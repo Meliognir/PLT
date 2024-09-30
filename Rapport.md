@@ -15,4 +15,4 @@
 ### 1.1 Archétype
 L’objectif de ce projet est la réalisation du jeu Jamaïca, avec des règles adaptées. Un exemple est présenté en Figure 1.
 
-![Texte alternatif](image.jpg "Images Jamaïca").
+![Texte alternatif](rapport/images/th.jpg "Images Jamaïca").
