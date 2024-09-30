@@ -8,7 +8,7 @@
 1.1 Archétype 
 
 1.2 Règles du jeu 
-
+ 
 1.3 Ressources 
 
 
