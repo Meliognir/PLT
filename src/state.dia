@@ -97,6 +97,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
+  <dia:layer name="Arrière-plan" visible="true" connectable="false"/>
   <dia:layer name="Background" visible="true" connectable="false"/>
   <dia:layer name="Background" visible="true" connectable="false"/>
   <dia:layer name="Background" visible="true" connectable="false"/>
@@ -104,16 +105,20 @@
   <dia:layer name="Arrière-plan" visible="true" connectable="true" active="true">
     <dia:object type="UML - LargePackage" version="0" id="O0">
       <dia:attribute name="obj_pos">
+
         <dia:point val="3.35,1.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
         <dia:rectangle val="3.3,0.85;109.65,51.9"/>
+
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
+
         <dia:point val="3.35,1.9"/>
+
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="106.25000000000001"/>
