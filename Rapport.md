@@ -82,4 +82,33 @@ B) Décompte : Le score final d'un joueur est le résultat de l'opération suiva
 
 C) Victoire : Le joueur totalisant le score le plus élevée l'emporte. En cas d'égalité c'est le joueur le plus en avant quigagne la course qui gagne. En cas de nouvelle égalité les joueurs se partagent la victoire.
 
-#### Règles Bonus :
+#### Précision de certaines règles :
+
+1- Tour de jeu : 
+Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on mélange la défausse pour créer une nouvelle pioche. 
+
+2- Types d'actions : Il faut toujours résoudre entièrement son action du matin avant de passer à celle du soir ! Ainsi :
+ * si la premeère est un déplacment, on ne peut pas payer le prix de la cas avec des ressources que l'on ne gagnera qu'avec la seconde action;
+ * entre deux actions déplacement, on n'échappe ni aux combats, ni aux paiements des cases;
+ * les doublons gagnés avec la carte or-or ne peuvent pas être cumulés et chargés dans une cale unique.
+
+3- Combat :
+* Il n'y a jamais de combat à Port Royal (l'arrivée);
+* Si l'on obtient l'étoile au dé de combat, on ne récupère pas la poudre investie.
+* Si un joueur finit son déplacement sur une case où sont déjà plusieurs bâteaux, il choisit un adversaire et il n'y a qu'un seul combat.
+
+4- Prix des cases :
+* Lorsque l'on paie le prix d'une case, on se sert librement dans ses cales.
+* On ne paie le prix d'une case qu'une seule lors de l'arrivée sur cette case.
+
+5-Pénurie :
+* Lorsque l'on recule suite à une Pénurie et que la première case dont on peut s'acquitter du prix est occupée par un adversaire, il y a d'abord un combat.
+* Lorsque l'on recule en deçà d'une bifurcation on choisit librement son itinaire ( si il y a des bifurcations ).
+
+6- Trésors : Sabre de Saran :
+* il n'est pas possible d'ajouter de la poudre au 2nd lancer;
+* on peut aussi faire relanser l'adversaire si il obtient une étoile;
+* le pouvoir du Sabre doit être utilisé immédiatement après le lancer que l'on aimerait voir modifié.
+
+* On peut regarder le contenur d'un trésor caché avant de le voler à un adversaire.
+* Lorsque l'on vole le trésor 6e cale, on en vole aussi le contenu. 
