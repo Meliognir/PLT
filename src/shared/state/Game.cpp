@@ -1,7 +1,7 @@
 #include "Game.h"
 
 void state::Game::gameTurn(int time){
-    
+
 }
 
 state::Game::Game(State *state, std::vector<Player *> playerList)
@@ -21,6 +21,10 @@ void state::Game::transitionTo(State *state){
     this->state->setContext(this);
 }
 
-void state::Game::request(){
-    this->state->handle();
+void state::Game::request1(){
+    this->state->handle1();
+}
+
+void state::Game::request2(){
+    this->state->handle2();
 }
