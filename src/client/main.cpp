@@ -6,9 +6,9 @@
 void testSFML() {
     sf::Texture texture;
 }
-// end of test SFML
+//end of test SFML
 
-#include <state.h>
+#include "../shared/state.h"
 
 using namespace std;
 using namespace state;
