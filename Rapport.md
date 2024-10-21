@@ -1,8 +1,9 @@
 # Rapport - Jamaïca
-#### LE POINSEL ROBIN TRIAS
-
-
+- - - -
+#### LE POINSEL ROBIN TRIAS  
+- - - -
 # Table des matières
+- - - -
 ## 1-Présentation Générale
 
 **1.1 Archétype**
@@ -17,11 +18,15 @@
 
 **2.2 Conception logiciel**
 
- 
+## 3-Rendu : Stratégie et Conception 
 
+**3.1 Stratégie de rendu d'un état**
+
+ 
+- - - -
 ## 1-Présentation Générale
 >### 1.1 Archétype 
->>L’objectif de ce projet est la réalisation du jeu Jamaïca, avec des règles adaptées. Un exemple est présenté sur la figure suivante.
+>>L’objectif de ce projet est la réalisation du jeu Jamaïca, avec des règles adaptées. Un exemple est présenté sur la figure suivante.  \
 >>![Image Jeu Jamaica](rapport/images/th.jpg "Images Jamaïca")
 
 
@@ -122,14 +127,19 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >
 >#### 2-Eléments mobiles
 > Il s'agit du bâteau se déplaçant sur les cases, représenté par Player dans le state.dia, il possède les attributs de la photo suivante :
->>![Image de la classe Player](rapport/images/Player1.0.png "Images class Player")
+>>![Image de la classe Player](rapport/images/Player1.1.png "Images class Player")
 > On voit que pour la localisation sur la map nous avons un int position qui détermine la position du player dans le tableau de la map.
 
 
 >### 2.2 Conception logiciel
 >>![Image du state.dia](rapport/images/State1.0.png "Images state.dia")
->Ceci est une première version du state.dia dans sa globalité, nous allons par la suite détaillé les états des parties importantes et visibles pour le joueur.
+>Ceci est une version du state.dia dans sa globalité, nous allons par la suite détaillé les états des parties importantes et visibles pour le joueur.
 > 
-> **Classe Player** :
+> **Classe Player** : comme vu ci-dessus player la classe player possède un getter de sa position. De plus la classe possède toutes les caractéristiques pour 
+> savoir l'état dans lequel un player est à un moment donné donc : sa position, ce qu'il à dans ses câles, le choix des cartes, le choix de la position des dés, l'ajout de ressources dans sa câle...
 > 
-> **Classe Game** :
+> **Classe Game** : la classe game quant à elle (voir en dessous), permet de passer d'un état à un autre pour lancer le jeu par exemple,
+> ainsi que de jouer un tour si besoin. Dans cette classe on retient qui à été le capitaine du tour d'avant, les deux chiifres de dés, la liste des joueurs...
+>>![Image du state.dia](rapport/images/Game1.0.png "Images state.dia")
+> 
+> 
