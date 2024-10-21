@@ -11,7 +11,6 @@ file(GLOB_RECURSE shared_sources *.cpp)
 
 # Build the "shared" library and add required includes
 add_library(${lib_shared_target} STATIC ${shared_sources} ${jsoncpp_sources}
-        state/Tile.h
         state/Tile.cpp
         state/Canon.cpp
         state/Gold.cpp
