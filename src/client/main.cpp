@@ -6,10 +6,12 @@
 void testSFML() {
     sf::Texture texture;
 }
-// end of test SFML
+//end of test SFML
+
 
 #include "../shared/state.h" //to use vscode tasks file instead of makefile
 //#include <state.h>
+
 
 using namespace std;
 using namespace state;
