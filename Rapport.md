@@ -140,6 +140,6 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 > **Classe Game** : la classe game quant à elle (voir en dessous), permet de passer d'un état à un autre pour lancer le jeu par exemple,
 > ainsi que de jouer un tour si besoin. Dans cette classe on retient qui à été le capitaine du tour d'avant, les deux chiifres de dés, la liste des joueurs...
->>![Image du state.dia](rapport/images/Game1.0.png "Images state.dia")
+>![Image du state.dia](rapport/images/Game1.0.png "Images state.dia")
 > 
-> 
+
