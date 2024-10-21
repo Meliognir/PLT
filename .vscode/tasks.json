@@ -7,13 +7,18 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "-I/home/lucian/Documents/c++PLT/PLT",   // Add this line
-                "-lsfml-graphics",
-                "-lsfml-window",
-                "-lsfml-system",
-                "${file}",
+                "${workspaceFolder}/src/client/main.cpp",/*
+                "${workspaceFolder}/src/shared/state/Action.cpp",
+                "${workspaceFolder}/src/shared/state/BoatHold.cpp",
+                "${workspaceFolder}/src/shared/state/Cards.cpp",
+                "${workspaceFolder}/src/shared/state/Player.cpp",
+                "${workspaceFolder}/src/shared/state/Resources.cpp",
+                "${workspaceFolder}/src/shared/state/Treasure.cpp",*/
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-lsfml-graphics",  // Link SFML graphics module
+                "-lsfml-window",    // Link SFML window module
+                "-lsfml-system"     // Link SFML system module
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -30,3 +35,4 @@
     ],
     "version": "2.0.0"
 }
+
