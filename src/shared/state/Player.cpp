@@ -1,18 +1,19 @@
 #include "Player.h"
-
-int state::Player::getPlayerId() const{
+namespace state{
+int Player::getPlayerId() const{
     return playerId;
 }
 
-void state::Player::setPlayerId(int playerId){
+void Player::setPlayerId(int playerId){
     this->playerId=playerId;
 }
 
-const std::string &state::Player::getName() const
+const std::string &Player::getName() const
 {
     return name;
 }
 
-void state::Player::setName(const std::string &name){
+void Player::setName(const std::string &name){
     this->name=name;
+}
 }
