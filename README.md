@@ -56,6 +56,7 @@ cd PLT
 
 Vous devez maintenant générer les fichiers d'en-têtes à partir du diagramme *state.dia*, puis construire client à partir du *main.c*. Pour cela, il suffit d'exécuter les commandes suivantes :
 ```
+mkdir build
 cd build
 cmake ..
 ```
