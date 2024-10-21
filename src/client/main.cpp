@@ -21,7 +21,7 @@ int main(int argc,char* argv[])
 
     cout << "It works !\n" << endl;
 
-    state::Player *player0 = new state::Player(0);
+    Player *player0 = new Player(0, "player0");
 
     player0->setPosition(20);
     cout << "A new player was created\n" << endl;

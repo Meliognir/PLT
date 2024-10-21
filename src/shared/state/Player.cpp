@@ -1,8 +1,10 @@
 #include "Player.h"
+#include "Cards.h"
+#include "BoatHold.h"
 namespace state{
 
 
-Player::Player(int playerId, std::string name) : playerId(playerId), name(name), boatHolds(6){
+Player::Player(int playerId, std::string name) : playerId(playerId), name(name)/*, boatHolds(6)*/{
 }
 
 int Player::getPlayerId() const{
