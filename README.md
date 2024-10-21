@@ -5,7 +5,7 @@
 
 # Projet PLT - Jeu de Jamaica - (WIP)
 
-Bienvenue dans le dépôt du client du jeu **Jamaica** ! Ce document vous guide à travers les étapes pour télécharger, configurer et compiler le client du jeu.
+Bienvenue dans le dépôt du jeu **Jamaica** ! Ce document vous guide à travers les étapes pour télécharger, configurer et compiler le client du jeu.
 
 ## Prérequis
 
