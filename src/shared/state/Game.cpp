@@ -28,3 +28,13 @@ void state::Game::request1(){
 void state::Game::request2(){
     this->state->handle2();
 }
+void state::Game::setTurn(int turn){
+}
+
+const std::vector<state::Player *> &state::Game::getPlayerList() const{
+    return this->playerList;
+}
+
+void state::Game::setPlayerList(const std::vector<Player *> &playerList){
+    this->playerList=playerList;
+}

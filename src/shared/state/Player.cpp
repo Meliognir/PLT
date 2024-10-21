@@ -1,6 +1,15 @@
 #include "Player.h"
 
-const std::string &state::Player::getName() const{
+int state::Player::getPlayerId() const{
+    return playerId;
+}
+
+void state::Player::setPlayerId(int playerId){
+    this->playerId=playerId;
+}
+
+const std::string &state::Player::getName() const
+{
     return name;
 }
 
