@@ -13,16 +13,30 @@ Important : Le jeu est conçu pour tourner sous Linux. N'utilisez pas une versio
 Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 
 - **CMake** (version 3.10 ou supérieure)
-- **g++** (compilateur C++)
-- **SFML** (Simple and Fast Multimedia Library)
-- **Git** (pour cloner le dépôt)
 - **Make** (pour la compilation)
+- **g++** (compilateur C++)
+- **Git** (pour cloner le dépôt)
+- **Dia** (pour le diagramme d'état)
+- **lcov** (pour tester le code coverage)
+- **gcovr** (pareil je crois)
+- **SFML** (Simple and Fast Multimedia Library)
+- **libxml** (mystère)
+- **libboost** (et mystère aussi)
 
 ### Installer les éléments manquants :
 
 Vous pouvez par exemple installer la bibliothèque **SFML** avec votre gestionnaire de paquets :
 ```
+sudo apt install cmake
+sudo apt-get install make
+sudo apt install g++
+sudo apt install git
 sudo apt-get install libsfml-dev
+sudo apt-get install dia
+sudo apt install lcov
+sudo apt install gcovr
+sudo apt-get install libxml2-dev
+sudo apt-get install libboost-test-dev
 ```
 
 ### Cloner le répertoire Git
@@ -31,6 +45,7 @@ Positionnez vous et créez un dossier là ou vous souhaitez télécharger le jeu
 ```
 cd {chemin vers votre espace personnel}/Bureau
 mkdir Jamaica
+cd Jamaica
 git clone https://github.com/Meliognir/PLT.git
 ```
 Entrez ensuite dans ce répertoire avec la commande :
