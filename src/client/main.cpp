@@ -16,10 +16,6 @@ void testSFML() {
 using namespace std;
 using namespace state;
 
-//-----------------------
-// instantiates a "Game *game" Context and sets an "initConfig" concrete state
-//-----------------------
-
 int main(int argc,char* argv[])
 {
 
