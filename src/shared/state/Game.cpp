@@ -1,19 +1,19 @@
 #include "Game.h"
-
-void state::Game::gameTurn(int time){
+namespace state{
+void Game::gameTurn(int time){
 
 }
 
-state::Game::Game(State *state, std::vector<Player *> playerList)
+Game::Game(State *state, std::vector<Player *> playerList)
 {
     this->transitionTo(state);
 }
 
-state::Game::~Game(){
+Game::~Game(){
     delete state;
 }
 
-void state::Game::transitionTo(State *state){
+void Game::transitionTo(State *state){
     if (this->state != nullptr){
         delete this->state;
     }
@@ -21,20 +21,22 @@ void state::Game::transitionTo(State *state){
     this->state->setContext(this);
 }
 
-void state::Game::request1(){
+void Game::request1(){
     this->state->handle1();
 }
 
-void state::Game::request2(){
+void Game::request2(){
     this->state->handle2();
 }
-void state::Game::setTurn(int turn){
+void Game::setTurn(int turn){
 }
 
-const std::vector<state::Player *> &state::Game::getPlayerList() const{
+const std::vector<Player *> &Game::getPlayerList() const{
     return this->playerList;
 }
 
-void state::Game::setPlayerList(const std::vector<Player *> &playerList){
+void Game::setPlayerList(const std::vector<Player *> &playerList){
     this->playerList=playerList;
+}
+
 }
