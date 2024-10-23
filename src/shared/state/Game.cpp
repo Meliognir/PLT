@@ -35,6 +35,22 @@ const std::vector<Player *> &Game::getPlayerList() const{
     return this->playerList;
 }
 
+void Game::displayState()
+{
+    // Ecran principal avec la map et la position des joueurs
+    int mapSize = map->getSize();
+    printf("Affichage de la map :\n");
+    for (int i = 0; i < mapSize; i++){
+        printf("Affichage de la tuile i\n");
+    }
+
+    // Ecran dédié aux états actuels des joueurs et les ressources dans leur cale
+    int numberOfPlayers = getPlayerList().size();
+    for (int i = 0; i < numberOfPlayers; i++){
+        printf("Affichage des informations du i-ème joueur\n");
+    }
+}
+
 void Game::setPlayerList(const std::vector<Player *> &playerList){
     this->playerList=playerList;
 }
