@@ -19,5 +19,24 @@ void BoatHold::addResource(std::unique_ptr<Resources> newResource, int amount) {
     }
 }
 
+bool BoatHold::isEmpty() {
+    return resource!=nullptr;
+}
+
+int BoatHold::getQuantity() {
+    return quantity;
+}
+
+std::string BoatHold::getResourceType() {
+    return resource==nullptr ? resource->getType() : "None";
+}
+
+void BoatHold::showContents() {
+    if (resource!=nullptr) {
+        std::cout<<"Contains "<< quantity<<" " << resource-> getType() << "(s).\n";
+    }else {
+        std::cout<< "Boathoald is empty.\n";
+    }
+}
 
 }
