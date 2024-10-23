@@ -35,7 +35,7 @@ void BoatHold::showContents() {
     if (resource!=nullptr) {
         std::cout<<"Contains "<< quantity<<" " << resource-> getType() << "(s).\n";
     }else {
-        std::cout<< "Boathoald is empty. \n";
+        std::cout<< "Boathoald is empty.\n";
     }
 }
 
