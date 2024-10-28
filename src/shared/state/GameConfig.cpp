@@ -27,24 +27,16 @@ namespace state {
     }
     
     std::cout << "Number of players set to: " << playerNumber << std::endl;
-    std::vector<Player*> players;
-  
+
     for (int i = 0; i < playerNumber; ++i) {
       std::string playerName;
       std::cout << "Enter name for player " << (i + 1) << ": ";
       std::cin >> playerName;
-      //!!!!!!!!!!!!!!!!!!!!!!!
-      Player* player = new Player(i + 1, playerName); // Player ID starts at 1
-      //!!!!!!!!!!!!!!!!!!!!!!!
+      Player* player = new Player(i + 1, playerName);
       player->setName(playerName);
-      players.push_back(player);
+      playerList.push_back(player);
       std::cout << "Player " << (i + 1) << " is named: " << playerName << std::endl;
     }
-
-    //!!!!!!!!!!!!!!!!!!!!!!!
-    Game game(nullptr, players); //see Game.h
-    game.setPlayerList(players);
-    //!!!!!!!!!!!!!!!!!!!!!!!
   }
 
 //-----------------------------
