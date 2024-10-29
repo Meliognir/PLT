@@ -25,7 +25,6 @@ namespace state {
             std::cout << "Invalid number of players. Please enter a number between 2 and 6." << std::endl;
         }
     }
-    
     std::cout << "Number of players set to: " << playerNumber << std::endl;
 
     for (int i = 0; i < playerNumber; ++i) {
@@ -33,16 +32,18 @@ namespace state {
       std::cout << "Enter name for player " << (i + 1) << ": ";
       std::cin >> playerName;
       Player* player = new Player(i + 1, playerName);
-      player->setName(playerName);
-      playerList.push_back(player);
-      std::cout << "Player " << (i + 1) << " is named: " << playerName << std::endl;
+      std::vector<Player*> players = game->getPlayerList();
+      players.push_back(player);
+      game->setPlayerList(players);
     }
   }
 
 //-----------------------------
-//nothing
+//transition to Playing concrete state
 //-----------------------------
-  void GameConfig::handle2() { 
+  void GameConfig::handle2() {
+
+
   }
 
   GameConfig::~GameConfig() {
