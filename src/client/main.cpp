@@ -16,18 +16,23 @@ void testSFML() {
 using namespace std;
 using namespace state;
 
+int clientcode(){
+//-----------------------------
+// instantiates a new Game context with concrete state GameConfig
+//-----------------------------
+    Game *mygame = new Game(new GameConfig, nullptr);
+
+    mygame->request1();
+    mygame->request2();
+
+    delete mygame;
+    return 0;
+}
 
 int main(int argc,char* argv[])
 {
-    cout << "It works !\n" << endl;
-
-    Player *player0 = new Player(0, "player0");
-
-    player0->setPosition(20);
-    cout << "A new player was created\n" << endl;
-
-    cout << "player is at position :" << player0->getPosition() << endl;    
-
-    return 0;
+    int ret;
+    ret = clientcode(); // test handle 1 and 2
+    return ret;
 }
 

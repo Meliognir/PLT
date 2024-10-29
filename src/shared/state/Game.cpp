@@ -4,12 +4,14 @@ void Game::gameTurn(int time){
 
 }
 
-Game::Game(State *state, std::vector<Player *> playerList)
+Game::Game(State *state, Map *map)
 {
     this->transitionTo(state);
+    this->map = map;
 }
 
 Game::~Game(){
+    delete map;
     delete state;
 }
 
@@ -17,7 +19,7 @@ void Game::transitionTo(State *state){
     if (this->state != nullptr){
         delete this->state;
     }
-    this->state=state;
+    this->state = state;
     this->state->setContext(this);
 }
 
