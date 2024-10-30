@@ -18,12 +18,15 @@ using namespace state;
 
 int clientcode(){
 //-----------------------------
-// instantiates a new Game context with concrete state GameConfig
+// instantiates a new Game context and runs concrete states "GameConfig" then "Playing" functions
 //-----------------------------
-    Game *mygame = new Game(new GameConfig, nullptr);
+    Game *mygame = new Game(new GameConfig, nullptr); //transition to GameConfig
 
-    mygame->request1();
-    mygame->request2();
+    mygame->request1(); //initializes Players
+    mygame->request2(); //transition to Playing
+
+    mygame->request1(); //initializes Map, Players parameters
+    mygame->request2(); //game loop
 
     delete mygame;
     return 0;

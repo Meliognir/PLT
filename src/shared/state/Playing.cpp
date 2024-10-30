@@ -52,9 +52,9 @@ namespace state {
   }
 
 //-------------------------
-// Other
+// Game Loop
 //-------------------------
   void Playing::handle2() {
 
-}
+  }
 }

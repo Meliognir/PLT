@@ -13,6 +13,10 @@ Game::Game(State *state, Map *map)
 Game::~Game(){
     delete map;
     delete state;
+    for(Player* player : playerList){
+        delete player;
+    }
+    playerList.clear();
 }
 
 void Game::transitionTo(State *state){
