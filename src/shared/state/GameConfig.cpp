@@ -1,6 +1,7 @@
 #include "GameConfig.h"
 #include "Game.h"
 #include "Player.h"
+#include "Playing.h"
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -42,8 +43,8 @@ namespace state {
 //transition to Playing concrete state
 //-----------------------------
   void GameConfig::handle2() {
-
-
+    std::cout << "Transitioning to Playing state..." << std::endl;
+    game->transitionTo(new Playing);
   }
 
   GameConfig::~GameConfig() {
