@@ -1,5 +1,4 @@
 #include "Resources.h"
 
-state::Resources::~Resources()
-{
+state::Resources::~Resources(){
 }
