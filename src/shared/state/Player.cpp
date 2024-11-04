@@ -7,6 +7,9 @@ namespace state{
 Player::Player(int playerId, std::string name) : playerId(playerId), name(name)/*, boatHolds(6)*/{
 }
 
+Player::~Player(){
+}
+
 int Player::getPlayerId() const{
     return playerId;
 }
