@@ -36,25 +36,23 @@ namespace state {
         game->map->setSize(mapSize);
         game->map->listOfTiles.clear();
     }
+
     int playerNumber=game->getPlayerList().size();
-    Tile tile(0, 0, false, playerNumber); // foodCost, goldCost, treasure, nbPlayer
+    Tile tile(0, 0, false, playerNumber); // Start Tile : foodCost, goldCost, treasure, nbPlayer
     game->map->listOfTiles.push_back(tile);
-    for (int i = 0; i < mapSize; ++i) {
+    for (int i = 0; i < mapSize-1; ++i) { // other Tiles
       int tileFCost=rand()%4;
       int tileGCost=rand()%4;
-      playerNumber=game->getPlayerList().size();
       if(tileFCost!=0) {
-        Tile tile(tileFCost, 0, false, playerNumber); // foodCost, goldCost, treasure, nbPlayer
-        game->map->listOfTiles.push_back(tile);
+        Tile tile(tileFCost, 0, false, 0);
       }
       if(tileFCost==0 && tileGCost!=0) {
-        Tile tile(0, tileGCost, false, playerNumber); // foodCost, goldCost, treasure, nbPlayer
-        game->map->listOfTiles.push_back(tile);
+        Tile tile(0, tileGCost, false, 0);
       }
       if(tileFCost==0 && tileGCost==0) {
-        Tile tile(0, 0, true, playerNumber); // foodCost, goldCost, treasure, nbPlayer
-        game->map->listOfTiles.push_back(tile);
+        Tile tile(0, 0, true, 0);
       }
+      game->map->listOfTiles.push_back(tile);
     }
 
     std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
@@ -73,6 +71,8 @@ namespace state {
 //-------------------------
   void Playing::handle2() {
     //the loop must start with the dices
+    
+
 
   }
 }
