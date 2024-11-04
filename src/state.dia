@@ -3183,10 +3183,10 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
+            <dia:boolean val="true"/>
           </dia:attribute>
           <dia:attribute name="inheritance_type">
-            <dia:enum val="1"/>
+            <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="query">
             <dia:boolean val="false"/>
@@ -5480,15 +5480,15 @@
         <dia:point val="18.8109,23.1146"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.9609,23.0646;20.7823,25.4507"/>
+        <dia:rectangle val="17.9609,23.0646;20.7823,25.4506"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="18.8109,23.1146"/>
-        <dia:point val="18.8109,24.6107"/>
-        <dia:point val="20.7323,24.6107"/>
+        <dia:point val="18.8109,24.6106"/>
+        <dia:point val="20.7323,24.6106"/>
         <dia:point val="20.7323,25.3067"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
