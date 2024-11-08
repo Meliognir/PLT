@@ -61,4 +61,12 @@ void Game::setPlayerList(const std::vector<Player *> &playerList){
     this->playerList=playerList;
 }
 
+bool Game::checkGameEndCondition(){
+    for (Player* player : playerList) {
+        if(player->getPreviousPosition() < map->getSize() && player->getPosition() >= map->getSize()){
+            return true;
+        }
+    }
+}
+
 }
