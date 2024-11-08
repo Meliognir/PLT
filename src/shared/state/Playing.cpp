@@ -78,45 +78,53 @@ namespace state {
 //-------------------------
   void Playing::handle2() {
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
-    bool gameOver = false;
-    int turnCount = 0;
+    Player* currentPlayer;
+    Player* activePlayer;
     int playerCount = playingPlayers.size();
+    bool gameOver = false;
     int startingPlayerIndex = 0;
+    int activePlayerIndex = 0;
+    
     int dice1 = 0;
     int dice2 = 0;
     bool diceBool = false;
 
     //gameTurn à enlever
     while (!gameOver) {
-        std::cout << "Starting a new round in the Playerlist." << std::endl;
-        startingPlayerIndex = turnCount % playerCount;
+      std::cout << "Starting a new round in the Playerlist." << std::endl;
 
-        Player* currentPlayer = playingPlayers[startingPlayerIndex];
-          dice1 = rand() % 6 + 1;
-          dice2 = rand() % 6 + 1;
-          diceBool = currentPlayer->chooseTimeDice(dice1, dice2); // std::cout << "Day dice roll: " << game->dayDice << std::endl;
-                                    // std::cout << "Night dice roll: " << game->nightDice << std::endl;
-          if(diceBool){
-            game->dayDice = dice1;
-            game->nightDice = dice2;
-          }
-          else{
-            game->dayDice = dice2;
-            game->nightDice = dice1;
-          }
-          
-          std::cout << "Player " << currentPlayer->getPlayerId() << " rolls the dice." << std::endl;
-          currentPlayer->chooseTimeDice();
-          std::cout << "Day dice roll: " << game->dayDice << ", Night dice roll: " << game->nightDice << std::endl;
+      currentPlayer = playingPlayers[startingPlayerIndex];
 
+      std::cout << "Player " << currentPlayer->getPlayerId() << " rolls the dice." << std::endl;
+      dice1 = rand() % 6 + 1;
+      dice2 = rand() % 6 + 1;
+      diceBool = currentPlayer->chooseTimeDice(dice1, dice2);
+      if(diceBool){
+        game->dayDice = dice1;
+        game->nightDice = dice2;
+      }
+      else{
+        game->dayDice = dice2;
+        game->nightDice = dice1;
+      }
 
-        turnCount +=1;
-          //player->setPosition(player->getPosition() + game->dayDice);
-          //std::cout << "Player " << player->getPlayerId() << " (" << player->getName() << ") moves to position " << player->getPosition() << std::endl
+      for (int i = 0; i < playerCount; i++) { // players choose their Card, the 2 Actions of each Card remain secret to other players
+        activePlayerIndex = (startingPlayerIndex + i) % playerCount;
+        activePlayer = playingPlayers[activePlayerIndex];
+        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
+        activePlayer->chooseCard();
+      }
 
-        
+      for (int i = 0; i < playerCount; i++) {
+        activePlayerIndex = (startingPlayerIndex + i) % playerCount;
+        activePlayer = playingPlayers[activePlayerIndex];
+        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;
+        activePlayer->playTurn();  // Day and Night Actions, Combat logic
+      }
 
-        gameOver = game->checkGameEndCondition();
+      startingPlayerIndex = (startingPlayerIndex + 1) % playerCount;
+
+      gameOver = game->checkGameEndCondition();
     }
   }
 }
