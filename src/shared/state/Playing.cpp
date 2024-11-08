@@ -37,19 +37,19 @@ namespace state {
         game->map->listOfTiles.clear();
     }
 
-    int playerNumber=game->getPlayerList().size();
+    int playerNumber = game->getPlayerList().size();
     Tile tile(0, 0, false, playerNumber); // Start Tile : foodCost, goldCost, treasure, nbPlayer
     game->map->listOfTiles.push_back(tile);
     for (int i = 0; i < mapSize-1; ++i) { // other Tiles
-      int tileFCost=rand()%4;
-      int tileGCost=rand()%4;
-      if(tileFCost!=0) {
+      int tileFCost = rand()%4;
+      int tileGCost = rand()%4;
+      if(tileFCost != 0) {
         Tile tile(tileFCost, 0, false, 0);
       }
-      if(tileFCost==0 && tileGCost!=0) {
+      if(tileFCost == 0 && tileGCost != 0) {
         Tile tile(0, tileGCost, false, 0);
       }
-      if(tileFCost==0 && tileGCost==0) {
+      if(tileFCost == 0 && tileGCost == 0) {
         Tile tile(0, 0, true, 0);
       }
       game->map->listOfTiles.push_back(tile);
@@ -58,9 +58,16 @@ namespace state {
     std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
 
 
-    const std::vector<Player*>& playingPlayers = game->getPlayerList();
+    const std::vector<Player*>& playingPlayers = game->getPlayerList(); //init players' parameters
     for (Player* player : playingPlayers) {
       player->setPosition(0);
+      std::vector<Treasure> initialTreasures = { Treasure(0, 0)}; // Treasure(bonus, malus)
+      std::vector<BoatHold> initialBoatHolds = { BoatHold(), BoatHold(), BoatHold(), BoatHold(), BoatHold(), BoatHold()}; // BoatHold()
+      std::vector<ActionCard> initialCards = { ActionCard()}; // ActionCard (int cardID, Player * owner);
+      player->setTreasures(initialTreasures);
+      player->setBoatHolds(initialBoatHolds); // Player.cpp : void BoatHold::addResource(std::unique_ptr<Resources> newResource, int amount) calls selectBoatHold()
+      player->setActionCard(initialCards);
+
       std::cout << "Player " << player->getPlayerId() << " (" << player->getName() << ") initialized at position " << player->getPosition() << std::endl;
     }
     std::cout << "Players initialized: " << playingPlayers.size() << " players in the game." << std::endl;
@@ -70,9 +77,27 @@ namespace state {
 // Game Loop
 //-------------------------
   void Playing::handle2() {
-    //the loop must start with the dices
-    
+    const std::vector<Player*>& playingPlayers = game->getPlayerList();
+    bool gameOver = false;
 
+    while (!gameOver) {
+        std::cout << "Starting a new round in the Playerlist." << std::endl;
 
+        for (Player* player : playingPlayers) {
+          activePlayer = player;
+          game->dayDice = rand() % 6 + 1;
+          game->nightDice = rand() % 6 + 1;
+          player->chooseTimeDice(); // std::cout << "Day dice roll: " << game->dayDice << std::endl;
+                                    // std::cout << "Night dice roll: " << game->nightDice << std::endl;
+          player->chooseCard(); // std::cout << "Chosen Day Card: " << player->         << "Chosen Night Card: " << player->         << std::endl;
+          player->playTurn(); // plays day then night actions, combat logic
+
+          //player->setPosition(player->getPosition() + game->dayDice);
+          //std::cout << "Player " << player->getPlayerId() << " (" << player->getName() << ") moves to position " << player->getPosition() << std::endl
+
+        }
+
+        gameOver = game->checkGameEndCondition();
+    }
   }
 }
