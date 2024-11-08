@@ -11,7 +11,7 @@ namespace state {
     void ActionCard::move()
     {
         int current_pos = cardOwner->getPosition();
-        cardOwner->setPlayerId(current_pos+1);
+        cardOwner->setPosition(current_pos+1);
 
     }
 

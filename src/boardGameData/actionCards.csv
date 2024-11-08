@@ -1,0 +1,11 @@
+cardID,morningAction,nightAction
+0,forward,forward
+1,backward,forward
+2,forward,backward
+3,gold,gold
+4,food,gold
+5,gold,food
+6,gold,canons
+7,canons,gold
+8,food,canons
+9,canons,food
