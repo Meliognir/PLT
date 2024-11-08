@@ -99,14 +99,14 @@ const std::vector<Treasure> &Player::getTreasures() const{
 void Player::setTreasures(const std::vector<Treasure> &treasures){
     this->treasures= treasures;
 }
-
+/*
 const std::vector<ActionCard> &Player::getActionCards() const{
     return actionCards;
 }
 
 void Player::setActionCards(const std::vector<ActionCard> &actionCard){
     this->actionCards=actionCard;
-}
+}*/
 
 const std::string &Player::getName() const
 {
