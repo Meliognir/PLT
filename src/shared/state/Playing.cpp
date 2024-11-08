@@ -63,10 +63,10 @@ namespace state {
       player->setPosition(0);
       std::vector<Treasure> initialTreasures = { Treasure(0, 0)}; // Treasure(bonus, malus)
       std::vector<BoatHold> initialBoatHolds = { BoatHold(), BoatHold(), BoatHold(), BoatHold(), BoatHold(), BoatHold()}; // BoatHold()
-      std::vector<ActionCard> initialCards = { ActionCard()}; // ActionCard (int cardID, Player * owner);
+      //std::vector<int> cardDeck = {0, 1, 2, 3, 5 , 6, 7, 8, 9}; // randomiser la pioche de chaque joueur
       player->setTreasures(initialTreasures);
       player->setBoatHolds(initialBoatHolds); // Player.cpp : void BoatHold::addResource(std::unique_ptr<Resources> newResource, int amount) calls selectBoatHold()
-      player->setActionCard(initialCards);
+      //player->setActionCard(cardDeck);
 
       std::cout << "Player " << player->getPlayerId() << " (" << player->getName() << ") initialized at position " << player->getPosition() << std::endl;
     }
