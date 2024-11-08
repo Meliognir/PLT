@@ -858,7 +858,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
-            <dia:enum val="1"/>
+            <dia:enum val="2"/>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -881,7 +881,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
-            <dia:enum val="1"/>
+            <dia:enum val="2"/>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -904,7 +904,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
-            <dia:enum val="1"/>
+            <dia:enum val="2"/>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -5177,7 +5177,7 @@
         <dia:point val="39.1965,28.3166"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="38.4465,27.5666;40.6626,38.0963"/>
+        <dia:rectangle val="38.4465,27.5666;40.6626,38.0962"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -5186,7 +5186,7 @@
         <dia:point val="39.1965,28.3166"/>
         <dia:point val="39.1965,33.1564"/>
         <dia:point val="40.4626,33.1564"/>
-        <dia:point val="40.4626,37.2963"/>
+        <dia:point val="40.4626,37.2962"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
