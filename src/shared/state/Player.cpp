@@ -26,7 +26,32 @@ void Player::setPosition(int position){
     this->position=position;
 }
 
-const std::string &Player::getName() const{
+const std::vector<Treasure> &Player::getTreasures() const{
+    return treasures;
+}
+
+void Player::setTreasures(const std::vector<Treasure> &treasures){
+    this->treasures= treasures;
+}
+
+const std::vector<BoatHold> &Player::getBoatHolds() const{
+    return boatHolds;
+}
+
+void Player::setBoatHolds(const std::vector<BoatHold> &boatHolds){
+    this->boatHolds=boatHolds;
+}
+
+const std::vector<ActionCard> &Player::getActionCard() const{
+    return actionCard;
+}
+
+void Player::setActionCard(const std::vector<ActionCard> &actionCard){
+    this->actionCard=actionCard;
+}
+
+const std::string &Player::getName() const
+{
     return name;
 }
 
