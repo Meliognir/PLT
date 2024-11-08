@@ -1,4 +1,5 @@
 #include "ActionCard.h"
+#include "Player.h"
 
 namespace state {
 
@@ -9,7 +10,8 @@ namespace state {
 
     void ActionCard::move()
     {
-        //cardOwner->position = 2;
+        int current_pos = cardOwner->getPosition();
+        cardOwner->setPosition(current_pos+1);
 
     }
 
