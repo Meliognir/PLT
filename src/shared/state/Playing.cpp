@@ -80,6 +80,7 @@ namespace state {
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
     bool gameOver = false;
 
+    //gameTurn à enlever
     while (!gameOver) {
         std::cout << "Starting a new round in the Playerlist." << std::endl;
 
