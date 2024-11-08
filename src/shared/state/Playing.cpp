@@ -79,24 +79,42 @@ namespace state {
   void Playing::handle2() {
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
     bool gameOver = false;
+    int turnCount = 0;
+    int playerCount = playingPlayers.size();
+    int startingPlayerIndex = 0;
+    int dice1 = 0;
+    int dice2 = 0;
+    bool diceBool = false;
 
     //gameTurn à enlever
     while (!gameOver) {
         std::cout << "Starting a new round in the Playerlist." << std::endl;
+        startingPlayerIndex = turnCount % playerCount;
 
-        for (Player* player : playingPlayers) {
-          activePlayer = player;
-          game->dayDice = rand() % 6 + 1;
-          game->nightDice = rand() % 6 + 1;
-          player->chooseTimeDice(); // std::cout << "Day dice roll: " << game->dayDice << std::endl;
+        Player* currentPlayer = playingPlayers[startingPlayerIndex];
+          dice1 = rand() % 6 + 1;
+          dice2 = rand() % 6 + 1;
+          diceBool = currentPlayer->chooseTimeDice(dice1, dice2); // std::cout << "Day dice roll: " << game->dayDice << std::endl;
                                     // std::cout << "Night dice roll: " << game->nightDice << std::endl;
-          player->chooseCard(); // std::cout << "Chosen Day Card: " << player->         << "Chosen Night Card: " << player->         << std::endl;
-          player->playTurn(); // plays day then night actions, combat logic
+          if(diceBool){
+            game->dayDice = dice1;
+            game->nightDice = dice2;
+          }
+          else{
+            game->dayDice = dice2;
+            game->nightDice = dice1;
+          }
+          
+          std::cout << "Player " << currentPlayer->getPlayerId() << " rolls the dice." << std::endl;
+          currentPlayer->chooseTimeDice();
+          std::cout << "Day dice roll: " << game->dayDice << ", Night dice roll: " << game->nightDice << std::endl;
 
+
+        turnCount +=1;
           //player->setPosition(player->getPosition() + game->dayDice);
           //std::cout << "Player " << player->getPlayerId() << " (" << player->getName() << ") moves to position " << player->getPosition() << std::endl
 
-        }
+        
 
         gameOver = game->checkGameEndCondition();
     }
