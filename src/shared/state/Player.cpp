@@ -2,6 +2,7 @@
 #include "ActionCard.h"
 #include "BoatHold.h"
 #include <iostream>
+#include "Game.h"
 namespace state{
 
 
@@ -49,8 +50,30 @@ void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amo
     }
 }
 
-Player::~Player()
-{
+bool Player::chooseTimeDice(int dice1, int dice2){
+    std::string input;
+    while (true){
+        std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n" << "dé 1 : " << dice1 << " dé 2 : " << dice2 << std::endl;
+        std::cin >> input;
+        if (input == "1" || input == "2"){
+            break;
+        } else {
+            std::cout << "Entrée invalide. Veuillez entrer '1' ou '2'.\n";
+        }
+    }
+    if (input == "1"){
+        std::cout << "Le dé " << dice1 << " sera le dé du jour. Le dé " << dice2 << " sera le dé de la nuit." << std::endl;
+        return true;
+    } else {
+        std::cout << "Le dé " << dice2 << " sera le dé du jour. Le dé " << dice1 << " sera le dé de la nuit." << std::endl;
+        return false;
+    }
+}
+
+void Player::chooseCard(){
+}
+
+Player::~Player(){
 }
 
 int Player::getPlayerId() const{
