@@ -34,14 +34,6 @@ void Player::setTreasures(const std::vector<Treasure> &treasures){
     this->treasures= treasures;
 }
 
-const std::vector<BoatHold> &Player::getBoatHolds() const{
-    return boatHolds;
-}
-
-void Player::setBoatHolds(const std::vector<BoatHold> &boatHolds){
-    this->boatHolds=boatHolds;
-}
-
 const std::vector<ActionCard> &Player::getActionCard() const{
     return actionCard;
 }
