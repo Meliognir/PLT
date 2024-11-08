@@ -127,7 +127,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >
 >#### 2-Eléments mobiles
 > Il s'agit du bâteau se déplaçant sur les cases, représenté par Player dans le state.dia, il possède les attributs de la photo suivante :
->>![Image de la classe Player](rapport/images/Player1.2.png "Images class Player")
+>>![Image de la classe Player](rapport/images/Player1.2.png "Image classe Player")
 > On voit que pour la localisation sur la map nous avons un int position qui détermine la position du player dans le tableau de la map.
 
 
@@ -140,7 +140,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 > **Classe Game** : la classe game quant à elle (voir en dessous), permet de passer d'un état à un autre pour lancer le jeu par exemple,
 > ainsi que de jouer un tour si besoin. Dans cette classe on retient qui à été le capitaine du tour d'avant, les deux chiffres de dés, la liste des joueurs...
->![Image du de la classe Game](rapport/images/Game1.1.png "Images state.dia")
+>![Image du de la classe Game](rapport/images/Game1.1.png "Image state.dia")
 > On peut aussi remarquer dans la classe deux méthode request1() et request() qui ont été dans la classe State que nous verrons juste après. Ces méthodes suivent le design patern State trouver sur refractoring guru :
 > - [refractoring.guru State design-pattern.](./https://refactoring.guru/design-patterns/state)  
 >
@@ -148,7 +148,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 > **Classe State** : 
 > 
->![Image du de la classe State et celles autour](rapport/images/ClasseState1.0.png "Images de la classe State et des classe qui en découlent.")
+>![Image du de la classe State et celles autour](rapport/images/ClasseState1.0.png "Image de la classe State et des classe qui en découlent.")
 > 
 > La classe State permet donc de passer d'un état à l'autre entre: Playing, GameConfig et Ending grâce à TransitionTo() de la classe Game.
 > 
@@ -156,7 +156,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 > **Classes ActionCard, Treasure, BoatHold** : 
 > 
->![Image du des classes ActionCard, BoatHold et Treasure](rapport/images/BoatHold1.0.png "Images des classe ActionCard, Boathold et Treasure.")
+>![Image du des classes ActionCard, BoatHold et Treasure](rapport/images/BoatHold1.0.png "Image des classe ActionCard, Boathold et Treasure.")
 > 
 >> - **ActionCard** : dans cette classe on regarde, quand une carte est dans la main ou joué, les attributs qu'elle possède comme les golds, les déplacements ou les canons. Si la carte est joué, on va alors effectué l'action en fonction des dés du matin et du soir.
 >> - **Treasure** : pour l'instant un trésors n'est qu'un bonus ou malus de gold, il ne s'agit donc que d'entier à ajouter ou enlever dans le décompte final de gold.
@@ -165,6 +165,12 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >> Pour avoir le type de ressource à prendre il y a la classe resources :
 >> 
 >>> **Resources** : cette classe donne le type de ressource à attribuer au BoatHold.
+>
+> 
+>**Classe Map** :
+>
+>![Image de la classe Map](rapport/images/Map1.0.png "Image de la classe map.")
+> 
 
 
 
