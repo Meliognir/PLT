@@ -2749,16 +2749,16 @@
         <dia:point val="43.9145,27.0292"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="43.8645,26.9792;60.6345,37.6792"/>
+        <dia:rectangle val="43.8645,26.9792;61.0195,38.4792"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="43.9145,27.0292"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="16.669999999999998"/>
+        <dia:real val="17.055"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="10.600000000000001"/>
+        <dia:real val="11.4"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#ActionCard#</dia:string>
@@ -2879,7 +2879,7 @@
             <dia:string>#dayAction#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#int#</dia:string>
+            <dia:string>#std::string#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -2902,7 +2902,7 @@
             <dia:string>#nightAction#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#int#</dia:string>
+            <dia:string>#std::string#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -2979,7 +2979,7 @@
                 <dia:string>#dayAction#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#int#</dia:string>
+                <dia:string>#const std::string&amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2996,7 +2996,7 @@
                 <dia:string>#nightAction#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#int#</dia:string>
+                <dia:string>#const std::string&amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -5378,7 +5378,7 @@
         <dia:point val="63.7151,8.09219"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="60.5345,7.33219;66.228,28.5692"/>
+        <dia:rectangle val="60.9195,7.33219;66.228,28.5692"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -5389,7 +5389,7 @@
         <dia:point val="61.9651,21.5074"/>
         <dia:point val="66.178,21.5074"/>
         <dia:point val="66.178,27.7292"/>
-        <dia:point val="60.5845,27.7292"/>
+        <dia:point val="60.9695,27.7292"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -5864,8 +5864,8 @@
         <dia:point val="51.2421,9.08661"/>
         <dia:point val="52.9921,9.08661"/>
         <dia:point val="52.9921,18.0329"/>
-        <dia:point val="52.2495,18.0329"/>
-        <dia:point val="52.2495,27.0292"/>
+        <dia:point val="52.442,18.0329"/>
+        <dia:point val="52.442,27.0292"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>

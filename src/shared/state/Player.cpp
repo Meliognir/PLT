@@ -1,12 +1,23 @@
 #include "Player.h"
+#include "Game.h"
 #include "ActionCard.h"
 #include "BoatHold.h"
 #include <iostream>
-#include "Game.h"
+
 namespace state{
 
 
-Player::Player(int playerId, std::string name) : playerId(playerId), name(name)/*, boatHolds(6)*/{
+Player::Player(int playerId, std::string name) : playerId(playerId), name(name){
+    for (const auto& card : Game::collectionOfCards) {
+        // Ajoute une copie de chaque carte dans cardDeck
+        cardDeck.push_back(new ActionCard(*card));
+    }
+}
+
+Player::~Player(){
+    for (auto card : cardDeck) {
+        delete card;
+    }
 }
 
 BoatHold *Player::selectBoatHold(std::unique_ptr<Resources> resource){
@@ -71,9 +82,6 @@ bool Player::chooseTimeDice(int dice1, int dice2){
 }
 
 void Player::chooseCard(){
-}
-
-Player::~Player(){
 }
 
 int Player::getPlayerId() const{

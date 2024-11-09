@@ -1,5 +1,12 @@
+#include "ActionCard.h"
 #include "Game.h"
+#include "Player.h"
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
 namespace state{
+
 void Game::gameTurn(int time){
 
 }
@@ -8,6 +15,47 @@ Game::Game(State *state, Map *map)
 {
     this->transitionTo(state);
     this->map = map;
+
+    // collectionOfCards = {
+    //     new ActionCard(0, "forward", "forward"),
+    //     new ActionCard(1, "backward", "forward"),
+    //     new ActionCard(2, "forward", "backward"),
+    //     new ActionCard(3, "gold", "gold"),
+    //     new ActionCard(4, "food", "gold"),
+    //     new ActionCard(5, "gold", "food"),
+    //     new ActionCard(6, "gold", "canons"),
+    //     new ActionCard(7, "canons", "gold"),
+    //     new ActionCard(8, "food", "canons"),
+    //     new ActionCard(9, "canons", "food")
+    // };
+
+    std::ifstream file("src/boardGameData/cards.csv");
+    std::string line;
+    
+    if (!file.is_open()) {
+        std::cerr << "Erreur lors de l'ouverture du fichier cards.csv." << std::endl;
+        return;
+    }
+
+    // Ignore la première ligne (les en-têtes)
+    std::getline(file, line);
+    
+    // Lire chaque ligne et créer une ActionCard
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        int cardID;
+        std::string dayAction, nightAction;
+
+        // Lire les valeurs du fichier CSV
+        ss >> cardID;
+        ss.ignore(1, ','); // Ignorer la virgule
+        std::getline(ss, dayAction, ',');
+        std::getline(ss, nightAction);
+
+        // Créer l'ActionCard avec les actions lues
+        collectionOfCards.push_back(new ActionCard(cardID, dayAction, nightAction));
+    }
+    file.close();
 }
 
 Game::~Game(){
@@ -17,6 +65,9 @@ Game::~Game(){
         delete player;
     }
     playerList.clear();
+    for (auto card : collectionOfCards) {
+        delete card;
+    }
 }
 
 void Game::transitionTo(State *state){
@@ -41,6 +92,10 @@ const std::vector<Player *> &Game::getPlayerList() const{
     return this->playerList;
 }
 
+void Game::setPlayerList(const std::vector<Player *> &playerList){
+    this->playerList=playerList;
+}
+
 void Game::displayState()
 {
     // Ecran principal avec la map et la position des joueurs
@@ -55,10 +110,6 @@ void Game::displayState()
     for (int i = 0; i < numberOfPlayers; i++){
         printf("Affichage des informations du i-ème joueur\n");
     }
-}
-
-void Game::setPlayerList(const std::vector<Player *> &playerList){
-    this->playerList=playerList;
 }
 
 bool Game::checkGameEndCondition(){
