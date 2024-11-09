@@ -4,6 +4,10 @@
 #include "Player.h"
 #include "GameConfig.h"
 #include "Game.h"
+#include "Resources.h"
+#include "Gold.h"
+#include "Food.h"
+#include "Canon.h"
 #include <iostream>
 #include <vector>
 
@@ -13,16 +17,17 @@
 
 
 namespace state {
-//-----------------------------
-// initializes the map and its tiles and initializes players' other parameters 
-//-----------------------------
+
   Playing::~Playing() {
     std::cout << "Playing state destructor called" << std::endl;
   }
 
-  void Playing::handle1() { // initializes Map, tiles, players' parameters
+//-----------------------------
+// initializes the map and its tiles and initializes players' other parameters 
+//-----------------------------
+  void Playing::handle1() {
     int mapSize = 0;
-    
+    //-------------Initializes Map + tiles------------
     while(mapSize <= 1){
       std::cout << "Enter the size of the map: ";
       std::cin >> mapSize;
@@ -38,9 +43,11 @@ namespace state {
     }
 
     int playerNumber = game->getPlayerList().size();
-    Tile tile(0, 0, false, playerNumber); // Start Tile : foodCost, goldCost, treasure, nbPlayer
+    // "Port Royal" : Start Tile : foodCost, goldCost, treasure, nbPlayer
+    Tile tile(0, 0, false, playerNumber);
     game->map->listOfTiles.push_back(tile);
-    for (int i = 0; i < mapSize-1; ++i) { // other Tiles
+    // other Tiles
+    for (int i = 0; i < mapSize-1; ++i) {
       int tileFCost = rand()%4;
       int tileGCost = rand()%4;
       if(tileFCost != 0) {
@@ -54,18 +61,27 @@ namespace state {
       }
       game->map->listOfTiles.push_back(tile);
     }
-
     std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
 
-
-    const std::vector<Player*>& playingPlayers = game->getPlayerList(); //init players' parameters
+    //-------------Initializes players' parameters------------
+    const std::vector<Player*>& playingPlayers = game->getPlayerList();
     for (Player* player : playingPlayers) {
       player->setPosition(0);
-      std::vector<Treasure> initialTreasures = { Treasure(0, 0)}; // Treasure(bonus, malus)
-      std::vector<BoatHold> initialBoatHolds = { BoatHold(), BoatHold(), BoatHold(), BoatHold(), BoatHold(), BoatHold()}; // BoatHold()
-      //std::vector<int> cardDeck = {0, 1, 2, 3, 5 , 6, 7, 8, 9}; // randomiser la pioche de chaque joueur
+      // Treasure(bonus, malus)
+      std::vector<Treasure> initialTreasures = { Treasure(0, 0)};
       player->setTreasures(initialTreasures);
-      player->setBoatHolds(initialBoatHolds); // Player.cpp : void BoatHold::addResource(std::unique_ptr<Resources> newResource, int amount) calls selectBoatHold()
+      // BoatHold()
+      std::vector<BoatHold> initialBoatHolds(6);
+      //définir setBoatHolds
+      player->setBoatHolds(initialBoatHolds);
+      // Gold() + Food()
+      auto goldResource = std::make_unique<Gold>();
+      player->addResourcesToBoatHold(std::move(goldResource), 3);
+      auto foodResource = std::make_unique<Food>();
+      player->addResourcesToBoatHold(std::move(foodResource), 3);
+
+      
+      //std::vector<int> cardDeck = {0, 1, 2, 3, 5 , 6, 7, 8, 9}; // randomiser la pioche de chaque joueur
       //player->setActionCard(cardDeck);
 
       std::cout << "Player " << player->getPlayerId() << " (" << player->getName() << ") initialized at position " << player->getPosition() << std::endl;
@@ -81,25 +97,30 @@ namespace state {
     Player* currentPlayer;
     Player* activePlayer;
     int playerCount = playingPlayers.size();
-    bool gameOver = false;
     int startingPlayerIndex = 0;
     int activePlayerIndex = 0;
+
+    bool gameOver = false;
+    int turn = 0;
     
     int dice1 = 0;
     int dice2 = 0;
     bool diceBool = false;
 
-    //gameTurn à enlever
     while (!gameOver) {
+      //-------------Captain + Round------------
       std::cout << "Starting a new round in the Playerlist." << std::endl;
-
+      turn ++; game->setTurn(turn);
       currentPlayer = playingPlayers[startingPlayerIndex];
-
+      game->setCaptainIndex(startingPlayerIndex);
+      //-------------Day and night Dices------------
       std::cout << "Player " << currentPlayer->getPlayerId() << " rolls the dice." << std::endl;
       dice1 = rand() % 6 + 1;
       dice2 = rand() % 6 + 1;
       diceBool = currentPlayer->chooseTimeDice(dice1, dice2);
       if(diceBool){
+        // dayDice and nightDice are static => are the same and shared by every instance of Game, have no setter or getter
+        // you can also write : Game::dayDice = ... , it will modify dayDice in "game" : instance of Game
         game->dayDice = dice1;
         game->nightDice = dice2;
       }
@@ -107,19 +128,20 @@ namespace state {
         game->dayDice = dice2;
         game->nightDice = dice1;
       }
-
-      for (int i = 0; i < playerCount; i++) { // players choose their Card, the 2 Actions of each Card remain secret to other players
+      //-------------Every Player choose 1 Card in their own cardDeck------------
+      for (int i = 0; i < playerCount; i++) {
         activePlayerIndex = (startingPlayerIndex + i) % playerCount;
         activePlayer = playingPlayers[activePlayerIndex];
         std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
         activePlayer->chooseCard();
       }
-
+      //-------------Every Player execute day and night Actions of their chosen card------------
       for (int i = 0; i < playerCount; i++) {
         activePlayerIndex = (startingPlayerIndex + i) % playerCount;
         activePlayer = playingPlayers[activePlayerIndex];
         std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;
-        activePlayer->playTurn();  // Day and Night Actions, Combat logic
+        // add combat logic in Player.cpp
+        activePlayer->playTurn();
       }
 
       startingPlayerIndex = (startingPlayerIndex + 1) % playerCount;

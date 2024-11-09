@@ -4,12 +4,13 @@
 
 namespace state {
 
-    ActionCard::ActionCard(int dayAction, int nightAction) : cardOwner(nullptr), dayAction(dayAction), nightAction(nightAction) 
-    {        
+    ActionCard::ActionCard(const std::string& dayAction, const std::string& nightAction) : cardOwner(nullptr), dayAction(dayAction), nightAction(nightAction) {
     }
 
-    ActionCard::ActionCard(int cardID, Player *owner) : cardOwner(owner)
-    {
+    ActionCard::~ActionCard(){
+    }
+
+    ActionCard::ActionCard(int cardID, Player *owner) : cardOwner(owner){
         //create a copy of the original action card, based on its cardID
         ActionCard *original = Game::collectionOfCards[cardID];
 
@@ -18,16 +19,38 @@ namespace state {
         
     }
 
-
-    void ActionCard::move()
-    {
+    void ActionCard::move(){
         int current_pos = cardOwner->getPosition();
         cardOwner->setPosition(current_pos+1);
 
     }
 
-    ActionCard::~ActionCard()
-    {
+    void ActionCard::addCanons() {
+        
+    }
+
+    void ActionCard::addFood() {
+    
+    }
+
+    void ActionCard::addGold() {
+    
+    }
+
+    const std::string& ActionCard::getDayAction() const {
+        return dayAction;
+    }
+
+    void ActionCard::setDayAction(const std::string& dayAction) {
+        this->dayAction = dayAction;
+    }
+
+    const std::string& ActionCard::getNightAction() const {
+        return nightAction;
+    }
+
+    void ActionCard::setNightAction(const std::string& nightAction) {
+        this->nightAction = nightAction;
     }
 
 }
