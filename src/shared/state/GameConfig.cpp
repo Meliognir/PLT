@@ -6,7 +6,6 @@
 #include <vector>
 #include <memory>
 
-
 //-------------------------
 // Lucian works here
 //-------------------------
