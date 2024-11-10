@@ -74,7 +74,7 @@ namespace state {
       std::vector<Treasure> initialTreasures = { Treasure(0, 0) };
       player->setTreasures(initialTreasures);
       // BoatHold()
-      std::vector<BoatHold> initialBoatHolds(6);
+      std::vector<BoatHold *> initialBoatHolds(6);
       //définir setBoatHolds
       player->setBoatHolds(initialBoatHolds);
       // Gold() + Food()
@@ -86,9 +86,9 @@ namespace state {
       //au lieu d'en faire une copie, ce qui est essentiel pour les 
       //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
-      auto goldResource = std::make_unique<Gold>();
+      auto goldResource = std::unique_ptr<Gold>();
       player->addResourcesToBoatHold(std::move(goldResource), 3);
-      auto foodResource = std::make_unique<Food>();
+      auto foodResource = std::unique_ptr<Food>();
       player->addResourcesToBoatHold(std::move(foodResource), 3);
       // print le type et nombre de ressource du boathold : void BoatHold::showContents()
 
@@ -136,14 +136,14 @@ namespace state {
       dice2 = rand() % 6 + 1;
       diceBool = currentPlayer->chooseTimeDice(dice1, dice2);
       if(diceBool){
-        // dayDice and nightDice are static => are the same and shared by every instance of Game, have no setter or getter
-        // you can also write : Game::dayDice = ... , it will modify dayDice in "game" : instance of Game
-        game->dayDice = dice1;
-        game->nightDice = dice2;
+        // dayDie and nightDie are static => are the same and shared by every instance of Game, have no setter or getter
+        // you can also write : Game::dayDie = ... , it will modify dayDie in "game" : instance of Game
+        game->dayDie = dice1;
+        game->nightDie = dice2;
       }
       else{
-        game->dayDice = dice2;
-        game->nightDice = dice1;
+        game->dayDie = dice2;
+        game->nightDie = dice1;
       }
       //-------------Every Player choose 1 Card in their own cardDeck------------
       for (int i = 0; i < playerCount; i++) {

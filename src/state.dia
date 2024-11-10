@@ -334,7 +334,7 @@
         </dia:composite>
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#dayDice#</dia:string>
+            <dia:string>#dayDie#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>#static int#</dia:string>
@@ -357,7 +357,7 @@
         </dia:composite>
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#nightDice#</dia:string>
+            <dia:string>#nightDie#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>#static int#</dia:string>
@@ -948,7 +948,7 @@
             <dia:string>#boatHolds#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::vector &lt;BoatHold&gt;#</dia:string>
+            <dia:string>#std::vector &lt;BoatHold *&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
