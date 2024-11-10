@@ -5,6 +5,15 @@
 #include <sstream>
 #include <iostream>
 
+#define DAY true
+#define NIGHT false
+
+#define MOVE_FORWARD 0
+#define MOVE_BACKWARD 1
+#define ADD_FOOD 2
+#define ADD_GOLD 3
+#define ADD_CANONS 4
+
 namespace state{
 
 void Game::gameTurn(int time){
@@ -16,20 +25,21 @@ Game::Game(State *state, Map *map)
     this->transitionTo(state);
     this->map = map;
 
+    // Example of a collectionOfCards
     // collectionOfCards = {
-    //     new ActionCard(0, "forward", "forward"),
-    //     new ActionCard(1, "backward", "forward"),
-    //     new ActionCard(2, "forward", "backward"),
-    //     new ActionCard(3, "gold", "gold"),
-    //     new ActionCard(4, "food", "gold"),
-    //     new ActionCard(5, "gold", "food"),
-    //     new ActionCard(6, "gold", "canons"),
-    //     new ActionCard(7, "canons", "gold"),
-    //     new ActionCard(8, "food", "canons"),
-    //     new ActionCard(9, "canons", "food")
+    //     new ActionCard(MOVE_FORWARD, MOVE_FORWARD),
+    //     new ActionCard(MOVE_BACKWARD, MOVE_FORWARD),
+    //     new ActionCard(MOVE_FORWARD, MOVE_BACKWARD),
+    //     new ActionCard(ADD_GOLD, ADD_GOLD),
+    //     new ActionCard(ADD_FOOD, ADD_GOLD),
+    //     new ActionCard(ADD_GOLD, ADD_FOOD),
+    //     new ActionCard(ADD_GOLD, ADD_CANONS),
+    //     new ActionCard(ADD_CANONS, ADD_GOLD),
+    //     new ActionCard(ADD_FOOD, ADD_CANONS),
+    //     new ActionCard(ADD_CANONS, ADD_FOOD)
     // };
 
-    std::ifstream file("src/boardGameData/cards.csv"); // "../../src/boardGameData/cards.csv"
+    std::ifstream file("src/boardGameData/officialActionCards.csv"); // "../../src/boardGameData/cards.csv"
     std::string line;
     
     if (!file.is_open()) {
@@ -43,17 +53,32 @@ Game::Game(State *state, Map *map)
     // Lire chaque ligne et créer une ActionCard
     while (std::getline(file, line)) {
         std::stringstream ss(line);
-        int cardID;
-        std::string dayAction, nightAction;
+        std::string readAction;
+        int dayAction, nightAction;
+        int* actions[2] = {&dayAction, &nightAction}; 
 
-        // Lire les valeurs du fichier CSV
-        ss >> cardID;
-        ss.ignore(1, ','); // Ignorer la virgule
-        std::getline(ss, dayAction, ',');
-        std::getline(ss, nightAction);
-
-        // Créer l'ActionCard avec les actions lues
-        collectionOfCards.push_back(new ActionCard(cardID, dayAction, nightAction));
+        for (int i= 0; i<2; i++){
+            // read csv file
+            std::getline(ss, readAction, ',');
+            // fill the dayAction or nightAction with the read value
+            if (readAction == "forward"){
+                *actions[i] = MOVE_FORWARD;
+            }
+            if (readAction == "backward"){
+                *actions[i] = MOVE_BACKWARD;
+            }
+            if (readAction == "food"){
+                *actions[i] = ADD_FOOD;
+            }
+            if (readAction == "gold"){
+                *actions[i] = ADD_GOLD;
+            }
+            if (readAction == "canons"){
+                *actions[i] = ADD_CANONS;
+            }
+        }
+        // create ActionCard based on the read actions
+        collectionOfCards.push_back(new ActionCard(dayAction, nightAction));
     }
     file.close();
 }
@@ -118,6 +143,7 @@ bool Game::checkGameEndCondition(){
             return true;
         }
     }
+    return false;
 }
 
 }
