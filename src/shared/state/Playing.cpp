@@ -68,17 +68,29 @@ namespace state {
     for (Player* player : playingPlayers) {
       player->setPosition(0);
       // Treasure(bonus, malus)
-      std::vector<Treasure> initialTreasures = { Treasure(0, 0)};
+      std::vector<Treasure> initialTreasures = { Treasure(0, 0) };
       player->setTreasures(initialTreasures);
       // BoatHold()
       std::vector<BoatHold> initialBoatHolds(6);
       //définir setBoatHolds
       player->setBoatHolds(initialBoatHolds);
       // Gold() + Food()
+      //Un std::unique_ptr est un pointeur intelligent qui garantit 
+      //qu'il ne peut y avoir qu'un seul propriétaire de l'objet 
+      //pointé, assurant ainsi une gestion mémoire automatique et 
+      //une prévention des fuites de mémoire.
+      //En utilisant std::move, cela transfère directement l’objet 
+      //au lieu d'en faire une copie, ce qui est essentiel pour les 
+      //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
+      //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
       auto goldResource = std::make_unique<Gold>();
       player->addResourcesToBoatHold(std::move(goldResource), 3);
       auto foodResource = std::make_unique<Food>();
       player->addResourcesToBoatHold(std::move(foodResource), 3);
+      // print le type et nombre de ressource du boathold : void BoatHold::showContents()
+
+
+
 
       
       //std::vector<int> cardDeck = {0, 1, 2, 3, 5 , 6, 7, 8, 9}; // randomiser la pioche de chaque joueur

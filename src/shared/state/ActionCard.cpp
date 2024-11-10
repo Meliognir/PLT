@@ -13,10 +13,8 @@ namespace state {
     ActionCard::ActionCard(int cardID, Player *owner) : cardOwner(owner){
         //create a copy of the original action card, based on its cardID
         ActionCard *original = Game::collectionOfCards[cardID];
-
         dayAction = original->dayAction;
         nightAction = original->nightAction;       
-        
     }
 
     void ActionCard::move(){

@@ -9,7 +9,7 @@ BoatHold::~BoatHold(){
 }
 
 void BoatHold::addResource(std::unique_ptr<Resources> newResource, int amount) {
-    if(resource==nullptr) {
+    if(resource == nullptr) {
         //Si boathold est vide, on peut ajouter la ressource
         resource= std::move(newResource);
         quantity = std::min(amount,6);
@@ -28,20 +28,21 @@ int BoatHold::getQuantity() {
 }
 
 std::string BoatHold::getResourceType() {
-    return resource==nullptr ? resource->getType() : "None";
+    return resource != nullptr ? resource->getType() : "None";
 }
 
 void BoatHold::showContents() {
-    if (resource!=nullptr) {
+    if (resource != nullptr) {
         std::cout<<"Contains "<< quantity<<" " << resource-> getType() << "(s).\n";
     }else {
-        std::cout<< "Boathoald is empty.\n";
+        std::cout<< "Boathold is empty.\n";
     }
 }
 
 bool BoatHold::hasResourceType(std::string type){
     return resource && resource->getType() == type;
 }
+
 void BoatHold::removeResource(int amount){
     if (resource == nullptr) {
         std::cout << "Le BoatHold est déjà vide. Aucune ressource à retirer.\n";

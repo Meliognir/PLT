@@ -29,7 +29,7 @@ Game::Game(State *state, Map *map)
     //     new ActionCard(9, "canons", "food")
     // };
 
-    std::ifstream file("src/boardGameData/cards.csv");
+    std::ifstream file("src/boardGameData/cards.csv"); // "../../src/boardGameData/cards.csv"
     std::string line;
     
     if (!file.is_open()) {
