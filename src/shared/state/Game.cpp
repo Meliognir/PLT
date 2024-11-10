@@ -16,6 +16,10 @@
 
 namespace state{
 
+int Game::dayDie = 0;
+int Game::nightDie = 0;
+std::vector<ActionCard *> Game::collectionOfCards = {};
+
 void Game::gameTurn(int time){
 
 }

@@ -14,6 +14,20 @@ Player::~Player(){
 }
 
 BoatHold *Player::selectBoatHold(std::unique_ptr<Resources> resource){
+    std::string resourceType = resource->getType();
+
+    // Check for exceptions :
+    bool exception_full_holds = true;
+    for (BoatHold *hold : boatHolds){
+        if (!hold->hasResourceType(resourceType)){
+            exception_full_holds = false;
+        }
+    }
+    if (exception_full_holds){
+        return nullptr;
+    }
+
+    // If no exceptions were found :
     int index = 0;
     std::string input;
 
@@ -26,23 +40,23 @@ BoatHold *Player::selectBoatHold(std::unique_ptr<Resources> resource){
         continue;
     }
 
-    BoatHold& selectedHold = boatHolds[index - 1];
-    if (selectedHold.hasResourceType(resource->getType())) {
+    BoatHold* selectedHold = boatHolds[index - 1];
+    if (selectedHold->hasResourceType(resource->getType())) {
         std::cout << "Ce BoatHold contient déjà des ressources du même type. Choisir un BoatHold vide ou ayant des ressources de type différent.\n";
         continue; 
     }
 
-    if (!selectedHold.isEmpty()) {
+    if (!selectedHold->isEmpty()) {
         std::cout << "Ce BoatHold contient d'autres ressources. Voulez-vous les remplacer ? (o/n) : ";
         std::cin >> input;
 
         if (input != "o") {
         continue; 
         }
-        int quantityToRemove = selectedHold.getQuantity();
-        selectedHold.removeResource(quantityToRemove);
+        int quantityToRemove = selectedHold->getQuantity();
+        selectedHold->removeResource(quantityToRemove);
     }
-    return &selectedHold;
+    return selectedHold;
     }
 }
 
@@ -51,6 +65,9 @@ void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amo
     if (selectedBoatHold != nullptr){
         selectedBoatHold->addResource(std::move(resource), amount);
         std::cout << "Ressource ajoutée au BoatHold avec succès !\n";
+    }
+    else{
+        std::cout << "La ressource n'a pas pu ếtre ajoutée.\n";
     }
 }
 
@@ -109,11 +126,11 @@ void Player::setTreasures(const std::vector<Treasure> &treasures){
     this->treasures= treasures;
 }
 
-const std::vector<BoatHold> &Player::getBoatHolds() const{
+const std::vector<BoatHold *> &Player::getBoatHolds() const{
     return boatHolds;
 }
 
-void Player::setBoatHolds(const std::vector <BoatHold>& boatHolds){
+void Player::setBoatHolds(const std::vector <BoatHold *>& boatHolds){
     this->boatHolds = boatHolds;
 }
 

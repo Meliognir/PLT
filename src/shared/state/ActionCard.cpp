@@ -33,28 +33,28 @@ namespace state {
 
     void ActionCard::addCanons() {
         if (Game::time == DAY){
-            cardOwner->addResourcesToBoatHold(std::unique_ptr<Canon>(), Game::dayDice);
+            cardOwner->addResourcesToBoatHold(std::unique_ptr<Canon>(), Game::dayDie);
         }
         if (Game::time == NIGHT){
-            cardOwner->addResourcesToBoatHold(std::unique_ptr<Canon>(), Game::nightDice);
+            cardOwner->addResourcesToBoatHold(std::unique_ptr<Canon>(), Game::nightDie);
         }
     }
 
     void ActionCard::addFood() {
         if (Game::time == DAY){
-            cardOwner->addResourcesToBoatHold(std::unique_ptr<Food>(), Game::dayDice);
+            cardOwner->addResourcesToBoatHold(std::unique_ptr<Food>(), Game::dayDie);
         }
         if (Game::time == NIGHT){
-            cardOwner->addResourcesToBoatHold(std::unique_ptr<Food>(), Game::nightDice);
+            cardOwner->addResourcesToBoatHold(std::unique_ptr<Food>(), Game::nightDie);
         }
     }
 
     void ActionCard::addGold() {
         if (Game::time == DAY){
-            cardOwner->addResourcesToBoatHold(std::unique_ptr<Gold>(), Game::dayDice);
+            cardOwner->addResourcesToBoatHold(std::unique_ptr<Gold>(), Game::dayDie);
         }
         if (Game::time == NIGHT){
-            cardOwner->addResourcesToBoatHold(std::unique_ptr<Gold>(), Game::nightDice);
+            cardOwner->addResourcesToBoatHold(std::unique_ptr<Gold>(), Game::nightDie);
         }
     }
 
