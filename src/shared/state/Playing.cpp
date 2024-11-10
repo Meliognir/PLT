@@ -11,6 +11,9 @@
 #include <iostream>
 #include <vector>
 
+#define DAY true
+#define NIGHT false
+
 //-------------------------
 // Lucian works here
 //-------------------------
@@ -114,6 +117,7 @@ namespace state {
 
     bool gameOver = false;
     int turn = 0;
+    bool current_time[2] = {DAY, NIGHT};
     
     int dice1 = 0;
     int dice2 = 0;
@@ -122,6 +126,7 @@ namespace state {
     while (!gameOver) {
       //-------------Captain + Round------------
       std::cout << "Starting a new round in the Playerlist." << std::endl;
+      Game::time = DAY;
       turn ++; game->setTurn(turn);
       currentPlayer = playingPlayers[startingPlayerIndex];
       game->setCaptainIndex(startingPlayerIndex);
@@ -149,6 +154,7 @@ namespace state {
       }
       //-------------Every Player execute day and night Actions of their chosen card------------
       for (int i = 0; i < playerCount; i++) {
+        Game::time = current_time[i];
         activePlayerIndex = (startingPlayerIndex + i) % playerCount;
         activePlayer = playingPlayers[activePlayerIndex];
         std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;
