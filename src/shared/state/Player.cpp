@@ -60,7 +60,11 @@ BoatHold *Player::selectBoatHold(std::unique_ptr<Resources> resource){
     }
 }
 
-void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amount){
+void Player::playTurn(){
+}
+
+void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amount)
+{
     BoatHold *selectedBoatHold = selectBoatHold(std::move(resource));
     if (selectedBoatHold != nullptr){
         selectedBoatHold->addResource(std::move(resource), amount);
