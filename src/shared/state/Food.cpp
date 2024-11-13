@@ -11,6 +11,7 @@ namespace state {
     }
 
     std::string Food::getType() {
-        return "Food";
+        std::string out = "Food";
+        return out;
     }
 }

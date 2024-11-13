@@ -11,7 +11,8 @@ namespace state {
     }
 
     std::string Canon::getType() {
-    return "Canon";
+        std::string out = "Canon";
+        return out;
     }
 }
 
