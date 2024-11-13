@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <limits> 
 
 //-------------------------
 // Lucian works here
@@ -21,9 +22,14 @@ namespace state {
     while(playerNumber < 2 || playerNumber > 6) {
         std::cout << "Enter the number of players: ";
         std::cin >> playerNumber;
-        if (playerNumber < 2 || playerNumber > 6) {
-            std::cout << "Invalid number of players. Please enter a number between 2 and 6." << std::endl;
-        }
+        if (std::cin.fail()) { 
+          std::cin.clear();   
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+          std::cout << "Invalid input. Please enter a number between 2 and 6." << std::endl;
+          playerNumber = 0; 
+    } else if (playerNumber < 2 || playerNumber > 6) {
+        std::cout << "Invalid number of players. Please enter a number between 2 and 6." << std::endl;
+    }
     }
     std::cout << "Number of players set to: " << playerNumber << std::endl;
 
