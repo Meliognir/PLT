@@ -32,16 +32,15 @@ namespace state {
     }
     }
     std::cout << "Number of players set to: " << playerNumber << std::endl;
-
+    std::vector<Player*> players={};
     for (int i = 0; i < playerNumber; ++i) {
       std::string playerName;
       std::cout << "Enter name for player " << (i + 1) << ": ";
       std::cin >> playerName;
       Player* player = new Player(i + 1, playerName);
-      std::vector<Player*> players = game->getPlayerList();
       players.push_back(player);
-      game->setPlayerList(players);
     }
+    game->setPlayerList(players);
   }
 
 //-----------------------------
