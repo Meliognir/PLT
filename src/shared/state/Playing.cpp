@@ -71,7 +71,6 @@ namespace state {
       game->map->listOfTiles.push_back(tile);
     }
     std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
-
     //-------------Initializes players' parameters------------
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
     for (Player* player : playingPlayers) {
