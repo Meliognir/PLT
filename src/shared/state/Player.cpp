@@ -17,7 +17,6 @@ namespace state{
 Player::Player(int playerId, std::string name) : playerId(playerId), name(name){
     for (int i = 0; i < 6; ++i) {
         boatHolds.push_back(new BoatHold());
-        std::cout << "BoatHold " << i + 1 << " initialisé." << std::endl;
 }
 }
 

@@ -86,9 +86,7 @@ namespace state {
       std::vector<Treasure> initialTreasures = { Treasure(0, 0) };
       player->setTreasures(initialTreasures);
       // BoatHold()
-      std::vector<BoatHold *> initialBoatHolds(6);
       //définir setBoatHolds
-      player->setBoatHolds(initialBoatHolds);
       // Gold() + Food()
       //Un std::unique_ptr est un pointeur intelligent qui garantit 
       //qu'il ne peut y avoir qu'un seul propriétaire de l'objet 
