@@ -10,6 +10,7 @@
 #include "Canon.h"
 #include <iostream>
 #include <vector>
+#include <limits>
 
 #define DAY true
 #define NIGHT false
@@ -34,8 +35,13 @@ namespace state {
     while(mapSize <= 1){
       std::cout << "Enter the size of the map: ";
       std::cin >> mapSize;
-      if(mapSize <= 1){
-        std::cout << "Invalid map size" << std::endl;
+      if (std::cin.fail()) { 
+          std::cin.clear();   
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+          std::cout << "Invalid input. Please enter a number." << std::endl;
+          mapSize = 0; 
+      } else if(mapSize <= 1){
+        std::cout << "Invalid map size. Please enter a number higher than 1." << std::endl;
       }
     }
     if (game->map == nullptr) {
@@ -69,7 +75,6 @@ namespace state {
     //-------------Initializes players' parameters------------
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
     for (Player* player : playingPlayers) {
-
       player->setPosition(0);
       // Treasure(bonus, malus)
       std::vector<Treasure> initialTreasures = { Treasure(0, 0) };
