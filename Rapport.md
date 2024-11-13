@@ -142,7 +142,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > ainsi que de jouer un tour si besoin. Dans cette classe on retient qui à été le capitaine du tour d'avant, les deux chiffres de dés, la liste des joueurs...
 >![Image du de la classe Game](rapport/images/Game1.1.png "Image state.dia")
 > On peut aussi remarquer dans la classe deux méthode request1() et request() qui ont été dans la classe State que nous verrons juste après. Ces méthodes suivent le design patern State trouver sur refractoring guru :
-> - [refractoring.guru State design-pattern.](./https://refactoring.guru/design-patterns/state)  
+> - [https://refactoring.guru/design-patterns/state](./https://refactoring.guru/design-patterns/state)  
 >
 > Ce design pattern nous permet de passer d'un état à un autre comme on le souhaite.
 > 

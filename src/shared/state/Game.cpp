@@ -44,7 +44,7 @@ Game::Game(State *state, Map *map)
     //     new ActionCard(ADD_CANONS, ADD_FOOD)
     // };
 
-    std::ifstream file("src/boardGameData/officialActionCards.csv"); // "../../src/boardGameData/cards.csv"
+    std::ifstream file("../src/boardGameData/officialActionCards.csv"); // "../../src/boardGameData/cards.csv"
     std::string line;
     
     if (!file.is_open()) {
