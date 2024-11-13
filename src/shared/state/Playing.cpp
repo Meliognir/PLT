@@ -69,6 +69,7 @@ namespace state {
     //-------------Initializes players' parameters------------
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
     for (Player* player : playingPlayers) {
+
       player->setPosition(0);
       // Treasure(bonus, malus)
       std::vector<Treasure> initialTreasures = { Treasure(0, 0) };
