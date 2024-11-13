@@ -1411,7 +1411,7 @@
                 <dia:string>#resourceType#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#string#</dia:string>
+                <dia:string>#std::string#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
