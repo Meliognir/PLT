@@ -80,22 +80,28 @@ BoatHold *Player::selectBoatHold(const std::string& resourceType,int init){
 void Player::playTurn(){
 }
 
-void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amount)
+void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amount, int skipSelection/*default value = 0*/)
 {
-        if (!resource) {
+    if (!resource) {
         std::cerr << "Erreur : le pointeur resource est nul !\n";
         return;
     }
 
     std::string resourceType = resource->getType();
-
     BoatHold *selectedBoatHold = selectBoatHold(resourceType);
     if (selectedBoatHold != nullptr){
         selectedBoatHold->addResource(std::move(resource), amount);
         std::cout << "Ressource ajoutée au BoatHold avec succès !\n";
     }
     else{
-        std::cout << "La ressource n'a pas pu ếtre ajoutée.\n";
+        selectedBoatHold = selectBoatHold(resourceType);
+        if (selectedBoatHold != nullptr){
+            selectedBoatHold->addResource(std::move(resource), amount);
+            std::cout << "Ressource ajoutée au BoatHold avec succès !\n";
+        }
+        else{
+            std::cout << "La ressource n'a pas pu ếtre ajoutée.\n";
+        }
     }
 }
 
