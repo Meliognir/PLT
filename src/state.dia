@@ -1408,10 +1408,10 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#resource#</dia:string>
+                <dia:string>#resourceType#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::unique_ptr&lt;Resources&gt;#</dia:string>
+                <dia:string>#string#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
