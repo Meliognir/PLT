@@ -18,6 +18,7 @@ namespace state{
 
 int Game::dayDie = 0;
 int Game::nightDie = 0;
+bool Game::time = true;
 std::vector<ActionCard *> Game::collectionOfCards = {};
 
 void Game::gameTurn(int time){
@@ -123,6 +124,9 @@ const std::vector<Player *> &Game::getPlayerList() const{
 
 void Game::setPlayerList(const std::vector<Player *> &playerList){
     this->playerList=playerList;
+}
+
+void Game::setCaptainIndex(int captainIndex){
 }
 
 void Game::displayState()
