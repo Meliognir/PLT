@@ -3,22 +3,40 @@
 #include "ActionCard.h"
 #include "BoatHold.h"
 #include <iostream>
+#include <memory>
+#include <utility> // Pour std::forward
+
+template <typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 
 namespace state{
 
 
 Player::Player(int playerId, std::string name) : playerId(playerId), name(name){
+    for (int i = 0; i < 6; ++i) {
+        boatHolds.push_back(new BoatHold());
+        std::cout << "BoatHold " << i + 1 << " initialisé." << std::endl;
+}
 }
 
 Player::~Player(){
+    for (BoatHold* hold : boatHolds) {
+        delete hold; 
+    }
+    boatHolds.clear();
 }
 
-BoatHold *Player::selectBoatHold(std::unique_ptr<Resources> resource){
-    std::string resourceType = resource->getType();
-
+BoatHold *Player::selectBoatHold(const std::string& resourceType){
+    std::cout << "Test rentrer fonc" << std::endl;
     // Check for exceptions :
     bool exception_full_holds = true;
     for (BoatHold *hold : boatHolds){
+        if (hold == nullptr) {
+            std::cout << "BoatHold pointer is nullptr!" << std::endl;
+            continue;  // Si le pointeur est nul, on continue à l'itération suivante
+        }
         if (!hold->hasResourceType(resourceType)){
             exception_full_holds = false;
         }
@@ -26,7 +44,7 @@ BoatHold *Player::selectBoatHold(std::unique_ptr<Resources> resource){
     if (exception_full_holds){
         return nullptr;
     }
-
+     std::cout << "Test afterfor" << std::endl;
     // If no exceptions were found :
     int index = 0;
     std::string input;
@@ -41,7 +59,7 @@ BoatHold *Player::selectBoatHold(std::unique_ptr<Resources> resource){
     }
 
     BoatHold* selectedHold = boatHolds[index - 1];
-    if (selectedHold->hasResourceType(resource->getType())) {
+    if (selectedHold->hasResourceType(resourceType)) {
         std::cout << "Ce BoatHold contient déjà des ressources du même type. Choisir un BoatHold vide ou ayant des ressources de type différent.\n";
         continue; 
     }
@@ -65,7 +83,14 @@ void Player::playTurn(){
 
 void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amount)
 {
-    BoatHold *selectedBoatHold = selectBoatHold(std::move(resource));
+        if (!resource) {
+        std::cerr << "Erreur : le pointeur resource est nul !\n";
+        return;
+    }
+    std::cout << "test gettype \n";
+    std::string resourceType = resource->getType();
+    std::cout << "test gettype suc \n";
+    BoatHold *selectedBoatHold = selectBoatHold(resourceType);
     if (selectedBoatHold != nullptr){
         selectedBoatHold->addResource(std::move(resource), amount);
         std::cout << "Ressource ajoutée au BoatHold avec succès !\n";

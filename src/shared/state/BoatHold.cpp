@@ -3,7 +3,7 @@
 
 namespace state {
 
-BoatHold::BoatHold(){}
+BoatHold::BoatHold() {}
 
 BoatHold::~BoatHold(){
 }

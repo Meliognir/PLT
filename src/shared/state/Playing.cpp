@@ -11,6 +11,13 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include <memory>
+#include <utility> // Pour std::forward
+
+template <typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 
 #define DAY true
 #define NIGHT false
@@ -54,7 +61,7 @@ namespace state {
     int playerNumber = game->getPlayerList().size();
     // "Port Royal" : Start Tile : foodCost, goldCost, treasure, nbPlayer
     Tile tile(0, 0, false, playerNumber);
-    game->map->listOfTiles.push_back(tile);
+    game->map->listOfTiles.push_back(&tile);
     // other Tiles
     for (int i = 0; i < mapSize-1; ++i) {
       int tileFCost = rand()%4;
@@ -68,7 +75,7 @@ namespace state {
       if(tileFCost == 0 && tileGCost == 0) {
         Tile tile(0, 0, true, 0);
       }
-      game->map->listOfTiles.push_back(tile);
+      game->map->listOfTiles.push_back(&tile);
     }
     std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
     //-------------Initializes players' parameters------------
@@ -91,9 +98,10 @@ namespace state {
       //au lieu d'en faire une copie, ce qui est essentiel pour les 
       //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
-      auto goldResource = std::unique_ptr<Gold>();
+      auto goldResource = make_unique<Gold>();
       player->addResourcesToBoatHold(std::move(goldResource), 3);
-      auto foodResource = std::unique_ptr<Food>();
+
+      auto foodResource = make_unique<Food>();
       player->addResourcesToBoatHold(std::move(foodResource), 3);
       // print le type et nombre de ressource du boathold : void BoatHold::showContents()
 
