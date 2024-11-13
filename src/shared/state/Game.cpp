@@ -140,8 +140,10 @@ void Game::displayState()
 
     // Ecran dédié aux états actuels des joueurs et les ressources dans leur cale
     int numberOfPlayers = getPlayerList().size();
+
     for (int i = 0; i < numberOfPlayers; i++){
         printf("Affichage des informations du i-ème joueur\n");
+
     }
 }
 

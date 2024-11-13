@@ -85,6 +85,7 @@ namespace state {
       // Treasure(bonus, malus)
       std::vector<Treasure> initialTreasures = { Treasure(0, 0) };
       player->setTreasures(initialTreasures);
+
       // BoatHold()
       //définir setBoatHolds
       // Gold() + Food()
@@ -97,12 +98,24 @@ namespace state {
       //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
       auto goldResource = make_unique<Gold>();
-      player->addResourcesToBoatHold(std::move(goldResource), 3, 1);
 
+      player->addResourcesToBoatHold(std::move(goldResource), 3, 1);
+      int i =1;
+      for (BoatHold *bh: player->getBoatHolds()) {
+        std::cout<< "BoatHold N°" << i << " : " ;
+        bh->showContents();
+        i++;
+      }
       auto foodResource = make_unique<Food>();
       player->addResourcesToBoatHold(std::move(foodResource), 3, 2);
-      // print le type et nombre de ressource du boathold : void BoatHold::showContents()
+      for (BoatHold *bh: player->getBoatHolds()) {
+        std::cout<< "BoatHold N°" << i << " : " ;
+        bh->showContents();
+        i++;
+      }
 
+      // print le type et nombre de ressource du boathold : void BoatHold::showContents()
+      game->displayState();
 
 
 

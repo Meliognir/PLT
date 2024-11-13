@@ -27,8 +27,8 @@ Player::~Player(){
     boatHolds.clear();
 }
 
-BoatHold *Player::selectBoatHold(const std::string& resourceType){
-    std::cout << "Test rentrer fonc" << std::endl;
+BoatHold *Player::selectBoatHold(const std::string& resourceType,int init){
+
     // Check for exceptions :
     bool exception_full_holds = true;
     for (BoatHold *hold : boatHolds){
@@ -43,7 +43,7 @@ BoatHold *Player::selectBoatHold(const std::string& resourceType){
     if (exception_full_holds){
         return nullptr;
     }
-     std::cout << "Test afterfor" << std::endl;
+
     // If no exceptions were found :
     int index = 0;
     std::string input;
@@ -86,12 +86,12 @@ void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amo
         std::cerr << "Erreur : le pointeur resource est nul !\n";
         return;
     }
-    std::cout << "test gettype \n";
+
     std::string resourceType = resource->getType();
-    std::cout << "test gettype suc \n";
-    BoatHold *selectedBoatHold;
-    if (skipSelection){
-        selectedBoatHold = boatHolds.at(skipSelection);
+    BoatHold *selectedBoatHold = selectBoatHold(resourceType);
+    if (selectedBoatHold != nullptr){
+        selectedBoatHold->addResource(std::move(resource), amount);
+        std::cout << "Ressource ajoutée au BoatHold avec succès !\n";
     }
     else{
         selectedBoatHold = selectBoatHold(resourceType);
