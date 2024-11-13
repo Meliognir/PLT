@@ -97,10 +97,10 @@ namespace state {
       //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
       auto goldResource = make_unique<Gold>();
-      player->addResourcesToBoatHold(std::move(goldResource), 3);
+      player->addResourcesToBoatHold(std::move(goldResource), 3, 1);
 
       auto foodResource = make_unique<Food>();
-      player->addResourcesToBoatHold(std::move(foodResource), 3);
+      player->addResourcesToBoatHold(std::move(foodResource), 3, 2);
       // print le type et nombre de ressource du boathold : void BoatHold::showContents()
 
 
