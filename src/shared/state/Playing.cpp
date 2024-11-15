@@ -77,6 +77,7 @@ namespace state {
       }
       game->map->listOfTiles.push_back(&tile);
     }
+
     std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
     //-------------Initializes players' parameters------------
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
@@ -99,7 +100,7 @@ namespace state {
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
       auto goldResource = make_unique<Gold>();
 
-      player->addResourcesToBoatHold(std::move(goldResource), 3);
+      player->addResourcesToBoatHold(std::move(goldResource), 3,1);
       int i =1;
       for (BoatHold *bh: player->getBoatHolds()) {
         std::cout<< "BoatHold N°" << i << " : " ;
@@ -108,7 +109,7 @@ namespace state {
       }
       i=1;
       auto foodResource = make_unique<Food>();
-      player->addResourcesToBoatHold(std::move(foodResource), 3);
+      player->addResourcesToBoatHold(std::move(foodResource), 3,2);
       for (BoatHold *bh: player->getBoatHolds()) {
         std::cout<< "BoatHold N°" << i << " : " ;
         bh->showContents();

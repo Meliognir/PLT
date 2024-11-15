@@ -136,9 +136,12 @@ void Game::displayState()
     printf("Affichage de la map :\n");
     for (int i = 0; i < mapSize; i++){
         std::cout<< "Tuile N°" << i << " contient : ";
-        //if(map->listOfTiles.at(i)==(0,"Gold" ||map->listOfTiles.at(i)=="Food") {
-            //std::cout<<map->listOfTiles.get_allocator()<< " à payer." << std::endl;
-        //}
+        if(map->getResourceCost(i)>0) {
+            std::cout<<"Il y a "<<map->getResourceCost(i)<<map->getResourceType(i)<< " à payer sur cette tuile." << std::endl;
+        }
+        if(map->getResourceType(i)=="Treasure") {
+            std::cout<<map->getResourceType(i)<< " à gagner sur cette tuile." << std::endl;
+        }
     }
 
     // Ecran dédié aux états actuels des joueurs et les ressources dans leur cale

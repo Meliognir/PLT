@@ -17,4 +17,18 @@ void Map::setSize(int size){
 int Map::getSize() const{
     return size;
 }
+
+std::string Map::getResourceType (int position) {
+   return listOfTiles.at(position)->getTileResource();
+}
+
+int Map::getResourceCost (int position) {
+    if (getResourceType(position)=="Food") {
+        return listOfTiles.at(position)->foodCost;
+    }
+    if (getResourceType(position)=="Gold") {
+        return listOfTiles.at(position)->goldCost;
+    }
+    return 0;
+}
 }
