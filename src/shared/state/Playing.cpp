@@ -106,6 +106,7 @@ namespace state {
         bh->showContents();
         i++;
       }
+      i=1;
       auto foodResource = make_unique<Food>();
       player->addResourcesToBoatHold(std::move(foodResource), 3, 2);
       for (BoatHold *bh: player->getBoatHolds()) {

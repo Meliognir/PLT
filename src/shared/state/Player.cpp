@@ -27,7 +27,7 @@ Player::~Player(){
     boatHolds.clear();
 }
 
-BoatHold *Player::selectBoatHold(const std::string& resourceType,int init){
+BoatHold *Player::selectBoatHold(const std::string& resourceType){
 
     // Check for exceptions :
     bool exception_full_holds = true;
