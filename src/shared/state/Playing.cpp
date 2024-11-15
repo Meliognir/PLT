@@ -70,8 +70,8 @@ namespace state {
     for (int i = 0; i < mapSize-1; ++i) {
       int resource = TREASURE;
       int cost = rand()%4;
-      if (resource){
-        cost = 1+rand()%3;
+      if (cost){
+        resource = 1+rand()%2;
       }
 
       Tile *tile;

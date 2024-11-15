@@ -134,14 +134,16 @@ void Game::displayState()
     // Ecran principal avec la map et la position des joueurs
     int mapSize = map->getSize();
     printf("Affichage de la map :\n");
-    for (int i = 0; i < mapSize; i++){
+    std::cout<<"Tuile N°0 : Ceci est la tuile de départ, il y a rien à payer ici." << std::endl;
+    for (int i = 1; i < mapSize; i++){
         std::cout<< "Tuile N°" << i << " contient : ";
         if(map->getResourceCost(i)>0) {
-            std::cout<<"Il y a "<<map->getResourceCost(i)<<map->getResourceType(i)<< " à payer sur cette tuile." << std::endl;
+            std::cout<<"Il y a "<<map->getResourceCost(i)<< " " <<map->getResourceType(i)<< " à payer sur cette tuile." << std::endl;
         }
         if(map->getResourceType(i)=="Treasure") {
-            std::cout<<map->getResourceType(i)<< " à gagner sur cette tuile." << std::endl;
+            std::cout<<"Il y a un "<<map->getResourceType(i)<< " à gagner sur cette tuile." << std::endl;
         }
+
     }
 
     // Ecran dédié aux états actuels des joueurs et les ressources dans leur cale
