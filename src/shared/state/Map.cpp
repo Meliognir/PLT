@@ -19,16 +19,10 @@ int Map::getSize() const{
 }
 
 std::string Map::getResourceType (int position) {
-   return listOfTiles.at(position)->getTileResource();
+   return listOfTiles.at(position)->tileResourceType;
 }
 
 int Map::getResourceCost (int position) {
-    if (getResourceType(position)=="Food") {
-        return listOfTiles.at(position)->foodCost;
-    }
-    if (getResourceType(position)=="Gold") {
-        return listOfTiles.at(position)->goldCost;
-    }
-    return 0;
+    return listOfTiles.at(position)->tileCost;
 }
 }
