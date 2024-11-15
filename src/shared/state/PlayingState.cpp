@@ -8,6 +8,7 @@
 #include "Gold.h"
 #include "Food.h"
 #include "Canon.h"
+#include "../../client/client/InputHandler.h"
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -41,9 +42,11 @@ namespace state {
 // initializes the map and its tiles and initializes players' other parameters 
 //-----------------------------
   void PlayingState::handle1() {
-    int mapSize = 0;
+    client::InputHandler inputHandler;
+    int mapSize = inputHandler.getMapSize();
     //-------------Initializes Map + tiles------------
-    while(mapSize <= 1){
+    
+    /*while(mapSize <= 1){
       std::cout << "Enter the size of the map: ";
       std::cin >> mapSize;
       if (std::cin.fail()) { 
@@ -54,7 +57,7 @@ namespace state {
       } else if(mapSize <= 1){
         std::cout << "Invalid map size. Please enter a number higher than 1." << std::endl;
       }
-    }
+    }*/
     if (game->map == nullptr) {
         game->map = new Map(mapSize);
     } else {
@@ -87,7 +90,8 @@ namespace state {
       game->map->listOfTiles.push_back(tile);
     }
 
-    std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
+    //std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
+    inputHandler.displayMessage("Map initialized with " + std::to_string(game->map->getSize()) + " tiles.");
     //-------------Initializes players' parameters------------
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
     for (Player* player : playingPlayers) {

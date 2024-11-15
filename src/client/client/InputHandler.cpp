@@ -4,6 +4,10 @@
 #include <limits>
 
 namespace client{
+
+InputHandler::InputHandler(){
+}
+
 int client::InputHandler::getNumberofPlayers(){
     int playerNumber = 0;
     while (playerNumber < 2 || playerNumber > 6) {
@@ -33,6 +37,20 @@ void client::InputHandler::displayMessage(const std::string &message){
     std::cout << message << std::endl;
 }
 
-InputHandler::InputHandler(){
+int InputHandler::getMapSize(){
+    int mapSize = 0;
+        while (mapSize <= 1) {
+            std::cout << "Enter the size of the map: ";
+            std::cin >> mapSize;
+            if (std::cin.fail()) { 
+                std::cin.clear();   
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+                std::cout << "Invalid input. Please enter a number." << std::endl;
+                mapSize = 0; 
+            } else if (mapSize <= 1) {
+                std::cout << "Invalid map size. Please enter a number higher than 1." << std::endl;
+            }
+        }
+    return mapSize;
 }
 }

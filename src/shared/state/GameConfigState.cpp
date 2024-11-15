@@ -60,12 +60,14 @@ namespace state {
 //transition to Playing concrete state
 //-----------------------------
   void GameConfigState::handle2() {
-    std::cout << "Transitioning to Playing state..." << std::endl;
+    client::InputHandler inputHandler;
+    inputHandler.displayMessage("Transitioning to Playing state...");
     game->transitionTo(new PlayingState);
   }
 
   GameConfigState::~GameConfigState() {
-    std::cout << "GameConfig destructor called" << std::endl;
+    client::InputHandler inputHandler;
+    inputHandler.displayMessage("GameConfig destructor called");
   }
 
 } // namespace state
