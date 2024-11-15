@@ -14,6 +14,10 @@
 #include <memory>
 #include <utility> // Pour std::forward
 
+#define TREASURE 0
+#define GOLD 1
+#define FOOD 2
+
 template <typename T, typename... Args>
 std::unique_ptr<T> make_unique(Args&&... args) {
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
@@ -60,22 +64,27 @@ namespace state {
 
     int playerNumber = game->getPlayerList().size();
     // "Port Royal" : Start Tile : foodCost, goldCost, treasure, nbPlayer
-    Tile tile(0, 0, false, playerNumber);
+    Tile tile(0, "Port Royal", playerNumber);
     game->map->listOfTiles.push_back(&tile);
     // other Tiles
     for (int i = 0; i < mapSize-1; ++i) {
-      int tileFCost = rand()%4;
-      int tileGCost = rand()%4;
-      if(tileFCost != 0) {
-        Tile tile(tileFCost, 0, false, 0);
+      int resource = TREASURE;
+      int cost = rand()%4;
+      if (resource){
+        cost = 1+rand()%3;
       }
-      if(tileFCost == 0 && tileGCost != 0) {
-        Tile tile(0, tileGCost, false, 0);
+
+      Tile *tile;
+      if (resource == TREASURE){
+        tile = new Tile(cost, "Treasure", 0);
       }
-      if(tileFCost == 0 && tileGCost == 0) {
-        Tile tile(0, 0, true, 0);
+      if (resource == FOOD){
+        tile = new Tile(cost, "Food", 0);
       }
-      game->map->listOfTiles.push_back(&tile);
+      if (resource == GOLD){
+        tile = new Tile(cost, "Gold", 0);
+      }
+      game->map->listOfTiles.push_back(tile);
     }
 
     std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;

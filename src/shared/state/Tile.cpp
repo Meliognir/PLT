@@ -2,20 +2,14 @@
 // Created by trias on 14/10/24.
 //
 #include "Tile.h"
+#include <string>
 
-state::Tile::Tile(int foodCost, int goldCost, bool treasure, int nbPlayer) :
-foodCost(foodCost),goldCost(goldCost),treasure(treasure),nbPlayer(nbPlayer){
+namespace state {
+Tile::Tile(int cost, std::string resource, int nbPlayer) :
+tileCost(cost),tileResourceType(resource),nbPlayer(nbPlayer){
 
 }
 
 state::Tile::~Tile()=default;
 
-std::string state::Tile::getTileResource () {
-    if (goldCost > 0) {
-        return "Gold";
-    }
-    if (foodCost > 0) {
-        return "Food";
-    }
-    return "Treasure";
 }
