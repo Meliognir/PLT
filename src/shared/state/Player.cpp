@@ -27,7 +27,7 @@ Player::~Player(){
     boatHolds.clear();
 }
 
-BoatHold *Player::selectBoatHold(const std::string& resourceType,int init){
+BoatHold *Player::selectBoatHold(const std::string& resourceType){
 
     // Check for exceptions :
     bool exception_full_holds = true;
@@ -88,7 +88,15 @@ void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amo
     }
 
     std::string resourceType = resource->getType();
-    BoatHold *selectedBoatHold = selectBoatHold(resourceType);
+    BoatHold *selectedBoatHold;
+
+    if (skipSelection){
+        selectedBoatHold = boatHolds.at(skipSelection-1);
+    }
+    else {
+        selectedBoatHold = selectBoatHold(resourceType);
+    }
+
     if (selectedBoatHold != nullptr){
         selectedBoatHold->addResource(std::move(resource), amount);
         std::cout << "Ressource ajoutée au BoatHold avec succès !\n";
