@@ -11,11 +11,11 @@ file(GLOB_RECURSE shared_sources *.cpp)
 
 # Build the "shared" library and add required includes
 add_library(${lib_shared_target} STATIC ${shared_sources} ${jsoncpp_sources}
-        state/Tile.cpp
-        state/Canon.cpp
-        state/Gold.cpp
-        state/Food.cpp
-        state/Playing.cpp
+        #state/Tile.cpp
+        #state/Canon.cpp
+        #state/Gold.cpp
+        #state/Food.cpp
+        #state/PlayingState.cpp
         state/GameConfigState.cpp
         ../client/client/InputHandler.cpp)
 add_dependencies(${lib_shared_target} generate-headers)
