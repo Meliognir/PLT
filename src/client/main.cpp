@@ -20,7 +20,7 @@ int clientcode(){
 //-----------------------------
 // instantiates a new Game context and runs concrete states "GameConfig" then "Playing" functions
 //-----------------------------
-    Game *mygame = new Game(new GameConfig, nullptr); //transition to GameConfig
+    Game *mygame = new Game(new GameConfigState, nullptr); //transition to GameConfig
 
     mygame->request1(); //initializes Players
     mygame->request2(); //transition to Playing

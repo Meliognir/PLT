@@ -1,7 +1,7 @@
-#include "GameConfig.h"
+#include "GameConfigState.h"
 #include "Game.h"
 #include "Player.h"
-#include "Playing.h"
+#include "PlayingState.h"
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -16,7 +16,7 @@ namespace state {
 //-----------------------------
 //asks for the number of player, instantiates Players and initializes their name
 //-----------------------------
-  void GameConfig::handle1() { 
+  void GameConfigState::handle1() { 
     int playerNumber = 0;
 
     while(playerNumber < 2 || playerNumber > 6) {
@@ -46,12 +46,12 @@ namespace state {
 //-----------------------------
 //transition to Playing concrete state
 //-----------------------------
-  void GameConfig::handle2() {
+  void GameConfigState::handle2() {
     std::cout << "Transitioning to Playing state..." << std::endl;
-    game->transitionTo(new Playing);
+    game->transitionTo(new PlayingState);
   }
 
-  GameConfig::~GameConfig() {
+  GameConfigState::~GameConfigState() {
     std::cout << "GameConfig destructor called" << std::endl;
   }
 

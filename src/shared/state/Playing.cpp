@@ -1,8 +1,8 @@
-#include "Playing.h"
+#include "PlayingState.h"
 #include "Map.h"
 #include "Tile.h"
 #include "Player.h"
-#include "GameConfig.h"
+#include "GameConfigState.h"
 #include "Game.h"
 #include "Resources.h"
 #include "Gold.h"
@@ -29,14 +29,14 @@ std::unique_ptr<T> make_unique(Args&&... args) {
 
 namespace state {
 
-  Playing::~Playing() {
+  PlayingState::~PlayingState() {
     std::cout << "Playing state destructor called" << std::endl;
   }
 
 //-----------------------------
 // initializes the map and its tiles and initializes players' other parameters 
 //-----------------------------
-  void Playing::handle1() {
+  void PlayingState::handle1() {
     int mapSize = 0;
     //-------------Initializes Map + tiles------------
     while(mapSize <= 1){
@@ -99,7 +99,7 @@ namespace state {
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
       auto goldResource = make_unique<Gold>();
 
-      player->addResourcesToBoatHold(std::move(goldResource), 3, 1);
+      player->addResourcesToBoatHold(std::move(goldResource), 3);
       int i =1;
       for (BoatHold *bh: player->getBoatHolds()) {
         std::cout<< "BoatHold N°" << i << " : " ;
@@ -108,7 +108,7 @@ namespace state {
       }
       i=1;
       auto foodResource = make_unique<Food>();
-      player->addResourcesToBoatHold(std::move(foodResource), 3, 2);
+      player->addResourcesToBoatHold(std::move(foodResource), 3);
       for (BoatHold *bh: player->getBoatHolds()) {
         std::cout<< "BoatHold N°" << i << " : " ;
         bh->showContents();
@@ -132,7 +132,7 @@ namespace state {
 //-------------------------
 // Game Loop
 //-------------------------
-  void Playing::handle2() {
+  void PlayingState::handle2() {
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
     Player* currentPlayer;
     Player* activePlayer;
