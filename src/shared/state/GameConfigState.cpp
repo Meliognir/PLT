@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "PlayingState.h"
+#include "../../client/client/InputHandler.h"
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -17,7 +18,19 @@ namespace state {
 //asks for the number of player, instantiates Players and initializes their name
 //-----------------------------
   void GameConfigState::handle1() { 
-    int playerNumber = 0;
+    client::InputHandler inputHandler;
+
+    int playerNumber = inputHandler.getNumberofPlayers();
+    inputHandler.displayMessage("Number of players set to: " + std::to_string(playerNumber));
+
+    std::vector<Player*> players;
+    for (int i = 0; i < playerNumber; ++i) {
+        std::string playerName = inputHandler.getPlayerName(i + 1);
+        Player* player = new Player(i + 1, playerName);
+        players.push_back(player);
+    }
+    game->setPlayerList(players);
+    /*int playerNumber = 0;
 
     while(playerNumber < 2 || playerNumber > 6) {
         std::cout << "Enter the number of players: ";
@@ -40,7 +53,7 @@ namespace state {
       Player* player = new Player(i + 1, playerName);
       players.push_back(player);
     }
-    game->setPlayerList(players);
+    game->setPlayerList(players);*/
   }
 
 //-----------------------------
