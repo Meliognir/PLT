@@ -125,11 +125,6 @@ namespace state {
       game->displayState();
 
 
-
-      
-      //std::vector<int> cardDeck = {0, 1, 2, 3, 5 , 6, 7, 8, 9}; // randomiser la pioche de chaque joueur
-      //player->setActionCard(cardDeck);
-
       std::cout << "Player " << player->getPlayerId() << " (" << player->getName() << ") initialized at position " << player->getPosition() << std::endl;
     }
     std::cout << "Players initialized: " << playingPlayers.size() << " players in the game." << std::endl;

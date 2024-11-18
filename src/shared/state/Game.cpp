@@ -145,7 +145,6 @@ void Game::displayState()
 
     }
 
-
     // Affichage des boatholds, trésors, cartes
     for(Player * player : getPlayerList()){
         int i=0;
@@ -158,7 +157,12 @@ void Game::displayState()
         std::cout<< "Trésors de "<< player->getName()<<" :" << std::endl;
         //à compléter
         std::cout<<"Cartes de "<< player->getName()<<" :" << std::endl;
-        //à compléter
+        for (int cardIndex : player->getHandCards()) {
+            std::cout<< "Card N°" << i << " : " ;
+            std::cout<< "Action du jour : "<< collectionOfCards.at(cardIndex)->getDayAction() << ". ";
+            std::cout<< "Action de la nuit : "<< collectionOfCards.at(cardIndex)->getNightAction() << "." <<std::endl;
+            i++;
+        }
     }
 }
 
