@@ -20,6 +20,7 @@ Player::Player(int playerId, std::string name) : playerId(playerId), name(name){
     for (int i = 0; i < 6; ++i) {
         boatHolds.push_back(new BoatHold());
 }
+
 }
 
 Player::~Player(){
@@ -163,5 +164,14 @@ const std::vector<ActionCard> &Player::getActionCards() const{
 void Player::setActionCards(const std::vector<ActionCard> &actionCard){
     this->actionCards=actionCard;
 }*/
+
+const std::vector <int>& Player::getHandCards() const{
+    return handCards;
+}
+
+void moveCardToHand () {
+
+}
+
 
 }
