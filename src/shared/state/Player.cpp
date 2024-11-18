@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "ActionCard.h"
 #include "BoatHold.h"
-#include "../../client/client/InputHandler.h"
 #include "../engine/ResourceManager.h"
 #include <iostream>
 #include <memory>
@@ -101,31 +100,15 @@ void Player::shuffleDeck(){
 }
 
 // sets activeCard to player's choice
-void Player::chooseCard(){
+void Player::chooseCard() {
     client::InputHandler inputHandler;
-    
-    inputHandler.displayMessage("Your 3 handCards : ");
-    for (size_t i = 0; i < handCards.size(); ++i) {
-        std::cout << i + 1 << ". " << handCards[i] << std::endl;
-    }
-    int choice = 0;
-    while (true) {
-        inputHandler.displayMessage("Choose a card, enter an index between 1 and 3 : ");
-        std::cin >> choice;
+    int selectedIndex = inputHandler.chooseCardFromHand(handCards);
 
-        if (std::cin.fail() || choice < 1 || choice > 3) {
-            std::cin.clear();
-            std::cin.ignore(1000, '\n');
-            inputHandler.displayMessage("Non valid entry.");
-        } else {
-            try {
-                activeCard = handCards.at(choice - 1);
-                inputHandler.displayMessage("You chose card with ID : " + std::to_string(activeCard));
-                break;
-            } catch (const std::out_of_range& e) {
-                inputHandler.displayMessage("Error in handCards : Index beyond limits.");
-            }
-        }
+    if (selectedIndex != -1) {
+        activeCard = handCards.at(selectedIndex);
+        inputHandler.displayMessage("You chose card with ID: " + std::to_string(activeCard));
+    } else {
+        inputHandler.displayMessage("Failed to choose a card.");
     }
 }
 
@@ -153,9 +136,6 @@ bool Player::chooseTimeDice(int dice1, int dice2){
         std::cout << "Le dé " << dice2 << " sera le dé du jour. Le dé " << dice1 << " sera le dé de la nuit." << std::endl;
         return false;
     }
-}
-
-void Player::chooseCard(){
 }
 
 int Player::getPlayerId() const{
