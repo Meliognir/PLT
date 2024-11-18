@@ -194,7 +194,7 @@ const std::vector <int>& Player::getHandCards() const{
 
 void Player::moveCardToHand () {
     handCards.push_back(cardDeck.at(0));
-    cardDeck.erase(cardDeck.begin);
+    cardDeck.erase(cardDeck.begin());
 }
 
 void Player::moveCardToDeck() {
