@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "ActionCard.h"
 #include "BoatHold.h"
+#include "../../client/client/InputHandler.h"
+#include "../engine/ResourceManager.h"
 #include <iostream>
 #include <memory>
 #include <utility> // Pour std::forward
@@ -28,50 +30,27 @@ Player::~Player(){
 }
 
 BoatHold *Player::selectBoatHold(const std::string& resourceType){
-
-    // Check for exceptions :
-    bool exception_full_holds = true;
-    for (BoatHold *hold : boatHolds){
-        if (hold == nullptr) {
-            std::cout << "BoatHold pointer is nullptr!" << std::endl;
-            continue;  // Si le pointeur est nul, on continue à l'itération suivante
-        }
-        if (!hold->hasResourceType(resourceType)){
-            exception_full_holds = false;
-        }
-    }
-    if (exception_full_holds){
+    client::InputHandler inputHandler;
+    engine::ResourceManager resourceManager;
+    if (!resourceManager.isBoatHoldAvailable(*this, resourceType)){
+        inputHandler.displayMessage("All boatholds already have this resource. Cannot replace.");
         return nullptr;
     }
-
-    // If no exceptions were found :
-    int index = 0;
-    std::string input;
-
-    while (true) {
-    std::cout << "Vous avez 6 BoatHold. Choisissez-en un (1-6) : ";
-    std::cin >> index;
-
-    if (index < 1 || index > 6) {
-        std::cout << "Index invalide. Veuillez entrer un numéro entre 1 et 6.\n";
+    while (true){
+    int index = inputHandler.selectUserBoatHold(6); // TODO : nombre de boathold d'un player
+    if (resourceManager.checkSameBoathold(*this,resourceType,index)){
+        inputHandler.displayMessage("Boathold already contains this type of resource. Please choose another.");
         continue;
     }
-
-    BoatHold* selectedHold = boatHolds[index - 1];
-    if (selectedHold->hasResourceType(resourceType)) {
-        std::cout << "Ce BoatHold contient déjà des ressources du même type. Choisir un BoatHold vide ou ayant des ressources de type différent.\n";
-        continue; 
-    }
-
-    if (!selectedHold->isEmpty()) {
-        std::cout << "Ce BoatHold contient d'autres ressources. Voulez-vous les remplacer ? (o/n) : ";
-        std::cin >> input;
-
-        if (input != "o") {
-        continue; 
+    if (resourceManager.checkOccupied(*this, index)){
+        if (!inputHandler.confirmBoatHoldReplace()){
+            continue;
         }
-        int quantityToRemove = selectedHold->getQuantity();
-        selectedHold->removeResource(quantityToRemove);
+    }
+    BoatHold* selectedHold = resourceManager.selectBoathold(*this, resourceType, index);
+    if (selectedHold == nullptr) {
+        inputHandler.displayMessage("Error selecting BoatHold.");
+        return nullptr;
     }
     return selectedHold;
     }
