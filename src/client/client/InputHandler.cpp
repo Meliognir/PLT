@@ -79,4 +79,26 @@ bool InputHandler::confirmBoatHoldReplace(){
         std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
     }
 }
+
+int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
+    displayMessage("Your 3 handCards:");
+    for (size_t i = 0; i < handCards.size(); ++i) {
+        std::cout << i + 1 << ". " << handCards[i] << std::endl;
+    }
+
+    int choice = 0;
+    while (true) {
+        displayMessage("Choose a card, enter an index between 1 and 3:");
+        std::cin >> choice;
+
+        if (std::cin.fail() || choice < 1 || choice > 3) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            displayMessage("Invalid input. Please enter a valid index (1-3).");
+        } else {
+            return choice - 1;
+        }
+    }
+}
+
 }
