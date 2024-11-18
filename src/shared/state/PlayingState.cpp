@@ -24,8 +24,6 @@ std::unique_ptr<T> make_unique(Args&&... args) {
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
-#define DAY true
-#define NIGHT false
 
 //-------------------------
 // Lucian works here
@@ -112,20 +110,14 @@ namespace state {
       //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
       auto goldResource = make_unique<Gold>();
-
       player->addResourcesToBoatHold(std::move(goldResource), 3,1);
-      int i =1;
-      for (BoatHold *bh: player->getBoatHolds()) {
-        std::cout<< "BoatHold N°" << i << " : " ;
-        bh->showContents();
-        i++;
-      }
-      i=1;
       auto foodResource = make_unique<Food>();
       player->addResourcesToBoatHold(std::move(foodResource), 3,2);
+      
+      int i=1;
       for (BoatHold *bh: player->getBoatHolds()) {
         std::cout<< "BoatHold N°" << i << " : " ;
-        bh->showContents();
+        bh->showContent();
         i++;
       }
 
@@ -156,7 +148,6 @@ namespace state {
 
     bool gameOver = false;
     int turn = 0;
-    bool current_time[2] = {DAY, NIGHT};
     
     int dice1 = 0;
     int dice2 = 0;
@@ -165,7 +156,6 @@ namespace state {
     while (!gameOver) {
       //-------------Captain + Round------------
       std::cout << "Starting a new round in the Playerlist." << std::endl;
-      Game::time = DAY;
       turn ++; game->setTurn(turn);
       currentPlayer = playingPlayers[startingPlayerIndex];
       game->setCaptainIndex(startingPlayerIndex);
@@ -193,7 +183,6 @@ namespace state {
       }
       //-------------Every Player execute day and night Actions of their chosen card------------
       for (int i = 0; i < playerCount; i++) {
-        Game::time = current_time[i];
         activePlayerIndex = (startingPlayerIndex + i) % playerCount;
         activePlayer = playingPlayers[activePlayerIndex];
         std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;

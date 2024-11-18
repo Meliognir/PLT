@@ -26,41 +26,41 @@ namespace state {
         nightAction = original->nightAction;       
     }
 
-    void ActionCard::move(){
+    void ActionCard::move(){/*
         int current_pos = cardOwner->getPosition();
         if (Game::time == DAY){
             cardOwner->setPosition(current_pos+Game::dayDie);
         }
         if (Game::time == NIGHT){
             cardOwner->setPosition(current_pos+Game::nightDie);
-        }
+        }*/
     }
 
-    void ActionCard::addCanons() {
+    void ActionCard::addCanons() {/*
         if (Game::time == DAY){
             cardOwner->addResourcesToBoatHold(std::unique_ptr<Canon>(), Game::dayDie);
         }
         if (Game::time == NIGHT){
             cardOwner->addResourcesToBoatHold(std::unique_ptr<Canon>(), Game::nightDie);
-        }
+        }*/
     }
 
-    void ActionCard::addFood() {
+    void ActionCard::addFood() {/*
         if (Game::time == DAY){
             cardOwner->addResourcesToBoatHold(std::unique_ptr<Food>(), Game::dayDie);
         }
         if (Game::time == NIGHT){
             cardOwner->addResourcesToBoatHold(std::unique_ptr<Food>(), Game::nightDie);
-        }
+        }*/
     }
 
-    void ActionCard::addGold() {
+    void ActionCard::addGold() {/*
         if (Game::time == DAY){
             cardOwner->addResourcesToBoatHold(std::unique_ptr<Gold>(), Game::dayDie);
         }
         if (Game::time == NIGHT){
             cardOwner->addResourcesToBoatHold(std::unique_ptr<Gold>(), Game::nightDie);
-        }
+        }*/
     }
 
     const uint8_t& ActionCard::getDayAction() const {
