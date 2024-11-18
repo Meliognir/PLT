@@ -28,7 +28,12 @@ namespace state {
 
     void ActionCard::move(){
         int current_pos = cardOwner->getPosition();
-        cardOwner->setPosition(current_pos+1);
+        if (Game::time == DAY){
+            cardOwner->setPosition(current_pos+Game::dayDie);
+        }
+        if (Game::time == NIGHT){
+            cardOwner->setPosition(current_pos+Game::nightDie);
+        }
     }
 
     void ActionCard::addCanons() {
