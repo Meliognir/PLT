@@ -53,4 +53,30 @@ int InputHandler::getMapSize(){
         }
     return mapSize;
 }
+int InputHandler::selectUserBoatHold(int boatHoldCount){
+    int index = 0;
+    while (true) {
+        std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
+        std::cin >> index;
+        if (index < 1 || index > boatHoldCount) {
+            std::cout << "Invalid index. Please enter a number between 1 and " << boatHoldCount << ".\n";
+            continue;
+        }
+        return index;
+    }
+}
+
+bool InputHandler::confirmBoatHoldReplace(){
+    std::string input;
+    while (true) {
+        std::cout << "This boathold contains other resources. Do you want to replace them ? (y/n) : ";
+        std::cin >> input;
+
+        if (input == "y" || input == "n") {
+            return input == "y";
+        }
+
+        std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
+    }
+}
 }
