@@ -6,6 +6,9 @@
 #include "../engine/ResourceManager.h"
 #include <iostream>
 #include <memory>
+#include "../../client/client/InputHandler.h"
+#include <algorithm> // Pour std::shuffle
+#include <random>   // Pour std::default_random_engine et std::random_device
 #include <utility> // Pour std::forward
 
 template <typename T, typename... Args>
@@ -56,9 +59,6 @@ BoatHold *Player::selectBoatHold(const std::string& resourceType){
     }
 }
 
-void Player::playTurn(){
-}
-
 void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amount, int skipSelection/*default value = 0*/)
 {
     if (!resource) {
@@ -90,6 +90,49 @@ void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amo
             std::cout << "La ressource n'a pas pu ếtre ajoutée.\n";
         }
     }
+}
+
+// shuffles player cardDeck
+void Player::shuffleDeck(){ 
+    std::random_device rd;
+    // Mersenne Twister PRNG initialisé avec r
+    std::mt19937 g(rd());
+    std::shuffle(cardDeck.begin(), cardDeck.end(), g);
+}
+
+// sets activeCard to player's choice
+void Player::chooseCard(){
+    client::InputHandler inputHandler;
+    
+    inputHandler.displayMessage("Your 3 handCards : ");
+    for (size_t i = 0; i < handCards.size(); ++i) {
+        std::cout << i + 1 << ". " << handCards[i] << std::endl;
+    }
+    int choice = 0;
+    while (true) {
+        inputHandler.displayMessage("Choose a card, enter an index between 1 and 3 : ");
+        std::cin >> choice;
+
+        if (std::cin.fail() || choice < 1 || choice > 3) {
+            std::cin.clear();
+            std::cin.ignore(1000, '\n');
+            inputHandler.displayMessage("Non valid entry.");
+        } else {
+            try {
+                activeCard = handCards.at(choice - 1);
+                inputHandler.displayMessage("You chose card with ID : " + std::to_string(activeCard));
+                break;
+            } catch (const std::out_of_range& e) {
+                inputHandler.displayMessage("Error in handCards : Index beyond limits.");
+            }
+        }
+    }
+}
+
+void Player::playTurn(){
+    //day action
+    //night action
+    //check pour shuffle
 }
 
 bool Player::chooseTimeDice(int dice1, int dice2){
