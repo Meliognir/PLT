@@ -18,7 +18,6 @@ namespace state{
 
 int Game::dayDie = 0;
 int Game::nightDie = 0;
-bool Game::time = true;
 std::vector<ActionCard *> Game::collectionOfCards = {};
 
 void Game::gameTurn(int time){
@@ -153,7 +152,7 @@ void Game::displayState()
         std::cout<< "Cales de "<< player->getName()<<" :" << std::endl;
         for (BoatHold *bh:player->getBoatHolds()) {
             std::cout<< "BoatHold N°" << i << " : " ;
-            bh->showContents();
+            bh->showContent();
             i++;
         }
         std::cout<< "Trésors de "<< player->getName()<<" :" << std::endl;

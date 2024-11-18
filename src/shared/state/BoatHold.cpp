@@ -31,7 +31,7 @@ std::string BoatHold::getResourceType() {
     return resource != nullptr ? resource->getType() : "None";
 }
 
-void BoatHold::showContents() {
+void BoatHold::showContent() {
     if (resource != nullptr) {
         std::cout<<"Contains "<< quantity<<" " << resource-> getType() << "(s).\n";
     }else {
