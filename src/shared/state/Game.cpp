@@ -146,12 +146,20 @@ void Game::displayState()
 
     }
 
-    // Ecran dédié aux états actuels des joueurs et les ressources dans leur cale
-    int numberOfPlayers = getPlayerList().size();
 
-    for (int i = 0; i < numberOfPlayers; i++){
-        printf("Affichage des informations du i-ème joueur\n");
-
+    // Affichage des boatholds, trésors, cartes
+    for(Player * player : getPlayerList()){
+        int i=0;
+        std::cout<< "Cales de "<< player->getName()<<" :" << std::endl;
+        for (BoatHold *bh:player->getBoatHolds()) {
+            std::cout<< "BoatHold N°" << i << " : " ;
+            bh->showContents();
+            i++;
+        }
+        std::cout<< "Trésors de "<< player->getName()<<" :" << std::endl;
+        //à compléter
+        std::cout<<"Cartes de "<< player->getName()<<" :" << std::endl;
+        //à compléter
     }
 }
 
