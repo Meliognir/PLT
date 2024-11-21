@@ -21,20 +21,20 @@ namespace state {
 
     ActionCard::ActionCard(int cardID, Player *owner) : cardOwner(owner){
         //create a copy of the original action card, based on its cardID
-        ActionCard *original = Game::collectionOfCards[cardID];
+        ActionCard *original = Game::collectionOfCards.at(cardID);
         dayAction = original->dayAction;
         nightAction = original->nightAction;       
     }
 
-    void ActionCard::move(){/*
+    /*void ActionCard::move(int direction){
         int current_pos = cardOwner->getPosition();
         if (Game::time == DAY){
             cardOwner->setPosition(current_pos+Game::dayDie);
         }
         if (Game::time == NIGHT){
             cardOwner->setPosition(current_pos+Game::nightDie);
-        }*/
-    }
+        }
+    }*/
 
     void ActionCard::addCanons() {/*
         if (Game::time == DAY){
