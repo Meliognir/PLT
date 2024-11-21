@@ -5385,7 +5385,7 @@
         <dia:point val="93.01,10.5463"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="78.1661,9.78627;96.5909,25.7775"/>
+        <dia:rectangle val="78.1661,9.7863;96.5909,25.7775"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
