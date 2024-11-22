@@ -4,8 +4,8 @@ using namespace engine;
 
 ResourceManager::ResourceManager() {}
 
-state::BoatHold *ResourceManager::selectBoathold(state::Player &player, const std::string resourceType, size_t index){
-    auto& boatHolds = player.getBoatHolds();
+state::BoatHold *ResourceManager::selectBoathold(state::Player *player, const std::string resourceType, size_t index){
+    auto& boatHolds = player->getBoatHolds();
    if (index < 1 || index > boatHolds.size()) {
         return nullptr;  
     }
@@ -15,8 +15,8 @@ state::BoatHold *ResourceManager::selectBoathold(state::Player &player, const st
     return selectedHold;
 }
 
-bool engine::ResourceManager::isBoatHoldAvailable(state::Player &player, const std::string resourceType){
-    auto& boatHolds = player.getBoatHolds();
+bool engine::ResourceManager::isBoatHoldAvailable(state::Player *player, const std::string resourceType){
+    auto& boatHolds = player->getBoatHolds();
     for (state::BoatHold* hold : boatHolds) {
         if (hold && !hold->hasResourceType(resourceType)) {
             return true;
@@ -25,8 +25,8 @@ bool engine::ResourceManager::isBoatHoldAvailable(state::Player &player, const s
     return false;
 }
 
-bool engine::ResourceManager::checkSameBoathold(state::Player &player, const std::string resourceType, size_t index){
-    auto& boatHolds = player.getBoatHolds();
+bool engine::ResourceManager::checkSameBoathold(state::Player *player, const std::string resourceType, size_t index){
+    auto& boatHolds = player->getBoatHolds();
     if (index < 1 || index > boatHolds.size()) {
         return false;  
     }
@@ -34,8 +34,8 @@ bool engine::ResourceManager::checkSameBoathold(state::Player &player, const std
     return selectedHold->hasResourceType(resourceType);
 }
 
-bool engine::ResourceManager::checkOccupied(state::Player &player, size_t index){
-    auto& boatHolds = player.getBoatHolds();
+bool engine::ResourceManager::checkOccupied(state::Player *player, size_t index){
+    auto& boatHolds = player->getBoatHolds();
     if (index < 1 || index > boatHolds.size()) {
         return false; 
     }
@@ -43,6 +43,6 @@ bool engine::ResourceManager::checkOccupied(state::Player &player, size_t index)
     return !selectedHold->isEmpty();
 }
 
-void ResourceManager::addResourcesToBoathold(state::Player &player, const std::string &resourceType, int amount, int skipSelection){
+void ResourceManager::addResourcesToBoathold(state::Player *player, const std::string &resourceType, int amount, int skipSelection){
 }
 

@@ -40,22 +40,22 @@ Player::~Player(){
 BoatHold *Player::selectBoatHold(const std::string& resourceType){
     client::InputHandler inputHandler;
     engine::ResourceManager resourceManager;
-    if (!resourceManager.isBoatHoldAvailable(*this, resourceType)){
+    if (!resourceManager.isBoatHoldAvailable(this, resourceType)){
         inputHandler.displayMessage("All boatholds already have this resource. Cannot replace.");
         return nullptr;
     }
     while (true){
     size_t index = inputHandler.selectUserBoatHold(6); // TODO : nombre de boathold d'un player
-    if (resourceManager.checkSameBoathold(*this,resourceType,index)){
+    if (resourceManager.checkSameBoathold(this,resourceType,index)){
         inputHandler.displayMessage("Boathold already contains this type of resource. Please choose another.");
         continue;
     }
-    if (resourceManager.checkOccupied(*this, index)){
+    if (resourceManager.checkOccupied(this, index)){
         if (!inputHandler.confirmBoatHoldReplace()){
             continue;
         }
     }
-    BoatHold* selectedHold = resourceManager.selectBoathold(*this, resourceType, index);
+    BoatHold* selectedHold = resourceManager.selectBoathold(this, resourceType, index);
     if (selectedHold == nullptr) {
         inputHandler.displayMessage("Error selecting BoatHold.");
         return nullptr;
