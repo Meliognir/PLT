@@ -101,4 +101,17 @@ int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
     }
 }
 
+bool InputHandler::chooseTimeDice(int die1, int die2){
+    std::string input;
+    while (true) {
+        std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
+                  << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
+        std::cin >> input;
+        if (input == "1" || input == "2") {
+            break;
+        }
+        std::cout << "Entrée invalide. Veuillez entrer '1' ou '2'.\n";
+    }
+    return input == "1";
+}
 }
