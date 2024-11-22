@@ -114,9 +114,33 @@ void Player::chooseCard() {
 }
 
 void Player::playTurn(){
-    //day action
-    //night action
-    //check pour shuffle
+    //state::Game::time = DAY
+    //ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
+    //checkCombat()
+    //state::Game::time = NIGHT
+    //ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
+    //checkCombat()
+    //moveCardToDeck() : on bouge les cartes de manière circulaire, la carte utilisée de 
+    //handCards va à la fin de cardDeck
+    //mybool = checkRemainingcards() dans cardDeck
+        //si on a rebouclé (int countUsedDeckCards = 8) alors shuffleDeck() ou pas
+    //moveCardToHand() : la carte en tête de cardDeck va dans handCards
+        
+    //------sub fonction 1------//
+    //checkCombat()
+        //const std::vector<Player*>& playingPlayers = game->getPlayerList();
+        //for (Player* player : playingPlayers) {
+        //if(player->getPosition() == this->position)
+            //ajouter à opponentList : liste dans Player.h
+        //}
+        //player* opponentPlayer = chooseOpponent() dans opponentList si elle n'est pas vide
+        //fightOpponent(opponentPlayer)
+            //si gagne : stealBoatHold(opponentPlayer) 
+    
+    //------sub fonction 2------//
+    //ActionProcessor::performAction()
+        //switch case (actionType)
+        //checker si on n'a pas assez de ressource : reculer, payer tout ce qu'on a
 }
 
 bool Player::chooseTimeDice(int dice1, int dice2){
