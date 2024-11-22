@@ -4,7 +4,7 @@ using namespace engine;
 
 ResourceManager::ResourceManager() {}
 
-state::BoatHold *ResourceManager::selectBoathold(state::Player &player, const std::string resourceType, int index){
+state::BoatHold *ResourceManager::selectBoathold(state::Player &player, const std::string resourceType, size_t index){
     auto& boatHolds = player.getBoatHolds();
    if (index < 1 || index > boatHolds.size()) {
         return nullptr;  
@@ -25,7 +25,7 @@ bool engine::ResourceManager::isBoatHoldAvailable(state::Player &player, const s
     return false;
 }
 
-bool engine::ResourceManager::checkSameBoathold(state::Player &player, const std::string resourceType, int index){
+bool engine::ResourceManager::checkSameBoathold(state::Player &player, const std::string resourceType, size_t index){
     auto& boatHolds = player.getBoatHolds();
     if (index < 1 || index > boatHolds.size()) {
         return false;  
@@ -34,7 +34,7 @@ bool engine::ResourceManager::checkSameBoathold(state::Player &player, const std
     return selectedHold->hasResourceType(resourceType);
 }
 
-bool engine::ResourceManager::checkOccupied(state::Player &player, int index){
+bool engine::ResourceManager::checkOccupied(state::Player &player, size_t index){
     auto& boatHolds = player.getBoatHolds();
     if (index < 1 || index > boatHolds.size()) {
         return false; 

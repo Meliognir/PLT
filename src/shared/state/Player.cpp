@@ -40,7 +40,7 @@ BoatHold *Player::selectBoatHold(const std::string& resourceType){
         return nullptr;
     }
     while (true){
-    int index = inputHandler.selectUserBoatHold(6); // TODO : nombre de boathold d'un player
+    size_t index = inputHandler.selectUserBoatHold(6); // TODO : nombre de boathold d'un player
     if (resourceManager.checkSameBoathold(*this,resourceType,index)){
         inputHandler.displayMessage("Boathold already contains this type of resource. Please choose another.");
         continue;

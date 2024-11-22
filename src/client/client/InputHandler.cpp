@@ -53,8 +53,8 @@ int InputHandler::getMapSize(){
         }
     return mapSize;
 }
-int InputHandler::selectUserBoatHold(int boatHoldCount){
-    int index = 0;
+size_t InputHandler::selectUserBoatHold(size_t boatHoldCount){
+    size_t index = 0;
     while (true) {
         std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
         std::cin >> index;
