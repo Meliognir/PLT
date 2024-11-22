@@ -118,7 +118,7 @@ void Player::chooseCard() {
     }
 }
 
-void Player::playTurn(){
+void Player::playTurn(std::vector<Player*> playerList){ // à mettre dans engine
     //state::Game::time = DAY
     //ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
         //checkCombat()
@@ -148,7 +148,79 @@ void Player::playTurn(){
         //checker si on n'a pas assez de ressource : reculer, payer tout ce qu'on a
 }
 
-bool Player::chooseTimeDice(int dice1, int dice2){
+// void Player::playTurn(std::vector<Player*> playerList) {
+//     // Actions du jour
+//     if (state::Game::time == DAY) {
+//         ActionProcessor::performAction(this, getActiveCard());
+
+//         // Vérifier les combats
+//         if (checkCombat(playerList)) {
+//             Player* opponentPlayer = chooseOpponent();
+//             if (opponentPlayer) {
+//                 fightOpponent(opponentPlayer);
+//             }
+//         }
+//     }
+
+//     // Actions de la nuit
+//     if (state::Game::time == NIGHT) {
+//         ActionProcessor::performAction(this, getActiveCard());
+
+//         // Vérifier les combats
+//         if (checkCombat(playerList)) {
+//             Player* opponentPlayer = chooseOpponent();
+//             if (opponentPlayer) {
+//                 fightOpponent(opponentPlayer);
+//             }
+//         }
+//     }
+
+//     // Gère les cartes
+//     moveCardToDeck();
+//     if (checkRemainingCards()) {
+//         shuffleDeck();
+//     }
+//     moveCardToHand();
+// }
+
+bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans engine
+    opponentsList.clear();
+    for (Player* otherPlayer : playerList) {
+        if (otherPlayer != this && otherPlayer->getPosition() == this->getPosition()) {
+            opponentsList.push_back(otherPlayer);
+        }    
+    }
+    return !opponentsList.empty();
+}
+
+Player* Player::chooseOpponent(){ // à mettre dans client
+    if (opponentsList.empty()) {
+        std::cout << "You have no opponent, enjoy. " << name << "." << std::endl;
+        return nullptr;
+    }
+    std::cout << "Choose an opponent in your opponentsList : " << std::endl;
+
+    for (int i = 0; i < opponentsList.size(); ++i) {
+        Player* opponent = opponentsList[i];
+        std::cout << i + 1 << ". " << opponent->getName() 
+                  << " (Position: " << opponent->getPosition() << ")" << std::endl;
+    }
+    int choice = 0;
+    while (true) {
+        std::cout << "Entrez le numéro de l'adversaire que vous voulez choisir : ";
+        std::cin >> choice;
+        if (std::cin.fail() || choice < 1 || choice > static_cast<int>(opponentsList.size())) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Entrée invalide. Veuillez entrer un numéro valide." << std::endl;
+        } else {
+            break;
+        }
+    }
+    return opponentsList[choice - 1];
+}
+
+bool Player::chooseTimeDice(int dice1, int dice2){ // à mettre dans client
     std::string input;
     while (true){
         std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n" << "dé 1 : " << dice1 << " dé 2 : " << dice2 << std::endl;

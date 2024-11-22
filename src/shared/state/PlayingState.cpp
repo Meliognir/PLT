@@ -192,7 +192,7 @@ namespace state {
         activePlayer = playingPlayers[activePlayerIndex];
         std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;
         // add combat logic in Player.cpp
-        activePlayer->playTurn();
+        activePlayer->playTurn(playingPlayers);
       }
 
       startingPlayerIndex = (startingPlayerIndex + 1) % playerCount;
