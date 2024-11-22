@@ -166,13 +166,13 @@ namespace state {
       }*/
 
       inputHandler.displayMessage("Player " + std::to_string(currentPlayer->getPlayerId()) + " rolls the dice.");
-      std::pair<int, int> dice = engine::DiceManager::rollDice();
-      int die1 = dice.first;  int die2 = dice.second;
+      std::array<int, 2> dice = engine::DiceManager::rollDice();
+      int die1 = dice[0];  int die2 = dice[1];
 
       bool dayFirst = client::InputHandler::chooseTimeDice(die1, die2);
 
-      std::pair<int, int> dayNightDice = engine::DiceManager::assignDayAndNightDice(die1, die2, dayFirst);
-      int dayDie = dayNightDice.first;  int nightDie = dayNightDice.second;
+      std::array<int, 2> dayNightDice = engine::DiceManager::assignDayAndNightDice(die1, die2, dayFirst);
+      int dayDie = dayNightDice[0];  int nightDie = dayNightDice[1];
 
       game->dayDie = dayDie;  game->nightDie = nightDie;
       inputHandler.displayMessage("The day die is " + std::to_string(dayDie) + " and the night die is " + std::to_string(nightDie) + ".");
