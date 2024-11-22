@@ -121,10 +121,10 @@ void Player::chooseCard() {
 void Player::playTurn(){
     //state::Game::time = DAY
     //ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
-    //checkCombat()
+        //checkCombat()
     //state::Game::time = NIGHT
     //ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
-    //checkCombat()
+        //checkCombat()
     //moveCardToDeck() : on bouge les cartes de manière circulaire, la carte utilisée de 
     //handCards va à la fin de cardDeck
     //mybool = checkRemainingcards() dans cardDeck
