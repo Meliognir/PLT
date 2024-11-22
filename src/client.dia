@@ -1439,13 +1439,13 @@
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O13">
       <dia:attribute name="obj_pos">
-        <dia:point val="71.7432,16.3737"/>
+        <dia:point val="71.6932,16.3737"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="71.6932,16.3237;95.0082,24.8237"/>
+        <dia:rectangle val="71.6432,16.3237;94.9582,24.8237"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="71.7432,16.3737"/>
+        <dia:point val="71.6932,16.3737"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="23.215"/>
@@ -1739,7 +1739,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#int#</dia:string>
+            <dia:string>#size_t#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -1765,7 +1765,7 @@
                 <dia:string>#boatHoldCount#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#int#</dia:string>
+                <dia:string>#size_t#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1983,15 +1983,15 @@
         <dia:point val="68.3882,9.27373"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="67.6382,8.51373;83.5507,17.1737"/>
+        <dia:rectangle val="67.6382,8.51373;83.5007,17.1737"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="68.3882,9.27373"/>
-        <dia:point val="83.3507,9.27373"/>
-        <dia:point val="83.3507,16.3737"/>
+        <dia:point val="83.3007,9.27373"/>
+        <dia:point val="83.3007,16.3737"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
