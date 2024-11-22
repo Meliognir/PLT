@@ -21,7 +21,12 @@ namespace state{
 Player::Player(int playerId, std::string name) : playerId(playerId), name(name){
     for (int i = 0; i < 6; ++i) {
         boatHolds.push_back(new BoatHold());
-}
+    }
+    cardDeck={0,1,2,3,4,5,6,7,8,9,10};
+    shuffleDeck();
+    for (int j = 0; j < 3; ++j) {
+        moveCardToHand();
+    }
 
 }
 
