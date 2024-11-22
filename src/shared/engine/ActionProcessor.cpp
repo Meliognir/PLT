@@ -1,5 +1,9 @@
 #include "ActionProcessor.h"
+#include "../state.h"
 
+/* -------------------------------------------- */
+/* -----------Aurélien works here ------------- */
+/* -------------------------------------------- */
 
 #define DAY true
 #define NIGHT false
@@ -18,7 +22,7 @@ namespace engine {
 void ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
 {
     int actionType;
-    int actionValue;/*
+    int actionValue;
     // lire l'action selon si c'est le jour ou le matin
     if (state::Game::time == DAY){
         actionType = actionCard->getDayAction();
@@ -33,29 +37,24 @@ void ActionProcessor::performAction(state::Player *player, state::ActionCard *ac
     switch (actionType)
     {
     case MOVE_FORWARD:
-        //move forward
         movePlayer(player, FORWARD, actionValue);
         break;
     case MOVE_BACKWARD:
-        //code
-        movePlayer(player, FORWARD, actionValue);
+        movePlayer(player, BACKWARD, actionValue);
         break;
     case ADD_FOOD:
-        //code
         addResourcesToBoathold(player, "food", actionValue);
         break;
     case ADD_GOLD:
         addResourcesToBoathold(player, "gold", actionValue);
-        //code
         break;
     case ADD_CANONS:
         addResourcesToBoathold(player, "canons", actionValue);
-        //code
         break;
     
     default:
         break;
-    }*/
+    }
 
 
 }
