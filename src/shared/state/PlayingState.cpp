@@ -9,6 +9,7 @@
 #include "Food.h"
 #include "Canon.h"
 #include "../../client/client/InputHandler.h"
+#include "../engine/DiceManager.h"
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -124,38 +125,32 @@ namespace state {
       // print le type et nombre de ressource du boathold : void BoatHold::showContents()
       game->displayState();
 
-
-      std::cout << "Player " << player->getPlayerId() << " (" << player->getName() << ") initialized at position " << player->getPosition() << std::endl;
+      inputHandler.displayMessage("Player " + std::to_string(player->getPlayerId()) + " (" + player->getName() + ") initialized at position " + std::to_string(player->getPosition()));
     }
-    std::cout << "Players initialized: " << playingPlayers.size() << " players in the game." << std::endl;
+    inputHandler.displayMessage("Players initialized: " + std::to_string(playingPlayers.size()) + " players in the game.");
   }
 
 //-------------------------
 // Game Loop
 //-------------------------
   void PlayingState::handle2() {
+    client::InputHandler inputHandler;
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
     Player* currentPlayer;
     Player* activePlayer;
     int playerCount = playingPlayers.size();
     int startingPlayerIndex = 0;
     int activePlayerIndex = 0;
-
-    bool gameOver = false;
     int turn = 0;
-    
-    int dice1 = 0;
-    int dice2 = 0;
-    bool diceBool = false;
 
-    while (!gameOver) {
+    while (!game->checkGameEndCondition()) {
       //-------------Captain + Round------------
       std::cout << "Starting a new round in the Playerlist." << std::endl;
       turn ++; game->setTurn(turn);
       currentPlayer = playingPlayers[startingPlayerIndex];
       game->setCaptainIndex(startingPlayerIndex);
       //-------------Day and night Dices------------
-      std::cout << "Player " << currentPlayer->getPlayerId() << " rolls the dice." << std::endl;
+      /*std::cout << "Player " << currentPlayer->getPlayerId() << " rolls the dice." << std::endl;
       dice1 = rand() % 6 + 1;
       dice2 = rand() % 6 + 1;
       diceBool = currentPlayer->chooseTimeDice(dice1, dice2);
@@ -168,7 +163,20 @@ namespace state {
       else{
         game->dayDie = dice2;
         game->nightDie = dice1;
-      }
+      }*/
+
+      inputHandler.displayMessage("Player " + std::to_string(currentPlayer->getPlayerId()) + " rolls the dice.");
+      std::pair<int, int> dice = engine::DiceManager::rollDice();
+      int die1 = dice.first;  int die2 = dice.second;
+
+      bool dayFirst = client::InputHandler::chooseTimeDice(die1, die2);
+
+      std::pair<int, int> dayNightDice = engine::DiceManager::assignDayAndNightDice(die1, die2, dayFirst);
+      int dayDie = dayNightDice.first;  int nightDie = dayNightDice.second;
+
+      game->dayDie = dayDie;  game->nightDie = nightDie;
+      inputHandler.displayMessage("The day die is " + std::to_string(dayDie) + " and the night die is " + std::to_string(nightDie) + ".");
+
       //-------------Every Player choose 1 Card in their own cardDeck------------
       for (int i = 0; i < playerCount; i++) {
         activePlayerIndex = (startingPlayerIndex + i) % playerCount;
@@ -186,8 +194,6 @@ namespace state {
       }
 
       startingPlayerIndex = (startingPlayerIndex + 1) % playerCount;
-
-      gameOver = game->checkGameEndCondition();
     }
   }
 }
