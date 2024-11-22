@@ -122,6 +122,8 @@ namespace state {
         i++;
       }
 
+
+
       // print le type et nombre de ressource du boathold : void BoatHold::showContents()
       game->displayState();
 

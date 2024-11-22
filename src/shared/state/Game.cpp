@@ -24,8 +24,7 @@ void Game::gameTurn(int time){
 
 }
 
-Game::Game(State *state, Map *map)
-{
+Game::Game(State *state, Map *map) {
     this->transitionTo(state);
     this->map = map;
 
@@ -53,13 +52,14 @@ Game::Game(State *state, Map *map)
 
     // Ignore la première ligne (les en-têtes)
     std::getline(file, line);
-    
+
     // Lire chaque ligne et créer une ActionCard
     while (std::getline(file, line)) {
+
         std::stringstream ss(line);
         std::string readAction;
-        int dayAction, nightAction;
-        int* actions[2] = {&dayAction, &nightAction}; 
+        uint8_t dayAction, nightAction;
+        uint8_t* actions[2] = {&dayAction, &nightAction};
 
         for (int i= 0; i<2; i++){
             // read csv file
@@ -82,8 +82,15 @@ Game::Game(State *state, Map *map)
             }
         }
         // create ActionCard based on the read actions
-        collectionOfCards.push_back(new ActionCard(dayAction, nightAction));
+            collectionOfCards.push_back(new ActionCard(*actions[0], *actions[1]));
+        /*
+        printf("%u\n", collectionOfCards.at(0)->getDayAction());
+        printf("%u\n", collectionOfCards.at(0)->getNightAction());*/
+
+
     }
+
+
     file.close();
 }
 
@@ -159,8 +166,40 @@ void Game::displayState()
         std::cout<<"Cartes de "<< player->getName()<<" :" << std::endl;
         for (int cardIndex : player->getHandCards()) {
             std::cout<< "Card N°" << i << " : " ;
-            std::cout<< "Action du jour : "<< collectionOfCards.at(cardIndex)->getDayAction() << ". ";
-            std::cout<< "Action de la nuit : "<< collectionOfCards.at(cardIndex)->getNightAction() << "." <<std::endl;
+            std::string dayAction;
+            std::string nightAction;
+            if(collectionOfCards.at(cardIndex)->getDayAction()==0) {
+                dayAction="move forward";
+            }
+            if(collectionOfCards.at(cardIndex)->getDayAction()==1) {
+                dayAction="move backward";
+            }
+            if(collectionOfCards.at(cardIndex)->getDayAction()==2) {
+                dayAction="food";
+            }
+            if(collectionOfCards.at(cardIndex)->getDayAction()==3) {
+                dayAction="gold";
+            }
+            if(collectionOfCards.at(cardIndex)->getDayAction()==4) {
+                dayAction="canon";
+            }
+            if(collectionOfCards.at(cardIndex)->getNightAction()==0) {
+                nightAction="move forward";
+            }
+            if(collectionOfCards.at(cardIndex)->getNightAction()==1) {
+                nightAction="move backward";
+            }
+            if(collectionOfCards.at(cardIndex)->getNightAction()==2) {
+                nightAction="food";
+            }
+            if(collectionOfCards.at(cardIndex)->getNightAction()==3) {
+                nightAction="gold";
+            }
+            if(collectionOfCards.at(cardIndex)->getNightAction()==4) {
+                nightAction="canon";
+            }
+            std::cout<<"Action du jour : "<< dayAction <<", ";
+            std::cout <<"Action de la nuit : "<<nightAction<<"."<< std::endl;
             i++;
         }
     }
