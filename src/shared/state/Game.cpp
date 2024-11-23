@@ -163,9 +163,10 @@ void Game::displayState()
         }
         std::cout<< "Trésors de "<< player->getName()<<" :" << std::endl;
         //à compléter
+        int j=1;
         std::cout<<"Cartes de "<< player->getName()<<" :" << std::endl;
         for (int cardIndex : player->getHandCards()) {
-            std::cout<< "Card N°" << i << " : " ;
+            std::cout<< "Card N°" << j << " : " ;
             std::string dayAction;
             std::string nightAction;
             if(collectionOfCards.at(cardIndex)->getDayAction()==0) {
@@ -200,7 +201,7 @@ void Game::displayState()
             }
             std::cout<<"Action du jour : "<< dayAction <<", ";
             std::cout <<"Action de la nuit : "<<nightAction<<"."<< std::endl;
-            i++;
+            j++;
         }
     }
 }
