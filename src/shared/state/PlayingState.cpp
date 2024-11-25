@@ -136,12 +136,7 @@ namespace state {
 
   void PlayingState::handle2() {
 
-
-      startingPlayerIndex = (startingPlayerIndex + 1) % playerCount;
-    }
-    //---Appel du handle1 du game Over
-
-
   }
-
+    //---Appel du handle1 du game Over
+  
 }
