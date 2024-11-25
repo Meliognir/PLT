@@ -1,6 +1,11 @@
 #include "CombatManager.h"
+#include "../../client/client.h"
 #include <iostream>
 #include <limits>
+
+
+
+
 
 namespace engine{
 
@@ -33,5 +38,8 @@ state::Player* engine::CombatManager::chooseOpponent(){ // à mettre dans client
     }
     return opponentsList[choice - 1];
 }
-
+void CombatManager::duel(state::Player *playerAttack, state::Player *playerDefense){
+    client::InputHandler inputHandler; 
+    //inputHandler.chooseCanonNb()
+}
 }
