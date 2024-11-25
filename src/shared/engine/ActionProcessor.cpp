@@ -17,6 +17,11 @@
 #define ADD_GOLD 3
 #define ADD_CANONS 4
 
+template <typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
 
 namespace engine {
 void ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
@@ -25,6 +30,9 @@ void ActionProcessor::performAction(state::Player *player, state::ActionCard *ac
     MapManager mapManager;
     int actionType;
     int actionValue;
+    auto foodResource = make_unique<state::Food>();
+    auto goldResource = make_unique<state::Gold>();
+    auto canonResource = make_unique<state::Canon>();
     // lire l'action selon si c'est le jour ou le matin
     if (state::Game::time == DAY){
         actionType = actionCard->getDayAction();
@@ -45,13 +53,13 @@ void ActionProcessor::performAction(state::Player *player, state::ActionCard *ac
         mapManager.movePlayer(player, BACKWARD, actionValue);
         break;
     case ADD_FOOD:
-        //resourceManager.addResourcesToBoathold(player, "food", actionValue);
+        resourceManager.addResourcesToBoathold(player, std::move(foodResource), actionValue);
         break;
     case ADD_GOLD:
-        //resourceManager.addResourcesToBoathold(player, "gold", actionValue);
+        resourceManager.addResourcesToBoathold(player, std::move(goldResource), actionValue);
         break;
     case ADD_CANONS:
-        //resourceManager.addResourcesToBoathold(player, "canons", actionValue);
+        resourceManager.addResourcesToBoathold(player, std::move(canonResource), actionValue);
         break;
     
     default:
