@@ -8,14 +8,10 @@
 #include <memory>
 #include <utility>
 
-engine::GameEngine::GameEngine(state::State *state, state::Map *map)
+engine::GameEngine::GameEngine(state::State *state)
 {
-     if (map == nullptr) {
-        map = new state::Map(10); // Taille par défaut, si nécessaire
-    }
-
     // Initialisation correcte de game avec state et map
-    game = new state::Game(state, map);
+    game = new state::Game(state);
 }
 
 void engine::GameEngine::runGameLoop()
