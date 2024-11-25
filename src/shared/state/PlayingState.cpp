@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "GameConfigState.h"
 #include "Game.h"
-#include "Resources.h"
+#include "../engine/ResourceManager.h"
 #include "Gold.h"
 #include "Food.h"
 #include "Canon.h"
@@ -15,6 +15,7 @@
 #include <limits>
 #include <memory>
 #include <utility> // Pour std::forward
+
 
 #define TREASURE 0
 #define GOLD 1
@@ -111,10 +112,10 @@ namespace state {
       //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
       auto goldResource = make_unique<Gold>();
-      player->addResourcesToBoatHold(std::move(goldResource), 3,1);
+      engine::ResourceManager resource_manager;
+      resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
       auto foodResource = make_unique<Food>();
-      player->addResourcesToBoatHold(std::move(foodResource), 3,2);
-      
+      resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);
       int i=1;
       for (BoatHold *bh: player->getBoatHolds()) {
         std::cout<< "BoatHold N°" << i << " : " ;
