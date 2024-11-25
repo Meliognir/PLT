@@ -24,8 +24,9 @@ std::unique_ptr<T> make_unique(Args&&... args) {
 
 
 namespace engine {
-void ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
+void ActionProcessor::performAction(state::Player *player, int cardId)
 {
+    state::ActionCard *actionCard = state::Game::collectionOfCards.at(cardId);
     ResourceManager resourceManager;
     MapManager mapManager;
     int actionType;
