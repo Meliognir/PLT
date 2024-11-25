@@ -24,9 +24,8 @@ void Game::gameTurn(int time){
 
 }
 
-Game::Game(State *state, Map *map) {
+Game::Game(State *state) {
     this->transitionTo(state);
-    this->map = map;
 
     // Example of a collectionOfCards
     // collectionOfCards = {
