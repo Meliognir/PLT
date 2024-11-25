@@ -8,9 +8,7 @@
 #include <memory>
 #include <utility>
 
-engine::GameEngine::GameEngine(state::State *state)
-{
-    // Initialisation correcte de game avec state et map
+engine::GameEngine::GameEngine(state::State *state){
     game = new state::Game(state);
 }
 
@@ -64,7 +62,7 @@ void engine::GameEngine::runGameLoop()
             activePlayer = playingPlayers[activePlayerIndex];
             std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;
             // add combat logic in Player.cpp
-            activePlayer->playTurn();
+            activePlayer->playTurn(playingPlayers);
         }
 
         startingPlayerIndex = (startingPlayerIndex + 1) % playerCount;
