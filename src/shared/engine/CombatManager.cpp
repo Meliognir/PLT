@@ -13,7 +13,7 @@ CombatManager::CombatManager(){
 }
 
 state::Player* engine::CombatManager::chooseOpponent(){ // à mettre dans client
-    if (state::Player::opponentsList.empty()) {
+    if (opponentsList.empty()) {
         std::cout << "You have no opponent, enjoy. " << name << "." << std::endl;
         return nullptr;
     }
