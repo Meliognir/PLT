@@ -26,6 +26,7 @@ int clientcode(){
     //Game *mygame = new Game(new GameConfigState); //transition to GameConfig
 
     gameEngine->initializeGame(10);
+    gameEngine->runGameLoop();
     return 0;
 }
 
