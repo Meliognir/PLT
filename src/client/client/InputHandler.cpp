@@ -114,4 +114,28 @@ bool InputHandler::chooseTimeDice(int die1, int die2){
     }
     return input == "1";
 }
+int InputHandler::chooseCanonNb(int totalNb){
+    if (totalNb <= 0) {
+        std::cout << "You don't have any available canons." << std::endl;
+        return 0;
+    }
+    int chosenNb = 0;
+    while (true) {
+        std::cout << "You have " << totalNb << " available canons. How many do you want to use ? ";
+        std::cin >> chosenNb;
+
+        if (std::cin.fail()) {
+            std::cin.clear(); 
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+            std::cout << "Invalid input. Please enter a number. " << std::endl;
+        } else if (chosenNb < 0) {
+            std::cout << "You cannot use a negative number of canons. " << std::endl;
+        } else if (chosenNb > totalNb) {
+            std::cout << "You cannot use more canons than you possess. " << std::endl;
+        } else {
+            break; 
+        }
+    }
+    return chosenNb;
+}
 }

@@ -44,8 +44,20 @@ bool engine::ResourceManager::checkOccupied(state::Player *player, size_t index)
     return !selectedHold->isEmpty();
 }
 
-void engine::ResourceManager::addResourcesToBoathold (state::Player *player, std::unique_ptr<state::Resources> resource, int amount, int skipSelection/* default value=0*/)
-{
+int engine::ResourceManager::countResource(state::Player *player, const std::string &resourceType){
+    if (!player) {
+        return 0;
+    }
+    int total = 0;
+    for (state::BoatHold* boatHold : player->getBoatHolds()) {
+        if (boatHold->hasResourceType(resourceType)) {
+            total += boatHold->getQuantity();
+        }
+    }
+    return total;
+}
+
+void engine::ResourceManager::addResourcesToBoathold (state::Player *player, std::unique_ptr<state::Resources> resource, int amount, int skipSelection/* default value=0*/){
     if (!resource) {
         std::cerr << "Erreur : le pointeur resource est nul !\n";
         return;
