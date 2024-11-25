@@ -138,13 +138,13 @@
         <dia:point val="8.31777,3.86311"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="8.26777,3.81311;27.3478,10.5131"/>
+        <dia:rectangle val="8.26777,3.81311;23.4978,10.5131"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="8.31777,3.86311"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="18.98"/>
+        <dia:real val="15.130000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="6.5999999999999996"/>
@@ -300,23 +300,6 @@
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#state::State*#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="0"/>
-              </dia:attribute>
-            </dia:composite>
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#map#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#state::Map*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2948,17 +2931,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O22">
       <dia:attribute name="obj_pos">
-        <dia:point val="17.8078,10.4631"/>
+        <dia:point val="15.8828,10.4631"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="0.531002,10.4131;17.8578,52.668"/>
+        <dia:rectangle val="0.531002,10.4131;15.9328,52.668"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="17.8078,10.4631"/>
-        <dia:point val="17.8078,14.322"/>
+        <dia:point val="15.8828,10.4631"/>
+        <dia:point val="15.8828,14.322"/>
         <dia:point val="0.581002,14.322"/>
         <dia:point val="0.581002,39.8982"/>
         <dia:point val="14.4526,39.8982"/>
