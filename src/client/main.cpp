@@ -23,12 +23,9 @@ int clientcode(){
 // instantiates a new Game context and runs concrete states "GameConfig" then "Playing" functions
 //-----------------------------
     GameEngine *gameEngine = new GameEngine(new GameConfigState);
-    Game *mygame = new Game(new GameConfigState); //transition to GameConfig
+    //Game *mygame = new Game(new GameConfigState); //transition to GameConfig
 
     gameEngine->initializeGame(10);
-    mygame->request2(); //game loop
-
-    delete mygame;
     return 0;
 }
 
