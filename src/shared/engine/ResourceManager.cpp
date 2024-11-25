@@ -1,4 +1,5 @@
 #include "ResourceManager.h"
+#include <iostream>
 
 using namespace engine;
 
@@ -43,6 +44,35 @@ bool engine::ResourceManager::checkOccupied(state::Player *player, size_t index)
     return !selectedHold->isEmpty();
 }
 
-void ResourceManager::addResourcesToBoathold(state::Player *player, const std::string &resourceType, int amount, int skipSelection){
-}
+void engine::ResourceManager::addResourcesToBoathold (state::Player *player, std::unique_ptr<state::Resources> resource, int amount, int skipSelection/* default value=0*/)
+{
+    if (!resource) {
+        std::cerr << "Erreur : le pointeur resource est nul !\n";
+        return;
+    }
 
+    std::string resourceType = resource->getType();
+    state::BoatHold *selectedBoatHold;
+
+    if (skipSelection){
+        selectedBoatHold = player->getBoatHolds().at(skipSelection-1);
+    }
+    else {
+        selectedBoatHold = selectBoathold(player,resourceType,6);
+    }
+
+    if (selectedBoatHold != nullptr){
+        selectedBoatHold->addResource(std::move(resource), amount);
+        std::cout << "Ressource ajoutée au BoatHold avec succès !\n";
+    }
+    else{
+        selectedBoatHold = selectBoathold(player,resourceType,6);
+        if (selectedBoatHold != nullptr){
+            selectedBoatHold->addResource(std::move(resource), amount);
+            std::cout << "Ressource ajoutée au BoatHold avec succès !\n";
+        }
+        else{
+            std::cout << "La ressource n'a pas pu ếtre ajoutée.\n";
+        }
+    }
+}
