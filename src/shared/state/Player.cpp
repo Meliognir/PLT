@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Game.h"
+#include "State.h"
+#include "../engine/ActionProcessor.h"
 #include "ActionCard.h"
 #include "BoatHold.h"
 #include "../engine/ResourceManager.h"
@@ -9,6 +11,14 @@
 #include <algorithm> // Pour std::shuffle
 #include <random>   // Pour std::default_random_engine et std::random_device
 #include <utility> // Pour std::forward
+
+
+/* -------------------------------------------- */
+/* ------------Lucian works here -------------- */
+/* -------------------------------------------- */
+
+#define DAY true
+#define NIGHT false
 
 template <typename T, typename... Args>
 std::unique_ptr<T> make_unique(Args&&... args) {
@@ -37,6 +47,7 @@ Player::~Player(){
     boatHolds.clear();
 }
 
+// refactored
 BoatHold *Player::selectBoatHold(const std::string& resourceType){
     client::InputHandler inputHandler;
     engine::ResourceManager resourceManager;
@@ -64,7 +75,7 @@ BoatHold *Player::selectBoatHold(const std::string& resourceType){
     }
 }
 
-void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amount, int skipSelection/*default value = 0*/)
+void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amount, int skipSelection/*default value = 0*/) // engine
 {
     if (!resource) {
         std::cerr << "Erreur : le pointeur resource est nul !\n";
@@ -97,6 +108,7 @@ void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amo
     }
 }
 
+// refactored
 // shuffles player cardDeck
 void Player::shuffleDeck(){ 
     std::random_device rd;
@@ -105,6 +117,7 @@ void Player::shuffleDeck(){
     std::shuffle(cardDeck.begin(), cardDeck.end(), g);
 }
 
+// refactored
 // sets activeCard to player's choice
 void Player::chooseCard() {
     client::InputHandler inputHandler;
@@ -119,69 +132,22 @@ void Player::chooseCard() {
 }
 
 void Player::playTurn(std::vector<Player*> playerList){ // à mettre dans engine
-    //state::Game::time = DAY
-    //ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
-        //checkCombat()
-    //state::Game::time = NIGHT
-    //ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
-        //checkCombat()
-    //moveCardToDeck() : on bouge les cartes de manière circulaire, la carte utilisée de 
-    //handCards va à la fin de cardDeck
-    //mybool = checkRemainingcards() dans cardDeck
-        //si on a rebouclé (int countUsedDeckCards = 8) alors shuffleDeck() ou pas
-    //moveCardToHand() : la carte en tête de cardDeck va dans handCards
-        
-    //------sub fonction 1------//
-    //checkCombat()
-        //const std::vector<Player*>& playingPlayers = game->getPlayerList();
-        //for (Player* player : playingPlayers) {
-        //if(player->getPosition() == this->position)
-            //ajouter à opponentList : liste dans Player.h
-        //}
-        //player* opponentPlayer = chooseOpponent() dans opponentList si elle n'est pas vide
-        //fightOpponent(opponentPlayer)
-            //si gagne : stealBoatHold(opponentPlayer) 
-    
-    //------sub fonction 2------//
-    //ActionProcessor::performAction()
-        //switch case (actionType)
-        //checker si on n'a pas assez de ressource : reculer, payer tout ce qu'on a
+    state::Game::time = DAY;
+    std::cout << "Current time: " << (state::Game::time ? "DAY" : "NIGHT") << std::endl;
+
+    engine::ActionProcessor actionProcessor;
+    actionProcessor.performAction(this, );
+
 }
 
-// void Player::playTurn(std::vector<Player*> playerList) {
-//     // Actions du jour
-//     if (state::Game::time == DAY) {
-//         ActionProcessor::performAction(this, getActiveCard());
+void Player::moveCardToHand () { // engine
+    handCards.push_back(cardDeck.at(0));
+    cardDeck.erase(cardDeck.begin());
+}
 
-//         // Vérifier les combats
-//         if (checkCombat(playerList)) {
-//             Player* opponentPlayer = chooseOpponent();
-//             if (opponentPlayer) {
-//                 fightOpponent(opponentPlayer);
-//             }
-//         }
-//     }
-
-//     // Actions de la nuit
-//     if (state::Game::time == NIGHT) {
-//         ActionProcessor::performAction(this, getActiveCard());
-
-//         // Vérifier les combats
-//         if (checkCombat(playerList)) {
-//             Player* opponentPlayer = chooseOpponent();
-//             if (opponentPlayer) {
-//                 fightOpponent(opponentPlayer);
-//             }
-//         }
-//     }
-
-//     // Gère les cartes
-//     moveCardToDeck();
-//     if (checkRemainingCards()) {
-//         shuffleDeck();
-//     }
-//     moveCardToHand();
-// }
+void Player::moveCardToDeck() { // engine
+    cardDeck.push_back(activeCard);
+}
 
 bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans engine
     opponentsList.clear();
@@ -193,31 +159,31 @@ bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans eng
     return !opponentsList.empty();
 }
 
-Player* Player::chooseOpponent(){ // à mettre dans client
-    if (opponentsList.empty()) {
-        std::cout << "You have no opponent, enjoy. " << name << "." << std::endl;
-        return nullptr;
-    }
-    std::cout << "Choose an opponent in your opponentsList : " << std::endl;
+Player* Player::chooseOpponent(){ // à mettre dans engine
+    // if (opponentsList.empty()) {
+    //     std::cout << "You have no opponent, enjoy. " << name << "." << std::endl;
+    //     return nullptr;
+    // }
+    // std::cout << "Choose an opponent in your opponentsList : " << std::endl;
 
-    for (int i = 0; i < opponentsList.size(); ++i) {
-        Player* opponent = opponentsList[i];
-        std::cout << i + 1 << ". " << opponent->getName() 
-                  << " (Position: " << opponent->getPosition() << ")" << std::endl;
-    }
-    int choice = 0;
-    while (true) {
-        std::cout << "Entrez le numéro de l'adversaire que vous voulez choisir : ";
-        std::cin >> choice;
-        if (std::cin.fail() || choice < 1 || choice > static_cast<int>(opponentsList.size())) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Entrée invalide. Veuillez entrer un numéro valide." << std::endl;
-        } else {
-            break;
-        }
-    }
-    return opponentsList[choice - 1];
+    // for (int i = 0; i < opponentsList.size(); ++i) {
+    //     Player* opponent = opponentsList[i];
+    //     std::cout << i + 1 << ". " << opponent->getName() 
+    //               << " (Position: " << opponent->getPosition() << ")" << std::endl;
+    // }
+    // int choice = 0;
+    // while (true) {
+    //     std::cout << "Entrez le numéro de l'adversaire que vous voulez choisir : ";
+    //     std::cin >> choice;
+    //     if (std::cin.fail() || choice < 1 || choice > static_cast<int>(opponentsList.size())) {
+    //         std::cin.clear();
+    //         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    //         std::cout << "Entrée invalide. Veuillez entrer un numéro valide." << std::endl;
+    //     } else {
+    //         break;
+    //     }
+    // }
+    // return opponentsList[choice - 1];
 }
 
 bool Player::chooseTimeDice(int dice1, int dice2){ // à mettre dans client
@@ -293,15 +259,8 @@ const std::vector <int>& Player::getHandCards() const{
     return handCards;
 }
 
-void Player::moveCardToHand () {
-    handCards.push_back(cardDeck.at(0));
-    cardDeck.erase(cardDeck.begin());
+int Player::getActiveCard() const{
+
 }
-
-void Player::moveCardToDeck() {
-    cardDeck.push_back(activeCard);
-}
-
-
 
 }

@@ -10,9 +10,51 @@ namespace engine {
 void MapManager::movePlayer(state::Player *player, int direction, int value)
 {
     int nextPosition = player->getPosition()+value*direction;
-    player->setPosition(nextPosition);
+    player->setPosition(nextPosition);    
+    //wait for a while (display state in another thread);
     
-    //wait(5000);
+    /*
+    if (checkPriceAndBoatHolds()){
+        moveOneTileBack(state::Player *);
+    }
+    */
+
+
+
+
+   // check le prix de la case et comparer avec les ressources
+   // check bankrupt
+
+   // si bankrupt :
+        // payer tout
+        // reculer
+
+        // recommencer
+        // fin
+
+   // sinon :
+        // check opponents
+
+        // si opponents
+            // duel
+        
+        // check le prix de la case et comparer avec les ressources
+
+        // si bankrupt :
+            // payer tout
+            // reculer
+
+            // recommence
+            // FIN
+        
+        // sinon :
+            // payer
+
+            // FIN
+
+
+
+
     
 }
 
