@@ -12,6 +12,16 @@ engine::GameEngine::GameEngine(state::State *state){
     game = new state::Game(state);
 }
 
+void engine::GameEngine::initializeGame(int playerCount){
+    game->request1(); // Appelle le comportement de GameConfigState pour initialiser les joueurs
+
+    // Transition vers l'état "Playing"
+    game->request2(); // Change l'état pour PlayingState
+
+    // Configure les paramètres de la carte et des joueurs
+    game->request1(); 
+}
+
 void engine::GameEngine::runGameLoop()
 {
     const std::vector<state::Player *> &playingPlayers = game->getPlayerList();
