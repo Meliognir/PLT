@@ -12,5 +12,6 @@ namespace state {
 
     std::string Gold::getType() {
         std::string out = "Gold";
-        return out;    }
+        return out;
+    }
 }
