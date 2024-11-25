@@ -133,72 +133,15 @@ namespace state {
     inputHandler.displayMessage("Players initialized: " + std::to_string(playingPlayers.size()) + " players in the game.");
   }
 
-//-------------------------
-// Game Loop
-//-------------------------
+
   void PlayingState::handle2() {
-    client::InputHandler inputHandler;
-    const std::vector<Player*>& playingPlayers = game->getPlayerList();
-    Player* currentPlayer;
-    Player* activePlayer;
-    int playerCount = playingPlayers.size();
-    int startingPlayerIndex = 0;
-    int activePlayerIndex = 0;
-    int turn = 0;
 
-    while (!game->checkGameEndCondition()) {
-      //-------------Captain + Round------------
-      std::cout << "Starting a new round in the Playerlist." << std::endl;
-      turn ++; game->setTurn(turn);
-      currentPlayer = playingPlayers[startingPlayerIndex];
-      game->setCaptainIndex(startingPlayerIndex);
-      //-------------Day and night Dices------------
-      /*std::cout << "Player " << currentPlayer->getPlayerId() << " rolls the dice." << std::endl;
-      dice1 = rand() % 6 + 1;
-      dice2 = rand() % 6 + 1;
-      diceBool = currentPlayer->chooseTimeDice(dice1, dice2);
-      if(diceBool){
-        // dayDie and nightDie are static => are the same and shared by every instance of Game, have no setter or getter
-        // you can also write : Game::dayDie = ... , it will modify dayDie in "game" : instance of Game
-        game->dayDie = dice1;
-        game->nightDie = dice2;
-      }
-      else{
-        game->dayDie = dice2;
-        game->nightDie = dice1;
-      }*/
-
-      inputHandler.displayMessage("Player " + std::to_string(currentPlayer->getPlayerId()) + " rolls the dice.");
-      std::array<int, 2> dice = engine::DiceManager::rollDice();
-      int die1 = dice[0];  int die2 = dice[1];
-
-      bool dayFirst = client::InputHandler::chooseTimeDice(die1, die2);
-
-      std::array<int, 2> dayNightDice = engine::DiceManager::assignDayAndNightDice(die1, die2, dayFirst);
-      int dayDie = dayNightDice[0];  int nightDie = dayNightDice[1];
-
-      game->dayDie = dayDie;  game->nightDie = nightDie;
-      inputHandler.displayMessage("The day die is " + std::to_string(dayDie) + " and the night die is " + std::to_string(nightDie) + ".");
-
-      //-------------Every Player choose 1 Card in their own cardDeck------------
-      for (int i = 0; i < playerCount; i++) {
-        activePlayerIndex = (startingPlayerIndex + i) % playerCount;
-        activePlayer = playingPlayers[activePlayerIndex];
-        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
-        activePlayer->chooseCard();
-      }
-      //-------------Every Player execute day and night Actions of their chosen card------------
-      for (int i = 0; i < playerCount; i++) {
-        activePlayerIndex = (startingPlayerIndex + i) % playerCount;
-        activePlayer = playingPlayers[activePlayerIndex];
-        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;
-        // add combat logic in Player.cpp
-        activePlayer->playTurn(playingPlayers);
-      }
 
       startingPlayerIndex = (startingPlayerIndex + 1) % playerCount;
     }
     //---Appel du handle1 du game Over
+
+
   }
 
 }
