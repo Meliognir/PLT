@@ -21,6 +21,8 @@
 namespace engine {
 void ActionProcessor::performAction(state::Player *player, state::ActionCard *actionCard)
 {
+    ResourceManager resourceManager;
+    MapManager mapManager;
     int actionType;
     int actionValue;
     // lire l'action selon si c'est le jour ou le matin
@@ -37,19 +39,19 @@ void ActionProcessor::performAction(state::Player *player, state::ActionCard *ac
     switch (actionType)
     {
     case MOVE_FORWARD:
-        movePlayer(player, FORWARD, actionValue);
+        mapManager.movePlayer(player, FORWARD, actionValue);
         break;
     case MOVE_BACKWARD:
-        movePlayer(player, BACKWARD, actionValue);
+        mapManager.movePlayer(player, BACKWARD, actionValue);
         break;
     case ADD_FOOD:
-        addResourcesToBoathold(player, "food", actionValue);
+        //resourceManager.addResourcesToBoathold(player, "food", actionValue);
         break;
     case ADD_GOLD:
-        addResourcesToBoathold(player, "gold", actionValue);
+        //resourceManager.addResourcesToBoathold(player, "gold", actionValue);
         break;
     case ADD_CANONS:
-        addResourcesToBoathold(player, "canons", actionValue);
+        //resourceManager.addResourcesToBoathold(player, "canons", actionValue);
         break;
     
     default:
