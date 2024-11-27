@@ -50,16 +50,16 @@ Player::~Player(){
 
 // refactored
 BoatHold *Player::selectBoatHold(const std::string& resourceType){
-    client::InputHandler inputHandler;
-    engine::ResourceManager resourceManager;
+    client::InputHandler inputHandler;// a vire
+    engine::ResourceManager resourceManager;// a vire
     if (!resourceManager.isBoatHoldAvailable(this, resourceType)){
-        inputHandler.displayMessage("All boatholds already have this resource. Cannot replace.");
+        std::cout<<"All boatholds already have this resource. Cannot replace."<<std::endl;
         return nullptr;
     }
     while (true){
     size_t index = inputHandler.selectUserBoatHold(6); // TODO : nombre de boathold d'un player
     if (resourceManager.checkSameBoathold(this,resourceType,index)){
-        inputHandler.displayMessage("Boathold already contains this type of resource. Please choose another.");
+        std::cout<<"Boathold already contains this type of resource. Please choose another."<<std::endl;
         continue;
     }
     if (resourceManager.checkOccupied(this, index)){
@@ -69,7 +69,7 @@ BoatHold *Player::selectBoatHold(const std::string& resourceType){
     }
     BoatHold* selectedHold = resourceManager.selectBoathold(this, resourceType, index);
     if (selectedHold == nullptr) {
-        inputHandler.displayMessage("Error selecting BoatHold.");
+        std::cout<<"Error selecting BoatHold."<<std::endl;
         return nullptr;
     }
     return selectedHold;
@@ -95,7 +95,7 @@ void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amo
 
     if (selectedBoatHold != nullptr){
         selectedBoatHold->addResource(std::move(resource), amount);
-        std::cout << "Ressource ajoutée au BoatHold avec succès !\n";
+        std::cout << "Ressource ajoutée au BoatHold avec succès !\n"<< std::endl;
     }
     else{
         selectedBoatHold = selectBoatHold(resourceType);
@@ -126,9 +126,9 @@ void Player::chooseCard() {
 
     if (selectedIndex != -1) {
         activeCard = handCards.at(selectedIndex);
-        inputHandler.displayMessage("You chose card with ID: " + std::to_string(activeCard));
+        std::cout<<"You chose card with ID: " + std::to_string(activeCard)<<std::endl;
     } else {
-        inputHandler.displayMessage("Failed to choose a card.");
+        std::cout<<"Failed to choose a card."<<std::endl;
     }
 }
 

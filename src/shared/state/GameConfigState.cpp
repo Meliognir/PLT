@@ -21,7 +21,7 @@ namespace state {
     client::InputHandler inputHandler;
 
     int playerNumber = inputHandler.getNumberofPlayers();
-    inputHandler.displayMessage("Number of players set to: " + std::to_string(playerNumber));
+    std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
 
     std::vector<Player*> players;
     for (int i = 0; i < playerNumber; ++i) {
