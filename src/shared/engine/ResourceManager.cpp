@@ -1,5 +1,6 @@
 #include "ResourceManager.h"
 #include <iostream>
+#include "state.h"
 
 using namespace engine;
 
@@ -44,7 +45,7 @@ bool engine::ResourceManager::checkOccupied(state::Player *player, size_t index)
     return !selectedHold->isEmpty();
 }
 
-int engine::ResourceManager::countResource(state::Player *player, const std::string &resourceType){
+int ResourceManager::countResource(state::Player *player, const std::string &resourceType){
     if (!player) {
         return 0;
     }
@@ -86,5 +87,16 @@ void engine::ResourceManager::addResourcesToBoathold (state::Player *player, std
         else{
             std::cout << "La ressource n'a pas pu ếtre ajoutée.\n";
         }
+    }
+}
+
+bool ResourceManager::checkBankrupt(state::Player * player, std::string resourceType, int price) {
+    for (state::BoatHold * boathold : player->getBoatHolds()) {
+        if (boathold->hasResourceType(resourceType)) {
+            if (boathold->getQuantity()>price) {
+                return true;
+            }
+        }
+        return false;
     }
 }

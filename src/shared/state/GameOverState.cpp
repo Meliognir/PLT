@@ -19,7 +19,7 @@ namespace state {
 
     void GameOverState::handle1() {
         int playerScore=0;
-       //quand un joueur atteint la dernière case chaque joueur fini son tour et on compte alors les points
+       //quand un joueur atteint la dernière tile chaque joueur fini son tour et on compte alors les points
         for(Player * playerEnd : game->getPlayerList()) {
             int positionEnding=playerEnd->getPosition();
             if (positionEnding <= game->map->getSize()-7) {
@@ -32,7 +32,7 @@ namespace state {
                 }
                 std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << " ."<< std::endl;
             }
-            //case -6
+            //tile -6
             if (positionEnding==game->map->getSize()-6) {
                 for (BoatHold *currentBoathold : playerEnd->getBoatHolds()) {
                     if (currentBoathold->hasResourceType("Gold")) {
@@ -41,7 +41,7 @@ namespace state {
                 }
                 std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << " ."<< std::endl;
             }
-            //case -5
+            //tile -5
             if (positionEnding==game->map->getSize()-5) {
                 playerScore+=1;
                 for (BoatHold *currentBoathold : playerEnd->getBoatHolds()) {
@@ -51,7 +51,7 @@ namespace state {
                 }
                 std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << " ."<< std::endl;
             }
-            //case -4
+            //tile -4
             if (positionEnding==game->map->getSize()-4) {
                 playerScore+=3;
                 for (BoatHold *currentBoathold : playerEnd->getBoatHolds()) {
@@ -61,7 +61,7 @@ namespace state {
                 }
                 std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << " ."<< std::endl;
             }
-            //case -3
+            //tile -3
             if (positionEnding==game->map->getSize()-3) {
                 playerScore+=5;
                 for (BoatHold *currentBoathold : playerEnd->getBoatHolds()) {
@@ -71,7 +71,7 @@ namespace state {
                 }
                 std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << " ."<< std::endl;
             }
-            //case -2
+            //tile -2
             if (positionEnding==game->map->getSize()-2) {
                 playerScore+=7;
                 for (BoatHold *currentBoathold : playerEnd->getBoatHolds()) {
