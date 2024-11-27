@@ -5,8 +5,9 @@
 
 namespace engine{
 
-CombatManager::CombatManager(){
-}
+//CombatManager::CombatManager(){
+//}
+
 
 state::Player* CombatManager::chooseOpponent(std::vector <state::Player*>& opponentsList, std::string name){ // à mettre dans client
     
@@ -38,6 +39,7 @@ state::Player* CombatManager::chooseOpponent(std::vector <state::Player*>& oppon
     }
     return opponentsList[choice - 1];
 }
+
 void CombatManager::duel(state::Player *playerAttack, state::Player *playerDefense){
     client::InputHandler inputHandler; 
     //inputHandler.chooseCanonNb()

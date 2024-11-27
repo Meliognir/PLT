@@ -133,8 +133,8 @@ void Player::chooseCard() {
 }
 
 void Player::playTurn(std::vector<Player*> playerList){ // à mettre dans engine
-    state::Game::time = DAY;
-    std::cout << "Current time: " << (state::Game::time ? "DAY" : "NIGHT") << std::endl;
+    Game::time = DAY;
+    std::cout << "Current time: " << (Game::time ? "DAY" : "NIGHT") << std::endl;
 
     engine::ActionProcessor actionProcessor;
     //actionProcessor.performAction(this, );
