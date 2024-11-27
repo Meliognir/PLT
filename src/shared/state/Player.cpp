@@ -166,30 +166,6 @@ bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans eng
 Player* Player::chooseOpponent(){
     engine::CombatManager combatManager;
     return combatManager.chooseOpponent(opponentsList, name);
-    // if (opponentsList.empty()) {
-    //     std::cout << "You have no opponent, enjoy. " << name << "." << std::endl;
-    //     return nullptr;
-    // }
-    // std::cout << "Choose an opponent in your opponentsList : " << std::endl;
-
-    // for (int i = 0; i < opponentsList.size(); ++i) {
-    //     Player* opponent = opponentsList[i];
-    //     std::cout << i + 1 << ". " << opponent->getName() 
-    //               << " (Position: " << opponent->getPosition() << ")" << std::endl;
-    // }
-    // int choice = 0;
-    // while (true) {
-    //     std::cout << "Entrez le numéro de l'adversaire que vous voulez choisir : ";
-    //     std::cin >> choice;
-    //     if (std::cin.fail() || choice < 1 || choice > static_cast<int>(opponentsList.size())) {
-    //         std::cin.clear();
-    //         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    //         std::cout << "Entrée invalide. Veuillez entrer un numéro valide." << std::endl;
-    //     } else {
-    //         break;
-    //     }
-    // }
-    // return opponentsList[choice - 1];
 }
 
 bool Player::chooseTimeDice(int dice1, int dice2){ // à mettre dans client
