@@ -32,7 +32,7 @@ std::string client::InputHandler::getPlayerName(int playerIndex){
     std::cin >> playerName;
     return playerName;
 }
-    
+
 
 int InputHandler::getMapSize(){
     int mapSize = 0;
@@ -78,20 +78,20 @@ bool InputHandler::confirmBoatHoldReplace(){
 }
 
 int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
-    displayMessage("Your 3 handCards:");
+    std::cout<<"Your 3 handCards:"<<std::endl;
     for (size_t i = 0; i < handCards.size(); ++i) {
         std::cout << i + 1 << ". " << handCards[i] << std::endl;
     }
 
     int choice = 0;
     while (true) {
-        displayMessage("Choose a card, enter an index between 1 and 3:");
+        std::cout<<"Choose a card, enter an index between 1 and 3:"<<std::endl;
         std::cin >> choice;
 
         if (std::cin.fail() || choice < 1 || choice > 3) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            displayMessage("Invalid input. Please enter a valid index (1-3).");
+            std::cout<<"Invalid input. Please enter a valid index (1-3)."<<std::endl;
         } else {
             return choice - 1;
         }
