@@ -1,13 +1,14 @@
 #include "Player.h"
 #include "Game.h"
 #include "State.h"
-#include "../engine/ActionProcessor.h"
 #include "ActionCard.h"
 #include "BoatHold.h"
+#include "../engine/ActionProcessor.h"
+#include "../engine/CombatManager.h"
 #include "../engine/ResourceManager.h"
+#include "../../client/client/InputHandler.h"
 #include <iostream>
 #include <memory>
-#include "../../client/client/InputHandler.h"
 #include <algorithm> // Pour std::shuffle
 #include <random>   // Pour std::default_random_engine et std::random_device
 #include <utility> // Pour std::forward
@@ -136,8 +137,11 @@ void Player::playTurn(std::vector<Player*> playerList){ // à mettre dans engine
     std::cout << "Current time: " << (state::Game::time ? "DAY" : "NIGHT") << std::endl;
 
     engine::ActionProcessor actionProcessor;
-    actionProcessor.performAction(this, );
-
+    //actionProcessor.performAction(this, );
+    //
+    //
+    //
+    //
 }
 
 void Player::moveCardToHand () { // engine
@@ -159,7 +163,9 @@ bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans eng
     return !opponentsList.empty();
 }
 
-Player* Player::chooseOpponent(){ // à mettre dans engine
+Player* Player::chooseOpponent(){
+    engine::CombatManager combatManager;
+    return combatManager.chooseOpponent(opponentsList, name);
     // if (opponentsList.empty()) {
     //     std::cout << "You have no opponent, enjoy. " << name << "." << std::endl;
     //     return nullptr;
@@ -261,6 +267,10 @@ const std::vector <int>& Player::getHandCards() const{
 
 int Player::getActiveCard() const{
 
+}
+
+const std::vector <Player*>& Player::getOpponentsList() const{
+    return opponentsList;
 }
 
 }
