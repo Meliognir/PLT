@@ -3,27 +3,27 @@
 #include <iostream>
 #include <limits>
 
-
-
-
-
 namespace engine{
 
 CombatManager::CombatManager(){
 }
 
-state::Player* engine::CombatManager::chooseOpponent(){ // à mettre dans client
+state::Player* CombatManager::chooseOpponent(std::vector <state::Player*>& opponentsList, std::string name){ // à mettre dans client
+    
+    //
     if (opponentsList.empty()) {
         std::cout << "You have no opponent, enjoy. " << name << "." << std::endl;
         return nullptr;
     }
     std::cout << "Choose an opponent in your opponentsList : " << std::endl;
 
+    //
     for (int i = 0; i < opponentsList.size(); ++i) {
         state::Player* opponent = opponentsList[i];
-        std::cout << i + 1 << ". " << opponent->getName() 
-                  << " (Position: " << opponent->getPosition() << ")" << std::endl;
+        std::cout << i + 1 << ". " << opponent->getName() << " (Position: " << opponent->getPosition() << ")" << std::endl;
     }
+
+    //
     int choice = 0;
     while (true) {
         std::cout << "Entrez le numéro de l'adversaire que vous voulez choisir : ";
