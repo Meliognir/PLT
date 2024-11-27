@@ -5,6 +5,11 @@ namespace state {
 Map::~Map(){
 }
 
+bool Map::hasFork(int position, int direction)
+{
+    return false;
+}
+
 Map::Map(int size){
     //test
     setSize(size);

@@ -27,7 +27,7 @@ namespace engine {
 void ActionProcessor::performAction(state::Player *player, int cardId)
 {
     state::ActionCard *actionCard = state::Game::collectionOfCards.at(cardId);
-    ResourceManager resourceManager;
+    static ResourceManager resourceManager;
     MapManager mapManager;
     int actionType;
     int actionValue;

@@ -204,6 +204,16 @@ void Player::setPosition(int position){
     this->position=position;
 }
 
+int Player::getPath() const
+{
+    return path;
+}
+
+void Player::setPath(int path)
+{
+    this->path = path;
+}
+
 const std::string &Player::getName() const{
     return name;
 }
