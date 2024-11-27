@@ -42,8 +42,8 @@ namespace state {
 // initializes the map and its tiles and initializes players' other parameters 
 //-----------------------------
   void PlayingState::handle1() {
-    client::InputHandler inputHandler;
-    int mapSize = inputHandler.getMapSize();
+    client::InputHandler inputHandler;// A vire
+    int mapSize = inputHandler.getMapSize();//A vire
     //-------------Initializes Map + tiles------------
     
     /*while(mapSize <= 1){
@@ -91,7 +91,7 @@ namespace state {
     }
 
     //std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
-    inputHandler.displayMessage("Map initialized with " + std::to_string(game->map->getSize()) + " tiles.");
+    std::cout<<"Map initialized with " << std::to_string(game->map->getSize()) << " tiles."<< std::endl;
     //-------------Initializes players' parameters------------
     const std::vector<Player*>& playingPlayers = game->getPlayerList();
     for (Player* player : playingPlayers) {
@@ -112,7 +112,7 @@ namespace state {
       //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
       auto goldResource = make_unique<Gold>();
-      engine::ResourceManager resource_manager;
+      engine::ResourceManager resource_manager;//A vire
       resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
       auto foodResource = make_unique<Food>();
       resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);
@@ -128,9 +128,9 @@ namespace state {
       // print le type et nombre de ressource du boathold : void BoatHold::showContents()
       game->displayState();
 
-      inputHandler.displayMessage("Player " + std::to_string(player->getPlayerId()) + " (" + player->getName() + ") initialized at position " + std::to_string(player->getPosition()));
+      std::cout<<"Player " << std::to_string(player->getPlayerId()) <<" (" + player->getName() << ") initialized at position " << std::to_string(player->getPosition())<< std::endl;
     }
-    inputHandler.displayMessage("Players initialized: " + std::to_string(playingPlayers.size()) + " players in the game.");
+    std::cout<<"Players initialized: " << std::to_string(playingPlayers.size()) << " players in the game."<< std::endl;
   }
 
 

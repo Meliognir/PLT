@@ -32,10 +32,7 @@ std::string client::InputHandler::getPlayerName(int playerIndex){
     std::cin >> playerName;
     return playerName;
 }
-
-void client::InputHandler::displayMessage(const std::string &message){
-    std::cout << message << std::endl;
-}
+    
 
 int InputHandler::getMapSize(){
     int mapSize = 0;
