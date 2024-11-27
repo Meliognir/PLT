@@ -32,7 +32,7 @@ void engine::GameEngine::runGameLoop()
     int activePlayerIndex = 0;
     int turn = 0;
 
-    client::InputHandler inputHandler;
+    //client::InputHandler inputHandler;
 
     while (!game->checkGameEndCondition()) {
         //-------------Captain + Round------------
@@ -43,7 +43,8 @@ void engine::GameEngine::runGameLoop()
         game->setCaptainIndex(startingPlayerIndex);
         
         //-------------Day and night Dices------------
-        inputHandler.displayMessage("Player " + std::to_string(currentPlayer->getPlayerId()) + " rolls the dice.");
+        //inputHandler.displayMessage("Player " + std::to_string(currentPlayer->getPlayerId()) + " rolls the dice.");
+        std::cout << "Player " << currentPlayer->getPlayerId() << "rolls the dice." << std::endl;
         std::array<int, 2> dice = engine::DiceManager::rollDice();
         int die1 = dice[0];
         int die2 = dice[1];
@@ -56,7 +57,7 @@ void engine::GameEngine::runGameLoop()
 
         game->dayDie = dayDie;  
         game->nightDie = nightDie;
-        inputHandler.displayMessage("The day die is " + std::to_string(dayDie) + " and the night die is " + std::to_string(nightDie) + ".");
+        std::cout <<"The day die is " << std::to_string(dayDie) << " and the night die is " << std::to_string(nightDie) << "."<<std::endl;
 
         //-------------Every Player choose 1 Card in their own cardDeck------------
         for (int i = 0; i < playerCount; i++) {

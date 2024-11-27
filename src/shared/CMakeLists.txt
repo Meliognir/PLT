@@ -20,7 +20,8 @@ add_library(${lib_shared_target} STATIC ${shared_sources} ${jsoncpp_sources}
         #state/Player.cpp
         ../client/client/InputHandler.cpp
         engine/GameEngine.cpp
-        state/GameOverState.cpp)
+        state/GameOverState.cpp
+        engine/CombatManager.cpp)
 add_dependencies(${lib_shared_target} generate-headers)
 target_include_directories(${lib_shared_target} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
