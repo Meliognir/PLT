@@ -15,7 +15,7 @@
 #define ADD_CANONS 4
 
 namespace state{
-
+bool Game::time = true;
 int Game::dayDie = 0;
 int Game::nightDie = 0;
 std::vector<ActionCard *> Game::collectionOfCards = {};
