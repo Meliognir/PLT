@@ -18,6 +18,7 @@ namespace state{
 bool Game::time = true;
 int Game::dayDie = 0;
 int Game::nightDie = 0;
+Map* Game::map;
 std::vector<ActionCard *> Game::collectionOfCards = {};
 
 void Game::gameTurn(int time){
@@ -93,17 +94,6 @@ Game::Game(State *state) {
     file.close();
 }
 
-Game::~Game(){
-    delete map;
-    delete state;
-    for(Player* player : playerList){
-        delete player;
-    }
-    playerList.clear();
-    for (auto card : collectionOfCards) {
-        delete card;
-    }
-}
 
 void Game::transitionTo(State *state){
     if (this->state != nullptr){
@@ -213,5 +203,23 @@ bool Game::checkGameEndCondition(){
     }
     return false;
 }
+
+
+Game::~Game(){
+    /*
+    for (Tile * tile : map){
+        delete tile;
+    }*/
+    //delete map;
+    delete state;
+    for(Player* player : playerList){
+        delete player;
+    }
+    playerList.clear();
+    for (auto card : collectionOfCards) {
+        delete card;
+    }
+}
+
 
 }
