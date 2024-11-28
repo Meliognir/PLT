@@ -13,7 +13,7 @@ namespace engine {
 void MapManager::movePlayer(state::Player *player, int direction, int value)
 {
     ResourceManager resourceManager2;
-    state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition());
+    //state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition());
     int nextPosition = player->getPosition()+value*direction;
     int nextPath = player->getPath();
     /*
@@ -26,9 +26,16 @@ void MapManager::movePlayer(state::Player *player, int direction, int value)
     //wait for a while (display state in another thread);
     
     // recursiveMoveBack(player, nextPosition);
+    /*
     if (resourceManager2.checkBankrupt(player, nextTile->tileResourceType, nextTile->tileCost)){
+        //pay resource;
         moveOneTileBack(player);
     }
+    else {
+        //pay resource;
+        return;
+    }
+    */
     
 
 
@@ -40,6 +47,7 @@ void MapManager::movePlayer(state::Player *player, int direction, int value)
    // si bankrupt :
         // payer tout
         // reculer
+        // (attention aux forks, exception et passage par le client)
 
         // recommencer
         // fin
@@ -55,6 +63,7 @@ void MapManager::movePlayer(state::Player *player, int direction, int value)
         // si bankrupt :
             // payer tout
             // reculer
+            // (attention aux forks, exception et passage par le client)
 
             // recommence
             // FIN
