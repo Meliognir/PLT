@@ -1,17 +1,12 @@
 #include "GameConfigState.h"
 #include "Game.h"
 #include "Player.h"
-#include "PlayingState.h"
+#include "CaptainDiceState.h"
 #include "../../client/client/InputHandler.h"
 #include <iostream>
 #include <vector>
 #include <memory>
 #include <limits> 
-
-//-------------------------
-// Lucian works here
-//-------------------------
-
 
 namespace state {
 //-----------------------------
@@ -57,16 +52,16 @@ namespace state {
   }
 
 //-----------------------------
-//transition to Playing concrete state
+//transition to CaptainDice concrete state
 //-----------------------------
   void GameConfigState::handle2() {
 
-    std::cout <<"Transitioning to Playing state..."<< std::endl;
-    game->transitionTo(new PlayingState);
+    std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
+    game->transitionTo(new CaptainDiceState);
   }
 
   GameConfigState::~GameConfigState() {
     std::cout <<"GameConfig destructor called"<< std::endl;
   }
 
-} // namespace state
+} 
