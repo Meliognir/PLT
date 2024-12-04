@@ -8,10 +8,8 @@ state::ResourceHandlingState::~ResourceHandlingState(){
     std::cout <<"destructor called"<< std::endl;
 }
 
-void state::ResourceHandlingState::handle1(){
-}
 
-void state::ResourceHandlingState::handle2(){
+void state::ResourceHandlingState::handle(){
     //si on peut payer et joueurs présents sur case
     std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
     game->transitionTo(new OpponentChoiceState);

@@ -103,13 +103,12 @@ void Game::transitionTo(State *state){
     this->state->setContext(this);
 }
 
-void Game::request1(){
-    this->state->handle1();
+void Game::request(){
+    this->state->handle();
 }
 
-void Game::request2(){
-    this->state->handle2();
-}
+
+
 void Game::setTurn(int turn){
 }
 

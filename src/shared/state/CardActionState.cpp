@@ -8,10 +8,8 @@ state::CardActionState::~CardActionState(){
     std::cout <<"destructor called"<< std::endl;
 }
 
-void state::CardActionState::handle1(){
-}
 
-void state::CardActionState::handle2(){
+void state::CardActionState::handle(){
     std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
     game->transitionTo(new ResourceHandlingState);
 

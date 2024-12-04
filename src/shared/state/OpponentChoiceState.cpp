@@ -7,10 +7,8 @@ state::OpponentChoiceState::~OpponentChoiceState(){
     std::cout <<"destructor called"<< std::endl;
 }
 
-void state::OpponentChoiceState::handle1(){
-}
 
-void state::OpponentChoiceState::handle2(){
+void state::OpponentChoiceState::handle(){
     std::cout <<"Transitioning to Combat state..."<< std::endl;
     game->transitionTo(new CombatState);
 }
