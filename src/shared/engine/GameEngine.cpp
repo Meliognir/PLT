@@ -1,5 +1,6 @@
 #include "GameEngine.h"
 #include "../state.h"
+#include "../state/GameOverState.h"
 #include "../../client/client.h"
 #include "DiceManager.h"
 #include <iostream>
@@ -22,9 +23,14 @@ void engine::GameEngine::initializeGame(int playerCount){
     game->request1(); 
 }
 
-void engine::GameEngine::runGameLoop()
-{
-    const std::vector<state::Player *> &playingPlayers = game->getPlayerList();
+void engine::GameEngine::steps() {
+    game->request2();
+    while(game->checkGameEndCondition()) {
+        game->request1();
+
+        game->request2();
+    }
+   /* const std::vector<state::Player *> &playingPlayers = game->getPlayerList();
     state::Player* currentPlayer;
     state::Player* activePlayer;
     int playerCount = playingPlayers.size();
@@ -45,13 +51,19 @@ void engine::GameEngine::runGameLoop()
         //-------------Day and night Dices------------
         //inputHandler.displayMessage("Player " + std::to_string(currentPlayer->getPlayerId()) + " rolls the dice.");
         std::cout << "Player " << currentPlayer->getPlayerId() << "rolls the dice." << std::endl;
-        std::array<int, 2> dice = engine::DiceManager::rollDice();
+        std::array<int, 2> dice = DiceManager::rollDice();
         int die1 = dice[0];
-        int die2 = dice[1];
+        int die2 = dice[1];*/
+}
 
-        bool dayFirst = client::InputHandler::chooseTimeDice(die1, die2);
 
-        std::array<int, 2> dayNightDice = engine::DiceManager::assignDayAndNightDice(die1, die2, dayFirst);
+
+
+
+        /*//changement d'état choix de dé
+        //bool dayFirst = client::InputHandler::chooseTimeDice(die1, die2);
+
+        std::array<int, 2> dayNightDice = DiceManager::assignDayAndNightDice(die1, die2, dayFirst);
         int dayDie = dayNightDice[0];  
         int nightDie = dayNightDice[1];
 
@@ -64,7 +76,8 @@ void engine::GameEngine::runGameLoop()
             activePlayerIndex = (startingPlayerIndex + i) % playerCount;
             activePlayer = playingPlayers[activePlayerIndex];
             std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
-            activePlayer->chooseCard();
+            //on change d'état vers un choix de carte
+            //chooseCardFromHand(activePlayer->getHandCards());
         }
 
         //-------------Every Player execute day and night Actions of their chosen card------------
@@ -78,4 +91,4 @@ void engine::GameEngine::runGameLoop()
 
         startingPlayerIndex = (startingPlayerIndex + 1) % playerCount;
     }
-}
+}*/

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <limits>
+#include "state.h"
 
 namespace client{
 
@@ -135,4 +136,6 @@ int InputHandler::chooseCanonNb(int totalNb){
     }
     return chosenNb;
 }
+
+
 }
