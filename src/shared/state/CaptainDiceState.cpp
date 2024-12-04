@@ -1,8 +1,13 @@
 #include "CaptainDiceState.h"
-#include "CardChoiceState.cpp"
+#include "CardChoiceState.h"
 #include "Game.h"
 #include <iostream>
 namespace state{
+
+CaptainDiceState::~CaptainDiceState(){
+    std::cout <<"destructor called"<< std::endl;
+}
+
 void CaptainDiceState::handle1(){
 
 }

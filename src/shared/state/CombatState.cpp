@@ -3,6 +3,10 @@
 #include "ResourceHandlingState.h"
 #include <iostream>
 
+state::CombatState::~CombatState(){
+    std::cout <<"destructor called"<< std::endl;
+}
+
 void state::CombatState::handle1(){
 }
 
