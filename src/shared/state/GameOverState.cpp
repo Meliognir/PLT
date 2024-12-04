@@ -17,7 +17,7 @@ namespace state {
 
     }
 
-    void GameOverState::handle1() {
+    void GameOverState::handle() {
         int playerScore=0;
        //quand un joueur atteint la dernière tile chaque joueur fini son tour et on compte alors les points
         for(Player * playerEnd : game->getPlayerList()) {
