@@ -4,6 +4,10 @@
 #include "OpponentChoiceState.h"
 #include <iostream>
 
+state::ResourceHandlingState::~ResourceHandlingState(){
+    std::cout <<"destructor called"<< std::endl;
+}
+
 void state::ResourceHandlingState::handle1(){
 }
 

@@ -3,7 +3,12 @@
 #include "Game.h"
 #include <iostream>
 
-void state::CardChoiceState::handle1(){
+state::CardChoiceState::~CardChoiceState(){
+    std::cout <<"destructor called"<< std::endl;
+}
+
+void state::CardChoiceState::handle1()
+{
 }
 
 void state::CardChoiceState::handle2(){

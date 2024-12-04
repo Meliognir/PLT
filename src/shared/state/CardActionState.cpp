@@ -1,8 +1,12 @@
 #include "CardActionState.h"
 #include "Game.h"
 #include "ResourceHandlingState.h"
-#include "CaptainDiceState.cpp"
+#include "CaptainDiceState.h"
 #include <iostream>
+
+state::CardActionState::~CardActionState(){
+    std::cout <<"destructor called"<< std::endl;
+}
 
 void state::CardActionState::handle1(){
 }
