@@ -24,7 +24,7 @@ namespace state {
 //-----------------------------
 //asks for the number of player, instantiates Players and initializes their name
 //-----------------------------
-  void GameConfigState::handle1() { 
+  void GameConfigState::handle() {
     client::InputHandler inputHandler;
 
     int playerNumber = inputHandler.getNumberofPlayers();
@@ -150,12 +150,6 @@ namespace state {
       std::cout<<"Player " << std::to_string(player->getPlayerId()) <<" (" + player->getName() << ") initialized at position " << std::to_string(player->getPosition())<< std::endl;
     }
     std::cout<<"Players initialized: " << std::to_string(playingPlayers.size()) << " players in the game."<< std::endl;
-  }
-
-//-----------------------------
-//transition to CaptainDice concrete state
-//-----------------------------
-  void GameConfigState::handle2() {
 
     std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
     game->transitionTo(new CaptainDiceState);
