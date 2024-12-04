@@ -5,11 +5,12 @@
 #include "GameConfigState.h"
 #include "Game.h"
 #include "../engine/ResourceManager.h"
+#include "../engine/DiceManager.h"
 #include "Gold.h"
 #include "Food.h"
 #include "Canon.h"
 #include "../../client/client/InputHandler.h"
-#include "../engine/DiceManager.h"
+
 #include <iostream>
 #include <vector>
 #include <limits>
