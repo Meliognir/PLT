@@ -1,5 +1,6 @@
 #include "ActionProcessor.h"
 #include "../state.h"
+#include <iostream>
 
 /* -------------------------------------------- */
 /* -----------Aurélien works here ------------- */
@@ -24,8 +25,7 @@ std::unique_ptr<T> make_unique(Args&&... args) {
 
 
 namespace engine {
-void ActionProcessor::performAction(state::Player *player, int cardId)
-{
+void ActionProcessor::performAction(state::Player *player, int cardId) {
     state::ActionCard *actionCard = state::Game::collectionOfCards.at(cardId);
     static ResourceManager resourceManager;
     MapManager mapManager;
@@ -47,27 +47,27 @@ void ActionProcessor::performAction(state::Player *player, int cardId)
 
     switch (actionType)
     {
-    case MOVE_FORWARD:
-        mapManager.movePlayer(player, FORWARD, actionValue);
+        case MOVE_FORWARD:
+            mapManager.movePlayer(player, FORWARD, actionValue);
         break;
-    case MOVE_BACKWARD:
-        mapManager.movePlayer(player, BACKWARD, actionValue);
+        case MOVE_BACKWARD:
+            mapManager.movePlayer(player, BACKWARD, actionValue);
         break;
-    case ADD_FOOD:
-        resourceManager.addResourcesToBoathold(player, std::move(foodResource), actionValue);
+        case ADD_FOOD:
+            resourceManager.addResourcesToBoathold(player, std::move(foodResource), actionValue);
         break;
-    case ADD_GOLD:
-        resourceManager.addResourcesToBoathold(player, std::move(goldResource), actionValue);
+        case ADD_GOLD:
+            resourceManager.addResourcesToBoathold(player, std::move(goldResource), actionValue);
         break;
-    case ADD_CANONS:
-        resourceManager.addResourcesToBoathold(player, std::move(canonResource), actionValue);
+        case ADD_CANONS:
+            resourceManager.addResourcesToBoathold(player, std::move(canonResource), actionValue);
         break;
-    
-    default:
-        break;
+
+        default:
+            break;
     }
+}
 
 
 }
 
-}

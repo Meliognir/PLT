@@ -48,70 +48,10 @@ Player::~Player(){
     boatHolds.clear();
 }
 
-// refactored
-BoatHold *Player::selectBoatHold(const std::string& resourceType){
-    client::InputHandler inputHandler;// a vire
-    engine::ResourceManager resourceManager;// a vire
-    if (!resourceManager.isBoatHoldAvailable(this, resourceType)){
-        std::cout<<"All boatholds already have this resource. Cannot replace."<<std::endl;
-        return nullptr;
-    }
-    while (true){
-    size_t index = inputHandler.selectUserBoatHold(6); // TODO : nombre de boathold d'un player
-    if (resourceManager.checkSameBoathold(this,resourceType,index)){
-        std::cout<<"Boathold already contains this type of resource. Please choose another."<<std::endl;
-        continue;
-    }
-    if (resourceManager.checkOccupied(this, index)){
-        if (!inputHandler.confirmBoatHoldReplace()){
-            continue;
-        }
-    }
-    BoatHold* selectedHold = resourceManager.selectBoathold(this, resourceType, index);
-    if (selectedHold == nullptr) {
-        std::cout<<"Error selecting BoatHold."<<std::endl;
-        return nullptr;
-    }
-    return selectedHold;
-    }
-}
-
-void Player::addResourcesToBoatHold(std::unique_ptr<Resources> resource, int amount, int skipSelection/*default value = 0*/) // engine
-{
-    if (!resource) {
-        std::cerr << "Erreur : le pointeur resource est nul !\n";
-        return;
-    }
-
-    std::string resourceType = resource->getType();
-    BoatHold *selectedBoatHold;
-
-    if (skipSelection){
-        selectedBoatHold = boatHolds.at(skipSelection-1);
-    }
-    else {
-        selectedBoatHold = selectBoatHold(resourceType);
-    }
-
-    if (selectedBoatHold != nullptr){
-        selectedBoatHold->addResource(std::move(resource), amount);
-        std::cout << "Ressource ajoutée au BoatHold avec succès !\n"<< std::endl;
-    }
-    else{
-        selectedBoatHold = selectBoatHold(resourceType);
-        if (selectedBoatHold != nullptr){
-            selectedBoatHold->addResource(std::move(resource), amount);
-            std::cout << "Ressource ajoutée au BoatHold avec succès !\n";
-        }
-        else{
-            std::cout << "La ressource n'a pas pu ếtre ajoutée.\n";
-        }
-    }
-}
 
 // refactored
 // shuffles player cardDeck
-void Player::shuffleDeck(){ 
+void Player::shuffleDeck(){
     std::random_device rd;
     // Mersenne Twister PRNG initialisé avec r
     std::mt19937 g(rd());
@@ -120,7 +60,7 @@ void Player::shuffleDeck(){
 
 // refactored
 // sets activeCard to player's choice
-void Player::chooseCard() {
+/*void Player::chooseCard() {
     client::InputHandler inputHandler;
     int selectedIndex = inputHandler.chooseCardFromHand(handCards);
 
@@ -130,7 +70,7 @@ void Player::chooseCard() {
     } else {
         std::cout<<"Failed to choose a card."<<std::endl;
     }
-}
+}*/
 
 void Player::playTurn(std::vector<Player*> playerList){ // à mettre dans engine
     Game::time = DAY;
@@ -163,10 +103,10 @@ bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans eng
     return !opponentsList.empty();
 }
 
-Player* Player::chooseOpponent(){
+/*Player* Player::chooseOpponent(){
     engine::CombatManager combatManager;
     return combatManager.chooseOpponent(opponentsList, name);
-}
+}*/
 
 bool Player::chooseTimeDice(int dice1, int dice2){ // à mettre dans client
     std::string input;
