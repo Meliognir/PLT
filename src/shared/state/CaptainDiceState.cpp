@@ -8,11 +8,10 @@ CaptainDiceState::~CaptainDiceState(){
     std::cout <<"destructor called"<< std::endl;
 }
 
-void CaptainDiceState::handle1(){
 
-}
 
-void CaptainDiceState::handle2(){
+
+void CaptainDiceState::handle(){
     std::cout <<"Transitioning to CardChoice state..."<< std::endl;
     game->transitionTo(new CardChoiceState);
 }
