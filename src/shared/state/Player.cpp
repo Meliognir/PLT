@@ -72,17 +72,11 @@ void Player::shuffleDeck(){
     }
 }*/
 
-void Player::playTurn(std::vector<Player*> playerList){ // à mettre dans engine
+/*void Player::playTurn(std::vector<Player*> playerList){ // à mettre dans engine
     Game::time = DAY;
     std::cout << "Current time: " << (Game::time ? "DAY" : "NIGHT") << std::endl;
 
-    engine::ActionProcessor actionProcessor;
-    //actionProcessor.performAction(this, );
-    //
-    //
-    //
-    //
-}
+}*/
 
 void Player::moveCardToHand () { // engine
     handCards.push_back(cardDeck.at(0));
