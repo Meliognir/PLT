@@ -203,6 +203,21 @@ bool Game::checkGameEndCondition(){
     return false;
 }
 
+int Game::getActivePlayerIndex() const{
+    return activePlayerIndex;
+}
+
+Player* Game::getActivePlayer(){
+    return activePlayer;
+}
+
+void Game::setActivePlayerIndex(int index){
+    activePlayerIndex = index;
+}
+
+void Game::setActivePlayer(Player *player){
+    activePlayer = player;
+}
 
 Game::~Game(){
     /*
