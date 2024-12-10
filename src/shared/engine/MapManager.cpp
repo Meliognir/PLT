@@ -10,9 +10,8 @@
 
 namespace engine {
 
-void MapManager::movePlayer(state::Player *player, int direction, int value)
-{
-    ResourceManager resourceManager2;
+void MapManager::movePlayer(state::Player *player, int direction, int value) {
+    //ResourceManager resourceManager2;
     //state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition());
     int nextPosition = player->getPosition()+value*direction;
     int nextPath = player->getPath();
@@ -22,9 +21,8 @@ void MapManager::movePlayer(state::Player *player, int direction, int value)
     }*/
     player->setPosition(nextPosition);
     player->setPath(nextPath);
-    state::Tile * nextTile = state::Game::map->listOfTiles.at(nextPosition);
-    //wait for a while (display state in another thread);
-    
+
+}
     // recursiveMoveBack(player, nextPosition);
     /*
     if (resourceManager2.checkBankrupt(player, nextTile->tileResourceType, nextTile->tileCost)){
@@ -77,14 +75,15 @@ void MapManager::movePlayer(state::Player *player, int direction, int value)
 
 
     
-}
+//}
 
 void MapManager::moveOneTileBack(state::Player *player)
 {
     movePlayer(player, BACKWARD, 1);    
 }
 
-bool MapManager::hasFork(int pos1, int pos2){
+/*A ne pas supprimer si on met les fork :
+ *bool MapManager::hasFork(int pos1, int pos2){
     int out = 0;
     int direction = 1;
     if (pos2 < pos1){
@@ -99,5 +98,5 @@ bool MapManager::hasFork(int pos1, int pos2){
     }
     return out;
 }
-
+*/
 }
