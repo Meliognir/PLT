@@ -41,7 +41,7 @@ state::Player* CombatManager::chooseOpponent(std::vector <state::Player*>& oppon
 }
 
 void CombatManager::duel(state::Player *playerAttack, state::Player *playerDefense){
-    client::InputHandler inputHandler; 
+    //client::InputHandler inputHandler;
     //inputHandler.chooseCanonNb()
 }
 }

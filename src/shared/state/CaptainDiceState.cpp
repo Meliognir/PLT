@@ -9,8 +9,6 @@ CaptainDiceState::~CaptainDiceState(){
 }
 
 
-
-
 void CaptainDiceState::handle(){
     std::cout <<"Transitioning to CardChoice state..."<< std::endl;
     game->transitionTo(new CardChoiceState);
