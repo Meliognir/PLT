@@ -15,7 +15,10 @@ void state::ResourceHandlingState::handle(){
     //si on peut payer et joueurs présents sur case
     int quantityResource=0;
     bool duel=false;
-    Player * activePlayer=game->getPlayerList().at(game->getActivePlayer());
+
+    /*A DEPLACER : */game->setActivePlayer(game->getPlayerList().at(game->getActivePlayerIndex()));
+
+    Player * activePlayer=game->getActivePlayer();
     std::string resource1=game->map->getResourceType(activePlayer->getPosition());
     for (BoatHold *currentBoathold : activePlayer->getBoatHolds()) {
         if (currentBoathold->hasResourceType(resource1)) {
