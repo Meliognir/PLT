@@ -9,14 +9,18 @@ state::CardActionState::~CardActionState(){
     std::cout <<"destructor called"<< std::endl;
 }
 
-
+int pap=0;
 void state::CardActionState::handle(){
-    //if () {
-        std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
-        game->transitionTo(new ResourceHandlingState);
-    //}
 
-    //en fin de tour, on passe au prochain tour
-    std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
-    game->transitionTo(new CaptainDiceState);
+    if (pap>game->getPlayerList().size()*3) {
+        pap+=1;
+        //en fin de tour, on passe au prochain tour
+        std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
+        game->transitionTo(new CaptainDiceState);
+    }
+
+    std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
+    game->transitionTo(new ResourceHandlingState);
+
+
 }

@@ -26,6 +26,7 @@ void engine::GameEngine::initializeGame(int playerCount){
 void engine::GameEngine::steps() {
 
     while(game->checkGameEndCondition()) {
+       // switch (state) :
         game->request();
     }
    /* const std::vector<state::Player *> &playingPlayers = game->getPlayerList();
