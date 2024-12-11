@@ -41,7 +41,7 @@ void engine::GameEngine::steps() {
         std::cout << "Starting a new round in the Playerlist." << std::endl;
         turn++; 
         game->setTurn(turn);
-        currentPlayer = playingPlayers[startingPlayerIndex];
+        currentPlayer = playingPlayers.at(startingPlayerIndex);
         game->setCaptainIndex(startingPlayerIndex);
         
         //-------------Day and night Dices------------
@@ -82,7 +82,7 @@ void engine::GameEngine::steps() {
             game->setActivePlayer(playingPlayers.at(activePlayerIndex));
             std::cout << "Player " << game->getActivePlayer()->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;
             // add combat logic in Player.cpp
-            activePlayer->playTurn(playingPlayers);
+            game->getActivePlayer()->playTurn(playingPlayers);
         }
 
         startingPlayerIndex = (startingPlayerIndex + 1) % playerCount;
