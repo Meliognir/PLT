@@ -3,6 +3,9 @@
 #include "State.h"
 #include "ActionCard.h"
 #include "BoatHold.h"
+#include "Gold.h"
+#include "Food.h"
+#include "Canon.h"
 #include "../engine/ActionProcessor.h"
 #include "../engine/CombatManager.h"
 #include "../engine/ResourceManager.h"
@@ -102,7 +105,33 @@ bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans eng
     return combatManager.chooseOpponent(opponentsList, name);
 }*/
 
-bool Player::chooseTimeDice(int dice1, int dice2){ // à mettre dans client
+void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount, int skipSelection){
+    auto& boatHolds = getBoatHolds();
+    state::BoatHold *selectedHold;
+    if (skipSelection){
+        selectedHold = getBoatHolds().at(skipSelection-1);
+    }
+    else {
+        selectedHold = boatHolds[boatholdIndex-1];
+    }
+    int quantityToRemove = selectedHold->getQuantity();
+    selectedHold->removeResource(quantityToRemove);
+    if (resourceType == "Food"){
+        auto foodResource = make_unique<Food>();
+        selectedHold->addResource(std::move(foodResource), amount);
+    }
+    if (resourceType == "Gold"){
+        auto goldResource = make_unique<Gold>();
+        selectedHold->addResource(std::move(goldResource), amount);
+    }
+    if (resourceType == "Canon"){
+        auto canonResource = make_unique<Canon>();
+        selectedHold->addResource(std::move(canonResource), amount);
+    }
+}
+
+bool Player::chooseTimeDice(int dice1, int dice2)
+{ // à mettre dans client
     std::string input;
     while (true){
         std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n" << "dé 1 : " << dice1 << " dé 2 : " << dice2 << std::endl;
