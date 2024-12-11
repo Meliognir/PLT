@@ -2,7 +2,6 @@
 #include "../state.h"
 #include "../state/GameOverState.h"
 #include "../../client/client.h"
-#include "DiceManager.h"
 #include <iostream>
 #include <vector>
 #include <limits>
