@@ -209,6 +209,10 @@ std::array<int, 2> Game::rollDice(){
     return {rand() % 6 + 1, rand() % 6 + 1};
 }
 
+void movePlayer(state::Player * player, int direction, int value){
+    
+}
+
 void Game::setAttackingPlayer(Player *player){
     attackingPlayer=player;
 }
