@@ -1,6 +1,6 @@
 #include "CombatState.h"
 #include "Game.h"
-#include "ResourceHandlingState.h"
+#include "StealResourceState.h"
 #include <iostream>
 
 state::CombatState::~CombatState(){
@@ -9,6 +9,7 @@ state::CombatState::~CombatState(){
 
 
 void state::CombatState::handle(){
-    std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
-    game->transitionTo(new ResourceHandlingState);
+
+    std::cout <<"Transitioning to StealResource state..."<< std::endl;
+    game->transitionTo(new StealResourceState);
 }
