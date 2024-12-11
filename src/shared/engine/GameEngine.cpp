@@ -13,6 +13,7 @@ engine::GameEngine::GameEngine(state::State *state){
 }
 
 void engine::GameEngine::initializeGame(int playerCount){
+
     game->request(); // Appelle le comportement de GameConfigState pour initialiser les joueurs
 
     // Transition vers l'état "Playing"
@@ -22,11 +23,16 @@ void engine::GameEngine::initializeGame(int playerCount){
     //game->request1();
 }
 
+// La boucle while doit être déplacée vers le client
 void engine::GameEngine::steps() {
 
     while(!game->checkGameEndCondition()) {
+        std::string wait;
        // switch (state) :
         game->request();
+        std::cout << "Continue playing ?" << std::endl;
+        std::cin >> wait;
+
     }
    /* const std::vector<state::Player *> &playingPlayers = game->getPlayerList();
     state::Player* currentPlayer;
