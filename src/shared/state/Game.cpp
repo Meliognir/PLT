@@ -230,6 +230,14 @@ void Game::setDefendingPlayer(Player *player){
     defendingPlayer=player;
 }
 
+Player *Game::getAttackingPlayer(){
+    return attackingPlayer;
+}
+
+Player *Game::getDefendingPlayer(){
+    return defendingPlayer;
+}
+
 int Game::getActivePlayerIndex() const{
     return activePlayerIndex;
 }
