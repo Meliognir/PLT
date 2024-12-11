@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <cstdlib>
+#include <random>
 
 #define DAY true
 #define NIGHT false
@@ -201,6 +203,10 @@ bool Game::checkGameEndCondition(){
         }
     }
     return false;
+}
+
+std::array<int, 2> Game::rollDice(){
+    return {rand() % 6 + 1, rand() % 6 + 1};
 }
 
 int Game::getActivePlayerIndex() const{

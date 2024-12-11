@@ -23,6 +23,7 @@
 
 #define DAY true
 #define NIGHT false
+#define STAR 1000
 
 template <typename T, typename... Args>
 std::unique_ptr<T> make_unique(Args&&... args) {
@@ -149,6 +150,18 @@ bool Player::chooseTimeDice(int dice1, int dice2)
         std::cout << "Le dé " << dice2 << " sera le dé du jour. Le dé " << dice1 << " sera le dé de la nuit." << std::endl;
         return false;
     }
+}
+
+int Player::rollCombatDie(){
+    const int dieValues[] = {2, 4, 6, 8, 10, STAR};
+
+    const int sides = sizeof(dieValues) / sizeof(dieValues[0]);
+
+    std::random_device rd;  
+    std::mt19937 gen(rd()); 
+    std::uniform_int_distribution<> distrib(0, sides - 1);
+
+    return dieValues[distrib(gen)];
 }
 
 int Player::getPlayerId() const{
