@@ -24,7 +24,7 @@ void engine::GameEngine::initializeGame(int playerCount){
 
 void engine::GameEngine::steps() {
 
-    while(game->checkGameEndCondition()) {
+    while(!game->checkGameEndCondition()) {
        // switch (state) :
         game->request();
     }
