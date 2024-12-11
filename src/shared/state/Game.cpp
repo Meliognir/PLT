@@ -209,6 +209,14 @@ std::array<int, 2> Game::rollDice(){
     return {rand() % 6 + 1, rand() % 6 + 1};
 }
 
+void Game::setAttackingPlayer(Player *player){
+    attackingPlayer=player;
+}
+
+void Game::setDefendingPlayer(Player *player){
+    defendingPlayer=player;
+}
+
 int Game::getActivePlayerIndex() const{
     return activePlayerIndex;
 }

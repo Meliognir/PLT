@@ -228,7 +228,11 @@ const std::vector <int>& Player::getHandCards() const{
 }
 
 int Player::getActiveCard() const{
+ return activeCard;
+}
 
+void Player::setActiveCard(int activeCard){
+    this->activeCard=activeCard;
 }
 
 const std::vector <Player*>& Player::getOpponentsList() const{
