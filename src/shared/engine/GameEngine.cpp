@@ -30,10 +30,8 @@ void engine::GameEngine::steps() {
     }
    /* const std::vector<state::Player *> &playingPlayers = game->getPlayerList();
     state::Player* currentPlayer;
-    state::Player* activePlayer;
     int playerCount = playingPlayers.size();
     int startingPlayerIndex = 0;
-    int activePlayerIndex = 0;
     int turn = 0;
 
     //client::InputHandler inputHandler;
@@ -71,18 +69,18 @@ void engine::GameEngine::steps() {
 
         //-------------Every Player choose 1 Card in their own cardDeck------------
         for (int i = 0; i < playerCount; i++) {
-            activePlayerIndex = (startingPlayerIndex + i) % playerCount;
-            activePlayer = playingPlayers[activePlayerIndex];
-            std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
+            game->setActivePlayerIndex((startingPlayerIndex + i) % playerCount);
+            game->setActivePlayer(playingPlayers.at(activePlayerIndex));
+            std::cout << "Player " << game->getActivePlayer()->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
             //on change d'état vers un choix de carte
             //chooseCardFromHand(activePlayer->getHandCards());
         }
 
         //-------------Every Player execute day and night Actions of their chosen card------------
         for (int i = 0; i < playerCount; i++) {
-            activePlayerIndex = (startingPlayerIndex + i) % playerCount;
-            activePlayer = playingPlayers[activePlayerIndex];
-            std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;
+            game->setActivePlayerIndex((startingPlayerIndex + i) % playerCount);
+            game->setActivePlayer(playingPlayers.at(activePlayerIndex));
+            std::cout << "Player " << game->getActivePlayer()->getPlayerId() << "'s turn. Execute your Action. Dew it." << std::endl;
             // add combat logic in Player.cpp
             activePlayer->playTurn(playingPlayers);
         }

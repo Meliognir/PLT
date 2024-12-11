@@ -210,7 +210,16 @@ std::array<int, 2> Game::rollDice(){
 }
 
 void movePlayer(state::Player * player, int direction, int value){
-    
+    //ResourceManager resourceManager2;
+    //state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition());
+    int nextPosition = player->getPosition()+value*direction;
+    int nextPath = player->getPath();
+    /*
+    if (Map->path1.at(nextPosition).isForking()){
+        nextPath = InputHandler::pick_a_path();
+    }*/
+    player->setPosition(nextPosition);
+    player->setPath(nextPath);
 }
 
 void Game::setAttackingPlayer(Player *player){
