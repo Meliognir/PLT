@@ -6,8 +6,8 @@ AssignDice::AssignDice(int chosenDice, int otherDice) : chosenDice(chosenDice), 
 }
 
 void const AssignDice::launchCommand(state::Game * GamePtr){
-    GamePtr->dayDice = chosenDice;
-    GamePtr->nightDice = otherDice;
+    GamePtr->dayDie = chosenDice;
+    GamePtr->nightDie = otherDice;
 }
 
 }
