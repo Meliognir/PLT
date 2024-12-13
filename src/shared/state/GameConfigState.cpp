@@ -1,5 +1,6 @@
 #include "GameConfigState.h"
 #include "Game.h"
+#include "state.h"
 #include "Player.h"
 #include "CaptainDiceState.h"
 #include "Gold.h"
@@ -10,6 +11,8 @@
 #include <vector>
 #include <memory>
 #include <limits> 
+
+#define GAME_CONFIG_STATE     0
 
 #define TREASURE 0
 #define GOLD 1
@@ -155,8 +158,14 @@ namespace state {
     game->transitionTo(new CaptainDiceState);
 
   }
+
+  int GameConfigState::getStateId (){
+    return GAME_CONFIG_STATE;
+  }
+  
   GameConfigState::~GameConfigState() {
     std::cout <<"GameConfig destructor called"<< std::endl;
   }
+
 
 } 

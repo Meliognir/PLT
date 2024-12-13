@@ -5,12 +5,12 @@
 #include "Player.h"
 #include <iostream>
 
-state::CombatAttackingState::~CombatAttackingState(){
-    std::cout <<"destructor called"<< std::endl;
-}
+#define COMBAT_ATTACKING_STATE 6
+
+namespace state{
 
 
-void state::CombatAttackingState::handle(){
+void CombatAttackingState::handle(){
     Player * attacker = game->getAttackingPlayer();
     int attackpower = attacker->getFirePower(); 
     if (attackpower>1000){
@@ -21,4 +21,15 @@ void state::CombatAttackingState::handle(){
     else {
         game->transitionTo(new CombatDefendingState);
     }
+}
+
+
+int CombatAttackingState::getStateId(){
+    return COMBAT_ATTACKING_STATE;
+}
+
+CombatAttackingState::~CombatAttackingState(){
+    std::cout <<"destructor called"<< std::endl;
+}
+
 }

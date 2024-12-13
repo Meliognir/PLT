@@ -23,6 +23,7 @@ Client::Client()
 
 int Client::launch(){
     gameEngine->initializeGame(10);
+    
     gameEngine->steps();
     
     return 0;

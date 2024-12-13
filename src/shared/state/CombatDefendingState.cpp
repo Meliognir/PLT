@@ -4,9 +4,11 @@
 #include "Game.h"
 #include "Player.h"
 #include "iostream"
-state::CombatDefendingState::~CombatDefendingState(){
-    std::cout <<"destructor called"<< std::endl;
-}
+
+#define COMBAT_DEFENDING_STATE 7
+
+
+namespace state{
 
 void state::CombatDefendingState::handle(){
     Player * attacker = game->getAttackingPlayer();
@@ -25,4 +27,14 @@ void state::CombatDefendingState::handle(){
     }
     std::cout <<"Transitioning to StealResource state..."<< std::endl;
     game->transitionTo(new StealResourceState);
+}
+
+int CombatDefendingState::getStateId(){
+    return COMBAT_DEFENDING_STATE;
+}
+
+state::CombatDefendingState::~CombatDefendingState(){
+    std::cout <<"destructor called"<< std::endl;
+}
+
 }

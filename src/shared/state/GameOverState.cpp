@@ -12,10 +12,9 @@
 #include "Player.h"
 #include "Map.h"
 
-namespace state {
-    GameOverState::~GameOverState () {
+#define GAME_OVER_STATE 9
 
-    }
+namespace state {
 
     void GameOverState::handle() {
         int playerScore=0;
@@ -102,6 +101,13 @@ namespace state {
                 std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << " ."<< std::endl;
             }
         }
+    }
+
+    int GameOverState::getStateId (){
+        return GAME_OVER_STATE;
+    }
+
+    GameOverState::~GameOverState () {
 
     }
 }

@@ -3,11 +3,21 @@
 #include "Game.h"
 #include <iostream>
 
-state::StealResourceState::~StealResourceState(){
+#define STEAL_RESOURCE_STATE 8
+
+namespace state{
+
+StealResourceState::~StealResourceState(){
     std::cout <<"destructor called"<< std::endl;
 }
 
-void state::StealResourceState::handle(){
+void StealResourceState::handle(){
     std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
     game->transitionTo(new ResourceHandlingState);
+}
+
+int StealResourceState::getStateId(){
+    return STEAL_RESOURCE_STATE;
+}
+
 }
