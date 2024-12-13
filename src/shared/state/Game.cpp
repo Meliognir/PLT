@@ -208,8 +208,9 @@ bool Game::checkGameEndCondition(){
     return false;
 }
 
-std::array<int, 2> Game::rollDice(){
-    return {rand() % 6 + 1, rand() % 6 + 1};
+void Game::rollDice(){
+    dayDie = rand() % 6 + 1;
+    nightDie = rand() % 6 + 1;
 }
 
 void movePlayer(state::Player * player, int direction, int value){
