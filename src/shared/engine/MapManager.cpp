@@ -10,6 +10,9 @@
 
 namespace engine {
 
+// > prio pas ordre
+//pas d'argent > combat > payer
+
 void MapManager::movePlayer(state::Player *player, int direction, int value) {
     //ResourceManager resourceManager2;
     //state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition());
@@ -35,10 +38,6 @@ void MapManager::movePlayer(state::Player *player, int direction, int value) {
     }
     */
     
-
-
-
-
    // check le prix de la case et comparer avec les ressources
    // check bankrupt
 

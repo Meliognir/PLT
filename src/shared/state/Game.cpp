@@ -109,8 +109,6 @@ void Game::request(){
     this->state->handle();
 }
 
-
-
 void Game::setTurn(int turn){
 }
 
@@ -119,10 +117,15 @@ const std::vector<Player *> &Game::getPlayerList() const{
 }
 
 void Game::setPlayerList(const std::vector<Player *> &playerList){
-    this->playerList=playerList;
+    this->playerList = playerList;
+}
+
+int Game::getCaptainIndex() const{
+    return this->captainIndex;
 }
 
 void Game::setCaptainIndex(int captainIndex){
+    this->captainIndex = captainIndex;
 }
 
 void Game::displayState()
