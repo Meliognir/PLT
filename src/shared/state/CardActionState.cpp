@@ -9,7 +9,7 @@ state::CardActionState::~CardActionState(){
     std::cout <<"destructor called"<< std::endl;
 }
 
-int pap = 0;
+unsigned pap = 0;
 int gameTurn = 0;
 
 void state::CardActionState::handle(){
@@ -17,7 +17,7 @@ void state::CardActionState::handle(){
     int playerNb = game->getPlayerList().size();
     int activePlayerIndex = game->getActivePlayerIndex();
     int captainIndex = game->getCaptainIndex();
-    activePlayerIndex = (captainIndex + 1) % playerNb;
+    activePlayerIndex = (captainIndex + 1);
     game->setActivePlayerIndex(activePlayerIndex);
     game->setActivePlayer(game->getPlayerList().at(activePlayerIndex));
 
