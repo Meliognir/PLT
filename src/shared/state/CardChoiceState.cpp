@@ -3,12 +3,25 @@
 #include "Game.h"
 #include <iostream>
 
-state::CardChoiceState::~CardChoiceState(){
+
+#define CARD_CHOICE_STATE 2
+
+
+namespace state{
+
+CardChoiceState::~CardChoiceState(){
     std::cout <<"destructor called"<< std::endl;
 }
 
 
-void state::CardChoiceState::handle(){
+void CardChoiceState::handle(){
     std::cout <<"Transitioning to CardAction state..."<< std::endl;
     game->transitionTo(new CardActionState);
+}
+
+int CardChoiceState::getStateId(){
+    return CARD_CHOICE_STATE;
+}
+
+
 }

@@ -5,13 +5,11 @@
 #include <iostream>
 #include "Map.h"
 
+#define RESOURCE_HANDLING_STATE 4
 
-state::ResourceHandlingState::~ResourceHandlingState(){
-    std::cout <<"destructor called"<< std::endl;
-}
+namespace state {
 
-
-void state::ResourceHandlingState::handle(){
+void ResourceHandlingState::handle(){
     //si on peut payer et joueurs présents sur case
     int quantityResource=0;
     bool duel=false;
@@ -39,3 +37,14 @@ void state::ResourceHandlingState::handle(){
     game->transitionTo(new CardActionState);
 }
 
+
+ResourceHandlingState::~ResourceHandlingState(){
+    std::cout <<"destructor called"<< std::endl;
+}
+
+int ResourceHandlingState::getStateId(){
+    return RESOURCE_HANDLING_STATE;
+}
+
+
+}

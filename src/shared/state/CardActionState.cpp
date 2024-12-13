@@ -5,14 +5,13 @@
 #include <iostream>
 #include <SFML/System/Time.hpp>
 
-state::CardActionState::~CardActionState(){
-    std::cout <<"destructor called"<< std::endl;
-}
+#define CARD_ACTION_STATE 3
 
 unsigned pap = 0;
 int gameTurn = 0;
 
-void state::CardActionState::handle(){
+namespace state {
+void CardActionState::handle(){
 
     int playerNb = game->getPlayerList().size();
     int activePlayerIndex = game->getActivePlayerIndex();
@@ -42,5 +41,15 @@ void state::CardActionState::handle(){
 
     std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
     game->transitionTo(new ResourceHandlingState);
+
+}
+
+int CardActionState::getStateId(){
+    return CARD_ACTION_STATE;
+}
+
+CardActionState::~CardActionState(){
+    std::cout <<"destructor called"<< std::endl;
+}
 
 }
