@@ -24,8 +24,10 @@ namespace state {
 //asks for the number of player, instantiates Players and initializes their name
 //-----------------------------
   void GameConfigState::handle() {
-
-    int CaptainIndex = 0; // set to 0 here and in CardActionState
+    
+    game->setCaptainIndex(0);
+    game->setActivePlayerIndex(0); // set to 0 here and in CardActionState
+    
 /*
     int playerNumber = inputHandler.getNumberofPlayers();
     std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
@@ -148,10 +150,10 @@ namespace state {
       std::cout<<"Player " << std::to_string(player->getPlayerId()) <<" (" + player->getName() << ") initialized at position " << std::to_string(player->getPosition())<< std::endl;
     }
     std::cout<<"Players initialized: " << std::to_string(playingPlayers.size()) << " players in the game."<< std::endl;
-
+*/
     std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
     game->transitionTo(new CaptainDiceState);
-*/
+
   }
   GameConfigState::~GameConfigState() {
     std::cout <<"GameConfig destructor called"<< std::endl;

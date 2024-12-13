@@ -11,6 +11,7 @@ void testSFML() {
 
 #include "../shared/state.h" //to use vscode tasks file instead of makefile
 #include "../shared/engine.h"
+#include "client.h"
 //#include <state.h>
 
 
@@ -33,7 +34,10 @@ int clientcode(){
 int main(int argc,char* argv[])
 {
     int ret;
-    ret = clientcode(); // test handle 1 and 2
+
+    client::Client *client = new client::Client();
+    ret = client->launch();
+
     return ret;
 }
 
