@@ -14,7 +14,9 @@ namespace engine{
             //Combat Die
             state::Player * player;
             player = GamePtr->getPlayerList()[playerIndex];
-            player->rollCombatDie();
+            int dievalue = player->rollCombatDie();
+            int currentFirePower = player->getFirePower();
+            player->setFirePower(currentFirePower+dievalue);
         }
     }
 }

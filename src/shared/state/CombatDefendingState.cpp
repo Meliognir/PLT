@@ -1,26 +1,23 @@
-#include "CombatState.h"
-#include "StealResourceState.h"
+#include "CombatDefendingState.h"
 #include "CardActionState.h"
+#include "StealResourceState.h"
 #include "Game.h"
 #include "Player.h"
-
-#include <iostream>
-
-state::CombatState::~CombatState(){
+#include "iostream"
+state::CombatDefendingState::~CombatDefendingState(){
     std::cout <<"destructor called"<< std::endl;
 }
 
-
-void state::CombatState::handle(){
+void state::CombatDefendingState::handle(){
     Player * attacker = game->getAttackingPlayer();
-    Player * defender = game->getDefendingPlayer();
     int attackpower = attacker->getFirePower(); 
-    int defensepower = attacker->getFirePower(); 
-    if (attackpower==defensepower){
-        std::cout <<" égalité : Transitioning to CardAction state..."<< std::endl;
+    Player * defender = game->getDefendingPlayer();
+    int defensepower = defender->getFirePower(); 
+    if (attackpower == defensepower){
+        std::cout <<"Egalite : Transitioning to CardAction state..."<< std::endl;
         game->transitionTo(new CardActionState);
     }
-    else if (attackpower>defensepower){
+    else if (attackpower > defensepower){
         game->setCombatWinner(attacker);
     }
     else {

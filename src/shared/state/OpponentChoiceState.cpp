@@ -1,6 +1,6 @@
 #include "OpponentChoiceState.h"
 #include "Game.h"
-#include "CombatState.h"
+#include "CombatAttackingState.h"
 #include <iostream>
 
 state::OpponentChoiceState::~OpponentChoiceState(){
@@ -9,6 +9,6 @@ state::OpponentChoiceState::~OpponentChoiceState(){
 
 
 void state::OpponentChoiceState::handle(){
-    std::cout <<"Transitioning to Combat state..."<< std::endl;
-    game->transitionTo(new CombatState);
+    std::cout <<"Transitioning to CombatAttacking state..."<< std::endl;
+    game->transitionTo(new CombatAttackingState);
 }
