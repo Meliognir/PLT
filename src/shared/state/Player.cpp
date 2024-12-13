@@ -131,6 +131,13 @@ void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex,
     }
 }
 
+void Player::removeFromBoatHold(int boatholdIndex, int amount){
+    auto& boatHolds = getBoatHolds();
+    state::BoatHold *selectedHold;
+    selectedHold = boatHolds[boatholdIndex-1];
+    selectedHold->removeResource(amount);
+}
+
 bool Player::chooseTimeDice(int dice1, int dice2)
 { // à mettre dans client
     std::string input;
