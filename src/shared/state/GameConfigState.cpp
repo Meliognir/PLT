@@ -24,20 +24,20 @@ namespace state {
 //asks for the number of player, instantiates Players and initializes their name
 //-----------------------------
   void GameConfigState::handle() {
-
+/*
     int CaptainIndex = 0; // set to 0 here and in CardActionState
 
-    // int playerNumber = inputHandler.getNumberofPlayers();
-    // std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
+    int playerNumber = inputHandler.getNumberofPlayers();
+    std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
 
-    // std::vector<Player*> players;
-    // for (int i = 0; i < playerNumber; ++i) {
-    //     std::string playerName = inputHandler.getPlayerName(i + 1);
-    //     Player* player = new Player(i + 1, playerName);
-    //     players.push_back(player);
-    // }
-    // game->setPlayerList(players);
-    /*int playerNumber = 0;
+    std::vector<Player*> players;
+    for (int i = 0; i < playerNumber; ++i) {
+        std::string playerName = inputHandler.getPlayerName(i + 1);
+        Player* player = new Player(i + 1, playerName);
+        players.push_back(player);
+    }
+    game->setPlayerList(players);
+    int playerNumber = 0;
 
     while(playerNumber < 2 || playerNumber > 6) {
         std::cout << "Enter the number of players: ";
@@ -60,12 +60,12 @@ namespace state {
       Player* player = new Player(i + 1, playerName);
       players.push_back(player);
     }
-    game->setPlayerList(players);*/
+    game->setPlayerList(players);
 
-    //int mapSize = inputHandler.getMapSize();//A vire
+    int mapSize = inputHandler.getMapSize();//A vire
     //-------------Initializes Map + tiles------------
     
-    /*while(mapSize <= 1){
+    while(mapSize <= 1){
       std::cout << "Enter the size of the map: ";
       std::cin >> mapSize;
       if (std::cin.fail()) { 
@@ -76,18 +76,18 @@ namespace state {
       } else if(mapSize <= 1){
         std::cout << "Invalid map size. Please enter a number higher than 1." << std::endl;
       }
-    }*/
-    // if (game->map == nullptr) {
-    //     game->map = new Map(mapSize);
-    // } else {
-    //     game->map->setSize(mapSize);
-    //     game->map->listOfTiles.clear();
-    // }
+    }
+    if (game->map == nullptr) {
+        game->map = new Map(mapSize);
+    } else {
+        game->map->setSize(mapSize);
+        game->map->listOfTiles.clear();
+    }
 
-    //int playerNumber = game->getPlayerList().size();
-    // "Port Royal" : Start Tile : foodCost, goldCost, treasure, nbPlayer
-    // Tile tile(0, "Port Royal", playerNumber);
-    // game->map->listOfTiles.push_back(&tile);
+    int playerNumber = game->getPlayerList().size();
+    "Port Royal" : Start Tile : foodCost, goldCost, treasure, nbPlayer
+    Tile tile(0, "Port Royal", playerNumber);
+    game->map->listOfTiles.push_back(&tile);
     // other Tiles
     for (int i = 0; i < mapSize-1; ++i) {
       int resource = TREASURE;
@@ -151,8 +151,8 @@ namespace state {
 
     std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
     game->transitionTo(new CaptainDiceState);
+*/
   }
-
   GameConfigState::~GameConfigState() {
     std::cout <<"GameConfig destructor called"<< std::endl;
   }
