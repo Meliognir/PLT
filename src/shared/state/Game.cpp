@@ -238,6 +238,14 @@ Player *Game::getDefendingPlayer(){
     return defendingPlayer;
 }
 
+Player *Game::getCombatWinner(){
+    return CombatWinner;
+}
+
+void Game::setCombatWinner(Player *player){
+    CombatWinner=player;
+}
+
 int Game::getActivePlayerIndex() const{
     return activePlayerIndex;
 }

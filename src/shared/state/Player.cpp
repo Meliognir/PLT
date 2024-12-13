@@ -239,7 +239,12 @@ const std::vector <Player*>& Player::getOpponentsList() const{
     return opponentsList;
 }
 
-void Player::setFirePower(int firePower){
+int Player::getFirePower() const{
+    return firePower;
+}
+
+void Player::setFirePower(int firePower)
+{
     this->firePower=firePower;
 }
 }
