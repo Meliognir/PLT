@@ -22,46 +22,29 @@ void engine::GameEngine::steps() {
 
     while(!game->checkGameEndCondition()) {
         std::string wait;
-       // switch (state) :
+        // switch (state) :
         game->request();
         std::cout << "Continue playing ?" << std::endl;
         std::cin >> wait;
 
     }
 }
-   /* const std::vector<state::Player *> &playingPlayers = game->getPlayerList();
+/* 
+OK    const std::vector<state::Player *> &playingPlayers = game->getPlayerList();
     state::Player* currentPlayer;
-    int playerCount = playingPlayers.size();
+OK    int playerCount = playingPlayers.size();
 OK    int CaptainIndex = 0;
-    int turn = 0;
-
-    //client::InputHandler inputHandler;
+OK    int turn = 0;
 
     while (!game->checkGameEndCondition()) {
         //-------------Captain + Round------------
         std::cout << "Starting a new round in the Playerlist." << std::endl;
-        turn++; 
-        game->setTurn(turn);
-        currentPlayer = playingPlayers.at(CaptainIndex);
-        game->setCaptainIndex(CaptainIndex);
+OK        turn++; 
+OK        game->setTurn(turn);
+OK        currentPlayer = playingPlayers.at(CaptainIndex);
+OK        game->setCaptainIndex(CaptainIndex);
         
         //-------------Day and night Dices------------
-        //inputHandler.displayMessage("Player " + std::to_string(currentPlayer->getPlayerId()) + " rolls the dice.");
-        std::cout << "Player " << currentPlayer->getPlayerId() << "rolls the dice." << std::endl;
-        std::array<int, 2> dice = DiceManager::rollDice();
-        int die1 = dice[0];
-        int die2 = dice[1];*/
-
-        /*//changement d'état choix de dé
-        //bool dayFirst = client::InputHandler::chooseTimeDice(die1, die2);
-
-        std::array<int, 2> dayNightDice = DiceManager::assignDayAndNightDice(die1, die2, dayFirst);
-        int dayDie = dayNightDice[0];  
-        int nightDie = dayNightDice[1];
-
-        game->dayDie = dayDie;  
-        game->nightDie = nightDie;
-        std::cout <<"The day die is " << std::to_string(dayDie) << " and the night die is " << std::to_string(nightDie) << "."<<std::endl;
 
         //-------------Every Player choose 1 Card in their own cardDeck------------
         for (int i = 0; i < playerCount; i++) {
