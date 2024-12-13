@@ -48,8 +48,8 @@ OK        game->setCaptainIndex(CaptainIndex);
 
         //-------------Every Player choose 1 Card in their own cardDeck------------
         for (int i = 0; i < playerCount; i++) {
-            game->setActivePlayerIndex((CaptainIndex + i) % playerCount);
-            game->setActivePlayer(playingPlayers.at(activePlayerIndex));
+OK            game->setActivePlayerIndex((CaptainIndex + i) % playerCount);
+OK            game->setActivePlayer(playingPlayers.at(activePlayerIndex));
             std::cout << "Player " << game->getActivePlayer()->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
             //on change d'état vers un choix de carte
             //chooseCardFromHand(activePlayer->getHandCards());

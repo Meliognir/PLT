@@ -14,14 +14,23 @@ int gameTurn = 0;
 
 void state::CardActionState::handle(){
 
-    if (pap > game->getPlayerList().size()*3) {
+    int playerNb = game->getPlayerList().size();
+    int activePlayerIndex = game->getActivePlayerIndex();
+    int captainIndex = game->getCaptainIndex();
+    activePlayerIndex = (captainIndex + 1) % playerNb;
+    game->setActivePlayerIndex(activePlayerIndex);
+    game->setActivePlayer(game->getPlayerList().at(activePlayerIndex));
+
+    //fin des actions de tous les joueurs
+    if(pap > game->getPlayerList().size()*3) {
         pap+=1;
         
         //update of Captain player
         gameTurn++; 
         game->setTurn(gameTurn);
+        game->setActivePlayerIndex(0);
         int captainIndex = game->getCaptainIndex();
-        captainIndex = (captainIndex + 1) % game->getPlayerList().size();
+        captainIndex = (captainIndex + 1) % playerNb;
         game->setCaptainIndex(captainIndex);
         game->setActivePlayer(game->getPlayerList().at(captainIndex));
         std::cout << "Starting a new round in the Playerlist." << std::endl;
