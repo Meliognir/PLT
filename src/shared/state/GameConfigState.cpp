@@ -24,9 +24,9 @@ namespace state {
 //asks for the number of player, instantiates Players and initializes their name
 //-----------------------------
   void GameConfigState::handle() {
-/*
-    int CaptainIndex = 0; // set to 0 here and in CardActionState
 
+    int CaptainIndex = 0; // set to 0 here and in CardActionState
+/*
     int playerNumber = inputHandler.getNumberofPlayers();
     std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
 
