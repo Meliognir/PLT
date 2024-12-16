@@ -94,7 +94,7 @@ Game::Game(State *state) {
 
 
         file.close();
-    }catch (std::ifstream file){
+    }catch (std::exception e){
         std::cerr << "Le fichier de carte n'a pas été ouvert correctement..." << std::endl;
     }
 

@@ -42,15 +42,44 @@ Client::Client()
 //-----------------------------
 // instantiates a new Game context and runs concrete states "GameConfig" then "Playing" functions
 //-----------------------------
-
+    Renderer renderer;
     gameState = new state::GameConfigState();
     gameEngine = new engine::GameEngine(gameState);
     InputHandler inputHandler;
 
 }
 
-
 int Client::launch(){
+
+    //renderer-> show the correct window
+    int exiting = 0;
+    int playingMode = 1;
+    std::string modeInput;
+    while(!exiting){
+        //cliquer aux bons endroits pour choisir le mode de jeu souhaité
+        std::cout << "Select a Game Mode" << std::endl;
+        std::cin >> modeInput;
+
+        //switch (playingMode)
+        //{
+        //case /* constant-expression */:
+            /* code */
+            /*break;
+        
+        default:
+            break;
+        }*/
+
+        //case local :
+        /*
+        runLocalGame()
+        exiting = 1;  */     
+    }
+
+
+}
+
+int Client::runLocalGame(){
 
     state::Game *gameInstance = gameEngine->game;
 
@@ -152,7 +181,7 @@ int Client::launch(){
 }
 
 
-void Client::gameConfigInit(){
+int Client::gameConfigInit(){
 
     state::Game *gameInstance = gameEngine->game;
 
