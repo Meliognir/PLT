@@ -28,7 +28,6 @@
 #define GAME_OVER_STATE 9
 
 
-
 #define TREASURE 0
 #define GOLD 1
 #define FOOD 2
@@ -71,10 +70,11 @@ int Client::launch(){
         }*/
 
         //case local :
-        /*
-        runLocalGame()
-        exiting = 1;  */     
+        runLocalGame();
+        exiting = 1;     
     }
+
+    return 0;
 
 
 }
@@ -191,7 +191,7 @@ int Client::gameConfigInit(){
     chooseNbOfPlayers->launchCommand(gameInstance);
     delete chooseNbOfPlayers;
 
-    for(int playerIndex; playerIndex < playerNumber; playerIndex++){
+    for(int playerIndex = 0; playerIndex < playerNumber; playerIndex++){
         std::string playerName = inputHandler.getPlayerName(playerIndex);
         engine::ChoosePlayerName* choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
         choosePlayerName->launchCommand(gameInstance);
@@ -204,61 +204,16 @@ int Client::gameConfigInit(){
     chooseMapSize->launchCommand(gameInstance);
     delete chooseMapSize;
 
-//ChoosePlayerName.launchcommand(gameInstance)
-
-//ChooseMapSize.launchcommand(gameInstance)
-
-    // std::vector<state::Player*> players={};
-
-    // int mapSize = inputHandler.getMapSize();//A vire
-    // //-------------Initializes Map + tiles------------
-    
-    // while(mapSize <= 1){
-    //   std::cout << "Enter the size of the map: ";
-    //   std::cin >> mapSize;
-    //   if (std::cin.fail()) { 
-    //       std::cin.clear();   
-    //       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-    //       std::cout << "Invalid input. Please enter a number." << std::endl;
-    //       mapSize = 0; 
-    //   } else if(mapSize <= 1){
-    //     std::cout << "Invalid map size. Please enter a number higher than 1." << std::endl;
-    //   }
-    // }
-    // if (game->map == nullptr) {
-    //     game->map = new state::Map(mapSize);
-    // } else {
-    //     game->map->setSize(mapSize);
-    //     game->map->listOfTiles.clear();
-    // }
 
     // int playerNumber = game->getPlayerList().size();
-    // //"Port Royal" : Start Tile : foodCost, goldCost, treasure, nbPlayer
-    // state::Tile tile(0, "Port Royal", playerNumber);
-    // game->map->listOfTiles.push_back(&tile);
-    // // other Tiles
-    // for (int i = 0; i < mapSize-1; ++i) {
-    //   int resource = TREASURE;
-    //   int cost = rand()%4;
-    //   if (cost){
-    //     resource = 1+rand()%2;
-    //   }
 
-    //   state::Tile *tile;
-    //   if (resource == TREASURE){
-    //     tile = new state::Tile(cost, "Treasure", 0);
-    //   }
-    //   if (resource == FOOD){
-    //     tile = new state::Tile(cost, "Food", 0);
-    //   }
-    //   if (resource == GOLD){
-    //     tile = new state::Tile(cost, "Gold", 0);
-    //   }
-    //   game->map->listOfTiles.push_back(tile);
-    // }
 
-    // //std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
-    // std::cout<<"Map initialized with " << std::to_string(game->map->getSize()) << " tiles."<< std::endl;
+// All the above is done .
+
+
+
+    
+    
     // //-------------Initializes players' parameters------------
     // const std::vector<state::Player*>& playingPlayers = game->getPlayerList();
     // for (state::Player* player : playingPlayers) {
@@ -298,6 +253,8 @@ int Client::gameConfigInit(){
 //       std::cout<<"Player " << std::to_string(player->getPlayerId()) <<" (" + player->getName() << ") initialized at position " << std::to_string(player->getPosition())<< std::endl;
 //     }
 //     std::cout<<"Players initialized: " << std::to_string(playingPlayers.size()) << " players in the game."<< std::endl;
-    }
+
+    return 0;
+}
 
 }

@@ -30,7 +30,7 @@ int client::InputHandler::getNumberofPlayers() {
 
 std::string client::InputHandler::getPlayerName(int playerIndex){
     std::string playerName;
-    std::cout << "Enter name for player " << playerIndex << ": ";
+    std::cout << "Enter name for player " << playerIndex+1 << ": ";
     std::cin >> playerName;
     return playerName;
 }
