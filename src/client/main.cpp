@@ -34,7 +34,7 @@ int clientcode(){
 
 int main(int argc,char* argv[])
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Parcours circulaire");
+    /*sf::RenderWindow window(sf::VideoMode(800, 600), "Parcours circulaire");
 
     // Initialisation de la carte
     int mapSize = 12; // Exemple : 12 tuiles pour former un cercle
@@ -74,7 +74,7 @@ int main(int argc,char* argv[])
     // Libération de la mémoire allouée pour les tuiles
     for (Tile* tile : gameMap.listOfTiles) {
         delete tile;
-    }
+    }*/
     int ret;
     client::Client *client = new client::Client();
     ret = client->launch();
