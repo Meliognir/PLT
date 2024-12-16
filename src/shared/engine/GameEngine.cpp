@@ -20,14 +20,14 @@ void engine::GameEngine::initializeGame(int playerCount){
 
 void engine::GameEngine::steps() {
 
-    while(!game->checkGameEndCondition()) {
+    //while(!game->checkGameEndCondition()) {
         std::string wait;
         // switch (state) :
         game->request();
         std::cout << "Continue playing ?" << std::endl;
         std::cin >> wait;
 
-    }
+    //}
 }
 /* 
 OK    const std::vector<state::Player *> &playingPlayers = game->getPlayerList();
