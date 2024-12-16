@@ -9,21 +9,22 @@ namespace client{
 InputHandler::InputHandler(){
 }
 
-int client::InputHandler::getNumberofPlayers(){
+int client::InputHandler::getNumberofPlayers() {
     int playerNumber = 0;
-    while (playerNumber < 2 || playerNumber > 6) {
-        std::cout << "Enter the number of players: ";
+
+    while (true) {
+        std::cout << "Enter the number of players (2-6): ";
         std::cin >> playerNumber;
 
-        if (std::cin.fail()) {
-            std::cin.clear();   
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input. Please enter a number between 2 and 6.\n";
-            playerNumber = 0;
-        } else if (playerNumber < 2 || playerNumber > 6) {
-            std::cout << "Invalid number of players. Please enter a number between 2 and 6.\n";
+        if (!std::cin.fail() && playerNumber >= 2 && playerNumber <= 6) {
+            break;
         }
+
+        std::cin.clear();   
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Invalid input. Please enter a number between 2 and 6.\n";
     }
+
     return playerNumber;
 }
 

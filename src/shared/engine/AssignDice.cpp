@@ -10,5 +10,7 @@ void const AssignDice::launchCommand(state::Game * GamePtr){
     GamePtr->nightDie = otherDice;
 }
 
+AssignDice::~AssignDice(){}
+
 }
 
