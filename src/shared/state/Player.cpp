@@ -39,10 +39,10 @@ Player::Player(int playerId, std::string name) : playerId(playerId), name(name){
     }
     cardDeck={0,1,2,3,4,5,6,7,8,9,10};
     shuffleDeck();
+    activeCard = -1;
     for (int j = 0; j < 3; ++j) {
         moveCardToHand();
     }
-
 }
 
 Player::~Player(){
@@ -52,12 +52,9 @@ Player::~Player(){
     boatHolds.clear();
 }
 
-
-// refactored
-// shuffles player cardDeck
 void Player::shuffleDeck(){
     std::random_device rd;
-    // Mersenne Twister PRNG initialisé avec r
+    // Mersenne Twister PRNG init with rd
     std::mt19937 g(rd());
     std::shuffle(cardDeck.begin(), cardDeck.end(), g);
 }
@@ -82,13 +79,22 @@ void Player::shuffleDeck(){
 
 }*/
 
-void Player::moveCardToHand () { // engine
+void Player::moveCardToHand () {
+    if (cardDeck.empty()) {
+        std::cerr << "Error: Cannot move card to hand. The card deck is empty." << std::endl;
+        return;
+    }
     handCards.push_back(cardDeck.at(0));
     cardDeck.erase(cardDeck.begin());
 }
 
-void Player::moveCardToDeck() { // engine
+void Player::moveCardToDeck() {
+    if (activeCard == -1) {
+        std::cerr << "Error: No active card to move to the deck." << std::endl;
+        return;
+    }
     cardDeck.push_back(activeCard);
+    activeCard = -1;
 }
 
 bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans engine
