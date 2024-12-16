@@ -120,15 +120,19 @@ void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex,
     if (resourceType == "Food"){
         auto foodResource = make_unique<Food>();
         selectedHold->addResource(std::move(foodResource), amount);
+        return;
     }
     if (resourceType == "Gold"){
         auto goldResource = make_unique<Gold>();
         selectedHold->addResource(std::move(goldResource), amount);
+        return;
     }
     if (resourceType == "Canon"){
         auto canonResource = make_unique<Canon>();
         selectedHold->addResource(std::move(canonResource), amount);
+        return;
     }
+    std::cout<< "Something was wrong with this resource, we destroyed it for you" << std::endl;
 }
 
 void Player::removeFromBoatHold(int boatholdIndex, int amount){
