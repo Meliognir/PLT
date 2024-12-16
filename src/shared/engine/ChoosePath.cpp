@@ -8,3 +8,5 @@ void const engine::ChoosePath::launchCommand (state::Game * GamePtr) {
     state::Player* player = GamePtr->getPlayerList().at(playerIndex);
     player->setPath(path);
 }
+
+engine::ChoosePath::~ChoosePath(){}

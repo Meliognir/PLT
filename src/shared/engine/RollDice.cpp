@@ -19,4 +19,6 @@ namespace engine{
             player->setFirePower(currentFirePower+dievalue);
         }
     }
+
+    RollDice::~RollDice(){}
 }
