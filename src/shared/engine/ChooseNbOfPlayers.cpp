@@ -17,3 +17,5 @@ void const engine::ChooseNbOfPlayers::launchCommand (state::Game * GamePtr){
   GamePtr->setPlayerList(players);
 
 }
+
+engine::ChooseNbOfPlayers::~ChooseNbOfPlayers (){}
