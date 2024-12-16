@@ -1,6 +1,7 @@
 #include "client.h"
 #include "state.h"
 #include "state/Player.h"
+#include "../shared/engine/ChooseNbOfPlayers.h"
 
 #include <iostream>
 #include <limits>
@@ -21,9 +22,6 @@
 #define TREASURE 0
 #define GOLD 1
 #define FOOD 2
-
-
-void gameConfigInit(client::InputHandler inputHandler, state::Game * game);
 
 
 namespace client{
@@ -56,9 +54,8 @@ int Client::launch(){
     // case where gameState is GAME_CONFIG_STATE:
     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
         //do command truc
-        gameConfigInit(inputHandler, gameInstance);
+        gameConfigInit();
         gameInstance->request();
-
 
     int endloop = 0;
     std::string waitConfirm;
@@ -74,7 +71,6 @@ int Client::launch(){
                 //do command truc
                 gameInstance->request();
             break;
-
 
 
             case CAPTAIN_DICE_STATE:
@@ -146,102 +142,78 @@ int Client::launch(){
 }
 
 
-}
+void Client::gameConfigInit(){
 
+    state::Game *gameInstance = gameEngine->game;
 
-void gameConfigInit(client::InputHandler inputHandler, state::Game* game)
-{
     int playerNumber = inputHandler.getNumberofPlayers();
     std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
-
-    std::vector<state::Player*> players;
-    for (int i = 0; i < playerNumber; ++i) {
-        std::string playerName = inputHandler.getPlayerName(i + 1);
-        state::Player* player = new state::Player(i + 1, playerName);
-        players.push_back(player);
-    }
-    game->setPlayerList(players);
-    int playerNumber = 0;
-
-    while(playerNumber < 2 || playerNumber > 6) {
-        std::cout << "Enter the number of players: ";
-        std::cin >> playerNumber;
-        if (std::cin.fail()) { 
-          std::cin.clear();   
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-          std::cout << "Invalid input. Please enter a number between 2 and 6." << std::endl;
-          playerNumber = 0; 
-    } else if (playerNumber < 2 || playerNumber > 6) {
-        std::cout << "Invalid number of players. Please enter a number between 2 and 6." << std::endl;
-    }
-    }
-    std::cout << "Number of players set to: " << playerNumber << std::endl;
-    std::vector<state::Player*> players={};
-    for (int i = 0; i < playerNumber; ++i) {
-      std::string playerName;
-      std::cout << "Enter name for player " << (i + 1) << ": ";
-      std::cin >> playerName;
-      state::Player* player = new state::Player(i + 1, playerName);
-      players.push_back(player);
-    }
-    game->setPlayerList(players);
-
-    int mapSize = inputHandler.getMapSize();//A vire
-    //-------------Initializes Map + tiles------------
     
-    while(mapSize <= 1){
-      std::cout << "Enter the size of the map: ";
-      std::cin >> mapSize;
-      if (std::cin.fail()) { 
-          std::cin.clear();   
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-          std::cout << "Invalid input. Please enter a number." << std::endl;
-          mapSize = 0; 
-      } else if(mapSize <= 1){
-        std::cout << "Invalid map size. Please enter a number higher than 1." << std::endl;
-      }
-    }
-    if (game->map == nullptr) {
-        game->map = new state::Map(mapSize);
-    } else {
-        game->map->setSize(mapSize);
-        game->map->listOfTiles.clear();
-    }
+    engine::ChooseNbOfPlayers* chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
+    chooseNbOfPlayers->launchCommand(gameInstance);
 
-    int playerNumber = game->getPlayerList().size();
-    //"Port Royal" : Start Tile : foodCost, goldCost, treasure, nbPlayer
-    state::Tile tile(0, "Port Royal", playerNumber);
-    game->map->listOfTiles.push_back(&tile);
-    // other Tiles
-    for (int i = 0; i < mapSize-1; ++i) {
-      int resource = TREASURE;
-      int cost = rand()%4;
-      if (cost){
-        resource = 1+rand()%2;
-      }
+//ChoosePlayerName.launchcommand(gameInstance)
 
-      state::Tile *tile;
-      if (resource == TREASURE){
-        tile = new state::Tile(cost, "Treasure", 0);
-      }
-      if (resource == FOOD){
-        tile = new state::Tile(cost, "Food", 0);
-      }
-      if (resource == GOLD){
-        tile = new state::Tile(cost, "Gold", 0);
-      }
-      game->map->listOfTiles.push_back(tile);
-    }
+//ChooseMapSize.launchcommand(gameInstance)
 
-    //std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
-    std::cout<<"Map initialized with " << std::to_string(game->map->getSize()) << " tiles."<< std::endl;
-    //-------------Initializes players' parameters------------
-    const std::vector<state::Player*>& playingPlayers = game->getPlayerList();
-    for (state::Player* player : playingPlayers) {
-      player->setPosition(0);
-      // Treasure(bonus, malus)
-      std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
-      player->setTreasures(initialTreasures);
+    // std::vector<state::Player*> players={};
+
+    // int mapSize = inputHandler.getMapSize();//A vire
+    // //-------------Initializes Map + tiles------------
+    
+    // while(mapSize <= 1){
+    //   std::cout << "Enter the size of the map: ";
+    //   std::cin >> mapSize;
+    //   if (std::cin.fail()) { 
+    //       std::cin.clear();   
+    //       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+    //       std::cout << "Invalid input. Please enter a number." << std::endl;
+    //       mapSize = 0; 
+    //   } else if(mapSize <= 1){
+    //     std::cout << "Invalid map size. Please enter a number higher than 1." << std::endl;
+    //   }
+    // }
+    // if (game->map == nullptr) {
+    //     game->map = new state::Map(mapSize);
+    // } else {
+    //     game->map->setSize(mapSize);
+    //     game->map->listOfTiles.clear();
+    // }
+
+    // int playerNumber = game->getPlayerList().size();
+    // //"Port Royal" : Start Tile : foodCost, goldCost, treasure, nbPlayer
+    // state::Tile tile(0, "Port Royal", playerNumber);
+    // game->map->listOfTiles.push_back(&tile);
+    // // other Tiles
+    // for (int i = 0; i < mapSize-1; ++i) {
+    //   int resource = TREASURE;
+    //   int cost = rand()%4;
+    //   if (cost){
+    //     resource = 1+rand()%2;
+    //   }
+
+    //   state::Tile *tile;
+    //   if (resource == TREASURE){
+    //     tile = new state::Tile(cost, "Treasure", 0);
+    //   }
+    //   if (resource == FOOD){
+    //     tile = new state::Tile(cost, "Food", 0);
+    //   }
+    //   if (resource == GOLD){
+    //     tile = new state::Tile(cost, "Gold", 0);
+    //   }
+    //   game->map->listOfTiles.push_back(tile);
+    // }
+
+    // //std::cout << "Map initialized with " << game->map->getSize() << " tiles." << std::endl;
+    // std::cout<<"Map initialized with " << std::to_string(game->map->getSize()) << " tiles."<< std::endl;
+    // //-------------Initializes players' parameters------------
+    // const std::vector<state::Player*>& playingPlayers = game->getPlayerList();
+    // for (state::Player* player : playingPlayers) {
+    //   player->setPosition(0);
+    //   // Treasure(bonus, malus)
+    //   std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
+    //   player->setTreasures(initialTreasures);
 
       // BoatHold()
       //définir setBoatHolds
@@ -255,23 +227,25 @@ void gameConfigInit(client::InputHandler inputHandler, state::Game* game)
       //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
       //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
       
-      /*
-      auto goldResource = make_unique<state::Gold>();
-      engine::ResourceManager resource_manager;//A vire
-      resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
-      auto foodResource = make_unique<state::Food>();
-      resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);*/
-      int i=1;
-      for (state::BoatHold *bh: player->getBoatHolds()) {
-        std::cout<< "BoatHold N°" << i << " : " ;
-        bh->showContent();
-        i++;
-      }
+      
+//       auto goldResource = make_unique<state::Gold>();
+//       engine::ResourceManager resource_manager;//A vire
+//       resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
+//       auto foodResource = make_unique<state::Food>();
+//       resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);
+//       int i=1;
+//       for (state::BoatHold *bh: player->getBoatHolds()) {
+//         std::cout<< "BoatHold N°" << i << " : " ;
+//         bh->showContent();
+//         i++;
+//       }
 
-      // print le type et nombre de ressource du boathold : void BoatHold::showContents()
-      game->displayState();
+//       // print le type et nombre de ressource du boathold : void BoatHold::showContents()
+//       game->displayState();
 
-      std::cout<<"Player " << std::to_string(player->getPlayerId()) <<" (" + player->getName() << ") initialized at position " << std::to_string(player->getPosition())<< std::endl;
+//       std::cout<<"Player " << std::to_string(player->getPlayerId()) <<" (" + player->getName() << ") initialized at position " << std::to_string(player->getPosition())<< std::endl;
+//     }
+//     std::cout<<"Players initialized: " << std::to_string(playingPlayers.size()) << " players in the game."<< std::endl;
     }
-    std::cout<<"Players initialized: " << std::to_string(playingPlayers.size()) << " players in the game."<< std::endl;
+
 }
