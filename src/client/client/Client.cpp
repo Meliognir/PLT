@@ -2,6 +2,16 @@
 #include "state.h"
 #include "state/Player.h"
 #include "../shared/engine/ChooseNbOfPlayers.h"
+#include "../shared/engine/ChoosePlayerName.h"
+#include "../shared/engine/ChooseMapSize.h"
+#include "../shared/engine/AddToBoathold.h"
+#include "../shared/engine/AssignDice.h"
+#include "../shared/engine/ChooseCanons.h"
+#include "../shared/engine/ChooseCard.h"
+#include "../shared/engine/ChooseOpponent.h"
+#include "../shared/engine/ChoosePath.h"
+#include "../shared/engine/RollDice.h"
+#include "../shared/engine/StealResource.h"
 
 #include <iostream>
 #include <limits>
@@ -148,9 +158,22 @@ void Client::gameConfigInit(){
 
     int playerNumber = inputHandler.getNumberofPlayers();
     std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
-    
     engine::ChooseNbOfPlayers* chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
     chooseNbOfPlayers->launchCommand(gameInstance);
+    delete chooseNbOfPlayers;
+
+    for(int playerIndex; playerIndex < playerNumber; playerIndex++){
+        std::string playerName = inputHandler.getPlayerName(playerIndex);
+        engine::ChoosePlayerName* choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
+        choosePlayerName->launchCommand(gameInstance);
+        delete choosePlayerName;
+    }
+
+    int mapSize = inputHandler.getMapSize();
+    std::cout <<"MapSize set to: " << std::to_string(mapSize)<< std::endl;
+    engine::ChooseMapSize* chooseMapSize = new engine::ChooseMapSize(mapSize);
+    chooseMapSize->launchCommand(gameInstance);
+    delete chooseMapSize;
 
 //ChoosePlayerName.launchcommand(gameInstance)
 
