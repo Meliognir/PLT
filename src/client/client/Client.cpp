@@ -1,6 +1,7 @@
 #include "client.h"
 #include "state.h"
 #include "state/Player.h"
+#include "../shared/engine/ResourceManager.h"
 #include "../shared/engine/ChooseNbOfPlayers.h"
 #include "../shared/engine/ChoosePlayerName.h"
 #include "../shared/engine/ChooseMapSize.h"
@@ -15,6 +16,8 @@
 
 #include <iostream>
 #include <limits>
+#include <bits/unique_ptr.h>
+#include "Client.h"
 
 #define GAME_CONFIG_STATE 0
 #define CAPTAIN_DICE_STATE 1
@@ -31,6 +34,18 @@
 #define TREASURE 0
 #define GOLD 1
 #define FOOD 2
+
+#define EXIT_GAME 0
+#define LOCAL_MULTIPLAYER 1
+#define ONLINE_MULTIPLAYER 2
+#define SINGLE_PLAYER 3
+
+
+
+template <typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 
 
 namespace client {
@@ -52,27 +67,29 @@ namespace client {
         //renderer-> show the correct window
         int exiting = 0;
         int playingMode = 1;
-        std::string modeInput;
-        while(!exiting){
+        while(playingMode){
+            playingMode = inputHandler.selectGameMode();
+            switch (playingMode){
+                case EXIT_GAME :
+                    break;
+                case LOCAL_MULTIPLAYER :
+                    runLocalGame();
+                    break;
+                case ONLINE_MULTIPLAYER :
+                    runOnlineGame();
+                    break;
+                case SINGLE_PLAYER :
+                    runSoloGame();
+                    break;
+
+                default :
+                    break;
+            }
             //cliquer aux bons endroits pour choisir le mode de jeu souhaité
-            std::cout << "Select a Game Mode" << std::endl;
-            std::cin >> modeInput;
-
-            //switch (playingMode)
-            //{
-            //case /* constant-expression */:
-            /* code */
-            /*break;
-
-        default:
-            break;
-        }*/
-
-            //case local :
-            runLocalGame();
-            exiting = 1;
+            std::cout << "We hope you enjoyed your game !" << std::endl;
+            std::string waitConfirm;
+            std::cin >> waitConfirm; //wait user confirmation
         }
-
         return 0;
 
 
@@ -179,8 +196,19 @@ namespace client {
         return 0;
     }
 
+    int Client::runSoloGame()
+    {
+        return 0;
+    }
 
-    int Client::gameConfigInit(){
+    int Client::runOnlineGame()
+    {
+        return 0;
+    }
+
+
+    int Client::gameConfigInit()
+    {
 
         state::Game *gameInstance = gameEngine->game;
 
@@ -203,16 +231,25 @@ namespace client {
         chooseMapSize->launchCommand(gameInstance);
         delete chooseMapSize;
 
+        //-------------Initializes players' parameters------------
 
-        for(int playerIndex=0; playerIndex < playerNumber; playerIndex++){
-            inputHandler.selectUserBoatHold(6);
-            engine::AddToBoathold* Resource1 = new engine::AddToBoathold(playerIndex,1, 3, "GOLD");
-            Resource1->launchCommand(gameInstance);
-            delete Resource1;
+        const std::vector<state::Player*>& playingPlayers = gameInstance->getPlayerList();
+        for (state::Player* player : playingPlayers) {
+            player->setPosition(0);
+            // Treasure(bonus, malus)
+            std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
+            player->setTreasures(initialTreasures);
+            auto goldResource = make_unique<state::Gold>();
+            engine::ResourceManager resource_manager;//A vire
+            resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
+            auto foodResource = make_unique<state::Food>();
+            resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);
+            //delete &resource_manager;   //bad idea         
         }
 
+        // Utiliser les blocs suivants pour gérer facilement le render !
         printf("Affichage de la map :\n");
-        std::cout<<"Tuile N°0 : Ceci est la tuile de départ, il y a rien à payer ici." << std::endl;
+        std::cout<<"Tuile N°0 : Cette case représente Port Royal, il y a rien à payer ici." << std::endl;
         for (int i = 1; i < mapSize; i++) {
             std::cout<< "Tuile N°" << i << " contient : ";
             if(gameInstance->map->getResourceCost(i)>0) {
@@ -234,14 +271,7 @@ namespace client {
             std::cout<< "Trésors de "<< player->getName()<<" :" << std::endl;
         }
 
-        //à compléter
-
-
-        // int playerNumber = game->getPlayerList().size();
-
-
-        // All the above is done .
-
+        // to be continued
 
 
 

@@ -4,6 +4,11 @@
 #include <limits>
 #include "state.h"
 
+#define EXIT_GAME 0
+#define LOCAL_MULTIPLAYER 1
+#define ONLINE_MULTIPLAYER 2
+#define SINGLE_PLAYER 3
+
 namespace client{
 
 InputHandler::InputHandler(){
@@ -138,5 +143,27 @@ int InputHandler::chooseCanonNb(int totalNb){
     return chosenNb;
 }
 
+int InputHandler::selectGameMode()
+{
+    std::string input;
+    while (true) {
+        std::cout << "Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)" << std::endl;
+        std::cin >> input;
 
+        if (input == "0" || input == "exit") {
+            return EXIT_GAME;
+        }
+        else if (input == "1" || input == "local") {
+            return LOCAL_MULTIPLAYER;
+        }
+        else if (input == "2" || input == "online") {
+            return ONLINE_MULTIPLAYER;
+        }
+        else if (input == "3" || input == "ia") {
+            return SINGLE_PLAYER;
+        }
+        std::cout << "Invalid input. Please enter '0', '1', '2' or '3'." << std::endl;
+    }
+    return 0;
+}
 }
