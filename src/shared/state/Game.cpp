@@ -44,56 +44,60 @@ Game::Game(State *state) {
     //     new ActionCard(ADD_CANONS, ADD_FOOD)
     // };
 
+    try {
     std::ifstream file("../src/boardGameData/officialActionCards.csv"); // "../../src/boardGameData/cards.csv"
     std::string line;
-    
-    if (!file.is_open()) {
-        std::cerr << "Erreur lors de l'ouverture du fichier cards.csv." << std::endl;
-        return;
-    }
-
-    // Ignore la première ligne (les en-têtes)
-    std::getline(file, line);
-
-    // Lire chaque ligne et créer une ActionCard
-    while (std::getline(file, line)) {
-
-        std::stringstream ss(line);
-        std::string readAction;
-        uint8_t dayAction, nightAction;
-        uint8_t* actions[2] = {&dayAction, &nightAction};
-
-        for (int i= 0; i<2; i++){
-            // read csv file
-            std::getline(ss, readAction, ',');
-            // fill the dayAction or nightAction with the read value
-            if (readAction == "forward"){
-                *actions[i] = MOVE_FORWARD;
-            }
-            if (readAction == "backward"){
-                *actions[i] = MOVE_BACKWARD;
-            }
-            if (readAction == "food"){
-                *actions[i] = ADD_FOOD;
-            }
-            if (readAction == "gold"){
-                *actions[i] = ADD_GOLD;
-            }
-            if (readAction == "canons"){
-                *actions[i] = ADD_CANONS;
-            }
+        if (!file.is_open()) {
+            std::cerr << "Erreur lors de l'ouverture du fichier cards.csv." << std::endl;
+            return;
         }
-        // create ActionCard based on the read actions
+
+        // Ignore la première ligne (les en-têtes)
+        std::getline(file, line);
+
+        // Lire chaque ligne et créer une ActionCard
+        while (std::getline(file, line)) {
+
+            std::stringstream ss(line);
+            std::string readAction;
+            uint8_t dayAction, nightAction;
+            uint8_t* actions[2] = {&dayAction, &nightAction};
+
+            for (int i= 0; i<2; i++){
+                // read csv file
+                std::getline(ss, readAction, ',');
+                // fill the dayAction or nightAction with the read value
+                if (readAction == "forward"){
+                    *actions[i] = MOVE_FORWARD;
+                }
+                if (readAction == "backward"){
+                    *actions[i] = MOVE_BACKWARD;
+                }
+                if (readAction == "food"){
+                    *actions[i] = ADD_FOOD;
+                }
+                if (readAction == "gold"){
+                    *actions[i] = ADD_GOLD;
+                }
+                if (readAction == "canons"){
+                    *actions[i] = ADD_CANONS;
+                }
+            }
+            // create ActionCard based on the read actions
             collectionOfCards.push_back(new ActionCard(*actions[0], *actions[1]));
-        /*
-        printf("%u\n", collectionOfCards.at(0)->getDayAction());
-        printf("%u\n", collectionOfCards.at(0)->getNightAction());*/
+            /*
+            printf("%u\n", collectionOfCards.at(0)->getDayAction());
+            printf("%u\n", collectionOfCards.at(0)->getNightAction());*/
 
 
+        }
+
+
+        file.close();
+    }catch (std::ifstream file){
+        std::cerr << "Le fichier de carte n'a pas été ouvert correctement..." << std::endl;
     }
 
-
-    file.close();
 }
 
 
