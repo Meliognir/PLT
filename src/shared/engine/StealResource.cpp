@@ -2,8 +2,7 @@
 #include "state.h"
 namespace engine{
 //TODO
-StealResource::StealResource(int boatholdIndex, int winnerIndex, int loserIndex ) : boatholdIndex(boatholdIndex), winnerIndex(winnerIndex), loserIndex(loserIndex){
-}
+StealResource::StealResource(int boatholdIndex, int winnerIndex, int loserIndex ) : boatholdIndex(boatholdIndex), winnerIndex(winnerIndex), loserIndex(loserIndex){}
 
 void const StealResource::launchCommand(state::Game * GamePtr){
     state::Player* winner = GamePtr->getPlayerList()[winnerIndex];
@@ -11,5 +10,7 @@ void const StealResource::launchCommand(state::Game * GamePtr){
     //winner->addResourcesToBoatHold(resourceType, boathold, quantity, 0);
     // je le ferai plus tard
 }
+
+StealResource::~StealResource(){}
 
 }
