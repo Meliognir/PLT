@@ -8,7 +8,7 @@ ResourceManager::ResourceManager() {}
 
 state::BoatHold *ResourceManager::selectBoathold(state::Player *player, const std::string resourceType, size_t index){
     auto& boatHolds = player->getBoatHolds();
-   if (index < 1 || index > boatHolds.size()) {
+    if (index < 1 || index > boatHolds.size()) {
         return nullptr;  
     }
     state::BoatHold* selectedHold = boatHolds[index-1];
