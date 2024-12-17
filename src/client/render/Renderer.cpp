@@ -6,13 +6,50 @@
 //beach tileset 576 * 288
 void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map){
     int mapSize = map.getSize();          // Nombre total de tuiles
-    float radius = 200.0f;                // Rayon du cercle
-    sf::Vector2f center(400, 300);        // Centre du cercle (position de la fenêtre)
+    float radius = 400.0f;                // Rayon du cercle
+    sf::Vector2f center(1050, 700);        // Centre du cercle (position de la fenêtre)
     float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
 
     sf::Font font;
     font.loadFromFile("../src/boardGameData/Arial.ttf");   
 
+    sf::Texture beachTileset;
+    if (!beachTileset.loadFromFile("../src/boardGameData/Beach_Tileset.png")) {
+        std::cerr << "Error loading Beach_Tileset.png!" << std::endl;
+        return;
+    }
+    sf::Texture portRoyal;
+    if (!portRoyal.loadFromFile("../src/boardGameData/PortRoyal.png")) {
+        std::cerr << "Error loading Beach_Tileset.png!" << std::endl;
+        return;
+    }
+    sf::Sprite tileSprite;
+    sf::Sprite portRoyalSprite;
+    tileSprite.setTexture(beachTileset);
+    portRoyalSprite.setTexture(portRoyal);
+    int tileWidth = 96;   
+    int tileHeight = 96;  
+
+    sf::Texture sunTexture;
+    sf::Texture moonTexture;
+    if (!sunTexture.loadFromFile("../src/boardGameData/Sun.png")) {
+        std::cerr << "Error loading player texture!" << std::endl;
+        return;
+    }
+    if (!moonTexture.loadFromFile("../src/boardGameData/Moon.png")) {
+        std::cerr << "Error loading player texture!" << std::endl;
+        return;
+    }
+    sf::Sprite sunSprite;
+    sunSprite.setTexture(sunTexture);
+    sunSprite.setTextureRect(sf::IntRect(0, 0, 400, 400));
+    sunSprite.setPosition(880, 630);
+    sunSprite.setScale(sf::Vector2f(0.36f, 0.36f));
+
+    sf::Sprite moonSprite;
+    moonSprite.setTexture(moonTexture);
+    moonSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
+    moonSprite.setPosition(1100, 636);
     // Parcourir toutes les tuiles de la carte
     for (int i = 0; i < mapSize; ++i) {
         const state::Tile* tile = map.listOfTiles[i];
@@ -22,21 +59,30 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
         float x = center.x + radius * cos(angle);
         float y = center.y + radius * sin(angle);
 
-        // Représentation visuelle de la tuile
-        sf::RectangleShape tileShape(sf::Vector2f(40, 40)); // Taille de chaque tuile
-        tileShape.setOrigin(20, 20);                        // Centrer la tuile sur ses coordonnées
-        tileShape.setPosition(x, y);
-
-        // Couleur de la tuile en fonction de ses propriétés
+        // Déterminer quelle région de la texture utiliser en fonction de la ressource
         if (tile->tileResourceType == "Food") {
-            tileShape.setFillColor(sf::Color::Green);
+            tileSprite.setTextureRect(sf::IntRect(32+4*tileWidth, 96, tileWidth, tileHeight)); // Première tuile
+            tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            tileSprite.setPosition(x, y);
+            window.draw(tileSprite);
         } else if (tile->tileResourceType == "Gold") {
-            tileShape.setFillColor(sf::Color::Yellow);
+            tileSprite.setTextureRect(sf::IntRect(32+2*tileWidth, 96, tileWidth, tileHeight)); // Deuxième tuile
+            tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            tileSprite.setPosition(x, y);
+            window.draw(tileSprite);
         } else if (tile->treasureAvailable) {
-            tileShape.setFillColor(sf::Color::Red);
+            tileSprite.setTextureRect(sf::IntRect(32, 96, tileWidth, tileHeight)); // Troisième tuile
+            tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            tileSprite.setPosition(x, y);
+            window.draw(tileSprite);
         } else {
-            tileShape.setFillColor(sf::Color::Blue);
+            portRoyalSprite.setTextureRect(sf::IntRect(32, 8, 192, 192)); // Par défaut (première tuile)
+            portRoyalSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            portRoyalSprite.setScale(sf::Vector2f(0.5f,0.5f));
+            portRoyalSprite.setPosition(x, y);
+            window.draw(portRoyalSprite);
         }
+
 
         // Ajout d'un texte pour afficher des informations sur la tuile
         sf::Text tileText;
@@ -46,9 +92,9 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
         tileText.setFillColor(sf::Color::Black);
         tileText.setPosition(x - 10, y - 10);
 
-        // Dessiner la tuile et son texte
-        window.draw(tileShape);
         window.draw(tileText);
+        window.draw(sunSprite);
+        window.draw(moonSprite);
     }
 }
 
@@ -83,8 +129,8 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             // Calculer la position de la tuile correspondante
             float angleStep = 2 * PI / map.getSize();   // Angle entre chaque tuile
             float angle = playerPosition * angleStep;
-            float radius = 200.0f;                     // Même rayon que dans renderMap
-            sf::Vector2f center(400, 300);             // Centre de la carte
+            float radius = 400.0f;                     // Même rayon que dans renderMap
+            sf::Vector2f center(1050, 700);             // Centre de la carte
 
             float x = center.x + radius * cos(angle);
             float y = center.y + radius * sin(angle);
@@ -105,9 +151,47 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             playerNameText.setStyle(sf::Text::Bold);
             playerNameText.setPosition(x - spriteWidth / 2, y + spriteHeight / 2 + 5);  // Position sous le sprite
 
-            // Dessiner le sprite et le nom du joueur
             window.draw(playerSprite);
             window.draw(playerNameText);
         }
+    }
+}
+
+void render::Renderer::renderDice(sf::RenderWindow &window, int dayDie, int nightDie){
+    sf::Texture diceTexture;
+    if (!diceTexture.loadFromFile("../src/boardGameData/DiceSprSheetX128.png")) {
+        std::cerr << "Error loading dice texture!" << std::endl;
+        return;
+    }
+    const int diceFaceSize = 128;  
+    sf::Sprite dayDieSprite;
+    sf::Sprite nightDieSprite;
+
+    sf::Vector2f dayDiePosition(890, 800);   
+    sf::Vector2f nightDiePosition(1100, 800);  
+
+    if (dayDie > 0) {
+        dayDieSprite.setTexture(diceTexture);
+        dayDieSprite.setTextureRect(sf::IntRect((dayDie - 1) * diceFaceSize, 0, diceFaceSize, diceFaceSize));
+        dayDieSprite.setPosition(dayDiePosition);
+        window.draw(dayDieSprite);
+    } 
+    else {
+        sf::RectangleShape dayDieRect(sf::Vector2f(diceFaceSize, diceFaceSize));
+        dayDieRect.setPosition(dayDiePosition);
+        dayDieRect.setFillColor(sf::Color(128, 128, 128)); 
+        window.draw(dayDieRect);
+    }
+    if (nightDie > 0) {
+        nightDieSprite.setTexture(diceTexture);
+        nightDieSprite.setTextureRect(sf::IntRect((nightDie - 1) * diceFaceSize, 0, diceFaceSize, diceFaceSize));
+        nightDieSprite.setPosition(nightDiePosition);
+        window.draw(nightDieSprite);
+    } 
+    else {
+        sf::RectangleShape nightDieRect(sf::Vector2f(diceFaceSize, diceFaceSize));
+        nightDieRect.setPosition(nightDiePosition);
+        nightDieRect.setFillColor(sf::Color(128, 128, 128)); 
+        window.draw(nightDieRect);
     }
 }

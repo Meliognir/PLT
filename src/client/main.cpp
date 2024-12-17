@@ -35,8 +35,7 @@ int main(int argc,char* argv[])
     while (!game->isMapInitialized()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Pause pour éviter un busy-wait trop intense
     }
-    std::cout << "Thread principal" << std::endl;
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Parcours circulaire");
+    sf::RenderWindow window(sf::VideoMode(2100, 1400), "Parcours circulaire");
     // Boucle principale pour le rendu
     while (window.isOpen()) {
         sf::Event event;
@@ -50,6 +49,7 @@ int main(int argc,char* argv[])
         {
             if (game->map) {
                 renderer->renderMap(window, *game->map);
+                renderer->renderDice(window, Game::dayDie, Game::nightDie);
             }
         }
         {
