@@ -98,7 +98,7 @@ namespace client {
     int Client::runLocalGame(){
 
         state::Game *gameInstance = gameEngine->game;
-
+        gameState = new state::GameConfigState();
         // Old method :
         // gameEngine->steps();
 
@@ -110,81 +110,94 @@ namespace client {
         std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
         //do command truc
         gameConfigInit();
-        gameInstance->request();
 
         int endloop = 0;
         std::string waitConfirm;
         std::cout << "Client now entering the game loop\r\n" << std::endl;
-
+        int die1;
+        int die2;
+        bool chosenDice;
+        engine::AssignDice* dice;
+        int state;
         while (!endloop){
-
-            switch (gameState->getStateId()/*test1*/){
-
-
+            //state=gameState->getStateId();
+            state=gameInstance->state->getStateId();
+            //on s'arrête là
+            switch (state){//gameState->getStateId()/*test1*/){
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
-                //do command truc
-                gameInstance->request();
-                break;
+                    //do command truc
+                    gameInstance->request();
+
+                    break;
 
 
                 case CAPTAIN_DICE_STATE:
                     std::cout << "Client now entering CAPTAIN_DICE_STATE\r\n" << std::endl;
-                //do command truc
-                gameInstance->request();
-                break;
+                    die1=rand()%6+1;
+                    die2=rand()%6+1;
+                    chosenDice=inputHandler.chooseTimeDice(die1,die2);
+                    if (chosenDice==1){dice= new engine::AssignDice(die1,die2);}
+                    else{dice= new engine::AssignDice(die2,die1);}
+                    dice->launchCommand(gameInstance);
+                    gameInstance->request();
+                    break;
 
 
                 case CARD_CHOICE_STATE:
                     std::cout << "Client now entering CARD_CHOICE_STATE\r\n" << std::endl;
-                //do command truc
-                gameInstance->request();
-                break;
+                    //do command truc
+                    gameInstance->request();
+                    break;
 
 
                 case CARD_ACTION_STATE:
                     std::cout << "Client now entering CARD_ACTION_STATE\r\n" << std::endl;
-                //do command truc
-                gameInstance->request();
-                break;
+                    //do command truc
+                    gameInstance->request();
+                    break;
 
 
                 case RESOURCE_HANDLING_STATE:
                     std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
-                //do command truc
-                gameInstance->request();
+                    //do command truc
+                    gameInstance->request();
                 break;
 
 
                 case OPPONENT_CHOICE_STATE:
                     std::cout << "Client now entering OPPONENT_CHOICE_STATE\r\n" << std::endl;
-                //do command truc
-                gameInstance->request();
-                break;
+                    //do command truc
+                    gameInstance->request();
+                    break;
 
 
                 case COMBAT_ATTACKING_STATE:
                     std::cout << "Client now entering COMBAT_ATTACKING_STATE\r\n" << std::endl;
-                //do command truc
-                gameInstance->request();
-                break;
+                    //do command truc
+                    gameInstance->request();
+                    break;
 
 
                 case COMBAT_DEFENDING_STATE:
                     std::cout << "Client now entering COMBAT_DEFENDING_STATE\r\n" << std::endl;
-                //do command truc
-                gameInstance->request();
-                break;
+                    //do command truc
+                    gameInstance->request();
+                    break;
 
 
                 case GAME_OVER_STATE:
                     std::cout << "Client now entering GAME_OVER_STATE\r\n" << std::endl;
-                //do command truc
-                gameInstance->request();
-                endloop = 1;
-                break;
+                    //do command truc
+                    gameInstance->request();
+                    endloop = 1;
+                    break;
 
+                default :
+                    break;
             }
+
+
 
             std::cout << "Souhaitez vous continuer le jeu ?" << std::endl;
             std::cin >> waitConfirm;
