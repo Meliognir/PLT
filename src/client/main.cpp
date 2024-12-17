@@ -52,6 +52,9 @@ int main(int argc,char* argv[])
                 renderer->renderMap(window, *game->map);
             }
         }
+        {
+        renderer->renderPlayers(window, game->getPlayerList(), *game->map);
+        }
         window.display();
     }
 
