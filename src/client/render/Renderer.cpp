@@ -27,9 +27,9 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
         tileShape.setPosition(x, y);
 
         // Couleur de la tuile en fonction de ses propriétés
-        if (tile->tileResourceType == "food") {
+        if (tile->tileResourceType == "Food") {
             tileShape.setFillColor(sf::Color::Green);
-        } else if (tile->tileResourceType == "gold") {
+        } else if (tile->tileResourceType == "Gold") {
             tileShape.setFillColor(sf::Color::Yellow);
         } else if (tile->treasureAvailable) {
             tileShape.setFillColor(sf::Color::Red);
