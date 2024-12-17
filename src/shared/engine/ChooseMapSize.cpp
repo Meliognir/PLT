@@ -34,6 +34,7 @@ void const engine::ChooseMapSize::launchCommand (state::Game * GamePtr){
         state::Tile *tile;
         if (resource == TREASURE){
           tile = new state::Tile(cost, "Treasure", 0);
+          tile->treasureAvailable=true;
         }
         if (resource == FOOD){
           tile = new state::Tile(cost, "Food", 0);

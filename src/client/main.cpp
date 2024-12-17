@@ -26,15 +26,11 @@ void clientThreadFunction(client::Client* client, Game* game) {
 
 int main(int argc,char* argv[])
 {
-    int displayCounter = 0; // Compteur pour limiter l'affichage
-    auto lastDisplay = std::chrono::steady_clock::now();
     render::Renderer* renderer = new render::Renderer();
     client::Client *client = new client::Client();
-    std::cout << "Test 2" << std::endl;
     Game * game = client->gameEngine->game;
     // Démarrer le thread pour le client
     std::thread clientThread(clientThreadFunction, client, game);
-std::cout << "Test 1" << std::endl;
     // Attendre que la carte soit prête
     while (!game->isMapInitialized()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Pause pour éviter un busy-wait trop intense
