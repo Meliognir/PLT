@@ -254,6 +254,22 @@ void Game::setCombatWinner(Player *player){
     CombatWinner=player;
 }
 
+Map *Game::getMap(){
+    return map;
+}
+
+void Game::setMap(Map *newMap){
+    map = newMap;
+}
+
+void Game::setMapReady(bool ready){
+    isMapReady = ready;
+}
+
+bool Game::isMapInitialized(){
+    return isMapReady;
+}
+
 int Game::getActivePlayerIndex() const{
     return activePlayerIndex;
 }
