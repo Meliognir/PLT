@@ -10,27 +10,41 @@
 namespace state {
 
 void ResourceHandlingState::handle(){
-    //si on peut payer et joueurs présents sur case
+
     int quantityResource = 0;
     bool duel = false;
 
     std::cout <<"coucou"<< std::endl;
     Player * activePlayer = game->getActivePlayer();
     std::string resource1 = game->map->getResourceType(activePlayer->getPosition());
+    // activeplayer's total resource quantity he can pay for resource1
     for (BoatHold *bh : activePlayer->getBoatHolds()) {
         if (bh->hasResourceType(resource1)) {
             quantityResource += bh->getQuantity();
         }
     }
+    // checks activeplayer's opponent presence
     for (Player *player : game->getPlayerList()) {
         if (player->getPosition() == activePlayer->getPosition()) {
             duel = true;
         }
     }
-    //check path
-    if (game->map->getResourceCost(activePlayer->getPosition()) <= quantityResource && duel){
-        std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
-        game->transitionTo(new OpponentChoiceState);
+    // don't forget to check path
+    if(game->map->getResourceCost(activePlayer->getPosition()) <= quantityResource){
+        activePlayer->setBankrupt(false);
+        if (duel){
+            std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
+            game->transitionTo(new OpponentChoiceState);
+        }
+        else{
+            // payer direct
+        }   
+    }
+    else{
+        activePlayer->setBankrupt(true);
+        // pas de duel
+        // payer au max
+        // reculer jusqu'à payer tout
     }
     
     std::cout <<"Transitioning to CardAction state..."<< std::endl;

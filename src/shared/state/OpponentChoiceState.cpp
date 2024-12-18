@@ -7,6 +7,12 @@
 
 namespace state{
 void OpponentChoiceState::handle(){
+    //don't forget the activePlayer->getBankrupt == true
+
+
+
+
+    
     std::cout <<"Transitioning to CombatAttacking state..."<< std::endl;
     game->transitionTo(new CombatAttackingState);
 }
