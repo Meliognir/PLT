@@ -36,8 +36,14 @@ int main(int argc,char* argv[])
         std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Pause pour éviter un busy-wait trop intense
     }
 
-    sf::RenderWindow *window;
-    if (client->running) {window = new sf::RenderWindow(sf::VideoMode(2100, 1400), "Parcours circulaire");}
+    sf::RenderWindow* window;
+
+    if (client->running) {
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * 0.8; 
+    unsigned int windowHeight = desktopMode.height * 0.8;
+    window = new sf::RenderWindow(sf::VideoMode(windowWidth, windowHeight), "Parcours circulaire");
+    }
     // Boucle principale pour le rendu
     while (window->isOpen() && client->running) {
         sf::Event event;
