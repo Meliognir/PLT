@@ -118,6 +118,7 @@ bool InputHandler::chooseTimeDice(int die1, int die2){
     }
     return input == "1";
 }
+
 int InputHandler::chooseCanonNb(int totalNb){
     if (totalNb <= 0) {
         std::cout << "You don't have any available canons." << std::endl;
