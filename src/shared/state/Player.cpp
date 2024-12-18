@@ -275,6 +275,12 @@ ai::AI *Player::get_AI()
     return AIptr;
 }
 
+void Player::set_AI(ai::AI *aiInstance)
+{
+    // TODO: insert return statement here
+    this->AIptr = aiInstance;
+}
+
 bool Player::getBankrupt() const
 {
     return bankrupt;
