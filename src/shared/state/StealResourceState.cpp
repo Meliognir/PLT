@@ -14,6 +14,7 @@ StealResourceState::~StealResourceState(){
 void StealResourceState::handle(){
     std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
     game->transitionTo(new ResourceHandlingState);
+    notifyObservers();
 }
 
 int StealResourceState::getStateId(){

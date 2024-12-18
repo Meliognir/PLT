@@ -19,10 +19,12 @@ void CardActionState::handle(){
         //end of turn
         std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
         game->transitionTo(new CaptainDiceState);
+        notifyObservers();
     }
     else{
         std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
         game->transitionTo(new ResourceHandlingState);
+        notifyObservers();
     }   
 }
 

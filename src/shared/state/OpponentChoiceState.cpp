@@ -9,6 +9,7 @@ namespace state{
 void OpponentChoiceState::handle(){
     std::cout <<"Transitioning to CombatAttacking state..."<< std::endl;
     game->transitionTo(new CombatAttackingState);
+    notifyObservers();
 }
 
 OpponentChoiceState::~OpponentChoiceState(){

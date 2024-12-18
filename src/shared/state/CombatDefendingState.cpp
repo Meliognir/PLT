@@ -18,6 +18,7 @@ void state::CombatDefendingState::handle(){
     if (attackpower == defensepower){
         std::cout <<"Egalite : Transitioning to CardAction state..."<< std::endl;
         game->transitionTo(new CardActionState);
+        notifyObservers();
     }
     else if (attackpower > defensepower){
         game->setCombatWinner(attacker);
@@ -27,6 +28,7 @@ void state::CombatDefendingState::handle(){
     }
     std::cout <<"Transitioning to StealResource state..."<< std::endl;
     game->transitionTo(new StealResourceState);
+    notifyObservers();
 }
 
 int CombatDefendingState::getStateId(){

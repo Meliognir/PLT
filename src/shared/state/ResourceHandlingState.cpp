@@ -31,10 +31,12 @@ void ResourceHandlingState::handle(){
     if (game->map->getResourceCost(activePlayer->getPosition()) <= quantityResource && duel){
         std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
         game->transitionTo(new OpponentChoiceState);
+        notifyObservers();
     }
     
     std::cout <<"Transitioning to CardAction state..."<< std::endl;
     game->transitionTo(new CardActionState);
+    notifyObservers();
 }
 
 

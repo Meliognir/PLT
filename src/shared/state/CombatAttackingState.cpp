@@ -17,9 +17,11 @@ void CombatAttackingState::handle(){
         game->setCombatWinner(attacker);
         std::cout <<"Transitioning to StealResource state..."<< std::endl;
         game->transitionTo(new StealResourceState);
+        notifyObservers();
     }
     else {
         game->transitionTo(new CombatDefendingState);
+        notifyObservers();
     }
 }
 

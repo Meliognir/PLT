@@ -32,6 +32,7 @@ namespace state {
 
     std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
     game->transitionTo(new CaptainDiceState);
+    notifyObservers();
 
   }
 
