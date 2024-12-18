@@ -7,3 +7,7 @@ void render::StateLayer::initSurfaces(state::State *state)
 {
 
 }
+
+void render::StateLayer::update()
+{
+}

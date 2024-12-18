@@ -360,5 +360,7 @@ namespace client {
 
         return 0;
     }
+    void Client::update()
+    {
+    }
 }
-
