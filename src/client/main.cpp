@@ -40,8 +40,8 @@ int main(int argc,char* argv[])
 
     if (client->running) {
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-    unsigned int windowWidth = desktopMode.width * 0.8; 
-    unsigned int windowHeight = desktopMode.height * 0.8;
+    unsigned int windowWidth = desktopMode.width ; 
+    unsigned int windowHeight = desktopMode.height ;
     window = new sf::RenderWindow(sf::VideoMode(windowWidth, windowHeight), "Parcours circulaire");
     }
     // Boucle principale pour le rendu
@@ -62,6 +62,8 @@ int main(int argc,char* argv[])
         }
         {
         renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+        std::vector<int> playerHand = {2, 5, 10}; // ID des cartes dans la main
+        renderer->renderHand(*window, playerHand);
         }
         window->display();
     }
