@@ -97,11 +97,6 @@ namespace client {
 
         int gameState = gameInstance->state->getStateId();
 
-        // case where gameState is GAME_CONFIG_STATE:
-        std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
-        //do command truc
-        gameConfigInit(); // is the gameconfiginit the same for every playing mode ?
-
         // Init every game loop variable
         int numberOfPlayers = gameInstance->getPlayerList().size();
         int captainIndex;
@@ -125,37 +120,78 @@ namespace client {
         std::string waitConfirm;
         std::cout << "Client now entering the game loop\r\n" << std::endl;
         while (!endloop){
-            //on s'arrête là
+
             gameState = gameInstance->state->getStateId();
-            switch (gameState){//gameState->getStateId()/*test1*/){
+
+            switch (gameState){
+
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
-                    //do command truc
+                    gameConfigInit(); // is the gameconfiginit the same for every playing mode ?
                     gameInstance->request();
                     break;
 
 
                 case CAPTAIN_DICE_STATE:
+
+                    // partie réseau
+
+                    // client récupère int captainPlayerIndex = gameInstance->getCaptainIndex(); 
+                    // et donne le captainPlayerIndex à l'InputHandler bool InputHandler::chooseTimeDice(int die1, int die2, Player* captainPlayerIndex){}
+                    // ensuite chooseTimeDice() affiche le message pour le joueur capitaine
+                    // std::cout << "Joueur " << captainPlayerIndex << ", choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
+                    
+                    // en même temps chooseTimeDice() envoie un message aux joueurs non captain "veuillez attendre le choix de dé du captain"
+
                     std::cout << "Client now entering CAPTAIN_DICE_STATE\r\n" << std::endl;
-                    die1=rand()%6+1;
-                    die2=rand()%6+1;
-                    chosenDice=inputHandler.chooseTimeDice(die1,die2);
-                    if (chosenDice==1){assignDice= new engine::AssignDice(die1,die2);}
-                    else{assignDice= new engine::AssignDice(die2,die1);}
+                    srand(time(NULL));
+                    gameInstance->actionCounter = 0;
+                    die1 = rand()%6+1;
+                    die2 = rand()%6+1;
+                    captainIndex = gameInstance->getCaptainIndex();
+                    std::cout << "Capitaine " << captainIndex << " choisissez vos dés ! \r\n" << std::endl;
+                    chosenDice = inputHandler.chooseTimeDice(die1, die2);
+                    if (chosenDice == 1){assignDice = new engine::AssignDice(die1, die2);}
+                    else{assignDice = new engine::AssignDice(die2, die1);}
                     assignDice->launchCommand(gameInstance);
                     gameInstance->request();
                     break;
 
 
                 case CARD_CHOICE_STATE:
-                    std::cout << "Client now entering CARD_CHOICE_STATE\r\n" << std::endl;
-                    //do command truc
 
+                    std::cout << "Client now entering CARD_CHOICE_STATE\r\n" << std::endl;
+                    int actionCounter = gameInstance->actionCounter;
                     captainIndex = gameInstance->getCaptainIndex();
 
-                    //-------------Every Player choose 1 Card in their own cardDeck------------
+                    /*
+                    int playerNb = game->getPlayerList().size();
+                    int activePlayerIndex = game->getActivePlayerIndex();
+                    int captainIndex = game->getCaptainIndex();
+                    activePlayerIndex = (captainIndex + 1);
+                    game->setActivePlayerIndex(activePlayerIndex);
+                    game->setActivePlayer(game->getPlayerList().at(activePlayerIndex));
+                    
+                    //fin des actions de tous les joueurs
+                    if(actionCounter > game->getPlayerList().size()*3) {
+                        
+                        //update of Captain player
+                        
+                        gameTurn++; 
+                        game->setTurn(gameTurn);
+                        game->setActivePlayerIndex(0);
+                        int captainIndex = game->getCaptainIndex();
+                        captainIndex = (captainIndex + 1) % playerNb;
+                        game->setCaptainIndex(captainIndex);
+                        game->setActivePlayer(game->getPlayerList().at(captainIndex));
+                        std::cout << "Starting a new round in the Playerlist." << std::endl;
+                    }
+                    */
+
+                    // Every Player choose 1 Card in their own cardDeck
                     for (int i = 0; i < numberOfPlayers; i++) {
-                        gameInstance->setActivePlayerIndex((captainIndex + i) % numberOfPlayers);
+                        std::cout << "Action number " << actionCounter << "\r\n" << std::endl;
+                        //gameInstance->setActivePlayerIndex((captainIndex + i) % numberOfPlayers);
                         activePlayer = gameInstance->getPlayerList().at(gameInstance->getActivePlayerIndex());
                         gameInstance->setActivePlayer(activePlayer);
                         std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
@@ -202,11 +238,13 @@ namespace client {
                     gameInstance->request();
                     break;
 
+
                 case STEAL_RESOURCE_STATE:
                     std::cout << "Client now entering STEAL_RESOURCE_STATE\r\n" << std::endl;
                     //do command truc
                     gameInstance->request();
                     break;
+
 
                 case GAME_OVER_STATE:
                     std::cout << "Client now entering GAME_OVER_STATE\r\n" << std::endl;
@@ -220,8 +258,7 @@ namespace client {
             }
 
 
-
-            std::cout << "Souhaitez vous continuer le jeu ?" << std::endl;
+            std::cout << "Do you wish to continue the game ?" << std::endl;
             std::cin >> waitConfirm;
             if (waitConfirm[0] == 'n'){
                 endloop = 1;
