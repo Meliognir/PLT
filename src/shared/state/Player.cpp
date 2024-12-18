@@ -265,6 +265,12 @@ void Player::setFirePower(int firePower)
     this->firePower=firePower;
 }
 
+ai::AI *Player::get_AI()
+{
+    // TODO: insert return statement here
+    return AIptr;
+}
+
 bool Player::getBankrupt() const
 {
     return bankrupt;
@@ -274,5 +280,7 @@ void Player::setBankrupt(bool bankrupt)
 {
     this->bankrupt = bankrupt;
 }
+
+
 
 }

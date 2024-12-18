@@ -140,13 +140,18 @@ namespace client {
 
                     std::cout << "Client now entering CAPTAIN_DICE_STATE\r\n" << std::endl;
                     srand(time(NULL));
+                    captainIndex = (gameInstance->getCaptainIndex() +1)%numberOfPlayers;
+                    gameInstance->setCaptainIndex(captainIndex);
                     gameInstance->actionCounter = 0;
+                    activePlayer = gameInstance->getPlayerList().at(captainIndex);
                     gameInstance->setTurn(turn + 1);
                     die1 = rand()%6+1;
                     die2 = rand()%6+1;
-                    captainIndex = gameInstance->getCaptainIndex();
                     std::cout << "Capitaine " << gameInstance->getPlayerList().at(captainIndex)->getName() << " : choisissez vos dés ! \r\n" << std::endl;
-                    chosenDice = inputHandler.chooseTimeDice(die1, die2);
+                    if (activePlayer->get_AI()==nullptr){
+                        chosenDice = inputHandler.chooseTimeDice(die1, die2);
+                    }
+                    //else {}
                     if (chosenDice == 1){assignDice = new engine::AssignDice(die1, die2);}
                     else{assignDice = new engine::AssignDice(die2, die1);}
                     assignDice->launchCommand(gameInstance);
