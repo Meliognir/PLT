@@ -148,6 +148,10 @@ void Player::removeFromBoatHold(int boatholdIndex, int amount){
     selectedHold->removeResource(amount);
 }
 
+void Player::payResource (std::string type, int amount, int boatholdIndex){
+    this->removeFromBoatHold(boatholdIndex, amount);
+}
+
 bool Player::chooseTimeDice(int dice1, int dice2)
 { // à mettre dans client
     std::string input;

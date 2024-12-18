@@ -13,32 +13,35 @@ void ResourceHandlingState::handle(){
 
     int quantityResource = 0;
     bool duel = false;
+    Player * activePlayer = game->getActivePlayer();
+    int activePlayerPos = activePlayer->getPosition();
+    std::string resourceToPay = game->map->getResourceType(activePlayerPos);
+    int resourceToPayCost = game->map->getResourceCost(activePlayerPos);
 
     std::cout <<"coucou"<< std::endl;
-    Player * activePlayer = game->getActivePlayer();
-    std::string resource1 = game->map->getResourceType(activePlayer->getPosition());
     // activeplayer's total resource quantity he can pay for resource1
     for (BoatHold *bh : activePlayer->getBoatHolds()) {
-        if (bh->hasResourceType(resource1)) {
+        if (bh->hasResourceType(resourceToPay)) {
             quantityResource += bh->getQuantity();
         }
     }
     // checks activeplayer's opponent presence
     for (Player *player : game->getPlayerList()) {
-        if (player->getPosition() == activePlayer->getPosition()) {
+        if (player->getPosition() == activePlayerPos) {
             duel = true;
         }
     }
     // don't forget to check path
-    if(game->map->getResourceCost(activePlayer->getPosition()) <= quantityResource){
+    if(resourceToPayCost <= quantityResource){
         activePlayer->setBankrupt(false);
         if (duel){
             std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
             game->transitionTo(new OpponentChoiceState);
+            notifyObservers();
         }
         else{
-            // payer direct
-        }   
+            activePlayer->payResource(resourceToPay, resourceToPayCost);            
+        }
     }
     else{
         activePlayer->setBankrupt(true);
