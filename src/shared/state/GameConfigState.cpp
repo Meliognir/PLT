@@ -28,6 +28,7 @@ namespace state {
     
     game->setCaptainIndex(0);
     game->setActivePlayerIndex(0); // set to 0 here and in CardActionState
+    game->setTurn(0);
 
     std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
     game->transitionTo(new CaptainDiceState);
