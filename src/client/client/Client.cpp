@@ -160,9 +160,6 @@ namespace client {
                     std::cout << "Starting a new round in the Playerlist\r\n" << std::endl;
                     captainIndex = gameInstance->getCaptainIndex();
                     numberOfPlayers = gameInstance->getPlayerList().size();
-                    //PB message //Transitioning to CardAction state...
-                                 // destructor called
-                                 // Do you wish to continue the game ?
 
                     // partie réseau
 
