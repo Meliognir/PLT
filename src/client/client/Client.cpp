@@ -95,14 +95,14 @@ namespace client {
 
     int Client::runLocalGame(){
 
-        //!!!!! IMPORTANT !!!!!
-        // notre client vole le rôle de l'engine
+        //important
+        // est ce que notre client vole le rôle de GameEngine ?
         // il faut faire GameEngine->fcn() à chaque fois que l'on modifie la valeur d'une variable de game avec un "set" ou un "="
 
-        int gameState = gameInstance->state->getStateId();
+        int gameState;
 
         // Init every game loop variable
-        int numberOfPlayers = gameInstance->getPlayerList().size();
+        int numberOfPlayers;
         int actionCounter;
         int activePlayerIndex;
         int captainIndex;
@@ -157,7 +157,7 @@ namespace client {
                     die1 = rand()%6+1;
                     die2 = rand()%6+1;
                     captainIndex = gameInstance->getCaptainIndex();
-                    std::cout << "Capitaine " << captainIndex << " choisissez vos dés ! \r\n" << std::endl;
+                    std::cout << "Capitaine " << gameInstance->getPlayerList().at(captainIndex)->getName() << " : choisissez vos dés ! \r\n" << std::endl;
                     chosenDice = inputHandler.chooseTimeDice(die1, die2);
                     if (chosenDice == 1){assignDice = new engine::AssignDice(die1, die2);}
                     else{assignDice = new engine::AssignDice(die2, die1);}
@@ -169,8 +169,13 @@ namespace client {
                 case CARD_CHOICE_STATE:
 
                     std::cout << "Client now entering CARD_CHOICE_STATE\r\n" << std::endl;
+                    std::cout << "Starting a new round in the Playerlist\r\n" << std::endl;
                     captainIndex = gameInstance->getCaptainIndex();
-                    
+                    numberOfPlayers = gameInstance->getPlayerList().size();
+                    //PB message //Transitioning to CardAction state...
+                                 // destructor called
+                                 // Do you wish to continue the game ?
+
                     // partie réseau
 
                     // l'InputHandler affiche un message personnalisé "joueur truc choisis tes cartes"
@@ -183,7 +188,7 @@ namespace client {
                         gameInstance->setActivePlayerIndex(activePlayerIndex);
                         gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                         activePlayer = gameInstance->getActivePlayer();
-                        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
+                        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely\r\n" << std::endl;
                         gameInstance->displayState();
                         chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                         chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
@@ -196,7 +201,6 @@ namespace client {
 
                 case CARD_ACTION_STATE:
                     std::cout << "Client now entering CARD_ACTION_STATE\r\n" << std::endl;
-                    std::cout << "Starting a new round in the Playerlist." << std::endl;
                     actionCounter = gameInstance->actionCounter;
 
                     // partie réseau
@@ -209,15 +213,15 @@ namespace client {
                     gameInstance->setActivePlayerIndex(activePlayerIndex);
                     gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                     activePlayer = gameInstance->getActivePlayer();
-                    std::cout << "Player index "<< activePlayerIndex << ", id : " << activePlayer->getPlayerId() << " do you Action. Dew it." << std::endl;
-                    gameInstance->displayState();
+                    std::cout << "Player index "<< activePlayerIndex << ", id : " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;
+                    //gameInstance->displayState();
                     //chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                     //chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
                     //chooseCard->launchCommand(gameInstance);
                     actionCounter += 1;
                     gameInstance->actionCounter = actionCounter;
 
-                    gameInstance->request();
+                    gameInstance->request(); // from cardactionstate to resourcehandlingstate or captaindicestate on condition
                     break;
 
 

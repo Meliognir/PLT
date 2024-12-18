@@ -14,8 +14,7 @@ void ResourceHandlingState::handle(){
     int quantityResource=0;
     bool duel=false;
 
-    /*A DEPLACER : */game->setActivePlayer(game->getPlayerList().at(game->getActivePlayerIndex()));
-
+    std::cout <<"coucou"<< std::endl;
     Player * activePlayer=game->getActivePlayer();
     std::string resource1=game->map->getResourceType(activePlayer->getPosition());
     for (BoatHold *currentBoathold : activePlayer->getBoatHolds()) {
@@ -33,6 +32,7 @@ void ResourceHandlingState::handle(){
         std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
         game->transitionTo(new OpponentChoiceState);
     }
+    
     std::cout <<"Transitioning to CardAction state..."<< std::endl;
     game->transitionTo(new CardActionState);
 }

@@ -12,7 +12,7 @@ int gameTurn = 0;
 namespace state {
 void CardActionState::handle(){
 
-    int actionCounter = game->actionCounter;
+    unsigned actionCounter = (unsigned) game->actionCounter;
 
     //fin des actions de tous les joueurs
     if(actionCounter > game->getPlayerList().size()*2) {
@@ -20,10 +20,10 @@ void CardActionState::handle(){
         std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
         game->transitionTo(new CaptainDiceState);
     }
-
-    std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
-    game->transitionTo(new ResourceHandlingState);
-
+    else{
+        std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
+        game->transitionTo(new ResourceHandlingState);
+    }   
 }
 
 int CardActionState::getStateId(){
