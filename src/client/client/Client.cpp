@@ -312,11 +312,19 @@ namespace client {
         delete chooseNbOfPlayers;
 
         // Sets players' name and choose AIs ?
+        engine::ChooseAI* chooseAI;
         state::Player* currentPlayer;
+        int levelAI = 0;
         for(int playerIndex = 0; playerIndex < playerNumber; playerIndex++){
+
+            // Set the AI
             std::string playerName;
-            // inputHandler.pickAnAI();
+            levelAI = inputHandler.pickAnAI(playerIndex);
             currentPlayer = gameInstance->getPlayerList().at(playerIndex);
+            chooseAI = new engine::ChooseAI(levelAI, playerIndex);
+            chooseAI->launchCommand(gameInstance);
+
+            // Set the username
             if (currentPlayer->get_AI()==nullptr){ //real player
                 playerName = inputHandler.getPlayerName(playerIndex);
             }

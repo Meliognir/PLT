@@ -167,4 +167,54 @@ int InputHandler::selectGameMode()
     }
     return 0;
 }
+
+int InputHandler::selectLevelAI()
+{
+    std::string setLevel;
+    while(1){
+        std::cout << "What is the level of this AI ? (0, 1, 2, 3)"<< std::endl;;
+        std::cin >> setLevel;
+        if (setLevel == "0" || setLevel == "cancel") {
+            std::cout << "User cancelled" << std::endl;
+            return 0;
+        }
+        else if (setLevel == "1" || setLevel == "random"){
+            std::cout << "User selected 1 : randomAI" << std::endl;
+            return 1;
+        }
+        else if (setLevel == "2" || setLevel == "heuristic"){
+            std::cout << "User selected 2 : heuristicAI" << std::endl;
+            return 2;
+        }
+        else if (setLevel == "3" || setLevel == "deep"){
+            std::cout << "User selected 3 : deepAI" << std::endl;
+            return 3;
+        }
+    }
+    return 1;
+}
+
+int InputHandler::pickAnAI(int playerIndex)
+{
+    std::string setAnAI;
+    int SelectionAI = 0;
+    while(1){
+        std::cout << "Is Player " << playerIndex+1 << " an AI ? (y/n)"<< std::endl;
+        std::cin >> setAnAI;
+        if (setAnAI == "n" || setAnAI == "no") {
+            return 0;
+        }
+        else if (setAnAI == "y" || setAnAI == "yes") {
+            SelectionAI = selectLevelAI();
+            if (SelectionAI){
+                return SelectionAI;
+            }
+        }
+        else {
+            std::cout << "Invalid input : this is a yes/no question."<< std::endl;
+        }
+    }
+}
+
+
 }
