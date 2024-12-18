@@ -3,11 +3,13 @@
 #include <vector>
 #include <iostream>
 #define PI 3.14159265358979323846
+#define WIDTHFAC 1.0
+#define HEIGHTFAC 1.0
 //beach tileset 576 * 288
 void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map){
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-    unsigned int windowWidth = desktopMode.width * 0.8; 
-    unsigned int windowHeight = desktopMode.height * 0.8;
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     int mapSize = map.getSize();          // Nombre total de tuiles
     float radius = 400.0f;                // Rayon du cercle
     sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
@@ -23,7 +25,7 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     }
     sf::Texture portRoyal;
     if (!portRoyal.loadFromFile("../src/boardGameData/PortRoyal.png")) {
-        std::cerr << "Error loading Beach_Tileset.png!" << std::endl;
+        std::cerr << "Error loading PortRoyal.png!" << std::endl;
         return;
     }
     sf::Sprite tileSprite;
@@ -36,11 +38,11 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     sf::Texture sunTexture;
     sf::Texture moonTexture;
     if (!sunTexture.loadFromFile("../src/boardGameData/Sun.png")) {
-        std::cerr << "Error loading player texture!" << std::endl;
+        std::cerr << "Error loading sun texture!" << std::endl;
         return;
     }
     if (!moonTexture.loadFromFile("../src/boardGameData/Moon.png")) {
-        std::cerr << "Error loading player texture!" << std::endl;
+        std::cerr << "Error loading moon texture!" << std::endl;
         return;
     }
     sf::Sprite sunSprite;
@@ -79,10 +81,10 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             tileSprite.setPosition(x, y);
             window.draw(tileSprite);
         } else {
-            portRoyalSprite.setTextureRect(sf::IntRect(32, 8, 192, 192)); // Par défaut (première tuile)
+            portRoyalSprite.setTextureRect(sf::IntRect(0, 0, 192, 192)); // Par défaut (première tuile)
             portRoyalSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             portRoyalSprite.setScale(sf::Vector2f(0.5f,0.5f));
-            portRoyalSprite.setPosition(x, y);
+            portRoyalSprite.setPosition(x-10, y-20);
             window.draw(portRoyalSprite);
         }
 
@@ -103,8 +105,8 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
 
 void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector<state::Player *> &players, const state::Map &map){
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-    unsigned int windowWidth = desktopMode.width * 0.8; 
-    unsigned int windowHeight = desktopMode.height * 0.8;
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Texture playerTexture;
     if (!playerTexture.loadFromFile("../src/boardGameData/Boats.png")) {
         std::cerr << "Error loading player texture!" << std::endl;
@@ -165,8 +167,8 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
 
 void render::Renderer::renderDice(sf::RenderWindow &window, int dayDie, int nightDie){
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-    unsigned int windowWidth = desktopMode.width * 0.8; 
-    unsigned int windowHeight = desktopMode.height * 0.8;
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Texture diceTexture;
     if (!diceTexture.loadFromFile("../src/boardGameData/DiceSprSheetX128.png")) {
         std::cerr << "Error loading dice texture!" << std::endl;
@@ -202,5 +204,70 @@ void render::Renderer::renderDice(sf::RenderWindow &window, int dayDie, int nigh
         nightDieRect.setPosition(nightDiePosition);
         nightDieRect.setFillColor(sf::Color(128, 128, 128)); 
         window.draw(nightDieRect);
+    }
+}
+
+void render::Renderer::renderCard(sf::RenderWindow &window, int cardID){
+    sf::Texture cardTexture;
+    if (!cardTexture.loadFromFile("../src/boardGameData/CardSprSheet.png")) {
+        std::cerr << "Error loading card texture!" << std::endl;
+        return;
+    }
+
+    sf::Sprite cardSprite;
+    cardSprite.setTexture(cardTexture);
+
+    int cardWidth = 68;  
+    int cardHeight = 28; 
+
+    // Déterminer quelle région de la texture utiliser en fonction de cardID
+    if (cardID >= 0 && cardID < 11) {
+      cardSprite.setTextureRect(sf::IntRect(cardID * cardWidth / 2, 0, cardWidth, cardHeight));
+    } else {
+        std::cerr << "Invalid cardID: " << cardID << std::endl;
+        return;
+    }
+    // Positionner la carte au centre de la fenêtre
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+
+    cardSprite.setPosition((windowWidth - cardWidth) / 2.0f, (windowHeight - cardHeight) / 2.0f);
+    cardSprite.setScale(sf::Vector2f(2.f, 2.f));
+    window.draw(cardSprite);
+}
+
+void render::Renderer::renderHand(sf::RenderWindow &window, const std::vector<int>& handCards) {
+    sf::Texture cardTexture;
+    if (!cardTexture.loadFromFile("../src/boardGameData/CardSprSheet.png")) {
+        std::cerr << "Error loading card texture!" << std::endl;
+        return;
+    }
+
+    sf::Sprite cardSprite;
+    cardSprite.setTexture(cardTexture);
+
+    int cardWidth = 68;
+    int cardHeight = 28;
+
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+
+    // Positionnement des cartes
+    float startX = (windowWidth - (7 * cardWidth)) / 2.0f; 
+    float y = windowHeight - 5*cardHeight;
+    for (size_t i = 0; i < handCards.size() && i < 3; ++i) {
+        int cardID = handCards[i];
+        // Déterminer la région de la texture
+        if (cardID >= 0 && cardID < 11) {
+            cardSprite.setTextureRect(sf::IntRect(cardID * cardWidth /2, 0, cardWidth, cardHeight));
+        } else {
+            std::cerr << "Invalid cardID: " << cardID << std::endl;
+            continue;
+        }
+        cardSprite.setPosition(startX + i * 2 * (cardWidth + 20), y);
+        cardSprite.setScale(sf::Vector2f(2.f, 2.f));
+        window.draw(cardSprite);
     }
 }
