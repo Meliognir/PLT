@@ -5,9 +5,12 @@
 #define PI 3.14159265358979323846
 //beach tileset 576 * 288
 void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map){
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * 0.8; 
+    unsigned int windowHeight = desktopMode.height * 0.8;
     int mapSize = map.getSize();          // Nombre total de tuiles
     float radius = 400.0f;                // Rayon du cercle
-    sf::Vector2f center(1050, 700);        // Centre du cercle (position de la fenêtre)
+    sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
     float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
 
     sf::Font font;
@@ -43,13 +46,13 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     sf::Sprite sunSprite;
     sunSprite.setTexture(sunTexture);
     sunSprite.setTextureRect(sf::IntRect(0, 0, 400, 400));
-    sunSprite.setPosition(880, 630);
+    sunSprite.setPosition((windowWidth/2)-windowWidth/12, (windowHeight/2)-windowHeight/16);
     sunSprite.setScale(sf::Vector2f(0.36f, 0.36f));
 
     sf::Sprite moonSprite;
     moonSprite.setTexture(moonTexture);
     moonSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
-    moonSprite.setPosition(1100, 636);
+    moonSprite.setPosition((windowWidth/2)+windowWidth/20, (windowHeight/2)-windowHeight/16);
     // Parcourir toutes les tuiles de la carte
     for (int i = 0; i < mapSize; ++i) {
         const state::Tile* tile = map.listOfTiles[i];
@@ -99,6 +102,9 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
 }
 
 void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector<state::Player *> &players, const state::Map &map){
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * 0.8; 
+    unsigned int windowHeight = desktopMode.height * 0.8;
     sf::Texture playerTexture;
     if (!playerTexture.loadFromFile("../src/boardGameData/Boats.png")) {
         std::cerr << "Error loading player texture!" << std::endl;
@@ -130,7 +136,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             float angleStep = 2 * PI / map.getSize();   // Angle entre chaque tuile
             float angle = playerPosition * angleStep;
             float radius = 400.0f;                     // Même rayon que dans renderMap
-            sf::Vector2f center(1050, 700);             // Centre de la carte
+            sf::Vector2f center(windowWidth/2, windowHeight/2);             // Centre de la carte
 
             float x = center.x + radius * cos(angle);
             float y = center.y + radius * sin(angle);
@@ -158,6 +164,9 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
 }
 
 void render::Renderer::renderDice(sf::RenderWindow &window, int dayDie, int nightDie){
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * 0.8; 
+    unsigned int windowHeight = desktopMode.height * 0.8;
     sf::Texture diceTexture;
     if (!diceTexture.loadFromFile("../src/boardGameData/DiceSprSheetX128.png")) {
         std::cerr << "Error loading dice texture!" << std::endl;
@@ -167,8 +176,8 @@ void render::Renderer::renderDice(sf::RenderWindow &window, int dayDie, int nigh
     sf::Sprite dayDieSprite;
     sf::Sprite nightDieSprite;
 
-    sf::Vector2f dayDiePosition(890, 800);   
-    sf::Vector2f nightDiePosition(1100, 800);  
+    sf::Vector2f dayDiePosition((windowWidth/2)-windowWidth/12, (windowHeight/2)+windowHeight/12);   
+    sf::Vector2f nightDiePosition((windowWidth/2)+windowWidth/20, (windowHeight/2)+windowHeight/12);  
 
     if (dayDie > 0) {
         dayDieSprite.setTexture(diceTexture);
