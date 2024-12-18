@@ -106,6 +106,7 @@ namespace client {
         int actionCounter;
         int activePlayerIndex;
         int captainIndex;
+        int turn;
         int die1;
         int die2;
         bool chosenDice;
@@ -152,6 +153,7 @@ namespace client {
                     std::cout << "Client now entering CAPTAIN_DICE_STATE\r\n" << std::endl;
                     srand(time(NULL));
                     gameInstance->actionCounter = 0;
+                    gameInstance->setTurn(turn + 1);
                     die1 = rand()%6+1;
                     die2 = rand()%6+1;
                     captainIndex = gameInstance->getCaptainIndex();
@@ -168,11 +170,11 @@ namespace client {
 
                     std::cout << "Client now entering CARD_CHOICE_STATE\r\n" << std::endl;
                     captainIndex = gameInstance->getCaptainIndex();
-
+                    
                     // partie réseau
 
                     // l'InputHandler affiche un message personnalisé "joueur truc choisis tes cartes"
-                    // la boucle for en dessous n'existera pas tout le monde choisi en même temps
+                    // la boucle for en dessous n'existera pas tout le monde choisit en même temps
                     // pas d'active player pour le choosecard
 
                     // Every Player choose 1 Card in their own cardDeck
@@ -194,44 +196,26 @@ namespace client {
 
                 case CARD_ACTION_STATE:
                     std::cout << "Client now entering CARD_ACTION_STATE\r\n" << std::endl;
+                    std::cout << "Starting a new round in the Playerlist." << std::endl;
                     actionCounter = gameInstance->actionCounter;
 
                     // partie réseau
 
-                    // on garde boucle for avec activePlayer
+                    // mettre les joueurs en attente avec un message "le joueur activePlayer exécute ses actions"
 
-                    for(int i = 0; i < numberOfPlayers; i++) {
-                        std::cout << "Action number " << actionCounter << "\r\n" << std::endl;
-                        activePlayerIndex = (captainIndex + i) % numberOfPlayers;
-                        gameInstance->setActivePlayerIndex(activePlayerIndex);
-                        gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
-                        activePlayer = gameInstance->getActivePlayer();
-                        std::cout << "Player " << activePlayer->getPlayerId() << " do you Action. Dew it." << std::endl;
-                        gameInstance->displayState();
-                        //chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
-                        //chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
-                        //chooseCard->launchCommand(gameInstance);
-
-                    }
-
-                    gameInstance->setActivePlayerIndex((captainIndex + 1) % numberOfPlayers);
-
-                    /*                    
-                    //fin des actions de tous les joueurs
-                    if(actionCounter > game->getPlayerList().size()*3) {
-                        
-                        //update of Captain player
-                        
-                        gameTurn++; 
-                        game->setTurn(gameTurn);
-                        game->setActivePlayerIndex(0);
-                        int captainIndex = game->getCaptainIndex();
-                        captainIndex = (captainIndex + 1) % playerNb;
-                        game->setCaptainIndex(captainIndex);
-                        game->setActivePlayer(game->getPlayerList().at(captainIndex));
-                        std::cout << "Starting a new round in the Playerlist." << std::endl;
-                    }
-                    */
+                    std::cout << "Action number " << actionCounter << "\r\n" << std::endl;
+                    // 2 actions day, night, 1 no action
+                    if(actionCounter%2 == 0){activePlayerIndex = (activePlayerIndex + 1) % numberOfPlayers;}
+                    gameInstance->setActivePlayerIndex(activePlayerIndex);
+                    gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
+                    activePlayer = gameInstance->getActivePlayer();
+                    std::cout << "Player index "<< activePlayerIndex << ", id : " << activePlayer->getPlayerId() << " do you Action. Dew it." << std::endl;
+                    gameInstance->displayState();
+                    //chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
+                    //chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
+                    //chooseCard->launchCommand(gameInstance);
+                    actionCounter += 1;
+                    gameInstance->actionCounter = actionCounter;
 
                     gameInstance->request();
                     break;

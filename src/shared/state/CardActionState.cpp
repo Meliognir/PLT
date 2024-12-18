@@ -15,7 +15,7 @@ void CardActionState::handle(){
     int actionCounter = game->actionCounter;
 
     //fin des actions de tous les joueurs
-    if(actionCounter > game->getPlayerList().size()*3) {
+    if(actionCounter > game->getPlayerList().size()*2) {
         //end of turn
         std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
         game->transitionTo(new CaptainDiceState);
