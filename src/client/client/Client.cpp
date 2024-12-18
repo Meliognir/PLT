@@ -148,10 +148,12 @@ namespace client {
                     die1 = rand()%6+1;
                     die2 = rand()%6+1;
                     std::cout << "Capitaine " << gameInstance->getPlayerList().at(captainIndex)->getName() << " : choisissez vos dés ! \r\n" << std::endl;
-                    if (activePlayer->get_AI()==nullptr){
+                    if (activePlayer->get_AI()==nullptr){ //real player
                         chosenDice = inputHandler.chooseTimeDice(die1, die2);
                     }
-                    //else {}
+                    else { // AI input
+                        activePlayer->get_AI()->chooseTimeDice(die1, die2);
+                    }
                     if (chosenDice == 1){assignDice = new engine::AssignDice(die1, die2);}
                     else{assignDice = new engine::AssignDice(die2, die1);}
                     assignDice->launchCommand(gameInstance);
@@ -295,9 +297,18 @@ namespace client {
         chooseNbOfPlayers->launchCommand(gameInstance);
         delete chooseNbOfPlayers;
 
-        // Sets players' name
+        // Sets players' name and choose AIs ?
+        state::Player* currentPlayer;
         for(int playerIndex = 0; playerIndex < playerNumber; playerIndex++){
-            std::string playerName = inputHandler.getPlayerName(playerIndex);
+            std::string playerName;
+            // inputHandler.pickAnAI();
+            currentPlayer = gameInstance->getPlayerList().at(playerIndex);
+            if (currentPlayer->get_AI()==nullptr){ //real player
+                playerName = inputHandler.getPlayerName(playerIndex);
+            }
+            else { // AI input
+                playerName = currentPlayer->get_AI()->getPlayerName(playerIndex);
+            }
             engine::ChoosePlayerName* choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
             choosePlayerName->launchCommand(gameInstance);
             delete choosePlayerName;
