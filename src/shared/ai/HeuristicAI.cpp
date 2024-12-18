@@ -2,22 +2,22 @@
 // Created by trias on 18/12/24.
 //
 
-#include "RandomAI.h"
+#include "HeuristicAI.h"
 #include <iostream>
 #include <cstdlib>
-
+#include <limits>
 
 int getRandomInput(int min, int max) {
     return min + std::rand() % ((max - min) + 1);
 }
 
-ai::RandomAI::RandomAI() {}
+ai::HeuristicAI::HeuristicAI() {}
     //when demande input : rand() response
 
 
 
 
-std::string ai::RandomAI::getPlayerName(int playerIndex){
+std::string ai::HeuristicAI::getPlayerName(int playerIndex){
     std::string playerName;
     std::cout << "Enter name for player : Débutant";
     playerName= "Débutant";
@@ -25,7 +25,7 @@ std::string ai::RandomAI::getPlayerName(int playerIndex){
 }
 
 
-size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount){
+size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount){
     size_t index = 0;
     while (true) {
         std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
@@ -38,7 +38,7 @@ size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount){
     }
 }
 
-bool ai::RandomAI::confirmBoatHoldReplace(){
+bool ai::HeuristicAI::confirmBoatHoldReplace(){
     std::string input;
     while (true) {
         std::cout << "This boathold contains other resources. Do you want to replace them ? (y/n) : ";
@@ -52,7 +52,7 @@ bool ai::RandomAI::confirmBoatHoldReplace(){
     }
 }
 
-int ai::RandomAI::chooseCardFromHand(const std::vector<int>& handCards) {
+int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
     std::cout<<"Your 3 handCards:"<<std::endl;
     for (size_t i = 0; i < handCards.size(); ++i) {
         std::cout << i + 1 << ". " << handCards[i] << std::endl;
@@ -65,7 +65,7 @@ int ai::RandomAI::chooseCardFromHand(const std::vector<int>& handCards) {
     return choice;
 }
 
-bool ai::RandomAI::chooseTimeDice(int die1, int die2){
+bool ai::HeuristicAI::chooseTimeDice(int die1, int die2){
     std::string input;
     while (true) {
         std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
@@ -79,7 +79,7 @@ bool ai::RandomAI::chooseTimeDice(int die1, int die2){
     return input == "1";
 }
 
-int ai::RandomAI::chooseCanonNb(int totalNb){
+int ai::HeuristicAI::chooseCanonNb(int totalNb){
     if (totalNb <= 0) {
         std::cout << "You don't have any available canons." << std::endl;
         return 0;
