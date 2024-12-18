@@ -1,5 +1,6 @@
 #include "client.h"
 #include "state.h"
+//#include "../shared/engine.h"
 #include "state/Player.h"
 #include "../shared/engine/ResourceManager.h"
 #include "../shared/engine/ChooseNbOfPlayers.h"
@@ -39,6 +40,7 @@
 #define LOCAL_MULTIPLAYER 1
 #define ONLINE_MULTIPLAYER 2
 #define SINGLE_PLAYER 3
+#define LOCAL_AND_AI 4
 
 
 
@@ -51,21 +53,19 @@ std::unique_ptr<T> make_unique(Args&&... args) {
 namespace client {
     Client::Client()
     {
-
         //-----------------------------
         // instantiates a new Game context and runs concrete states "GameConfig" then "Playing" functions
         //-----------------------------
         Renderer renderer;
-        gameState = new state::GameConfigState();
+        state::State *gameState = new state::GameConfigState();
         gameEngine = new engine::GameEngine(gameState);
+        gameInstance = gameEngine->game;
         InputHandler inputHandler;
-
     }
 
     int Client::launch(){
-
+        running=true;
         //renderer-> show the correct window
-        int exiting = 0;
         int playingMode = 1;
         while(playingMode){
             playingMode = inputHandler.selectGameMode();
@@ -90,6 +90,7 @@ namespace client {
             std::string waitConfirm;
             std::cin >> waitConfirm; //wait user confirmation
         }
+        running = false;
         return 0;
 
 
@@ -97,33 +98,42 @@ namespace client {
 
     int Client::runLocalGame(){
 
-        state::Game *gameInstance = gameEngine->game;
-        gameState = new state::GameConfigState();
-        // Old method :
-        // gameEngine->steps();
-
-
-        // New method :
-
+        int gameState = gameInstance->state->getStateId();
 
         // case where gameState is GAME_CONFIG_STATE:
         std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
         //do command truc
         gameConfigInit();
 
-        int endloop = 0;
-        std::string waitConfirm;
-        std::cout << "Client now entering the game loop\r\n" << std::endl;
+        // Initializing all the variables for the game loop
+        
+        int numberOfPlayers = gameInstance->getPlayerList().size;
+        int captainIndex;
         int die1;
         int die2;
         bool chosenDice;
-        engine::AssignDice* dice;
-        int state;
+        state::Player* activePlayer;
+        int chosenCardId;
+
+        // Initializing all the commands for the game loop
+
+        engine::AssignDice* assignDice;
+        engine::ChooseCard* chooseCard;
+        engine::AddToBoathold* addToBoathold;
+        engine::ResourceManager* resourceManager;
+        engine::ChoosePath* choosePath;
+        engine::ChooseCanons* chooseCanons;
+        engine::ChoosePlayerName* choosePlayerName;
+
+
+        int endloop = 0;
+        std::string waitConfirm;
+        std::cout << "Client now entering the game loop\r\n" << std::endl;
         while (!endloop){
             //state=gameState->getStateId();
-            state=gameInstance->state->getStateId();
             //on s'arrête là
-            switch (state){//gameState->getStateId()/*test1*/){
+            gameState = gameInstance->state->getStateId();
+            switch (gameState){//gameState->getStateId()/*test1*/){
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
                     //do command truc
@@ -137,8 +147,8 @@ namespace client {
                     die1=rand()%6+1;
                     die2=rand()%6+1;
                     chosenDice=inputHandler.chooseTimeDice(die1,die2);
-                    if (chosenDice==1){dice= new engine::AssignDice(die1,die2);}
-                    else{dice= new engine::AssignDice(die2,die1);}
+                    if (chosenDice==1){assignDice= new engine::AssignDice(die1,die2);}
+                    else{assignDice= new engine::AssignDice(die2,die1);}
                     dice->launchCommand(gameInstance);
                     gameInstance->request();
                     break;
@@ -147,6 +157,20 @@ namespace client {
                 case CARD_CHOICE_STATE:
                     std::cout << "Client now entering CARD_CHOICE_STATE\r\n" << std::endl;
                     //do command truc
+                    captainIndex = gameInstance->getCaptainIndex();
+
+                    //-------------Every Player choose 1 Card in their own cardDeck------------
+                    for (int i = 0; i < numberOfPlayers; i++) {
+                        gameInstance->setActivePlayerIndex((captainIndex + i) % numberOfPlayers);
+                        activePlayer = playingPlayers.at(gameInstance->getActivePlayerIndex());
+                        gameInstance->setActivePlayer(activePlayer);
+                        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
+                        chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards);
+                        chooseCard = new engine::chooseCard(chosenCardId);
+                        chooseCard->launchCommand(gameInstance);
+
+                    }
+
                     gameInstance->request();
                     break;
 
