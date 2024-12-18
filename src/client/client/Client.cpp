@@ -1,6 +1,5 @@
 #include "client.h"
 #include "state.h"
-//#include "../shared/engine.h"
 #include "state/Player.h"
 #include "../shared/engine/ResourceManager.h"
 #include "../shared/engine/ChooseNbOfPlayers.h"
@@ -14,6 +13,7 @@
 #include "../shared/engine/ChoosePath.h"
 #include "../shared/engine/RollDice.h"
 #include "../shared/engine/StealResource.h"
+//#include "../shared/engine.h"
 
 #include <iostream>
 #include <limits>
@@ -31,7 +31,6 @@
 #define STEAL_RESOURCE_STATE 8
 #define GAME_OVER_STATE 9
 
-
 #define TREASURE 0
 #define GOLD 1
 #define FOOD 2
@@ -43,7 +42,6 @@
 #define LOCAL_AND_AI 4
 
 
-
 template <typename T, typename... Args>
 std::unique_ptr<T> make_unique(Args&&... args) {
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
@@ -53,10 +51,8 @@ std::unique_ptr<T> make_unique(Args&&... args) {
 namespace client {
     Client::Client()
     {
-        //-----------------------------
-        // instantiates a new Game context and runs concrete states "GameConfig" then "Playing" functions
-        //-----------------------------
-        Renderer renderer;
+        // Instantiates a new Game context and runs concrete state GameConfigState
+        Renderer renderer; //unused
         state::State *gameState = new state::GameConfigState();
         gameEngine = new engine::GameEngine(gameState);
         gameInstance = gameEngine->game;
@@ -64,6 +60,7 @@ namespace client {
     }
 
     int Client::launch(){
+        // Playing Modes
         running=true;
         //renderer-> show the correct window
         int playingMode = 1;
@@ -88,11 +85,11 @@ namespace client {
             //cliquer aux bons endroits pour choisir le mode de jeu souhaité
             std::cout << "We hope you enjoyed your game !" << std::endl;
             std::string waitConfirm;
-            std::cin >> waitConfirm; //wait user confirmation
+            //wait user confirmation
+            std::cin >> waitConfirm;
         }
         running = false;
         return 0;
-
 
     }
 
@@ -103,10 +100,9 @@ namespace client {
         // case where gameState is GAME_CONFIG_STATE:
         std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
         //do command truc
-        gameConfigInit();
+        gameConfigInit(); // is the gameconfiginit the same for every playing mode ?
 
-        // Initializing all the variables for the game loop
-        
+        // Init every game loop variable
         int numberOfPlayers = gameInstance->getPlayerList().size();
         int captainIndex;
         int die1;
@@ -115,22 +111,20 @@ namespace client {
         state::Player* activePlayer;
         int chosenCardId;
 
-        // Initializing all the commands for the game loop
-
+        // Init every game loop command
         engine::AssignDice* assignDice;
         engine::ChooseCard* chooseCard;
-        engine::AddToBoathold* addToBoathold;
-        engine::ResourceManager* resourceManager;
-        engine::ChoosePath* choosePath;
-        engine::ChooseCanons* chooseCanons;
-        engine::ChoosePlayerName* choosePlayerName;
+        engine::AddToBoathold* addToBoathold; //unused
+        engine::ResourceManager* resourceManager; //unused
+        engine::ChoosePath* choosePath; //unused
+        engine::ChooseCanons* chooseCanons; //unused
+        engine::ChoosePlayerName* choosePlayerName; //unused
 
-
+        // Game loop State behavior
         int endloop = 0;
         std::string waitConfirm;
         std::cout << "Client now entering the game loop\r\n" << std::endl;
         while (!endloop){
-            //state=gameState->getStateId();
             //on s'arrête là
             gameState = gameInstance->state->getStateId();
             switch (gameState){//gameState->getStateId()/*test1*/){
@@ -138,7 +132,6 @@ namespace client {
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
                     //do command truc
                     gameInstance->request();
-
                     break;
 
 
@@ -209,6 +202,11 @@ namespace client {
                     gameInstance->request();
                     break;
 
+                case STEAL_RESOURCE_STATE:
+                    std::cout << "Client now entering STEAL_RESOURCE_STATE\r\n" << std::endl;
+                    //do command truc
+                    gameInstance->request();
+                    break;
 
                 case GAME_OVER_STATE:
                     std::cout << "Client now entering GAME_OVER_STATE\r\n" << std::endl;
@@ -249,12 +247,14 @@ namespace client {
 
         state::Game *gameInstance = gameEngine->game;
 
+        // Sets number of player
         int playerNumber = inputHandler.getNumberofPlayers();
         std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
         engine::ChooseNbOfPlayers* chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
         chooseNbOfPlayers->launchCommand(gameInstance);
         delete chooseNbOfPlayers;
 
+        // Sets players' name
         for(int playerIndex = 0; playerIndex < playerNumber; playerIndex++){
             std::string playerName = inputHandler.getPlayerName(playerIndex);
             engine::ChoosePlayerName* choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
@@ -262,31 +262,30 @@ namespace client {
             delete choosePlayerName;
         }
 
+        // Sets MapSize
         int mapSize = inputHandler.getMapSize();
         std::cout <<"MapSize set to: " << std::to_string(mapSize)<< std::endl;
         engine::ChooseMapSize* chooseMapSize = new engine::ChooseMapSize(mapSize);
         chooseMapSize->launchCommand(gameInstance);
         delete chooseMapSize;
 
-        //-------------Initializes players' parameters------------
-
+        // Init players' position, treasures, gold, food
         const std::vector<state::Player*>& playingPlayers = gameInstance->getPlayerList();
         for (state::Player* player : playingPlayers) {
             player->setPosition(0);
-            // Treasure(bonus, malus)
             std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
             player->setTreasures(initialTreasures);
             auto goldResource = make_unique<state::Gold>();
-            engine::ResourceManager resource_manager;//A vire
+            engine::ResourceManager resource_manager;
             resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
             auto foodResource = make_unique<state::Food>();
-            resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);
-            //delete &resource_manager;   //bad idea         
+            resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);    
         }
 
+        // Displays Tiles' cost
         // Utiliser les blocs suivants pour gérer facilement le render !
         printf("Affichage de la map :\n");
-        std::cout<<"Tuile N°0 : Cette case représente Port Royal, il y a rien à payer ici." << std::endl;
+        std::cout<<"Tuile N°0 : Cette case représente Port Royal, il n'y a rien à payer ici." << std::endl;
         for (int i = 1; i < mapSize; i++) {
             std::cout<< "Tuile N°" << i << " contient : ";
             if(gameInstance->map->getResourceCost(i)>0) {
@@ -297,6 +296,7 @@ namespace client {
             }
         }
 
+        // Displays players' boatholds
         for(state::Player * player : gameInstance->getPlayerList()) {
             int i=0;
             std::cout<< "Cales de "<< player->getName()<<" :" << std::endl;
@@ -310,20 +310,6 @@ namespace client {
 
         // to be continued
 
-
-
-
-        // //-------------Initializes players' parameters------------
-        // const std::vector<state::Player*>& playingPlayers = game->getPlayerList();
-        // for (state::Player* player : playingPlayers) {
-        //   player->setPosition(0);
-        //   // Treasure(bonus, malus)
-        //   std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
-        //   player->setTreasures(initialTreasures);
-
-        // BoatHold()
-        //définir setBoatHolds
-        // Gold() + Food()
         //Un std::unique_ptr est un pointeur intelligent qui garantit
         //qu'il ne peut y avoir qu'un seul propriétaire de l'objet
         //pointé, assurant ainsi une gestion mémoire automatique et
@@ -332,26 +318,6 @@ namespace client {
         //au lieu d'en faire une copie, ce qui est essentiel pour les
         //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
         //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
-
-
-        //       auto goldResource = make_unique<state::Gold>();
-        //       engine::ResourceManager resource_manager;//A vire
-        //       resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
-        //       auto foodResource = make_unique<state::Food>();
-        //       resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);
-        //       int i=1;
-        //       for (state::BoatHold *bh: player->getBoatHolds()) {
-        //         std::cout<< "BoatHold N°" << i << " : " ;
-        //         bh->showContent();
-        //         i++;
-        //       }
-
-        //       // print le type et nombre de ressource du boathold : void BoatHold::showContents()
-        //       game->displayState();
-
-        //       std::cout<<"Player " << std::to_string(player->getPlayerId()) <<" (" + player->getName() << ") initialized at position " << std::to_string(player->getPosition())<< std::endl;
-        //     }
-        //     std::cout<<"Players initialized: " << std::to_string(playingPlayers.size()) << " players in the game."<< std::endl;
 
         return 0;
     }
