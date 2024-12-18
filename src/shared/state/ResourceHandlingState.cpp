@@ -13,12 +13,13 @@ void ResourceHandlingState::handle(){
 
     int quantityResource = 0;
     bool duel = false;
+    int boatholdIndex;
     Player * activePlayer = game->getActivePlayer();
     int activePlayerPos = activePlayer->getPosition();
     std::string resourceToPay = game->map->getResourceType(activePlayerPos);
     int resourceToPayCost = game->map->getResourceCost(activePlayerPos);
 
-    std::cout <<"coucou"<< std::endl;
+    std::cout <<"coucou\r\n"<< std::endl;
     // activeplayer's total resource quantity he can pay for resource1
     for (BoatHold *bh : activePlayer->getBoatHolds()) {
         if (bh->hasResourceType(resourceToPay)) {
@@ -35,15 +36,23 @@ void ResourceHandlingState::handle(){
     if(resourceToPayCost <= quantityResource){
         activePlayer->setBankrupt(false);
         if (duel){
+            std::cout <<"si pas bankrupt si duel\r\n"<< std::endl;
             std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
             game->transitionTo(new OpponentChoiceState);
             notifyObservers();
         }
         else{
-            activePlayer->payResource(resourceToPay, resourceToPayCost);            
+            std::cout <<"si pas bankrupt si pas duel\r\n"<< std::endl;
+            boatholdIndex = activePlayer->getChosenBoatholdIndex();
+            activePlayer->removeFromBoatHold(boatholdIndex, resourceToPayCost);
+            std::cout <<"si pas bankrupt si pas duel v2\r\n"<< std::endl;
+            std::cout <<"Transitioning to CardActionState state..."<< std::endl;
+            game->transitionTo(new CardActionState);
+            notifyObservers();          
         }
     }
     else{
+        std::cout <<"si bankrupt pas duel\r\n"<< std::endl;
         activePlayer->setBankrupt(true);
         // pas de duel
         // payer au max

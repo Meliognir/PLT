@@ -148,9 +148,6 @@ void Player::removeFromBoatHold(int boatholdIndex, int amount){
     selectedHold->removeResource(amount);
 }
 
-void Player::payResource (std::string type, int amount, int boatholdIndex){
-    this->removeFromBoatHold(boatholdIndex, amount);
-}
 
 bool Player::chooseTimeDice(int dice1, int dice2)
 { // à mettre dans client
@@ -291,6 +288,13 @@ void Player::setBankrupt(bool bankrupt)
     this->bankrupt = bankrupt;
 }
 
+int Player::getChosenBoatholdIndex() const
+{
+    return chosenBoatholdIndex;
+}
 
-
+void Player::setChosenBoatholdIndex(int chosenBoatholdIndex)
+{
+    this->chosenBoatholdIndex = chosenBoatholdIndex;
+}
 }
