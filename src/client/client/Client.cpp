@@ -107,7 +107,7 @@ namespace client {
 
         // Initializing all the variables for the game loop
         
-        int numberOfPlayers = gameInstance->getPlayerList().size;
+        int numberOfPlayers = gameInstance->getPlayerList().size();
         int captainIndex;
         int die1;
         int die2;
@@ -149,7 +149,7 @@ namespace client {
                     chosenDice=inputHandler.chooseTimeDice(die1,die2);
                     if (chosenDice==1){assignDice= new engine::AssignDice(die1,die2);}
                     else{assignDice= new engine::AssignDice(die2,die1);}
-                    dice->launchCommand(gameInstance);
+                    assignDice->launchCommand(gameInstance);
                     gameInstance->request();
                     break;
 
@@ -162,11 +162,11 @@ namespace client {
                     //-------------Every Player choose 1 Card in their own cardDeck------------
                     for (int i = 0; i < numberOfPlayers; i++) {
                         gameInstance->setActivePlayerIndex((captainIndex + i) % numberOfPlayers);
-                        activePlayer = playingPlayers.at(gameInstance->getActivePlayerIndex());
+                        activePlayer = gameInstance->getPlayerList().at(gameInstance->getActivePlayerIndex());
                         gameInstance->setActivePlayer(activePlayer);
                         std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
-                        chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards);
-                        chooseCard = new engine::chooseCard(chosenCardId);
+                        chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
+                        chooseCard = new engine::ChooseCard(gameInstance->getActivePlayerIndex(), chosenCardId);
                         chooseCard->launchCommand(gameInstance);
 
                     }
