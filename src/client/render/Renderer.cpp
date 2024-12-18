@@ -133,7 +133,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
         int playerPosition = player->getPosition();  // Position du joueur (index de la tuile)
 
         // Vérifier si la position est valide dans la carte
-        if (playerPosition >= 0 && playerPosition < map.listOfTiles.size()) {
+        if (playerPosition >= 0 && playerPosition < static_cast<int>(map.listOfTiles.size())) {
             // Calculer la position de la tuile correspondante
             float angleStep = 2 * PI / map.getSize();   // Angle entre chaque tuile
             float angle = playerPosition * angleStep;

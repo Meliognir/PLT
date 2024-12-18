@@ -49,6 +49,7 @@ void ResourceHandlingState::handle(){
     
     std::cout <<"Transitioning to CardAction state..."<< std::endl;
     game->transitionTo(new CardActionState);
+    notifyObservers();
 }
 
 
