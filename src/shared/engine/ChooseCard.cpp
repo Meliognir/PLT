@@ -1,10 +1,10 @@
 #include "ChooseCard.h"
+#include "../shared/state/Player.h"
 
-engine::ChooseCard::ChooseCard(int player, int card) : playerIndex(player), card(card){}
+engine::ChooseCard::ChooseCard(state::Player* playingPlayer, int card) : playingPlayer(playingPlayer), card(card){}
 
 void const engine::ChooseCard::launchCommand(state::Game *GamePtr){
-    state::Player* player = GamePtr->getPlayerList()[playerIndex];
-    player->setActiveCard(card);
+    playingPlayer->setActiveCard(card);
     return;
 }
 
