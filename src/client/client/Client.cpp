@@ -100,11 +100,13 @@ namespace client {
         bool chosenDice;
         state::Player* activePlayer;
         int chosenCardId;
+        int chosenBoatholdId;
+        int boatHoldCount;
 
         // Init every game loop command
         engine::AssignDice* assignDice;
         engine::ChooseCard* chooseCard;
-        engine::AddToBoathold* addToBoathold; //unused
+        engine::AddToBoathold* addToBoathold;
         engine::ResourceManager* resourceManager; //unused
         engine::ChoosePath* choosePath; //unused
         engine::ChooseCanons* chooseCanons; //unused
@@ -140,7 +142,8 @@ namespace client {
 
                     std::cout << "Client now entering CAPTAIN_DICE_STATE\r\n" << std::endl;
                     srand(time(NULL));
-                    captainIndex = (gameInstance->getCaptainIndex() +1)%numberOfPlayers;
+                    captainIndex = gameInstance->getCaptainIndex();
+                    if(gameInstance->getTurn() > 0){captainIndex = (captainIndex + 1) % numberOfPlayers;}
                     gameInstance->setCaptainIndex(captainIndex);
                     gameInstance->actionCounter = 0;
                     activePlayer = gameInstance->getPlayerList().at(captainIndex);
@@ -187,7 +190,7 @@ namespace client {
                         chooseCard->launchCommand(gameInstance);
                     }
 
-                    gameInstance->request();
+                    gameInstance->request(); // from cardchoicestate to cardactionstate
                     break;
 
 
@@ -205,36 +208,41 @@ namespace client {
                     gameInstance->setActivePlayerIndex(activePlayerIndex);
                     gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                     activePlayer = gameInstance->getActivePlayer();
-                    std::cout << "Player index "<< activePlayerIndex << ", id : " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;
-                    //gameInstance->displayState();
-                    //chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
-                    //chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
-                    //chooseCard->launchCommand(gameInstance);
-
-                                        
+                    std::cout << "Player index "<< activePlayerIndex << ", id : " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
 
 
-                    //à utiliser
-                    // dans state.dia payResource(type:std::string, amount:int, boatholdIndex:int):void
-                    //boatHoldCount = activePlayer->
-                    //chosenCardId = inputHandler.selectUserBoatHold(boatHoldCount);
-                    //addToBoathold = new engine::AddToBoathold(activePlayer, int boathold, int quantity, std::string resourceType);
-                    //addToBoathold->launchCommand(gameInstance);
-
-
+                    //ajouter logique de déplacement dans gameEngine car pas d'input
 
 
                     actionCounter += 1;
                     gameInstance->actionCounter = actionCounter;
 
-                    gameInstance->request(); // from cardactionstate to resourcehandlingstate or captaindicestate on condition
+                    gameInstance->request(); // from cardactionstate to resourcehandlingstate or captaindicestate if condition
                     break;
 
 
                 case RESOURCE_HANDLING_STATE:
                     std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
-                    //do command truc
-                    gameInstance->request();
+
+                    //QUESTION : qui se produit en premier ? : le code qui suit ou celui de resourcehandlingstate
+                    // car on a besoin du choix de boathold du joueur 
+
+                    //payer après déplacement
+                    boatHoldCount = activePlayer->getBoatHolds().size();
+                    //selectUserBoatHold ne check pas si la resource choisie est bien celle qu'il faut payer...
+                    // resourceManager ?
+                    //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                    // une nouvelle commande pour payer ? 
+                    
+
+                    //carte action resource
+                    boatHoldCount = activePlayer->getBoatHolds().size();
+                    //addToBoathold = new engine::AddToBoathold(activePlayer, chosenBoatholdId, quantity, std::string resourceType);
+                    //addToBoathold->launchCommand(gameInstance);
+                    //pas besoin de commande
+
+
+                    gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
                 break;
 
 
