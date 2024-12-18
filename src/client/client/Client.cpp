@@ -166,7 +166,7 @@ namespace client {
                         gameInstance->setActivePlayer(activePlayer);
                         std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
                         chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
-                        chooseCard = new engine::ChooseCard(gameInstance->getActivePlayerIndex(), chosenCardId);
+                        chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
                         chooseCard->launchCommand(gameInstance);
 
                     }
