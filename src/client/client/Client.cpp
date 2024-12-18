@@ -1,19 +1,7 @@
 #include "client.h"
 #include "state.h"
 #include "state/Player.h"
-#include "../shared/engine/ResourceManager.h"
-#include "../shared/engine/ChooseNbOfPlayers.h"
-#include "../shared/engine/ChoosePlayerName.h"
-#include "../shared/engine/ChooseMapSize.h"
-#include "../shared/engine/AddToBoathold.h"
-#include "../shared/engine/AssignDice.h"
-#include "../shared/engine/ChooseCanons.h"
-#include "../shared/engine/ChooseCard.h"
-#include "../shared/engine/ChooseOpponent.h"
-#include "../shared/engine/ChoosePath.h"
-#include "../shared/engine/RollDice.h"
-#include "../shared/engine/StealResource.h"
-//#include "../shared/engine.h"
+#include "../shared/engine.h"
 
 #include <iostream>
 #include <limits>
