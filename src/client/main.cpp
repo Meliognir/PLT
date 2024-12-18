@@ -20,7 +20,7 @@ using namespace std;
 using namespace state;
 using namespace engine; 
 
-void clientThreadFunction(client::Client* client, Game* game) {
+void clientThreadFunction(client::Client* client) {
     client->launch(); // Exécute la logique du client sur un thread séparé
 }
 
@@ -28,36 +28,43 @@ int main(int argc,char* argv[])
 {
     render::Renderer* renderer = new render::Renderer();
     client::Client *client = new client::Client();
-    Game * game = client->gameEngine->game;
+    Game * game = client->gameInstance;
     // Démarrer le thread pour le client
-    std::thread clientThread(clientThreadFunction, client, game);
+    std::thread clientThread(clientThreadFunction, client);
     // Attendre que la carte soit prête
-    while (!game->isMapInitialized()) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Pause pour éviter un busy-wait trop intense
+    while (client->running && !game->isMapInitialized()) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Pause pour éviter un busy-wait trop intense
     }
-    sf::RenderWindow window(sf::VideoMode(2100, 1400), "Parcours circulaire");
+
+    sf::RenderWindow *window;
+    if (client->running) {window = new sf::RenderWindow(sf::VideoMode(2100, 1400), "Parcours circulaire");}
     // Boucle principale pour le rendu
-    while (window.isOpen()) {
+    while (window->isOpen() && client->running) {
         sf::Event event;
-        while (window.pollEvent(event)) {
+        while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed)
-                window.close();
+                window->close();
         }
 
-        window.clear();
+        window->clear();
         // Appel à renderMap ici
         {
             if (game->map) {
-                renderer->renderMap(window, *game->map);
-                renderer->renderDice(window, Game::dayDie, Game::nightDie);
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, Game::dayDie, Game::nightDie);
             }
         }
         {
-        renderer->renderPlayers(window, game->getPlayerList(), *game->map);
+        renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
         }
-        window.display();
+        window->display();
     }
 
+
+    //When the window is closed, we need to stop the client thread too :   
+    //Use pthread instead of thread and request_stop() instead of join()   ?
+    //clientThread.request_stop();  ?
+    // while (!client->closing) {display();}
     clientThread.join();
     delete renderer;
     delete client;
