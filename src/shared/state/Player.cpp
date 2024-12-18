@@ -264,4 +264,15 @@ void Player::setFirePower(int firePower)
 {
     this->firePower=firePower;
 }
+
+bool Player::getBankrupt() const
+{
+    return bankrupt;
+}
+
+void Player::setBankrupt(bool bankrupt)
+{
+    this->bankrupt = bankrupt;
+}
+
 }
