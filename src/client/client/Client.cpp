@@ -157,6 +157,7 @@ namespace client {
                 case CARD_CHOICE_STATE:
                     std::cout << "Client now entering CARD_CHOICE_STATE\r\n" << std::endl;
                     //do command truc
+
                     captainIndex = gameInstance->getCaptainIndex();
 
                     //-------------Every Player choose 1 Card in their own cardDeck------------
@@ -165,12 +166,11 @@ namespace client {
                         activePlayer = gameInstance->getPlayerList().at(gameInstance->getActivePlayerIndex());
                         gameInstance->setActivePlayer(activePlayer);
                         std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely." << std::endl;
+                        gameInstance->displayState();
                         chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                         chooseCard = new engine::ChooseCard(gameInstance->getActivePlayerIndex(), chosenCardId);
                         chooseCard->launchCommand(gameInstance);
-
                     }
-
                     gameInstance->request();
                     break;
 
