@@ -208,6 +208,20 @@ namespace client {
                     //chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                     //chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
                     //chooseCard->launchCommand(gameInstance);
+
+                                        
+
+
+                    //à utiliser
+                    // dans state.dia payResource(type:std::string, amount:int, boatholdIndex:int):void
+                    //boatHoldCount = activePlayer->
+                    //chosenCardId = inputHandler.selectUserBoatHold(boatHoldCount);
+                    //addToBoathold = new engine::AddToBoathold(activePlayer, int boathold, int quantity, std::string resourceType);
+                    //addToBoathold->launchCommand(gameInstance);
+
+
+
+
                     actionCounter += 1;
                     gameInstance->actionCounter = actionCounter;
 
