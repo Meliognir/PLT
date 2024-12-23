@@ -3,6 +3,7 @@
 #include "CombatDefendingState.h"
 #include "Game.h"
 #include "Player.h"
+#include "Observable.h"
 #include <iostream>
 
 #define COMBAT_ATTACKING_STATE 6

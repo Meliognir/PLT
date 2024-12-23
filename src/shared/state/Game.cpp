@@ -113,7 +113,13 @@ void Game::request(){
     this->state->handle();
 }
 
-void Game::setTurn(int turn){
+int Game::getTurn() const
+{
+    return this->turn;
+}
+
+void Game::setTurn(int turn)
+{
 }
 
 const std::vector<Player *> &Game::getPlayerList() const{

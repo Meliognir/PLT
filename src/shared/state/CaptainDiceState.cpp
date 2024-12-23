@@ -1,6 +1,7 @@
 #include "CaptainDiceState.h"
 #include "CardChoiceState.h"
 #include "Game.h"
+#include "Observable.h"
 #include <iostream>
 
 #define CAPTAIN_DICE_STATE 1

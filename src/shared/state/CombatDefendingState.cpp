@@ -3,6 +3,7 @@
 #include "StealResourceState.h"
 #include "Game.h"
 #include "Player.h"
+#include "Observable.h"
 #include "iostream"
 
 #define COMBAT_DEFENDING_STATE 7

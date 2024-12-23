@@ -1,6 +1,7 @@
 #include "CardChoiceState.h"
 #include "CardActionState.h"
 #include "Game.h"
+#include "Observable.h"
 #include <iostream>
 
 

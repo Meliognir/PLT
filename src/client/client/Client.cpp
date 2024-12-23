@@ -143,7 +143,8 @@ namespace client {
                     std::cout << "Client now entering CAPTAIN_DICE_STATE\r\n" << std::endl;
                     srand(time(NULL));
                     captainIndex = gameInstance->getCaptainIndex();
-                    if(gameInstance->getTurn() > 0){captainIndex = (captainIndex + 1) % numberOfPlayers;}
+                    turn = gameInstance->getTurn();
+                    if(turn > 0){captainIndex = (captainIndex + 1) % numberOfPlayers;}
                     gameInstance->setCaptainIndex(captainIndex);
                     gameInstance->actionCounter = 0;
                     activePlayer = gameInstance->getPlayerList().at(captainIndex);
@@ -311,7 +312,7 @@ namespace client {
     {
 
         state::Game *gameInstance = gameEngine->game;
-
+        gameInstance->setTurn(0);
         // Sets number of player
         int playerNumber = inputHandler.getNumberofPlayers();
         std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;

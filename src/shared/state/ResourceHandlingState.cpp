@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "CardActionState.h"
 #include "OpponentChoiceState.h"
+#include "Observable.h"
 #include <iostream>
 #include "Map.h"
 

@@ -2,19 +2,16 @@
 // Created by trias on 18/12/24.
 //
 
+#include "AI.h"
 #include "HeuristicAI.h"
 #include <iostream>
 #include <cstdlib>
 #include <limits>
 
-int getRandomInput(int min, int max) {
-    return min + std::rand() % ((max - min) + 1);
-}
+#define HEURISTIC_PLACE_HOLDER 1
+
 
 ai::HeuristicAI::HeuristicAI() {}
-    //when demande input : rand() response
-
-
 
 
 std::string ai::HeuristicAI::getPlayerName(int playerIndex){
@@ -29,7 +26,7 @@ size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount){
     size_t index = 0;
     while (true) {
         std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
-        index=getRandomInput(0,5);
+        index=HEURISTIC_PLACE_HOLDER;
         if (index < 1 || index > boatHoldCount) {
             std::cout << "Invalid index. Please enter a number between 1 and " << boatHoldCount << ".\n";
             continue;
@@ -60,7 +57,7 @@ int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
 
     int choice = 0;
     std::cout<<"Choose a card, enter an index between 1 and 3:"<<std::endl;
-    choice=getRandomInput(1,3);
+    choice=HEURISTIC_PLACE_HOLDER;
 
     return choice;
 }
@@ -70,7 +67,7 @@ bool ai::HeuristicAI::chooseTimeDice(int die1, int die2){
     while (true) {
         std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
                   << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
-        input=getRandomInput(1,2);
+        input=HEURISTIC_PLACE_HOLDER;
         if (input == "1" || input == "2") {
             break;
         }
@@ -87,7 +84,10 @@ int ai::HeuristicAI::chooseCanonNb(int totalNb){
     int chosenNb = 0;
 
     std::cout << "You have " << totalNb << " available canons. How many do you want to use ? ";
-    chosenNb=getRandomInput(0,totalNb);
+    chosenNb=HEURISTIC_PLACE_HOLDER;
     return chosenNb;
 }
 
+ai::HeuristicAI::~HeuristicAI()
+{
+}

@@ -1,6 +1,7 @@
 #include "OpponentChoiceState.h"
 #include "Game.h"
 #include "CombatAttackingState.h"
+#include "Observable.h"
 #include <iostream>
 
 #define OPPONENT_CHOICE_STATE 5
