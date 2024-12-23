@@ -2,6 +2,7 @@
 // Created by trias on 18/12/24.
 //
 
+#include "AI.h"
 #include "RandomAI.h"
 #include <iostream>
 #include <cstdlib>
@@ -12,8 +13,6 @@ int getRandomInput(int min, int max) {
 }
 
 ai::RandomAI::RandomAI() {}
-    //when demande input : rand() response
-
 
 
 
@@ -91,3 +90,6 @@ int ai::RandomAI::chooseCanonNb(int totalNb){
     return chosenNb;
 }
 
+ai::RandomAI::~RandomAI()
+{
+}

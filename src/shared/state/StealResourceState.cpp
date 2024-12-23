@@ -1,5 +1,6 @@
 #include "StealResourceState.h"
 #include "ResourceHandlingState.h"
+#include "Observable.h"
 #include "Game.h"
 #include <iostream>
 

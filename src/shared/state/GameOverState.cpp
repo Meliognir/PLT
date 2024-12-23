@@ -6,6 +6,7 @@
 #include "BoatHold.h"
 #include <list>
 #include <unicode/urename.h>
+#include "Observable.h"
 #include <iostream>
 
 #include "Game.h"

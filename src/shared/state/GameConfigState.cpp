@@ -7,6 +7,7 @@
 #include "Food.h"
 #include "../../client/client/InputHandler.h"
 #include "../engine/ResourceManager.h"
+#include "Observable.h"
 #include <iostream>
 #include <vector>
 #include <memory>

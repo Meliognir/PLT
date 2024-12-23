@@ -18,13 +18,17 @@ add_library(${lib_shared_target} STATIC ${shared_sources} ${jsoncpp_sources}
         #state/PlayingState.cpp
         #state/GameConfigState.cpp
         #state/Player.cpp
+        #ai/RandomAI.cpp
+        #ai/HeuristicAI.cpp
+        #ai/DeepAI.cpp
+        #ai/AI.cpp
+        #state/Observable.cpp
         ../client/client/InputHandler.cpp
         engine/GameEngine.cpp
         state/GameOverState.cpp
         engine/CombatManager.cpp
-        state/CardActionState.cpp
-        ai/RandomAI.cpp
-        ai/HeuristicAI.cpp)
+        state/CardActionState.cpp)
+
 add_dependencies(${lib_shared_target} generate-headers)
 target_include_directories(${lib_shared_target} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
