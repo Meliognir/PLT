@@ -45,7 +45,7 @@ void ResourceHandlingState::handle(){
             std::cout <<"si pas bankrupt si pas duel\r\n"<< std::endl;
             boatholdIndex = activePlayer->getChosenBoatholdIndex();
             activePlayer->removeFromBoatHold(boatholdIndex, resourceToPayCost);
-            std::cout <<"si pas bankrupt si pas duel v2\r\n"<< std::endl;
+            std::cout <<"si pas bankrupt si pas duel fin\r\n"<< std::endl;
             std::cout <<"Transitioning to CardActionState state..."<< std::endl;
             game->transitionTo(new CardActionState);
             notifyObservers();          
