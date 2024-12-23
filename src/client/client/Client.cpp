@@ -228,7 +228,7 @@ namespace client {
                     //QUESTION : qui se produit en premier ? : le code qui suit ou celui de resourcehandlingstate
                     // car on a besoin du choix de boathold du joueur 
 
-                    //payer après déplacement
+                    //payer après déplacement après combat si combat
                     boatHoldCount = activePlayer->getBoatHolds().size();
                     //selectUserBoatHold ne check pas si la resource choisie est bien celle qu'il faut payer...
                     // resourceManager ?
