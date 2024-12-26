@@ -1,6 +1,3 @@
-//
-// Created by trias on 18/12/24.
-//
 
 #include "AI.h"
 #include "RandomAI.h"
@@ -18,7 +15,7 @@ ai::RandomAI::RandomAI() {}
 
 std::string ai::RandomAI::getPlayerName(int playerIndex){
     std::string playerName;
-    std::cout << "Enter name for player : Débutant";
+    std::cout << "Enter name for player : Débutant" << std::endl;
     playerName= "Débutant";
     return playerName;
 }
@@ -65,17 +62,11 @@ int ai::RandomAI::chooseCardFromHand(const std::vector<int>& handCards) {
 }
 
 bool ai::RandomAI::chooseTimeDice(int die1, int die2){
-    std::string input;
-    while (true) {
-        std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
-                  << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
-        input=getRandomInput(1,2);
-        if (input == "1" || input == "2") {
-            break;
-        }
-        std::cout << "Entrée invalide. Veuillez entrer '1' ou '2'.\n";
-    }
-    return input == "1";
+    int input;
+    std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
+              << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
+    input=getRandomInput(0,1);
+    return input == 1;
 }
 
 int ai::RandomAI::chooseCanonNb(int totalNb){
