@@ -60,6 +60,8 @@ void ResourceHandlingState::handle(){
 //         // reculer jusqu'à payer tout
 //     }
     
+    std::cout <<"Transitioning to CardAction state..."<< std::endl;
+    game->transitionTo(new CardActionState);
 //     std::cout <<"Transitioning to CardAction state..."<< std::endl;
 //     game->transitionTo(new CardActionState);
 //     notifyObservers();

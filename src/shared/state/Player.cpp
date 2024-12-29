@@ -114,7 +114,9 @@ bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans eng
 
 void Player::moveWithDirection (int distance, int direction){
     int currentPos = this->getPosition();
-    this->setPosition(currentPos + distance*direction);
+    int nextPos = currentPos + distance*direction;
+    if(nextPos > 0){this->setPosition(nextPos);}
+    else{this->setPosition(0);}
 }
 
 void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount, int skipSelection){
@@ -300,5 +302,37 @@ int Player::getChosenBoatholdIndex() const
 void Player::setChosenBoatholdIndex(int chosenBoatholdIndex)
 {
     this->chosenBoatholdIndex = chosenBoatholdIndex;
+}
+bool Player::getPrevDuel() const
+{
+    return this->prevDuel;
+}
+void Player::setPrevDuel(bool prevDuel)
+{
+    this->prevDuel = prevDuel;
+}
+bool Player::getHasToPay() const
+{
+    return this->hasToPay;
+}
+void Player::setHasToPay(bool hasToPay)
+{
+    this->hasToPay = hasToPay;
+}
+const std::string &Player::getResTypeToPay() const
+{
+    return this->resTypeToPay;
+}
+void Player::setResTypeToPay(const std::string &resTypeToPay)
+{
+    this->resTypeToPay = resTypeToPay;
+}
+int Player::getAmountToPay() const
+{
+    return this->amountToPay;
+}
+void Player::setAmountToPay(int amountToPay)
+{
+    this->amountToPay = amountToPay;
 }
 }

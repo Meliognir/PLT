@@ -22,8 +22,8 @@
 #define TREASURE 0
 #define GOLD 1
 #define FOOD 2
-#define FORWARD 1
-#define BACKWARD -1
+#define MOVE_FORWARD 0
+#define MOVE_BACKWARD 1
 
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
@@ -55,8 +55,8 @@ namespace client {
         //renderer-> show the correct window
         int playingMode = 1;
         while(playingMode){
-            playingMode = inputHandler.selectGameMode();
-            switch (playingMode){
+            playingMode = inputHandler.selectGameMode(); //Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)
+            switch (playingMode){                        //quel est le mode 3 ? c'est SINGLE_PLAYER ou IA ?
                 case EXIT_GAME :
                     break;
                 case LOCAL_MULTIPLAYER :
@@ -102,6 +102,7 @@ namespace client {
         bool chosenDice;
         state::Player* activePlayer;
         int chosenCardId;
+        state::ActionCard *actionCard;
         int chosenBoatholdId;
         int boatHoldCount;
 
@@ -186,13 +187,14 @@ namespace client {
                         gameInstance->setActivePlayerIndex(activePlayerIndex);
                         gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                         activePlayer = gameInstance->getActivePlayer();
-                        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely\r\n" << std::endl;
+                        std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely\r\n" << std::endl;
                         gameInstance->displayState();
                         chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                         chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
                         chooseCard->launchCommand(gameInstance);
                     }
-
+                    activePlayerIndex = captainIndex;
+                    gameInstance->setActivePlayerIndex(activePlayerIndex);
                     gameInstance->request(); // from cardchoicestate to cardactionstate
                     break;
 
@@ -207,19 +209,44 @@ namespace client {
 
                     std::cout << "Action number " << actionCounter << "\r\n" << std::endl;
                     // 2 actions day, night, 1 no action
-                    if(actionCounter%2 == 0){activePlayerIndex = (activePlayerIndex + 1) % numberOfPlayers;}
+                    if(actionCounter > 0 && actionCounter%2 == 0){activePlayerIndex = (activePlayerIndex + 1) % numberOfPlayers;}
                     gameInstance->setActivePlayerIndex(activePlayerIndex);
                     gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                     activePlayer = gameInstance->getActivePlayer();
-                    std::cout << "Player index "<< activePlayerIndex << ", id : " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
+                    std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
 
 
-                    //ajouter logique de déplacement dans gameEngine car pas d'input
+                    activePlayer->setPrevDuel(false);
+                    // logique de déplacement sans input
+                    chosenCardId = activePlayer->getActiveCard();
+                    // checker si l'action en cours est un mouvement
+                    actionCard = state::Game::collectionOfCards.at(chosenCardId);
+                    if(actionCounter%2 == 0){ //day
+                        std::cout << "actionCounter%2 == 0\r\n" << std::endl;
+                        std::cout << "getDayAction: " << actionCard->getDayAction() << ".\r\n" << std::endl;
 
+                        if(actionCard->getDayAction() == MOVE_FORWARD){
+                            activePlayer->moveWithDirection(gameInstance->dayDie, 1);
+                        }
+                        if(actionCard->getDayAction() == MOVE_BACKWARD){
+                            activePlayer->moveWithDirection(gameInstance->dayDie, -1);
+                        }
+                    }
+                    if(actionCounter%2 == 1){ //night
+                        std::cout << "actionCounter%2 == 1\r\n" << std::endl;
+                        std::cout << "getNightAction" << actionCard->getNightAction() << ".\r\n" << std::endl;
+                        if(actionCard->getNightAction() == MOVE_FORWARD){
+                            activePlayer->moveWithDirection(gameInstance->nightDie, 1);
+                        }
+                        if(actionCard->getNightAction() == MOVE_BACKWARD){
+                            activePlayer->moveWithDirection(gameInstance->nightDie, -1);
+                        }
+                    }
+                    std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
+                    //PB d'ordre de joueur faisant l'action
 
                     actionCounter += 1;
                     gameInstance->actionCounter = actionCounter;
-
                     gameInstance->request(); // from cardactionstate to resourcehandlingstate or captaindicestate if condition
                     break;
 
