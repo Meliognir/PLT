@@ -22,6 +22,8 @@
 #define TREASURE 0
 #define GOLD 1
 #define FOOD 2
+#define FORWARD 1
+#define BACKWARD -1
 
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
@@ -226,10 +228,17 @@ namespace client {
                     std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
 
                     //QUESTION : qui se produit en premier ? : le code qui suit ou celui de resourcehandlingstate
-                    // car on a besoin du choix de boathold du joueur 
+                    // car on a besoin du choix de boathold du joueur
+                    // => c'est le code de  
+                    
+                    
+
+
+
+
 
                     //payer après déplacement après combat si combat
-                    boatHoldCount = activePlayer->getBoatHolds().size();
+                    //boatHoldCount = activePlayer->getBoatHolds().size();
                     //selectUserBoatHold ne check pas si la resource choisie est bien celle qu'il faut payer...
                     // resourceManager ?
                     //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
@@ -237,7 +246,7 @@ namespace client {
                     
 
                     //carte action resource
-                    boatHoldCount = activePlayer->getBoatHolds().size();
+                    //boatHoldCount = activePlayer->getBoatHolds().size();
                     //addToBoathold = new engine::AddToBoathold(activePlayer, chosenBoatholdId, quantity, std::string resourceType);
                     //addToBoathold->launchCommand(gameInstance);
                     //pas besoin de commande
