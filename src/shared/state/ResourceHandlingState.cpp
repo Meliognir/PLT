@@ -12,61 +12,79 @@ namespace state {
 
 void ResourceHandlingState::handle(){
 
-    int quantityResource = 0;
-    bool duel = false;
-    int boatholdIndex;
+    int nbOpponent = 0;
     Player * activePlayer = game->getActivePlayer();
-    int activePlayerPos = activePlayer->getPosition();
-    std::string resourceToPay = game->map->getResourceType(activePlayerPos);
-    int resourceToPayCost = game->map->getResourceCost(activePlayerPos);
-
+    
     std::cout <<"coucou\r\n"<< std::endl;
-    // activeplayer's total resource quantity he can pay for resource1
+
+    //player's total resource quantity he can pay for resourcetoPayType
+    int activePlayerPos = activePlayer->getPosition();
+    std::string resourceToPayType = game->map->getResourceType(activePlayerPos);
+    int resourceToPayCost = game->map->getResourceCost(activePlayerPos);
+    int quantityResource = 0;
     for (BoatHold *bh : activePlayer->getBoatHolds()) {
-        if (bh->hasResourceType(resourceToPay)) {
+        if (bh->hasResourceType(resourceToPayType)) {
             quantityResource += bh->getQuantity();
         }
     }
-    // checks activeplayer's opponent presence
+    std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " " << resourceToPayType << "\r\n"<< std::endl;
+    std::cout <<"the tile costs: " << resourceToPayCost << " " << resourceToPayType << "\r\n"<< std::endl;
+
+    //player can't pay
+    while(quantityResource < resourceToPayCost){
+        
+        //player pays as much as he can afford
+        activePlayer->setResTypeToPay(resourceToPayType);
+        activePlayer->setAmountToPay(quantityResource);
+        activePlayer->setHasToPay(true);
+
+        //player moves backward
+        activePlayer->moveWithDirection(1, -1);
+        activePlayer->setPrevDuel(false);
+
+        //player's total resource quantity he can pay for resourcetoPayType
+        activePlayerPos = activePlayer->getPosition();
+        resourceToPayType = game->map->getResourceType(activePlayerPos);
+        resourceToPayCost = game->map->getResourceCost(activePlayerPos);
+        quantityResource = 0;
+        for (BoatHold *bh : activePlayer->getBoatHolds()) {
+            if (bh->hasResourceType(resourceToPayType)) {
+                quantityResource += bh->getQuantity();
+            }
+        }
+        std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " " << resourceToPayType << "\r\n"<< std::endl;
+        std::cout <<"the tile costs: " << resourceToPayCost << " " << resourceToPayType << "\r\n"<< std::endl;
+    }
+
+    //checks activeplayer's opponent presence
     for (Player *player : game->getPlayerList()) {
         if (player->getPosition() == activePlayerPos) {
-            duel = true;
+            nbOpponent += 1;
         }
     }
-//     // don't forget to check path
-//     if(resourceToPayCost <= quantityResource){
-//         activePlayer->setBankrupt(false);
-//         if (duel){
-//             std::cout <<"si pas bankrupt si duel\r\n"<< std::endl;
-//             std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
-//             game->transitionTo(new OpponentChoiceState);
-//             notifyObservers();
-//         }
-//         else{
-//             std::cout <<"si pas bankrupt si pas duel\r\n"<< std::endl;
-//             boatholdIndex = activePlayer->getChosenBoatholdIndex();
-//             activePlayer->removeFromBoatHold(boatholdIndex, resourceToPayCost);
-//             std::cout <<"si pas bankrupt si pas duel fin\r\n"<< std::endl;
-//             std::cout <<"Transitioning to CardActionState state..."<< std::endl;
-//             game->transitionTo(new CardActionState);
-//             notifyObservers();          
-//         }
-//     }
-//     else{
-//         std::cout <<"si bankrupt pas duel\r\n"<< std::endl;
-//         activePlayer->setBankrupt(true);
-//         // pas de duel
-//         // payer au max
-//         // reculer jusqu'à payer tout
-//     }
-    
-    std::cout <<"Transitioning to CardAction state..."<< std::endl;
-    game->transitionTo(new CardActionState);
-//     std::cout <<"Transitioning to CardAction state..."<< std::endl;
-//     game->transitionTo(new CardActionState);
-//     notifyObservers();
-}
+    std::cout <<"there is: " << nbOpponent << "opponents on this tile\r\n"<< std::endl;
 
+    //condition for duel
+    if(nbOpponent > 0 && !(activePlayer->getPrevDuel())){
+        std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
+        game->transitionTo(new OpponentChoiceState);
+        notifyObservers();
+    }
+    //condition to exit ResourceHandlingState
+    if(nbOpponent == 0 || activePlayer->getPrevDuel()){
+        //player pays resourceToPayCost
+        activePlayer->setResTypeToPay(resourceToPayType);
+        activePlayer->setAmountToPay(resourceToPayCost);
+        activePlayer->setHasToPay(true);
+        std::cout <<"Transitioning to CardActionState state..."<< std::endl;
+        game->transitionTo(new CardActionState);
+        notifyObservers();  
+    }
+    
+    // std::cout <<"Transitioning to CardAction state..."<< std::endl;
+    // game->transitionTo(new CardActionState);
+    // notifyObservers();
+}
 
 ResourceHandlingState::~ResourceHandlingState(){
     std::cout <<"destructor called"<< std::endl;
@@ -75,6 +93,5 @@ ResourceHandlingState::~ResourceHandlingState(){
 int ResourceHandlingState::getStateId(){
     return RESOURCE_HANDLING_STATE;
 }
-
 
 }

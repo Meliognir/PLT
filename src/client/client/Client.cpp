@@ -243,8 +243,7 @@ namespace client {
                         }
                     }
                     std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
-                    //PB d'ordre de joueur faisant l'action
-
+                    
                     actionCounter += 1;
                     gameInstance->actionCounter = actionCounter;
                     gameInstance->request(); // from cardactionstate to resourcehandlingstate or captaindicestate if condition
@@ -258,26 +257,22 @@ namespace client {
                     // car on a besoin du choix de boathold du joueur
                     // => c'est le code de  
                     
+                    if(activePlayer->getHasToPay()){
+                        boatHoldCount = activePlayer->getBoatHolds().size();
+                        chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount); // ajouter condition
+                        //activePlayer->removeFromBoatHold(chosenBoatholdId, activePlayer->getAmountToPay(), activePlayer->getResTypeToPay()); // à faire dans une nouvelle commande
+                        activePlayer->setHasToPay(false);
+                    }
                     
-
-
-
-
-
-                    //payer après déplacement après combat si combat
-                    //boatHoldCount = activePlayer->getBoatHolds().size();
                     //selectUserBoatHold ne check pas si la resource choisie est bien celle qu'il faut payer...
                     // resourceManager ?
-                    //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
-                    // une nouvelle commande pour payer ? 
+                    // une nouvelle commande pour removeResource ? 
                     
-
                     //carte action resource
                     //boatHoldCount = activePlayer->getBoatHolds().size();
                     //addToBoathold = new engine::AddToBoathold(activePlayer, chosenBoatholdId, quantity, std::string resourceType);
                     //addToBoathold->launchCommand(gameInstance);
                     //pas besoin de commande
-
 
                     gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
                 break;
