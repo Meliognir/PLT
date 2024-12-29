@@ -112,6 +112,11 @@ bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans eng
     return combatManager.chooseOpponent(opponentsList, name);
 }*/
 
+void Player::moveWithDirection (int distance, int direction){
+    int currentPos = this->getPosition();
+    this->setPosition(currentPos + distance*direction);
+}
+
 void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount, int skipSelection){
     auto& boatHolds = getBoatHolds();
     state::BoatHold *selectedHold;
@@ -147,7 +152,6 @@ void Player::removeFromBoatHold(int boatholdIndex, int amount){
     selectedHold = boatHolds[boatholdIndex-1];
     selectedHold->removeResource(amount);
 }
-
 
 bool Player::chooseTimeDice(int dice1, int dice2)
 { // à mettre dans client
