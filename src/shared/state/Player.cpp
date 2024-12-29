@@ -97,20 +97,20 @@ void Player::moveCardToDeck() {
     activeCard = -1;
 }
 
-bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans engine
-    opponentsList.clear();
-    for (Player* otherPlayer : playerList) {
-        if (otherPlayer != this && otherPlayer->getPosition() == this->getPosition()) {
-            opponentsList.push_back(otherPlayer);
-        }    
-    }
-    return !opponentsList.empty();
-}
+// bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans engine
+//     opponentsList.clear();
+//     for (Player* otherPlayer : playerList) {
+//         if (otherPlayer != this && otherPlayer->getPosition() == this->getPosition()) {
+//             opponentsList.push_back(otherPlayer);
+//         }    
+//     }
+//     return !opponentsList.empty();
+// }
 
-/*Player* Player::chooseOpponent(){
-    engine::CombatManager combatManager;
-    return combatManager.chooseOpponent(opponentsList, name);
-}*/
+// Player* Player::chooseOpponent(){
+//     engine::CombatManager combatManager;
+//     return combatManager.chooseOpponent(opponentsList, name);
+// }
 
 void Player::moveWithDirection (int distance, int direction){
     int currentPos = this->getPosition();
@@ -120,13 +120,13 @@ void Player::moveWithDirection (int distance, int direction){
 }
 
 void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount, int skipSelection){
-    auto& boatHolds = getBoatHolds();
+    auto& boatHolds = this->getBoatHolds();
     state::BoatHold *selectedHold;
     if (skipSelection){
-        selectedHold = getBoatHolds().at(skipSelection-1);
+        selectedHold = boatHolds.at(skipSelection-1);
     }
     else {
-        selectedHold = boatHolds[boatholdIndex-1];
+        selectedHold = boatHolds.at(boatholdIndex-1);
     }
     int quantityToRemove = selectedHold->getQuantity();
     selectedHold->removeResource(quantityToRemove);
@@ -149,32 +149,32 @@ void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex,
 }
 
 void Player::removeFromBoatHold(int boatholdIndex, int amount){
-    auto& boatHolds = getBoatHolds();
+    auto& boatHolds = this->getBoatHolds();
     state::BoatHold *selectedHold;
-    selectedHold = boatHolds[boatholdIndex-1];
+    selectedHold = boatHolds.at(boatholdIndex-1);
     selectedHold->removeResource(amount);
 }
 
-bool Player::chooseTimeDice(int dice1, int dice2)
-{ // à mettre dans client
-    std::string input;
-    while (true){
-        std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n" << "dé 1 : " << dice1 << " dé 2 : " << dice2 << std::endl;
-        std::cin >> input;
-        if (input == "1" || input == "2"){
-            break;
-        } else {
-            std::cout << "Entrée invalide. Veuillez entrer '1' ou '2'.\n";
-        }
-    }
-    if (input == "1"){
-        std::cout << "Le dé " << dice1 << " sera le dé du jour. Le dé " << dice2 << " sera le dé de la nuit." << std::endl;
-        return true;
-    } else {
-        std::cout << "Le dé " << dice2 << " sera le dé du jour. Le dé " << dice1 << " sera le dé de la nuit." << std::endl;
-        return false;
-    }
-}
+// bool Player::chooseTimeDice(int dice1, int dice2)
+// { // à mettre dans client
+//     std::string input;
+//     while (true){
+//         std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n" << "dé 1 : " << dice1 << " dé 2 : " << dice2 << std::endl;
+//         std::cin >> input;
+//         if (input == "1" || input == "2"){
+//             break;
+//         } else {
+//             std::cout << "Entrée invalide. Veuillez entrer '1' ou '2'.\n";
+//         }
+//     }
+//     if (input == "1"){
+//         std::cout << "Le dé " << dice1 << " sera le dé du jour. Le dé " << dice2 << " sera le dé de la nuit." << std::endl;
+//         return true;
+//     } else {
+//         std::cout << "Le dé " << dice2 << " sera le dé du jour. Le dé " << dice1 << " sera le dé de la nuit." << std::endl;
+//         return false;
+//     }
+// }
 
 int Player::rollCombatDie(){
     const int dieValues[] = {2, 4, 6, 8, 10, STAR};

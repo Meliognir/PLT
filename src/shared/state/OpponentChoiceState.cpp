@@ -1,4 +1,5 @@
 #include "OpponentChoiceState.h"
+#include "ResourceHandlingState.h"
 #include "Game.h"
 #include "CombatAttackingState.h"
 #include "Observable.h"
@@ -8,15 +9,20 @@
 
 namespace state{
 void OpponentChoiceState::handle(){
-    //don't forget the activePlayer->getBankrupt == true
 
+    Player * activePlayer = game->getActivePlayer();
 
-
-
+    activePlayer->setPrevDuel(true); // à déplacer après la fin du combat dans stealresourcestate
     
-    std::cout <<"Transitioning to CombatAttacking state..."<< std::endl;
-    game->transitionTo(new CombatAttackingState);
+    //test
+    std::cout <<"Transitioning to ResourceHandlingState state..."<< std::endl;
+    game->transitionTo(new ResourceHandlingState);
     notifyObservers();
+
+    //à décommenter
+    // std::cout <<"Transitioning to CombatAttacking state..."<< std::endl;
+    // game->transitionTo(new CombatAttackingState);
+    // notifyObservers();
 }
 
 OpponentChoiceState::~OpponentChoiceState(){
