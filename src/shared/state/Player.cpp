@@ -114,7 +114,8 @@ void Player::moveCardToDeck() {
 
 void Player::moveWithDirection (int distance, int direction){
     int currentPos = this->getPosition();
-    int nextPos = currentPos + distance*direction;
+    signed int nextPos = currentPos + distance*direction;
+    std::cout << "nextPos" << nextPos << "\r\n" << std::endl;
     if(nextPos > 0){this->setPosition(nextPos);}
     else{this->setPosition(0);}
 }

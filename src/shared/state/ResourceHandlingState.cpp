@@ -13,7 +13,7 @@ namespace state {
 void ResourceHandlingState::handle(){
 
     int nbOpponent = 0;
-    Player * activePlayer = game->getActivePlayer();
+    Player *activePlayer = game->getActivePlayer();
     
     std::cout <<"coucou\r\n"<< std::endl;
 
@@ -62,7 +62,8 @@ void ResourceHandlingState::handle(){
             nbOpponent += 1;
         }
     }
-    std::cout <<"there is: " << nbOpponent << "opponents on this tile\r\n"<< std::endl;
+    nbOpponent -= 1;
+    std::cout <<"there are: " << nbOpponent << " opponents on this tile\r\n"<< std::endl;
 
     //condition for duel
     if(nbOpponent > 0 && !(activePlayer->getPrevDuel())){
@@ -81,9 +82,6 @@ void ResourceHandlingState::handle(){
         notifyObservers();  
     }
     
-    // std::cout <<"Transitioning to CardAction state..."<< std::endl;
-    // game->transitionTo(new CardActionState);
-    // notifyObservers();
 }
 
 ResourceHandlingState::~ResourceHandlingState(){

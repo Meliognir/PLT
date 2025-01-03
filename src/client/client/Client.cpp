@@ -110,10 +110,8 @@ namespace client {
         engine::AssignDice* assignDice;
         engine::ChooseCard* chooseCard;
         engine::AddToBoathold* addToBoathold;
-        engine::ResourceManager* resourceManager; //unused
         engine::ChoosePath* choosePath; //unused
         engine::ChooseCanons* chooseCanons; //unused
-        engine::ChoosePlayerName* choosePlayerName; //unused
 
         // Game loop State behavior
         int endloop = 0;
@@ -215,7 +213,7 @@ namespace client {
                     activePlayer = gameInstance->getActivePlayer();
                     std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
 
-
+                    
                     activePlayer->setPrevDuel(false);
                     // logique de déplacement sans input
                     chosenCardId = activePlayer->getActiveCard();
@@ -254,19 +252,32 @@ namespace client {
                     std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
 
                     //QUESTION : qui se produit en premier ? : le code qui suit ou celui de resourcehandlingstate
-                    // car on a besoin du choix de boathold du joueur
-                    // => c'est le code de  
+                    // car on a besoin du choix de boathold du joueur après déplacement
+                    // => c'est le code de 
                     
+                    //player selects boatholds to pay
                     if(activePlayer->getHasToPay()){
                         boatHoldCount = activePlayer->getBoatHolds().size();
-                        chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount); // ajouter condition
-                        //activePlayer->removeFromBoatHold(chosenBoatholdId, activePlayer->getAmountToPay(), activePlayer->getResTypeToPay()); // à faire dans une nouvelle commande
+                        std::string resTypeToPay = activePlayer->getResTypeToPay();
+                        int remainToPay = activePlayer->getAmountToPay();
+
+                        while (remainToPay != 0){
+                            auto boatHolds = activePlayer->getBoatHolds();
+                            chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                            if(boatHolds.at(chosenBoatholdId)->getResourceType() != resTypeToPay){
+                                std::cout << "Invalid Resource Type. Please choose a BoatHold with: " << resTypeToPay << ".\n";
+                                continue;
+                            }
+                            state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
+                            int boatHoldQuantity = bh->getQuantity();
+                            remainToPay = activePlayer->getAmountToPay() - boatHoldQuantity;
+                            activePlayer->removeFromBoatHold(chosenBoatholdId, remainToPay);// à faire dans une nouvelle commande
+                            activePlayer->setAmountToPay(remainToPay);
+                        }
                         activePlayer->setHasToPay(false);
                     }
                     
-                    //selectUserBoatHold ne check pas si la resource choisie est bien celle qu'il faut payer...
                     // resourceManager ?
-                    // une nouvelle commande pour removeResource ? 
                     
                     //carte action resource
                     //boatHoldCount = activePlayer->getBoatHolds().size();
@@ -342,17 +353,22 @@ namespace client {
     int Client::gameConfigInit()
     {
 
+        engine::ChooseNbOfPlayers* chooseNbOfPlayers;
+        engine::ChooseAI* chooseAI;
+        engine::ChoosePlayerName* choosePlayerName;
+        engine::ChooseMapSize* chooseMapSize;
+        engine::ResourceManager resource_manager;
+        
         state::Game *gameInstance = gameEngine->game;
         gameInstance->setTurn(0);
         // Sets number of player
         int playerNumber = inputHandler.getNumberofPlayers();
         std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
-        engine::ChooseNbOfPlayers* chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
+        chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
         chooseNbOfPlayers->launchCommand(gameInstance);
         delete chooseNbOfPlayers;
 
         // Sets players' name and choose AIs ?
-        engine::ChooseAI* chooseAI;
         state::Player* currentPlayer;
         int levelAI = 0;
         for(int playerIndex = 0; playerIndex < playerNumber; playerIndex++){
@@ -371,7 +387,7 @@ namespace client {
             else { // AI input
                 playerName = currentPlayer->get_AI()->getPlayerName(playerIndex);
             }
-            engine::ChoosePlayerName* choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
+            choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
             choosePlayerName->launchCommand(gameInstance);
             delete choosePlayerName;
         }
@@ -379,7 +395,7 @@ namespace client {
         // Sets MapSize
         int mapSize = inputHandler.getMapSize();
         std::cout <<"MapSize set to: " << std::to_string(mapSize)<< std::endl;
-        engine::ChooseMapSize* chooseMapSize = new engine::ChooseMapSize(mapSize);
+        chooseMapSize = new engine::ChooseMapSize(mapSize);
         chooseMapSize->launchCommand(gameInstance);
         delete chooseMapSize;
 
@@ -390,7 +406,6 @@ namespace client {
             std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
             player->setTreasures(initialTreasures);
             auto goldResource = make_unique<state::Gold>();
-            engine::ResourceManager resource_manager;
             resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
             auto foodResource = make_unique<state::Food>();
             resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);    

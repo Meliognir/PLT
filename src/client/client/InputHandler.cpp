@@ -1,4 +1,5 @@
 #include "InputHandler.h"
+#include "../../shared/state/BoatHold.h"
 #include <iostream>
 #include <string>
 #include <limits>
@@ -9,12 +10,14 @@
 #define ONLINE_MULTIPLAYER 2
 #define SINGLE_PLAYER 3
 
+using state::BoatHold;
+
 namespace client{
 
 InputHandler::InputHandler(){
 }
 
-int client::InputHandler::getNumberofPlayers() {
+int InputHandler::getNumberofPlayers() {
     int playerNumber = 0;
 
     while (true) {
@@ -33,7 +36,7 @@ int client::InputHandler::getNumberofPlayers() {
     return playerNumber;
 }
 
-std::string client::InputHandler::getPlayerName(int playerIndex){
+std::string InputHandler::getPlayerName(int playerIndex){
     std::string playerName;
     std::cout << "Enter name for player " << playerIndex+1 << ": ";
     std::cin >> playerName;

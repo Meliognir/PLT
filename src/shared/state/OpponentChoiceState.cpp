@@ -10,7 +10,7 @@
 namespace state{
 void OpponentChoiceState::handle(){
 
-    Player * activePlayer = game->getActivePlayer();
+    Player *activePlayer = game->getActivePlayer();
 
     activePlayer->setPrevDuel(true); // à déplacer après la fin du combat dans stealresourcestate
     
