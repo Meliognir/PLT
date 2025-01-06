@@ -20,10 +20,13 @@
 #define GAME_OVER_STATE 9
 
 #define TREASURE 0
-#define GOLD 1
-#define FOOD 2
+
 #define MOVE_FORWARD 0
 #define MOVE_BACKWARD 1
+#define ADD_FOOD 2
+#define ADD_GOLD 3
+#define ADD_CANONS 4
+
 
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
@@ -105,10 +108,15 @@ namespace client {
         int chosenCardId;
         state::ActionCard *actionCard;
         int chosenBoatholdId;
+        std::string chosenBoatholdResType;
         int boatHoldCount;
         int remainToPay;
         std::string resTypeToPay;
         int boatHoldQuantity;
+        std::string resTypeToAdd;
+        int actionType;
+        int currentDie;
+        bool validChosenBoathold;
 
         // Init every game loop command
         engine::AssignDice* assignDice;
@@ -215,40 +223,67 @@ namespace client {
                     gameInstance->setActivePlayerIndex(activePlayerIndex);
                     gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                     activePlayer = gameInstance->getActivePlayer();
-                    std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
+                    std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
 
-                    
                     activePlayer->setPrevDuel(false);
                     activePlayer->setHasMoved(false);
+
                     // logique de déplacement sans input
                     chosenCardId = activePlayer->getActiveCard();
-                    // checker si l'action en cours est un mouvement
+                    // checks if current action is a movement or a Resource, do we use resourceManager ?
                     actionCard = state::Game::collectionOfCards.at(chosenCardId);
+                    boatHoldCount = activePlayer->getBoatHolds().size();
                     if(actionCounter%2 == 0){ //day
                         std::cout << "actionCounter%2 == 0\r\n" << std::endl;
-                        std::cout << "getDayAction: " << actionCard->getDayAction() << ".\r\n" << std::endl;
-                        if(actionCard->getDayAction() == MOVE_FORWARD){
-                            activePlayer->setHasMoved(true);
-                            activePlayer->moveWithDirection(gameInstance->dayDie, 1);
-                        }
-                        if(actionCard->getDayAction() == MOVE_BACKWARD){
-                            activePlayer->setHasMoved(true);
-                            activePlayer->moveWithDirection(gameInstance->dayDie, -1);
-                        }
+                        actionType = actionCard->getDayAction();
+                        currentDie = gameInstance->dayDie;
+                        std::cout << "getDayAction: " << actionType << ".\r\n" << std::endl;
                     }
                     if(actionCounter%2 == 1){ //night
                         std::cout << "actionCounter%2 == 1\r\n" << std::endl;
-                        std::cout << "getNightAction" << actionCard->getNightAction() << ".\r\n" << std::endl;
-                        if(actionCard->getNightAction() == MOVE_FORWARD){
-                            activePlayer->setHasMoved(true);
-                            activePlayer->moveWithDirection(gameInstance->nightDie, 1);
-                        }
-                        if(actionCard->getNightAction() == MOVE_BACKWARD){
-                            activePlayer->setHasMoved(true);
-                            activePlayer->moveWithDirection(gameInstance->nightDie, -1);
-                        }
+                        actionType = actionCard->getNightAction();
+                        currentDie = gameInstance->nightDie;
+                        std::cout << "getNightAction" << actionType << ".\r\n" << std::endl;
                     }
-                    
+                    switch (actionType)
+                    {
+                    case MOVE_FORWARD:
+                        activePlayer->setHasMoved(true);
+                        activePlayer->moveWithDirection(currentDie, 1);
+                        break;
+                    case MOVE_BACKWARD:
+                        activePlayer->setHasMoved(true);
+                        activePlayer->moveWithDirection(currentDie, -1);
+                        break;
+                    case ADD_FOOD:
+                        resTypeToAdd = "Food";
+                        break;
+                    case ADD_GOLD:
+                        resTypeToAdd = "Gold";
+                        break;
+                    case ADD_CANONS:
+                        resTypeToAdd = "Canon";
+                        break;
+                    default:
+                        break;
+                    }
+                    if(actionType != MOVE_BACKWARD && actionType != MOVE_FORWARD){
+                        std::cout << "Player: "<< activePlayer->getName() << " receives: " << currentDie << " " << resTypeToAdd << ", Please choose a BoatHold to store this Resource\n";
+                        validChosenBoathold = false;
+                        while(!validChosenBoathold){
+                            auto boatHolds = activePlayer->getBoatHolds();
+                            chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                            chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
+                            if(chosenBoatholdResType == resTypeToAdd){
+                                std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
+                                continue;
+                            }
+                            validChosenBoathold = true;
+                        }
+                        addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId + 1, currentDie, resTypeToAdd);
+                        addToBoathold->launchCommand(gameInstance);
+                    }
+
                     std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
                     
                     actionCounter += 1;
@@ -265,7 +300,8 @@ namespace client {
                     // => c'est le code de 
                     
                     //player selects boatholds to pay
-                    if(activePlayer->getHasToPay()){
+                    //prevents from paying two times the same tile
+                    if(activePlayer->getHasToPay() && activePlayer->getHasMoved()){
                         boatHoldCount = activePlayer->getBoatHolds().size();
                         resTypeToPay = activePlayer->getResTypeToPay();
                         remainToPay = activePlayer->getAmountToPay();
@@ -273,7 +309,7 @@ namespace client {
                         while (remainToPay > 0){
                             auto boatHolds = activePlayer->getBoatHolds();
                             chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
-                            std::string chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
+                            chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
                             if(chosenBoatholdResType != resTypeToPay){
                                 std::cout << "Invalid Resource Type. You chose a Boathold with: " << chosenBoatholdResType << " Please choose a BoatHold with: " << resTypeToPay << ".\n";
                                 continue;
@@ -294,15 +330,6 @@ namespace client {
                         }
                         activePlayer->setHasToPay(false);
                     }
-
-                
-                    // resourceManager ?
-                    
-                    //carte action resource
-                    //boatHoldCount = activePlayer->getBoatHolds().size();
-                    //addToBoathold = new engine::AddToBoathold(activePlayer, chosenBoatholdId, quantity, std::string resourceType);
-                    //addToBoathold->launchCommand(gameInstance);
-                    //pas besoin de commande
 
                     gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
                 break;

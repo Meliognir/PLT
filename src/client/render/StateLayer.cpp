@@ -48,14 +48,13 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
             }
             
             case CARD_CHOICE_STATE:{
-                if (!game->getActivePlayer()) {
-                    std::cout << "Waiting for active player initialization...\n";
-                    break;
-                }
-                std::vector<int> playerHand = game->getActivePlayer()->getHandCards();
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                if (!game->getActivePlayer()) {
+                    break;
+                }
+                std::vector<int> playerHand = game->getActivePlayer()->getHandCards();
                 renderer->renderHand(*window, playerHand);
                 break;
             }
@@ -64,11 +63,19 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                if (!game->getActivePlayer()) {
+                    break;
+                }
+                renderer->renderBoatholds(*window, game->getActivePlayer());
                 break;}
             case RESOURCE_HANDLING_STATE: {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                if (!game->getActivePlayer()) {
+                    break;
+                }
+                renderer->renderBoatholds(*window, game->getActivePlayer());
                 break;
             }
             case OPPONENT_CHOICE_STATE:{
