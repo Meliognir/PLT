@@ -69,7 +69,7 @@ size_t InputHandler::selectUserBoatHold(size_t boatHoldCount){
             std::cout << "Invalid index. Please enter a number between 1 and " << boatHoldCount << ".\n";
             continue;
         }
-        return index;
+        return index-1;
     }
 }
 
@@ -103,7 +103,7 @@ int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cout<<"Invalid input. Please enter a valid index (1-3)."<<std::endl;
         } else {
-            return choice - 1;
+            return handCards.at(choice - 1);
         }
     }
 }
