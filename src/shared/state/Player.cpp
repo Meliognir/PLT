@@ -115,7 +115,7 @@ void Player::moveCardToDeck() {
 void Player::moveWithDirection (int distance, int direction){
     int currentPos = this->getPosition();
     signed int nextPos = currentPos + distance*direction;
-    std::cout << "nextPos" << nextPos << "\r\n" << std::endl;
+    std::cout << "nextPos: " << nextPos << "\r\n" << std::endl;
     if(nextPos > 0){this->setPosition(nextPos);}
     else{this->setPosition(0);}
 }
@@ -152,7 +152,7 @@ void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex,
 void Player::removeFromBoatHold(int boatholdIndex, int amount){
     auto& boatHolds = this->getBoatHolds();
     state::BoatHold *selectedHold;
-    selectedHold = boatHolds.at(boatholdIndex-1);
+    selectedHold = boatHolds.at(boatholdIndex);
     selectedHold->removeResource(amount);
 }
 
