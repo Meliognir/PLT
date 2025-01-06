@@ -174,7 +174,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >![Image du de la classe State et celles autour](rapport/images/eachState1.0.png "Image de la classe State et des classe qui en découlent.")
 > 
 >> La classe State permet donc de passer d'un état à l'autre entre tous les états ci-dessus, la transition se fait à la fin de la request appeler depuis le client.
-> >
+>>
 >> On voit qu'il y a handle1() et handle2(), qui sont les méthodes utilisé pour le design-pattern State, dans chachune des classes pour pouvoir faire la transition entre chaque état.
 > 
 > **Classes ActionCard, Treasure, BoatHold** : 
@@ -199,7 +199,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 
 > ### 4.1 Horloge globale
 >>Les changements d'état sont fait à la chaîne sans horloge. Nous allons mettre des délais pour laissé le temps aux joueurs
->>de comprendre l'affichage qui change. Les changement d'états sur la console se font après confirmation avec un y donc on attend l'avale
+>>de comprendre l'affichage qui change. Les changement d'états sur la console se font après confirmation avec un "y" donc on attend l'avale
 >> du joueur physique ou IA pour continuer à jouer.
 > ### 4.2 Changements extérieurs
 >>Les changements extérieurs sont provoqués par des commandes extérieures, comme la pression sur un
