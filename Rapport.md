@@ -186,7 +186,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >>
 >> Pour avoir le type de ressource à prendre il y a la classe resources :
 >> 
->>> **Resources** : cette classe donne le type de ressource à attribuer au BoatHold.
+>> - **Resources** : cette classe donne le type de ressource à attribuer au BoatHold.
 >
 > 
 >**Classe Map** :
@@ -221,6 +221,17 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >>Le diagramme des classes pour le moteur du jeu est présenté ci-dessous. L’ensemble du moteur de jeu
 >>repose sur un patron de conception de type Command, et a pour but la mise en œuvre différée de commandes
 >>extérieures sur l’état du jeu.
+> ![Image des commandes et engine](rapport/images/engine-commande1.0.png "Image des commandes et de l'engine.")
 >>>**Classes Command :** Le rôle de ces classes est de représenter une commande, quelque soit sa source. Notons bien que ces classes ne gère absolument pas l’origine des com-
 mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriquerons les instances de ces classes.
->>>* 
+>>>* AssignDice : demande le dé à mettre sur jour au joueur.
+>>>* AddToBoathold : ajoute une ressource à un boathold.
+>>>* ChooseAI : choisi quelle IA va jouer.
+>>>* ChooseCards : demande au joueur la carte qu'il veut jouer.
+>>>* ChooseCanons : demande au joueur le nombre de canons qu'il veut jouer.
+>>>* ChooseMapSize : demande aux joueurs la taille de la carte.
+>>>* ChooseNbOfPlayer : demande le nombre de joueurs.
+>>>* ChoosePath : ne fait rien pour l'instant.
+>>>* ChoosePlayerName : permet aux joueurs de choisir leur pseudo.
+>>>* RollDice : génère deux dés de façon "random".
+>>>* StealResources : permet de voler des ressources après un combat.
