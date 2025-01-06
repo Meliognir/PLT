@@ -61,15 +61,20 @@ int InputHandler::getMapSize(){
     return mapSize;
 }
 size_t InputHandler::selectUserBoatHold(size_t boatHoldCount){
+    std::string tempString;
     size_t index = 0;
     while (true) {
-        std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
-        std::cin >> index;
-        if (index < 1 || index > boatHoldCount) {
-            std::cout << "Invalid index. Please enter a number between 1 and " << boatHoldCount << ".\n";
-            continue;
+        std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : " << std::endl;
+        std::cin >> tempString;
+        try {
+            index = stoi(tempString);
+            if (index > 0 && index <= boatHoldCount) {
+                return index-1;
+            }
         }
-        return index-1;
+        catch(std::invalid_argument e){
+        }
+        std::cout << "Invalid index. Please enter a number between 1 and " << boatHoldCount << "." << std::endl;
     }
 }
 
@@ -151,7 +156,7 @@ int InputHandler::selectGameMode()
 {
     std::string input;
     while (true) {
-        std::cout << "Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)" << std::endl;
+        std::cout << "Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = duel)" << std::endl;
         std::cin >> input;
 
         if (input == "0" || input == "exit") {
@@ -163,7 +168,7 @@ int InputHandler::selectGameMode()
         else if (input == "2" || input == "online") {
             return ONLINE_MULTIPLAYER;
         }
-        else if (input == "3" || input == "ia") {
+        else if (input == "3" || input == "duel") {
             return SINGLE_PLAYER;
         }
         std::cout << "Invalid input. Please enter '0', '1', '2' or '3'." << std::endl;

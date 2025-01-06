@@ -59,25 +59,6 @@ void Player::shuffleDeck(){
     std::shuffle(cardDeck.begin(), cardDeck.end(), g);
 }
 
-// refactored
-// sets activeCard to player's choice
-/*void Player::chooseCard() {
-    client::InputHandler inputHandler;
-    int selectedIndex = inputHandler.chooseCardFromHand(handCards);
-
-    if (selectedIndex != -1) {
-        activeCard = handCards.at(selectedIndex);
-        std::cout<<"You chose card with ID: " + std::to_string(activeCard)<<std::endl;
-    } else {
-        std::cout<<"Failed to choose a card."<<std::endl;
-    }
-}*/
-
-/*void Player::playTurn(std::vector<Player*> playerList){ // à mettre dans engine
-    Game::time = DAY;
-    std::cout << "Current time: " << (Game::time ? "DAY" : "NIGHT") << std::endl;
-
-}*/
 
 void Player::moveCardToHand () {
     if (cardDeck.empty()) {
@@ -96,21 +77,6 @@ void Player::moveCardToDeck() {
     cardDeck.push_back(activeCard);
     activeCard = -1;
 }
-
-// bool Player::checkCombat(std::vector<Player*> playerList){ // à mettre dans engine
-//     opponentsList.clear();
-//     for (Player* otherPlayer : playerList) {
-//         if (otherPlayer != this && otherPlayer->getPosition() == this->getPosition()) {
-//             opponentsList.push_back(otherPlayer);
-//         }    
-//     }
-//     return !opponentsList.empty();
-// }
-
-// Player* Player::chooseOpponent(){
-//     engine::CombatManager combatManager;
-//     return combatManager.chooseOpponent(opponentsList, name);
-// }
 
 void Player::moveWithDirection (int distance, int direction){
     int currentPos = this->getPosition();
@@ -156,26 +122,6 @@ void Player::removeFromBoatHold(int boatholdIndex, int amount){
     selectedHold->removeResource(amount);
 }
 
-// bool Player::chooseTimeDice(int dice1, int dice2)
-// { // à mettre dans client
-//     std::string input;
-//     while (true){
-//         std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n" << "dé 1 : " << dice1 << " dé 2 : " << dice2 << std::endl;
-//         std::cin >> input;
-//         if (input == "1" || input == "2"){
-//             break;
-//         } else {
-//             std::cout << "Entrée invalide. Veuillez entrer '1' ou '2'.\n";
-//         }
-//     }
-//     if (input == "1"){
-//         std::cout << "Le dé " << dice1 << " sera le dé du jour. Le dé " << dice2 << " sera le dé de la nuit." << std::endl;
-//         return true;
-//     } else {
-//         std::cout << "Le dé " << dice2 << " sera le dé du jour. Le dé " << dice1 << " sera le dé de la nuit." << std::endl;
-//         return false;
-//     }
-// }
 
 int Player::rollCombatDie(){
     const int dieValues[] = {2, 4, 6, 8, 10, STAR};
@@ -239,14 +185,6 @@ void Player::setBoatHolds(const std::vector <BoatHold *>& boatHolds){
     this->boatHolds = boatHolds;
 }
 
-/*
-const std::vector<ActionCard> &Player::getActionCards() const{
-    return actionCards;
-}
-
-void Player::setActionCards(const std::vector<ActionCard> &actionCard){
-    this->actionCards=actionCard;
-}*/
 
 const std::vector <int>& Player::getHandCards() const{
     return handCards;
