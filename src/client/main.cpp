@@ -44,28 +44,10 @@ int main(int argc,char* argv[])
     unsigned int windowHeight = desktopMode.height ;
     window = new sf::RenderWindow(sf::VideoMode(windowWidth, windowHeight), "Parcours circulaire");
     }
-    // Boucle principale pour le rendu
-    while (window->isOpen() && client->running) {
-        sf::Event event;
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window->close();
-        }
-
-        window->clear();
-        // Appel à renderMap ici
-        {
-            if (game->map) {
-                renderer->renderMap(*window, *game->map);
-                renderer->renderDice(*window, Game::dayDie, Game::nightDie);
-            }
-        }
-        {
-        renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
-        std::vector<int> playerHand = {2, 5, 10}; // ID des cartes dans la main
-        renderer->renderHand(*window, playerHand);
-        }
-        window->display();
+    
+    if (window) {
+        render::StateLayer stateLayer(renderer, game, window);
+        stateLayer.runRenderLoop(client); // Exécution de la boucle de rendu
     }
 
 
