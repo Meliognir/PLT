@@ -63,6 +63,10 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                if (!game->getActivePlayer()) {
+                    break;
+                }
+                renderer->renderBoatholds(*window, game->getActivePlayer());
                 break;}
             case RESOURCE_HANDLING_STATE: {
                 renderer->renderMap(*window, *game->map);
