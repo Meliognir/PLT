@@ -7,13 +7,23 @@
 #include <limits>
 #include <memory>
 #include <utility>
+namespace engine{
+GameEngine* GameEngine::instance = nullptr;
 
-engine::GameEngine::GameEngine(state::State *state){
+GameEngine::GameEngine(state::State *state){
     game = new state::Game(state);
 }
 
-void engine::GameEngine::initializeGame(int playerCount){
+void GameEngine::initializeGame(int playerCount){
 
     game->request(); // Appelle GameConfigState pour initialiser les joueurs
+
+}
+GameEngine* GameEngine::getInstance(state::State* state) {
+    if (instance == nullptr) {
+        instance = new GameEngine(state);
+    }
+    return instance;
+}
 
 }
