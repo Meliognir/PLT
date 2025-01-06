@@ -244,6 +244,7 @@ namespace client {
                             activePlayer->moveWithDirection(gameInstance->nightDie, -1);
                         }
                     }
+                    
                     std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
                     
                     actionCounter += 1;
