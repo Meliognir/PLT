@@ -19,10 +19,6 @@
 render::StateLayer::StateLayer(Renderer * renderer, state::Game * game, sf::RenderWindow * window) : game(game), renderer(renderer), window(window){
 }
 
-void render::StateLayer::initSurfaces(state::State *state)
-{
-}
-
 void render::StateLayer::update(){
     engine::GameEngine * gameEngineInstance = engine::GameEngine::getInstance(nullptr);
     setCurrentStateID(gameEngineInstance->game->state->getStateId());
@@ -41,16 +37,52 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
         }
         window->clear();
         // Rendu de la carte
-        if (game->map) {
-            renderer->renderMap(*window, *game->map);
-            renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
-        }
+        switch(currentStateID){
+            case GAME_CONFIG_STATE:
+            break;
+            case CAPTAIN_DICE_STATE:{
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+            break;
+            }
+            
+            case CARD_CHOICE_STATE:{
+                if (!game->getActivePlayer()) {
+                    std::cout << "Waiting for active player initialization...\n";
+                    break;
+                }
+                std::vector<int> playerHand = game->getActivePlayer()->getHandCards();
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                renderer->renderHand(*window, playerHand);
+                break;
+            }
 
-        // Rendu des joueurs
-        renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
-        // Rendu des cartes (par exemple)
-        std::vector<int> playerHand = {2, 5, 10}; // ID des cartes dans la main
-        renderer->renderHand(*window, playerHand);
+            case CARD_ACTION_STATE: {
+
+            }
+            break;
+            case RESOURCE_HANDLING_STATE:
+            break;
+            case OPPONENT_CHOICE_STATE:
+            break;
+            case COMBAT_ATTACKING_STATE:
+            break;
+            case COMBAT_DEFENDING_STATE:
+            break;
+            case STEAL_RESOURCE_STATE:
+            break;
+            case GAME_OVER_STATE:
+            break;
+            default:
+            break;
+        }
         window->display();
     }
+}
+
+void render::StateLayer::setWindow(sf::RenderWindow *window){
+    this->window=window;
 }

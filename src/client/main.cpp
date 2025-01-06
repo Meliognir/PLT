@@ -26,9 +26,13 @@ void clientThreadFunction(client::Client* client) {
 
 int main(int argc,char* argv[])
 {
-    render::Renderer* renderer = new render::Renderer();
+    sf::RenderWindow* window;
     client::Client *client = new client::Client();
+    Observable::addObserver(client);
     Game * game = client->gameInstance;
+    render::Renderer* renderer = new render::Renderer();
+    render::StateLayer * stateLayer = new render::StateLayer(renderer, game, window);
+    Observable::addObserver(stateLayer);
     // Démarrer le thread pour le client
     std::thread clientThread(clientThreadFunction, client);
     // Attendre que la carte soit prête
@@ -36,7 +40,6 @@ int main(int argc,char* argv[])
         std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Pause pour éviter un busy-wait trop intense
     }
 
-    sf::RenderWindow* window;
 
     if (client->running) {
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -46,8 +49,8 @@ int main(int argc,char* argv[])
     }
     
     if (window) {
-        render::StateLayer stateLayer(renderer, game, window);
-        stateLayer.runRenderLoop(client); // Exécution de la boucle de rendu
+        stateLayer->setWindow(window);
+        stateLayer->runRenderLoop(client); // Exécution de la boucle de rendu
     }
 
 
