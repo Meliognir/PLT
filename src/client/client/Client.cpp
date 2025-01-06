@@ -219,6 +219,7 @@ namespace client {
 
                     
                     activePlayer->setPrevDuel(false);
+                    activePlayer->setHasMoved(false);
                     // logique de déplacement sans input
                     chosenCardId = activePlayer->getActiveCard();
                     // checker si l'action en cours est un mouvement
@@ -226,7 +227,7 @@ namespace client {
                     if(actionCounter%2 == 0){ //day
                         std::cout << "actionCounter%2 == 0\r\n" << std::endl;
                         std::cout << "getDayAction: " << actionCard->getDayAction() << ".\r\n" << std::endl;
-
+                        activePlayer->setHasMoved(true);
                         if(actionCard->getDayAction() == MOVE_FORWARD){
                             activePlayer->moveWithDirection(gameInstance->dayDie, 1);
                         }
@@ -237,6 +238,7 @@ namespace client {
                     if(actionCounter%2 == 1){ //night
                         std::cout << "actionCounter%2 == 1\r\n" << std::endl;
                         std::cout << "getNightAction" << actionCard->getNightAction() << ".\r\n" << std::endl;
+                        activePlayer->setHasMoved(true);
                         if(actionCard->getNightAction() == MOVE_FORWARD){
                             activePlayer->moveWithDirection(gameInstance->nightDie, 1);
                         }
@@ -263,7 +265,6 @@ namespace client {
                     //player selects boatholds to pay
                     if(activePlayer->getHasToPay()){
                         boatHoldCount = activePlayer->getBoatHolds().size();
-
                         resTypeToPay = activePlayer->getResTypeToPay();
                         remainToPay = activePlayer->getAmountToPay();
                         std::cout << "Player: "<< activePlayer->getName() << " has to pay: " << remainToPay << " " << resTypeToPay << ".\n";

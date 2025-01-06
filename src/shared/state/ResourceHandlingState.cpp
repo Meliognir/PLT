@@ -65,6 +65,11 @@ void ResourceHandlingState::handle(){
     nbOpponent -= 1;
     std::cout <<"there are: " << nbOpponent << " opponents on this tile\r\n"<< std::endl;
 
+    //no duel if activeplayer has moved
+    if(!(activePlayer->getHasMoved())){
+        activePlayer->setPrevDuel(true);
+    }
+
     //condition for duel
     if(nbOpponent > 0 && !(activePlayer->getPrevDuel())){
         std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
