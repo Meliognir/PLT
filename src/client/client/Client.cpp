@@ -300,7 +300,8 @@ namespace client {
                     // => c'est le code de 
                     
                     //player selects boatholds to pay
-                    if(activePlayer->getHasToPay()){
+                    //prevents from paying two times the same tile
+                    if(activePlayer->getHasToPay() && activePlayer->getHasMoved()){
                         boatHoldCount = activePlayer->getBoatHolds().size();
                         resTypeToPay = activePlayer->getResTypeToPay();
                         remainToPay = activePlayer->getAmountToPay();
