@@ -106,6 +106,9 @@ namespace client {
         state::ActionCard *actionCard;
         int chosenBoatholdId;
         int boatHoldCount;
+        int remainToPay;
+        std::string resTypeToPay;
+        int boatHoldQuantity;
 
         // Init every game loop command
         engine::AssignDice* assignDice;
@@ -259,25 +262,29 @@ namespace client {
                     //player selects boatholds to pay
                     if(activePlayer->getHasToPay()){
                         boatHoldCount = activePlayer->getBoatHolds().size();
-                        std::string resTypeToPay = activePlayer->getResTypeToPay();
-                        int remainToPay = activePlayer->getAmountToPay();
 
-                        while (remainToPay != 0){
+                        resTypeToPay = activePlayer->getResTypeToPay();
+                        remainToPay = activePlayer->getAmountToPay();
+                        std::cout << "Player: "<< activePlayer->getName() << " has to pay: " << remainToPay << " " << resTypeToPay << ".\n";
+                        while (remainToPay > 0){
                             auto boatHolds = activePlayer->getBoatHolds();
                             chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
-                            if(boatHolds.at(chosenBoatholdId)->getResourceType() != resTypeToPay){
-                                std::cout << "Invalid Resource Type. Please choose a BoatHold with: " << resTypeToPay << ".\n";
+                            std::string chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
+                            if(chosenBoatholdResType != resTypeToPay){
+                                std::cout << "Invalid Resource Type. You chose a Boathold with: " << chosenBoatholdResType << " Please choose a BoatHold with: " << resTypeToPay << ".\n";
                                 continue;
                             }
                             state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
-                            int boatHoldQuantity = bh->getQuantity();
-                            remainToPay = activePlayer->getAmountToPay() - boatHoldQuantity;
+                            boatHoldQuantity = bh->getQuantity();
                             activePlayer->removeFromBoatHold(chosenBoatholdId, remainToPay);// à faire dans une nouvelle commande
+                            remainToPay = abs(activePlayer->getAmountToPay() - boatHoldQuantity);
                             activePlayer->setAmountToPay(remainToPay);
+                            std::cout << "There remain: " << remainToPay << " " << resTypeToPay << " to pay.\n";
                         }
                         activePlayer->setHasToPay(false);
                     }
-                    
+
+                
                     // resourceManager ?
                     
                     //carte action resource
