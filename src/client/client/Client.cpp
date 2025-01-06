@@ -277,9 +277,16 @@ namespace client {
                             }
                             state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
                             boatHoldQuantity = bh->getQuantity();
-                            activePlayer->removeFromBoatHold(chosenBoatholdId, remainToPay);// à faire dans une nouvelle commande
-                            remainToPay = abs(activePlayer->getAmountToPay() - boatHoldQuantity);
-                            activePlayer->setAmountToPay(remainToPay);
+                            if(boatHoldQuantity >= remainToPay){
+                                activePlayer->removeFromBoatHold(chosenBoatholdId, remainToPay);// à faire dans une nouvelle commande
+                                remainToPay = 0;
+                                activePlayer->setAmountToPay(remainToPay);
+                            }
+                            else{
+                                activePlayer->removeFromBoatHold(chosenBoatholdId, boatHoldQuantity);
+                                remainToPay = activePlayer->getAmountToPay() - boatHoldQuantity;
+                                activePlayer->setAmountToPay(remainToPay);
+                            }
                             std::cout << "There remain: " << remainToPay << " " << resTypeToPay << " to pay.\n";
                         }
                         activePlayer->setHasToPay(false);
