@@ -16,6 +16,18 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
     float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
 
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("../src/boardGameData/board.png")) {
+        std::cerr << "Error loading board.png!" << std::endl;
+        return;
+    }
+    sf::Sprite backgroundSprite;
+    backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.setScale(
+        static_cast<float>(windowWidth) / backgroundTexture.getSize().x,
+        static_cast<float>(windowHeight) / backgroundTexture.getSize().y
+    );
+
     sf::Font font;
     font.loadFromFile("../src/boardGameData/Arial.ttf");   
 
@@ -56,6 +68,9 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     moonSprite.setTexture(moonTexture);
     moonSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
     moonSprite.setPosition((windowWidth/2)+windowWidth/20, (windowHeight/2)-windowHeight/16);
+
+    window.draw(backgroundSprite);
+    
     // Parcourir toutes les tuiles de la carte
     for (int i = 0; i < mapSize; ++i) {
         const state::Tile* tile = map.listOfTiles[i];
