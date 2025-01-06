@@ -227,11 +227,12 @@ namespace client {
                     if(actionCounter%2 == 0){ //day
                         std::cout << "actionCounter%2 == 0\r\n" << std::endl;
                         std::cout << "getDayAction: " << actionCard->getDayAction() << ".\r\n" << std::endl;
-                        activePlayer->setHasMoved(true);
                         if(actionCard->getDayAction() == MOVE_FORWARD){
+                            activePlayer->setHasMoved(true);
                             activePlayer->moveWithDirection(gameInstance->dayDie, 1);
                         }
                         if(actionCard->getDayAction() == MOVE_BACKWARD){
+                            activePlayer->setHasMoved(true);
                             activePlayer->moveWithDirection(gameInstance->dayDie, -1);
                         }
                     }
@@ -240,9 +241,11 @@ namespace client {
                         std::cout << "getNightAction" << actionCard->getNightAction() << ".\r\n" << std::endl;
                         activePlayer->setHasMoved(true);
                         if(actionCard->getNightAction() == MOVE_FORWARD){
+                            activePlayer->setHasMoved(true);
                             activePlayer->moveWithDirection(gameInstance->nightDie, 1);
                         }
                         if(actionCard->getNightAction() == MOVE_BACKWARD){
+                            activePlayer->setHasMoved(true);
                             activePlayer->moveWithDirection(gameInstance->nightDie, -1);
                         }
                     }
