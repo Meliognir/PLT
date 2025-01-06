@@ -61,23 +61,53 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
             }
 
             case CARD_ACTION_STATE: {
-
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                break;}
+            case RESOURCE_HANDLING_STATE: {
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                break;
             }
-            break;
-            case RESOURCE_HANDLING_STATE:
-            break;
-            case OPPONENT_CHOICE_STATE:
-            break;
-            case COMBAT_ATTACKING_STATE:
-            break;
+            case OPPONENT_CHOICE_STATE:{
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                break;
+            }
+            case COMBAT_ATTACKING_STATE:{
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                break;
+            }
             case COMBAT_DEFENDING_STATE:
-            break;
-            case STEAL_RESOURCE_STATE:
-            break;
-            case GAME_OVER_STATE:
-            break;
-            default:
-            break;
+            {
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                break;
+            }
+            case STEAL_RESOURCE_STATE:{
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                break;
+            }
+            case GAME_OVER_STATE:{
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                break;
+            }
+            default:{
+                renderer->renderMap(*window, *game->map);
+                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                break;
+            }
         }
         window->display();
     }
