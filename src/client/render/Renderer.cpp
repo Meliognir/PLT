@@ -287,3 +287,39 @@ void render::Renderer::renderHand(sf::RenderWindow &window, const std::vector<in
         window.draw(cardSprite);
     }
 }
+
+void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *player){
+    sf::Texture boatholdTexture;
+    if (!boatholdTexture.loadFromFile("../src/boardGameData/CardSprSheet.png")) {
+        std::cerr << "Error loading card texture!" << std::endl;
+        return;
+    }
+    std::vector<state::BoatHold *> boatholds = player->getBoatHolds();
+    int boatHoldCount = boatholds.size();
+    sf::Sprite boatholdSprite;
+    sf::Sprite resourceSprite;
+    boatholdSprite.setTexture(boatholdTexture);
+    resourceSprite.setTexture(boatholdTexture);
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    int i;
+    for (i = 0; i<boatHoldCount; i++){
+        boatholdSprite.setTextureRect(sf::IntRect(530,0, 90, 90));
+        boatholdSprite.setPosition(100+i*100, 300); //TODO : scale
+        state::BoatHold* hold = boatholds[i];
+        resourceSprite.setTextureRect(sf::IntRect(600,175,1,1));
+        if (hold->getResourceType()=="Food"){
+            resourceSprite.setTextureRect(sf::IntRect(30, 29, 30, 30));
+        }
+        if (hold->getResourceType()=="Gold"){
+            resourceSprite.setTextureRect(sf::IntRect(60, 29, 30, 30));
+        }
+        if (hold->getResourceType()=="Canon"){
+            resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
+        }
+        resourceSprite.setPosition(100+i*100, 300);
+        window.draw(boatholdSprite);
+        window.draw(resourceSprite);
+    }
+}
