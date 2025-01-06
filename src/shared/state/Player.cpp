@@ -274,4 +274,12 @@ void Player::setAmountToPay(int amountToPay)
 {
     this->amountToPay = amountToPay;
 }
+bool Player::getHasMoved() const
+{
+    return this->hasMoved;
+}
+void Player::setHasMoved(bool hasMoved)
+{
+    this->hasMoved = hasMoved;
+}
 }
