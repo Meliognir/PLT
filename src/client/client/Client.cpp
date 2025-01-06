@@ -22,14 +22,11 @@
 #define TREASURE 0
 #define GOLD 1
 #define FOOD 2
-#define MOVE_FORWARD 0
-#define MOVE_BACKWARD 1
 
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
 #define ONLINE_MULTIPLAYER 2
-#define SINGLE_PLAYER 3
-#define LOCAL_AND_AI 4
+//#define DUEL_GAME 3
 
 
 template <typename T, typename... Args>
@@ -55,8 +52,8 @@ namespace client {
         //renderer-> show the correct window
         int playingMode = 1;
         while(playingMode){
-            playingMode = inputHandler.selectGameMode(); //Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)
-            switch (playingMode){                        //quel est le mode 3 ? c'est SINGLE_PLAYER ou IA ?
+            playingMode = inputHandler.selectGameMode();
+            switch (playingMode){
                 case EXIT_GAME :
                     break;
                 case LOCAL_MULTIPLAYER :
@@ -65,9 +62,11 @@ namespace client {
                 case ONLINE_MULTIPLAYER :
                     runOnlineGame();
                     break;
-                case SINGLE_PLAYER :
-                    runSoloGame();
+                /*
+                case TWO_PLAYERS_MODE :
+                    runDuelGame();
                     break;
+                */
 
                 default :
                     break;
@@ -102,7 +101,6 @@ namespace client {
         bool chosenDice;
         state::Player* activePlayer;
         int chosenCardId;
-        state::ActionCard *actionCard;
         int chosenBoatholdId;
         int boatHoldCount;
         int remainToPay;
@@ -113,8 +111,10 @@ namespace client {
         engine::AssignDice* assignDice;
         engine::ChooseCard* chooseCard;
         engine::AddToBoathold* addToBoathold;
+        engine::ResourceManager* resourceManager; //unused
         engine::ChoosePath* choosePath; //unused
         engine::ChooseCanons* chooseCanons; //unused
+        engine::ChoosePlayerName* choosePlayerName; //unused
 
         // Game loop State behavior
         int endloop = 0;
@@ -128,7 +128,7 @@ namespace client {
 
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
-                    gameConfigInit(); // is the gameconfiginit the same for every playing mode ?
+                    soloGameConfigInit(); // is the soloGameConfigInit the same for every playing mode ?
                     gameInstance->request();
                     break;
 
@@ -188,14 +188,13 @@ namespace client {
                         gameInstance->setActivePlayerIndex(activePlayerIndex);
                         gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                         activePlayer = gameInstance->getActivePlayer();
-                        std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely\r\n" << std::endl;
+                        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely\r\n" << std::endl;
                         gameInstance->displayState();
                         chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                         chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
                         chooseCard->launchCommand(gameInstance);
                     }
-                    activePlayerIndex = captainIndex;
-                    gameInstance->setActivePlayerIndex(activePlayerIndex);
+
                     gameInstance->request(); // from cardchoicestate to cardactionstate
                     break;
 
@@ -210,43 +209,19 @@ namespace client {
 
                     std::cout << "Action number " << actionCounter << "\r\n" << std::endl;
                     // 2 actions day, night, 1 no action
-                    if(actionCounter > 0 && actionCounter%2 == 0){activePlayerIndex = (activePlayerIndex + 1) % numberOfPlayers;}
+                    if(actionCounter%2 == 0){activePlayerIndex = (activePlayerIndex + 1) % numberOfPlayers;}
                     gameInstance->setActivePlayerIndex(activePlayerIndex);
                     gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                     activePlayer = gameInstance->getActivePlayer();
-                    std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
+                    std::cout << "Player index "<< activePlayerIndex << ", id : " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
 
-                    
-                    activePlayer->setPrevDuel(false);
-                    // logique de déplacement sans input
-                    chosenCardId = activePlayer->getActiveCard();
-                    // checker si l'action en cours est un mouvement
-                    actionCard = state::Game::collectionOfCards.at(chosenCardId);
-                    if(actionCounter%2 == 0){ //day
-                        std::cout << "actionCounter%2 == 0\r\n" << std::endl;
-                        std::cout << "getDayAction: " << actionCard->getDayAction() << ".\r\n" << std::endl;
 
-                        if(actionCard->getDayAction() == MOVE_FORWARD){
-                            activePlayer->moveWithDirection(gameInstance->dayDie, 1);
-                        }
-                        if(actionCard->getDayAction() == MOVE_BACKWARD){
-                            activePlayer->moveWithDirection(gameInstance->dayDie, -1);
-                        }
-                    }
-                    if(actionCounter%2 == 1){ //night
-                        std::cout << "actionCounter%2 == 1\r\n" << std::endl;
-                        std::cout << "getNightAction" << actionCard->getNightAction() << ".\r\n" << std::endl;
-                        if(actionCard->getNightAction() == MOVE_FORWARD){
-                            activePlayer->moveWithDirection(gameInstance->nightDie, 1);
-                        }
-                        if(actionCard->getNightAction() == MOVE_BACKWARD){
-                            activePlayer->moveWithDirection(gameInstance->nightDie, -1);
-                        }
-                    }
-                    std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
-                    
+                    //ajouter logique de déplacement dans gameEngine car pas d'input
+
+
                     actionCounter += 1;
                     gameInstance->actionCounter = actionCounter;
+
                     gameInstance->request(); // from cardactionstate to resourcehandlingstate or captaindicestate if condition
                     break;
 
@@ -282,13 +257,18 @@ namespace client {
                         activePlayer->setHasToPay(false);
                     }
                     
+
                     // resourceManager ?
+                    //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                    // une nouvelle commande pour payer ? 
                     
+
                     //carte action resource
-                    //boatHoldCount = activePlayer->getBoatHolds().size();
+                    boatHoldCount = activePlayer->getBoatHolds().size();
                     //addToBoathold = new engine::AddToBoathold(activePlayer, chosenBoatholdId, quantity, std::string resourceType);
                     //addToBoathold->launchCommand(gameInstance);
                     //pas besoin de commande
+
 
                     gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
                 break;
@@ -344,7 +324,7 @@ namespace client {
         return 0;
     }
 
-    int Client::runSoloGame()
+    int Client::runDuelGame()
     {
         return 0;
     }
@@ -355,25 +335,20 @@ namespace client {
     }
 
 
-    int Client::gameConfigInit()
+    int Client::soloGameConfigInit()
     {
 
-        engine::ChooseNbOfPlayers* chooseNbOfPlayers;
-        engine::ChooseAI* chooseAI;
-        engine::ChoosePlayerName* choosePlayerName;
-        engine::ChooseMapSize* chooseMapSize;
-        engine::ResourceManager resource_manager;
-        
         state::Game *gameInstance = gameEngine->game;
         gameInstance->setTurn(0);
         // Sets number of player
         int playerNumber = inputHandler.getNumberofPlayers();
         std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
-        chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
+        engine::ChooseNbOfPlayers* chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
         chooseNbOfPlayers->launchCommand(gameInstance);
         delete chooseNbOfPlayers;
 
         // Sets players' name and choose AIs ?
+        engine::ChooseAI* chooseAI;
         state::Player* currentPlayer;
         int levelAI = 0;
         for(int playerIndex = 0; playerIndex < playerNumber; playerIndex++){
@@ -392,7 +367,7 @@ namespace client {
             else { // AI input
                 playerName = currentPlayer->get_AI()->getPlayerName(playerIndex);
             }
-            choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
+            engine::ChoosePlayerName* choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
             choosePlayerName->launchCommand(gameInstance);
             delete choosePlayerName;
         }
@@ -400,7 +375,7 @@ namespace client {
         // Sets MapSize
         int mapSize = inputHandler.getMapSize();
         std::cout <<"MapSize set to: " << std::to_string(mapSize)<< std::endl;
-        chooseMapSize = new engine::ChooseMapSize(mapSize);
+        engine::ChooseMapSize* chooseMapSize = new engine::ChooseMapSize(mapSize);
         chooseMapSize->launchCommand(gameInstance);
         delete chooseMapSize;
 
@@ -411,6 +386,7 @@ namespace client {
             std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
             player->setTreasures(initialTreasures);
             auto goldResource = make_unique<state::Gold>();
+            engine::ResourceManager resource_manager;
             resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
             auto foodResource = make_unique<state::Food>();
             resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);    
@@ -456,6 +432,10 @@ namespace client {
         return 0;
     }
     void Client::update()
+    {
+    }
+    
+    Client::~Client()
     {
     }
 }
