@@ -13,10 +13,9 @@ void state::Observable::removeObserver(IObserver *observer){
 }
 
 void state::Observable::notifyObservers(){
-    std::cout << "attempt update obs" << std::endl;
     for (IObserver* observer : observers) {
-        std::cout << "obs update" << std::endl;
+        //std::cout << "obs update" << std::endl;
         observer->update();
     }
-    std::cout << "success update obs" << std::endl;
+    //std::cout << "success update obs" << std::endl;
 }
