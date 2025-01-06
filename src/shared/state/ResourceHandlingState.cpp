@@ -15,8 +15,6 @@ void ResourceHandlingState::handle(){
     int nbOpponent = 0;
     Player *activePlayer = game->getActivePlayer();
     
-    std::cout <<"coucou\r\n"<< std::endl;
-
     //player's total resource quantity he can pay for resourcetoPayType
     int activePlayerPos = activePlayer->getPosition();
     std::string resourceToPayType = game->map->getResourceType(activePlayerPos);
