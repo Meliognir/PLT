@@ -22,7 +22,15 @@
 
 **3.1 Stratégie de rendu d'un état**
 
- 
+**3.2 Conception logiciel**
+
+## 4-Règles de changement d'états et moteur de jeu 
+
+## 5-Intelligence Artificielle
+
+
+
+
 - - - -
 ## 1-Présentation Générale
 >### 1.1 Archétype 
@@ -107,7 +115,9 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >>* Lorsque l'on vole le trésor 6e cale, on en vole aussi le contenu. 
 
 >### 1.3 Ressources
->Les ressources nous avons pour ce jeu est le jeu physique en lui-même. Nous allons essayer de trouver des sprites libre de droit sur internet.
+>Les ressources nous avons pour ce jeu est le jeu physique en lui-même. 
+> Nous avons essayer de trouver des sprites libre de droit sur internet.
+> Et nous avons affevtuer certains sprites à la main.
 
 ## 2-Description et conception des états
 
@@ -127,40 +137,43 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >
 >#### 2-Eléments mobiles
 > Il s'agit du bâteau se déplaçant sur les cases, représenté par Player dans le state.dia, il possède les attributs de la photo suivante :
->>![Image de la classe Player](rapport/images/Player1.2.png "Image classe Player")
+>>![Image de la classe Player](rapport/images/Player1.3.png "Image classe Player")
 > On voit que pour la localisation sur la map nous avons un int position qui détermine la position du player dans le tableau de la map.
+> Chaque Player à un playerID et un Name qui servent à identifier un player.
+> Il possède aussi tous les éléments qui nous permettent de vérifier cahque règle et effectuer les actions voulu.
 
 
 >### 2.2 Conception logiciel
->>![Image du state.dia](rapport/images/State1.1.png "Images state.dia")
+>>![Image du state.dia](rapport/images/state1.2.png "Images state.dia")
 >Ceci est une version du state.dia dans sa globalité, nous allons par la suite détaillé les états des parties importantes et visibles pour le joueur.
 > 
 > **Classe Player** : comme vu ci-dessus player la classe player possède un getter de sa position. De plus la classe possède toutes les caractéristiques pour 
 > savoir l'état dans lequel un player est à un moment donné donc : sa position, ce qu'il à dans ses câles, le choix des cartes, le choix de la position des dés, l'ajout de ressources dans sa câle...
+> Il possède aussi des attributs pour vérifier certaines règles comme le fait qu'il n'est pas de quoi payer une case par exemple.
 > 
-> **Classe Game** : la classe game quant à elle (voir en dessous), permet de passer d'un état à un autre pour lancer le jeu par exemple,
-> ainsi que de jouer un tour si besoin. Dans cette classe on retient qui à été le capitaine du tour d'avant, les deux chiffres de dés, la liste des joueurs...
->![Image du de la classe Game](rapport/images/Game1.1.png "Image state.dia")
-> On peut aussi remarquer dans la classe deux méthode request1() et request() qui ont été dans la classe State que nous verrons juste après. Ces méthodes suivent le design patern State trouver sur refractoring guru :
+> 
+> **Classe Game** : la classe game, elle (voir en dessous), permet de passer d'un état à un autre en passant par la classe state et la méthode transitionTo.
+> Dans cette classe on retient qui à été le capitaine du tour en cours, on regarde les modifcations apportés à la map par les commandes de l'engine.
+>![Image du de la classe Game](rapport/images/Game1.2.png "Image state.dia")
+> 
 > - [https://refactoring.guru/design-patterns/state](./https://refactoring.guru/design-patterns/state)  
 >
 > Ce design pattern nous permet de passer d'un état à un autre comme on le souhaite.
 > 
 > **Classe State** : 
 > 
->![Image du de la classe State et celles autour](rapport/images/ClasseState1.0.png "Image de la classe State et des classe qui en découlent.")
+>![Image du de la classe State et celles autour](rapport/images/eachState1.0.png "Image de la classe State et des classe qui en découlent.")
 > 
-> La classe State permet donc de passer d'un état à l'autre entre: Playing, GameConfig et Ending grâce à TransitionTo() de la classe Game.
-> 
-> On voit qu'il y a handle1() et handle2(), qui sont les méthodes utilisé pour le design-pattern State, dans chachune des classes pour pouvoir faire la transition entre chaque état.
+>> La classe State permet donc de passer d'un état à l'autre entre tous les états ci-dessus, la transition se fait à la fin de la request appeler depuis le client.
+> >
+>> On voit qu'il y a handle1() et handle2(), qui sont les méthodes utilisé pour le design-pattern State, dans chachune des classes pour pouvoir faire la transition entre chaque état.
 > 
 > **Classes ActionCard, Treasure, BoatHold** : 
 > 
->![Image du des classes ActionCard, BoatHold et Treasure](rapport/images/BoatHold1.0.png "Image des classe ActionCard, Boathold et Treasure.")
+>![Image du des classes ActionCard, BoatHold et Treasure](rapport/images/BoatHold1.1.png "Image des classe ActionCard, Boathold et Treasure.")
 > 
->> - **ActionCard** : dans cette classe on regarde, quand une carte est dans la main ou joué, les attributs qu'elle possède comme les golds, les déplacements ou les canons. Si la carte est joué, on va alors effectué l'action en fonction des dés du matin et du soir.
 >> - **Treasure** : pour l'instant un trésors n'est qu'un bonus ou malus de gold, il ne s'agit donc que d'entier à ajouter ou enlever dans le décompte final de gold.
->> - **BoatHold** :  
+>> - **BoatHold** : c'est une câle, donc on regarde si on doit ajouter ou non une ressource, si une cale d'un player est vide ou non... il s'agit principalement de getter des ressources de chaque boathold. 
 >>
 >> Pour avoir le type de ressource à prendre il y a la classe resources :
 >> 
@@ -169,7 +182,10 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 >**Classe Map** :
 >
->![Image de la classe Map](rapport/images/Map1.0.png "Image de la classe map.")
+>![Image de la classe Map](rapport/images/Map1.1.png "Image de la classe map.")
+> 
+>> La map est une liste de vecteur de type Tile qui on ce qu'elle coûte, le nombre de player dessus ainsi que le nombre de trésors dessus. Le path n'est pas encore utilisé.
+> 
 > 
 
 
