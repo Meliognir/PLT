@@ -262,7 +262,7 @@ namespace client {
                         resTypeToAdd = "Gold";
                         break;
                     case ADD_CANONS:
-                        resTypeToAdd = "Canons";
+                        resTypeToAdd = "Canon";
                         break;
                     default:
                         break;
