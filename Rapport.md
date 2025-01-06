@@ -26,6 +26,15 @@
 
 ## 4-Règles de changement d'états et moteur de jeu 
 
+**4.1 Horloge globale**
+
+**4.2 Changement extérieur**
+
+**4.3 Changement autonome**
+
+**4.4 Conception logiciel**
+
+
 ## 5-Intelligence Artificielle
 
 
@@ -186,7 +195,32 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 >> La map est une liste de vecteur de type Tile qui on ce qu'elle coûte, le nombre de player dessus ainsi que le nombre de trésors dessus. Le path n'est pas encore utilisé.
 > 
-> 
+ ## 4-Règles de changement d'états et moteur de jeu 
 
-
-
+> ### 4.1 Horloge globale
+>>Les changements d'état sont fait à la chaîne sans horloge. Nous allons mettre des délais pour laissé le temps aux joueurs
+>>de comprendre l'affichage qui change. Les changement d'états sur la console se font après confirmation avec un y donc on attend l'avale
+>> du joueur physique ou IA pour continuer à jouer.
+> ### 4.2 Changements extérieurs
+>>Les changements extérieurs sont provoqués par des commandes extérieures, comme la pression sur un
+>>bouton ou un ordre provenant du réseau quand le réseau sera effectuer :
+>>>Commandes : dans la classe engine elles sont appelées dans le client avec les paramètres adaptés en arguments.
+> ### 4.3 Changements autonomes
+>>Les changements autonomes sont appliqués à chaque création ou mise à jour d’un état, après les changements extérieurs. Ils sont exécutés dans l’ordre suivant :
+>>>0) On commence par créer l'envirronement de jeu donc la map, les joueurs, les cartes... On ne repasse normalement pas dans cet état par la suite.
+>>>1) A chaque tour, on choisit un capitaine qui est supposé être la personne après le capitaine précédent. On lui demande alors de lancer et choisir les dés jour/nuit qu'il veut.
+>>>2) On demande à chaque joueur de choisir la carte qu'il veut parmis les cartes qu'il a en main.
+>>>3) On regarde l'action de la carte jour puis nuit. Et soit on à un mouvement et on l'exécute soit on passe à RessourceHandlingState.
+>>>4) On affecte les ressources de la carte dans la câle que choisi le joueur.
+>>>5) Si après un mouvement on tombe sur une case avec des joueurs on choisit contre lequel on veut combattre.
+>>>6) L'attaquant va dans ce state pour lancer les dés et choisir les canons pour le combat 
+>>>7) Le défenseur fait de même que l'attaquant.
+>>>8) Après un combat le gagnant choisi les ressources à voler au perdant.
+>>>9) Quand un joueur atteint la dernière case, on fini le tour puis on fait le décompte des points et on affiche l'or de chaque joueur.
+>### 4.4 Conception logiciel
+>>Le diagramme des classes pour le moteur du jeu est présenté ci-dessous. L’ensemble du moteur de jeu
+>>repose sur un patron de conception de type Command, et a pour but la mise en œuvre différée de commandes
+>>extérieures sur l’état du jeu.
+>>>**Classes Command :** Le rôle de ces classes est de représenter une commande, quelque soit sa source. Notons bien que ces classes ne gère absolument pas l’origine des com-
+mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriquerons les instances de ces classes.
+>>>* 
