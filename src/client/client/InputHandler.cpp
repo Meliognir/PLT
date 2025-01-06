@@ -108,7 +108,7 @@ int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cout<<"Invalid input. Please enter a valid index (1-3)."<<std::endl;
         } else {
-            return choice - 1;
+            return handCards.at(choice - 1);
         }
     }
 }

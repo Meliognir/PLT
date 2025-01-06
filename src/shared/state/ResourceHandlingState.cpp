@@ -27,8 +27,8 @@ void ResourceHandlingState::handle(){
             quantityResource += bh->getQuantity();
         }
     }
-    std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " " << resourceToPayType << "\r\n"<< std::endl;
-    std::cout <<"the tile costs: " << resourceToPayCost << " " << resourceToPayType << "\r\n"<< std::endl;
+    std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " resourceToPayType: " << resourceToPayType << "\r\n"<< std::endl;
+    std::cout <<"the tile costs: " << resourceToPayCost << " resourceToPayType: " << resourceToPayType << "\r\n"<< std::endl;
 
     //player can't pay
     while(quantityResource < resourceToPayCost){
