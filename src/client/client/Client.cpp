@@ -239,7 +239,6 @@ namespace client {
                     if(actionCounter%2 == 1){ //night
                         std::cout << "actionCounter%2 == 1\r\n" << std::endl;
                         std::cout << "getNightAction" << actionCard->getNightAction() << ".\r\n" << std::endl;
-                        activePlayer->setHasMoved(true);
                         if(actionCard->getNightAction() == MOVE_FORWARD){
                             activePlayer->setHasMoved(true);
                             activePlayer->moveWithDirection(gameInstance->nightDie, 1);
