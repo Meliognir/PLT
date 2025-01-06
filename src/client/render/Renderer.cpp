@@ -10,10 +10,12 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
     int mapSize = map.getSize();          // Nombre total de tuiles
-    float radius = std::min(desktopMode.width, desktopMode.height)/3;
-    //float radius = 400.0f;                // Rayon du cercle
     sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
+    
+    // Rayon du cercle
+    float radius = 3*globalScale/5;
     float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
 
     sf::Texture backgroundTexture;
@@ -61,13 +63,14 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     sf::Sprite sunSprite;
     sunSprite.setTexture(sunTexture);
     sunSprite.setTextureRect(sf::IntRect(0, 0, 400, 400));
-    sunSprite.setPosition((windowWidth/2)-windowWidth/12, (windowHeight/2)-windowHeight/16);
-    sunSprite.setScale(sf::Vector2f(0.36f, 0.36f));
+    sunSprite.setPosition(windowWidth/2.7, windowHeight/2.35);
+    sunSprite.setScale(sf::Vector2f(globalScale/1050, globalScale/1050));
 
     sf::Sprite moonSprite;
     moonSprite.setTexture(moonTexture);
     moonSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
-    moonSprite.setPosition((windowWidth/2)+windowWidth/20, (windowHeight/2)-windowHeight/16);
+    moonSprite.setPosition(windowWidth/1.83, windowHeight/2.3);
+    moonSprite.setScale(sf::Vector2f(globalScale/450, globalScale/450));
 
     window.draw(backgroundSprite);
     
@@ -85,21 +88,24 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             tileSprite.setTextureRect(sf::IntRect(32+4*tileWidth, 96, tileWidth, tileHeight)); // Première tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
+            tileSprite.setScale(sf::Vector2f(globalScale/1000, globalScale/1000));
             window.draw(tileSprite);
         } else if (tile->tileResourceType == "Gold") {
             tileSprite.setTextureRect(sf::IntRect(32+2*tileWidth, 96, tileWidth, tileHeight)); // Deuxième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
+            tileSprite.setScale(sf::Vector2f(globalScale/1000, globalScale/1000));
             window.draw(tileSprite);
         } else if (tile->treasureAvailable) {
             tileSprite.setTextureRect(sf::IntRect(32, 96, tileWidth, tileHeight)); // Troisième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
+            tileSprite.setScale(sf::Vector2f(globalScale/1000, globalScale/1000));
             window.draw(tileSprite);
         } else {
             portRoyalSprite.setTextureRect(sf::IntRect(0, 0, 192, 192)); // Par défaut (première tuile)
             portRoyalSprite.setOrigin(tileWidth / 2, tileHeight / 2);
-            portRoyalSprite.setScale(sf::Vector2f(0.5f,0.5f));
+            portRoyalSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
             portRoyalSprite.setPosition(x-10, y-20);
             window.draw(portRoyalSprite);
         }
@@ -194,8 +200,8 @@ void render::Renderer::renderDice(sf::RenderWindow &window, int dayDie, int nigh
     sf::Sprite dayDieSprite;
     sf::Sprite nightDieSprite;
 
-    sf::Vector2f dayDiePosition((windowWidth/2)-windowWidth/12, (windowHeight/2)+windowHeight/12);   
-    sf::Vector2f nightDiePosition((windowWidth/2)+windowWidth/20, (windowHeight/2)+windowHeight/12);  
+    sf::Vector2f dayDiePosition(windowWidth/2.7, windowHeight/2);   
+    sf::Vector2f nightDiePosition(windowWidth/1.83, windowHeight/2);  
 
     if (dayDie > 0) {
         dayDieSprite.setTexture(diceTexture);
@@ -254,6 +260,11 @@ void render::Renderer::renderCard(sf::RenderWindow &window, int cardID){
 }
 
 void render::Renderer::renderHand(sf::RenderWindow &window, const std::vector<int>& handCards) {
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
+
     sf::Texture cardTexture;
     if (!cardTexture.loadFromFile("../src/boardGameData/CardSprSheet.png")) {
         std::cerr << "Error loading card texture!" << std::endl;
@@ -266,15 +277,12 @@ void render::Renderer::renderHand(sf::RenderWindow &window, const std::vector<in
     int cardWidth = 68;
     int cardHeight = 28;
 
-    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
-    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
 
     // Positionnement des cartes
     float startX = (windowWidth - (7 * cardWidth)) / 2.0f; 
     float y = windowHeight - 5*cardHeight;
     for (size_t i = 0; i < handCards.size() && i < 3; ++i) {
-        int cardID = handCards[i];
+        int cardID = handCards.at(i);
         // Déterminer la région de la texture
         if (cardID >= 0 && cardID < 11) {
             cardSprite.setTextureRect(sf::IntRect(cardID * cardWidth /2, 0, cardWidth, cardHeight));
@@ -283,7 +291,7 @@ void render::Renderer::renderHand(sf::RenderWindow &window, const std::vector<in
             continue;
         }
         cardSprite.setPosition(startX + i * 2 * (cardWidth + 20), y);
-        cardSprite.setScale(sf::Vector2f(2.f, 2.f));
+        cardSprite.setScale(sf::Vector2f(globalScale/500, globalScale/500));
         window.draw(cardSprite);
     }
 }
