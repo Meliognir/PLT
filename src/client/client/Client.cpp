@@ -22,6 +22,8 @@
 #define TREASURE 0
 #define GOLD 1
 #define FOOD 2
+#define MOVE_FORWARD 0
+#define MOVE_BACKWARD 1
 
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
@@ -41,7 +43,7 @@ namespace client {
         // Instantiates a new Game context and runs concrete state GameConfigState
         Renderer renderer; //unused
         state::State *gameState = new state::GameConfigState();
-        gameEngine = engine::GameEngine::getInstance(gameState);
+        gameEngine = new engine::GameEngine(gameState);
         gameInstance = gameEngine->game;
         InputHandler inputHandler;
     }
@@ -52,8 +54,8 @@ namespace client {
         //renderer-> show the correct window
         int playingMode = 1;
         while(playingMode){
-            playingMode = inputHandler.selectGameMode();
-            switch (playingMode){
+            playingMode = inputHandler.selectGameMode(); //Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)
+            switch (playingMode){                        //quel est le mode 3 ? c'est SINGLE_PLAYER ou IA ?
                 case EXIT_GAME :
                     break;
                 case LOCAL_MULTIPLAYER :
@@ -101,6 +103,7 @@ namespace client {
         bool chosenDice;
         state::Player* activePlayer;
         int chosenCardId;
+        state::ActionCard *actionCard;
         int chosenBoatholdId;
         int boatHoldCount;
 
@@ -108,10 +111,8 @@ namespace client {
         engine::AssignDice* assignDice;
         engine::ChooseCard* chooseCard;
         engine::AddToBoathold* addToBoathold;
-        engine::ResourceManager* resourceManager; //unused
         engine::ChoosePath* choosePath; //unused
         engine::ChooseCanons* chooseCanons; //unused
-        engine::ChoosePlayerName* choosePlayerName; //unused
 
         // Game loop State behavior
         int endloop = 0;
@@ -185,13 +186,14 @@ namespace client {
                         gameInstance->setActivePlayerIndex(activePlayerIndex);
                         gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                         activePlayer = gameInstance->getActivePlayer();
-                        std::cout << "Player " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely\r\n" << std::endl;
+                        std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely\r\n" << std::endl;
                         gameInstance->displayState();
                         chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                         chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
                         chooseCard->launchCommand(gameInstance);
                     }
-
+                    activePlayerIndex = captainIndex;
+                    gameInstance->setActivePlayerIndex(activePlayerIndex);
                     gameInstance->request(); // from cardchoicestate to cardactionstate
                     break;
 
@@ -206,19 +208,43 @@ namespace client {
 
                     std::cout << "Action number " << actionCounter << "\r\n" << std::endl;
                     // 2 actions day, night, 1 no action
-                    if(actionCounter%2 == 0){activePlayerIndex = (activePlayerIndex + 1) % numberOfPlayers;}
+                    if(actionCounter > 0 && actionCounter%2 == 0){activePlayerIndex = (activePlayerIndex + 1) % numberOfPlayers;}
                     gameInstance->setActivePlayerIndex(activePlayerIndex);
                     gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
                     activePlayer = gameInstance->getActivePlayer();
-                    std::cout << "Player index "<< activePlayerIndex << ", id : " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
+                    std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
 
+                    
+                    activePlayer->setPrevDuel(false);
+                    // logique de déplacement sans input
+                    chosenCardId = activePlayer->getActiveCard();
+                    // checker si l'action en cours est un mouvement
+                    actionCard = state::Game::collectionOfCards.at(chosenCardId);
+                    if(actionCounter%2 == 0){ //day
+                        std::cout << "actionCounter%2 == 0\r\n" << std::endl;
+                        std::cout << "getDayAction: " << actionCard->getDayAction() << ".\r\n" << std::endl;
 
-                    //ajouter logique de déplacement dans gameEngine car pas d'input
-
-
+                        if(actionCard->getDayAction() == MOVE_FORWARD){
+                            activePlayer->moveWithDirection(gameInstance->dayDie, 1);
+                        }
+                        if(actionCard->getDayAction() == MOVE_BACKWARD){
+                            activePlayer->moveWithDirection(gameInstance->dayDie, -1);
+                        }
+                    }
+                    if(actionCounter%2 == 1){ //night
+                        std::cout << "actionCounter%2 == 1\r\n" << std::endl;
+                        std::cout << "getNightAction" << actionCard->getNightAction() << ".\r\n" << std::endl;
+                        if(actionCard->getNightAction() == MOVE_FORWARD){
+                            activePlayer->moveWithDirection(gameInstance->nightDie, 1);
+                        }
+                        if(actionCard->getNightAction() == MOVE_BACKWARD){
+                            activePlayer->moveWithDirection(gameInstance->nightDie, -1);
+                        }
+                    }
+                    std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
+                    
                     actionCounter += 1;
                     gameInstance->actionCounter = actionCounter;
-
                     gameInstance->request(); // from cardactionstate to resourcehandlingstate or captaindicestate if condition
                     break;
 
@@ -227,22 +253,38 @@ namespace client {
                     std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
 
                     //QUESTION : qui se produit en premier ? : le code qui suit ou celui de resourcehandlingstate
-                    // car on a besoin du choix de boathold du joueur 
-
-                    //payer après déplacement
-                    boatHoldCount = activePlayer->getBoatHolds().size();
-                    //selectUserBoatHold ne check pas si la resource choisie est bien celle qu'il faut payer...
-                    // resourceManager ?
-                    //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
-                    // une nouvelle commande pour payer ? 
+                    // car on a besoin du choix de boathold du joueur après déplacement
+                    // => c'est le code de 
                     
+                    //player selects boatholds to pay
+                    if(activePlayer->getHasToPay()){
+                        boatHoldCount = activePlayer->getBoatHolds().size();
+                        std::string resTypeToPay = activePlayer->getResTypeToPay();
+                        int remainToPay = activePlayer->getAmountToPay();
 
+                        while (remainToPay != 0){
+                            auto boatHolds = activePlayer->getBoatHolds();
+                            chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                            if(boatHolds.at(chosenBoatholdId)->getResourceType() != resTypeToPay){
+                                std::cout << "Invalid Resource Type. Please choose a BoatHold with: " << resTypeToPay << ".\n";
+                                continue;
+                            }
+                            state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
+                            int boatHoldQuantity = bh->getQuantity();
+                            remainToPay = activePlayer->getAmountToPay() - boatHoldQuantity;
+                            activePlayer->removeFromBoatHold(chosenBoatholdId, remainToPay);// à faire dans une nouvelle commande
+                            activePlayer->setAmountToPay(remainToPay);
+                        }
+                        activePlayer->setHasToPay(false);
+                    }
+                    
+                    // resourceManager ?
+                    
                     //carte action resource
-                    boatHoldCount = activePlayer->getBoatHolds().size();
+                    //boatHoldCount = activePlayer->getBoatHolds().size();
                     //addToBoathold = new engine::AddToBoathold(activePlayer, chosenBoatholdId, quantity, std::string resourceType);
                     //addToBoathold->launchCommand(gameInstance);
                     //pas besoin de commande
-
 
                     gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
                 break;
@@ -312,17 +354,22 @@ namespace client {
     int Client::soloGameConfigInit()
     {
 
+        engine::ChooseNbOfPlayers* chooseNbOfPlayers;
+        engine::ChooseAI* chooseAI;
+        engine::ChoosePlayerName* choosePlayerName;
+        engine::ChooseMapSize* chooseMapSize;
+        engine::ResourceManager resource_manager;
+        
         state::Game *gameInstance = gameEngine->game;
         gameInstance->setTurn(0);
         // Sets number of player
         int playerNumber = inputHandler.getNumberofPlayers();
         std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
-        engine::ChooseNbOfPlayers* chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
+        chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
         chooseNbOfPlayers->launchCommand(gameInstance);
         delete chooseNbOfPlayers;
 
         // Sets players' name and choose AIs ?
-        engine::ChooseAI* chooseAI;
         state::Player* currentPlayer;
         int levelAI = 0;
         for(int playerIndex = 0; playerIndex < playerNumber; playerIndex++){
@@ -341,7 +388,7 @@ namespace client {
             else { // AI input
                 playerName = currentPlayer->get_AI()->getPlayerName(playerIndex);
             }
-            engine::ChoosePlayerName* choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
+            choosePlayerName = new engine::ChoosePlayerName(playerIndex, playerName);
             choosePlayerName->launchCommand(gameInstance);
             delete choosePlayerName;
         }
@@ -349,7 +396,7 @@ namespace client {
         // Sets MapSize
         int mapSize = inputHandler.getMapSize();
         std::cout <<"MapSize set to: " << std::to_string(mapSize)<< std::endl;
-        engine::ChooseMapSize* chooseMapSize = new engine::ChooseMapSize(mapSize);
+        chooseMapSize = new engine::ChooseMapSize(mapSize);
         chooseMapSize->launchCommand(gameInstance);
         delete chooseMapSize;
 
@@ -360,7 +407,6 @@ namespace client {
             std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
             player->setTreasures(initialTreasures);
             auto goldResource = make_unique<state::Gold>();
-            engine::ResourceManager resource_manager;
             resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
             auto foodResource = make_unique<state::Food>();
             resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);    

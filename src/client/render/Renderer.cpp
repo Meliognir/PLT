@@ -11,7 +11,8 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     int mapSize = map.getSize();          // Nombre total de tuiles
-    float radius = 400.0f;                // Rayon du cercle
+    float radius = std::min(desktopMode.width, desktopMode.height)/3;
+    //float radius = 400.0f;                // Rayon du cercle
     sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
     float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
 
