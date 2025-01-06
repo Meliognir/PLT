@@ -28,8 +28,7 @@
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
 #define ONLINE_MULTIPLAYER 2
-#define SINGLE_PLAYER 3
-#define LOCAL_AND_AI 4
+//#define DUEL_GAME 3
 
 
 template <typename T, typename... Args>
@@ -65,9 +64,11 @@ namespace client {
                 case ONLINE_MULTIPLAYER :
                     runOnlineGame();
                     break;
-                case SINGLE_PLAYER :
-                    runSoloGame();
+                /*
+                case TWO_PLAYERS_MODE :
+                    runDuelGame();
                     break;
+                */
 
                 default :
                     break;
@@ -125,7 +126,7 @@ namespace client {
 
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
-                    gameConfigInit(); // is the gameconfiginit the same for every playing mode ?
+                    soloGameConfigInit(); // is the soloGameConfigInit the same for every playing mode ?
                     gameInstance->request();
                     break;
 
@@ -339,7 +340,7 @@ namespace client {
         return 0;
     }
 
-    int Client::runSoloGame()
+    int Client::runDuelGame()
     {
         return 0;
     }
@@ -350,7 +351,7 @@ namespace client {
     }
 
 
-    int Client::gameConfigInit()
+    int Client::soloGameConfigInit()
     {
 
         engine::ChooseNbOfPlayers* chooseNbOfPlayers;
@@ -451,6 +452,10 @@ namespace client {
         return 0;
     }
     void Client::update()
+    {
+    }
+    
+    Client::~Client()
     {
     }
 }
