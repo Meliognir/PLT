@@ -43,7 +43,7 @@ namespace client {
         // Instantiates a new Game context and runs concrete state GameConfigState
         Renderer renderer; //unused
         state::State *gameState = new state::GameConfigState();
-        gameEngine = new engine::GameEngine(gameState);
+        gameEngine = engine::GameEngine::getInstance(gameState);
         gameInstance = gameEngine->game;
         InputHandler inputHandler;
     }
@@ -244,6 +244,7 @@ namespace client {
                             activePlayer->moveWithDirection(gameInstance->nightDie, -1);
                         }
                     }
+                    
                     std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
                     
                     actionCounter += 1;
