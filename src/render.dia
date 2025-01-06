@@ -147,7 +147,7 @@
         <dia:point val="24.2284,10.1323"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.1784,10.0823;47.8784,29.5823"/>
+        <dia:rectangle val="24.1784,10.0823;47.8784,30.3823"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="24.2284,10.1323"/>
@@ -156,7 +156,7 @@
         <dia:real val="23.600000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="19.399999999999999"/>
+        <dia:real val="20.200000000000003"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#StateLayer#</dia:string>
@@ -952,6 +952,54 @@
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#client::Client *#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="0"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#setWindow#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#void#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#window#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#sf::RenderWindow *#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -4340,7 +4388,7 @@
         <dia:point val="24.2284,10.8323"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.36,10.7823;24.2784,14.6"/>
+        <dia:rectangle val="9.36,10.0723;24.2784,14.6"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
