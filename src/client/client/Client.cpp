@@ -27,7 +27,6 @@
 #define ADD_GOLD 3
 #define ADD_CANONS 4
 
-
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
 #define ONLINE_MULTIPLAYER 2
@@ -117,12 +116,15 @@ namespace client {
         int actionType;
         int currentDie;
         bool validChosenBoathold;
+        int chosenOpponentId;
+        std::vector<state::Player *> opponentsList;
 
         // Init every game loop command
         engine::AssignDice* assignDice;
         engine::ChooseCard* chooseCard;
         engine::AddToBoathold* addToBoathold;
         engine::ChoosePath* choosePath; //unused
+        engine::ChooseOpponent* chooseOpponent;
         engine::ChooseCanons* chooseCanons; //unused
 
         // Game loop State behavior
@@ -295,10 +297,6 @@ namespace client {
                 case RESOURCE_HANDLING_STATE:
                     std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
 
-                    //QUESTION : qui se produit en premier ? : le code qui suit ou celui de resourcehandlingstate
-                    // car on a besoin du choix de boathold du joueur après déplacement
-                    // => c'est le code de 
-                    
                     //player selects boatholds to pay
                     //prevents from paying two times the same tile
                     if(activePlayer->getHasToPay() && activePlayer->getHasMoved()){
@@ -337,8 +335,18 @@ namespace client {
 
                 case OPPONENT_CHOICE_STATE:
                     std::cout << "Client now entering OPPONENT_CHOICE_STATE\r\n" << std::endl;
-                    //do command truc
-                    gameInstance->request();
+                        
+                    opponentsList = activePlayer->getOpponentsList();
+                    for (size_t i = 0; i < opponentsList.size(); ++i) {
+                        std::cout << i + 1 << ". " << opponentsList[i]->getName() << std::endl;
+                    }
+                    chosenOpponentId = inputHandler.chooseOpponent(opponentsList.size());
+                    chosenOpponentId = activePlayer->getOpponentsList().at(chosenOpponentId)->getPlayerId();
+                    chooseOpponent = new engine::ChooseOpponent(activePlayerIndex, chosenOpponentId);
+                    chooseOpponent->launchCommand(gameInstance);
+                    std::cout << "You chose this bad guy: " << gameInstance->getDefendingPlayer()->getName() << "\r\n" << std::endl;
+                    
+                    gameInstance->request(); // from OpponentChoiceState to CombatAttackingState
                     break;
 
 
