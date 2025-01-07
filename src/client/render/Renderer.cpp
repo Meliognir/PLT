@@ -5,17 +5,10 @@
 #define PI 3.14159265358979323846
 #define WIDTHFAC 1.0
 #define HEIGHTFAC 1.0
-//beach tileset 576 * 288
-void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map){
+void render::Renderer::renderBackground(sf::RenderWindow &window){
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
-    int mapSize = map.getSize();          // Nombre total de tuiles
-    float radius = std::min(desktopMode.width, desktopMode.height)/3;
-    //float radius = 400.0f;                // Rayon du cercle
-    sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
-    float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
-
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("../src/boardGameData/board.png")) {
         std::cerr << "Error loading board.png!" << std::endl;
@@ -27,6 +20,18 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
         static_cast<float>(windowWidth) / backgroundTexture.getSize().x,
         static_cast<float>(windowHeight) / backgroundTexture.getSize().y
     );
+    window.draw(backgroundSprite);
+}
+// beach tileset 576 * 288
+void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map){
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    int mapSize = map.getSize();          // Nombre total de tuiles
+    float radius = std::min(desktopMode.width, desktopMode.height)/3;
+    //float radius = 400.0f;                // Rayon du cercle
+    sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
+    float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
 
     sf::Font font;
     font.loadFromFile("../src/boardGameData/Arial.ttf");   
@@ -68,8 +73,6 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     moonSprite.setTexture(moonTexture);
     moonSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
     moonSprite.setPosition((windowWidth/2)+windowWidth/20, (windowHeight/2)-windowHeight/16);
-
-    window.draw(backgroundSprite);
     
     // Parcourir toutes les tuiles de la carte
     for (int i = 0; i < mapSize; ++i) {
@@ -289,6 +292,8 @@ void render::Renderer::renderHand(sf::RenderWindow &window, const std::vector<in
 }
 
 void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *player){
+    sf::Font font;
+    font.loadFromFile("../src/boardGameData/Arial.ttf"); 
     sf::Texture boatholdTexture;
     if (!boatholdTexture.loadFromFile("../src/boardGameData/CardSprSheet.png")) {
         std::cerr << "Error loading card texture!" << std::endl;
@@ -304,6 +309,11 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     int i;
+    sf::Text quantityText;
+    quantityText.setFont(font);    
+    quantityText.setCharacterSize(20);
+    quantityText.setFillColor(sf::Color::Red);
+
     for (i = 0; i<boatHoldCount; i++){
         boatholdSprite.setTextureRect(sf::IntRect(530,0, 90, 90));
         boatholdSprite.setPosition(100+i*100, 300); //TODO : scale
@@ -319,7 +329,11 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
             resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
         }
         resourceSprite.setPosition(100+i*100, 300);
+        quantityText.setString(std::to_string(hold->getQuantity()));  
+        quantityText.setPosition(100+i*105, 320);
+
         window.draw(boatholdSprite);
         window.draw(resourceSprite);
+        window.draw(quantityText);
     }
 }
