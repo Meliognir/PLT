@@ -347,7 +347,7 @@
                 <dia:string>#out#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -412,7 +412,7 @@
                 <dia:string>#in #</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -477,7 +477,7 @@
                 <dia:string>#in #</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::vlaue*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -494,7 +494,7 @@
                 <dia:string>#out #</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1059,7 +1059,7 @@
                 <dia:string>#in#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1076,7 +1076,7 @@
                 <dia:string>#out#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1530,7 +1530,7 @@
                 <dia:string>#out#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1573,13 +1573,13 @@
         <dia:point val="62.1805,-78.9141"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="62.1305,-78.9641;85.4455,-67.4641"/>
+        <dia:rectangle val="62.1305,-78.9641;88.1405,-67.4641"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="62.1805,-78.9141"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="23.215"/>
+        <dia:real val="25.91"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="11.4"/>
@@ -1680,7 +1680,7 @@
             <dia:string>#players#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::map&lt;int, std::unique_ptr&lt;Player&gt;&gt;#</dia:string>
+            <dia:string>#std::map&lt;int, std::unique_ptr&lt;state::Player&gt;&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -1726,7 +1726,7 @@
             <dia:string>#engine#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#engine::Engine#</dia:string>
+            <dia:string>#engine::GameEngine#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -1807,7 +1807,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#Player*#</dia:string>
+            <dia:string>#state::Player*#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -1885,7 +1885,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#engine::Engine*#</dia:string>
+            <dia:string>#engine::GameEngine*#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -1915,7 +1915,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#const std::map&lt;int, std::unique_ptr&lt;Player&gt;&gt;*#</dia:string>
+            <dia:string>#const std::map&lt;int, std::unique_ptr&lt;state::Player&gt;&gt;*#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -1988,7 +1988,7 @@
                 <dia:string>#newData#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::unique_ptr&lt;Player&gt;#</dia:string>
+                <dia:string>#std::unique_ptr&lt;state::Player&gt;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2084,7 +2084,7 @@
                 <dia:string>#newPlayer#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::unqiue_ptr&lt;Player&gt;#</dia:string>
+                <dia:string>#std::unqiue_ptr&lt;state::Player&gt;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2319,7 +2319,7 @@
                 <dia:string>#out#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2469,7 +2469,7 @@
             <dia:string>#engine#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#engine::Engine*#</dia:string>
+            <dia:string>#engine::GameEngine*#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -2569,7 +2569,7 @@
                 <dia:string>#engine#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#engine::Engine*#</dia:string>
+                <dia:string>#engine::GameEngine*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2617,7 +2617,7 @@
                 <dia:string>#out#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2682,7 +2682,7 @@
                 <dia:string>#in#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2699,7 +2699,7 @@
                 <dia:string>#out#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -3024,7 +3024,7 @@
                 <dia:string>#out#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -3089,7 +3089,7 @@
                 <dia:string>#in#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -3154,7 +3154,7 @@
                 <dia:string>#in#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -3171,7 +3171,7 @@
                 <dia:string>#out#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#Json::value*#</dia:string>
+                <dia:string>#Json::Value*#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -3584,7 +3584,7 @@
         <dia:point val="53.9615,-77.9078"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="53.2115,-80.7241;73.988,-77.0678"/>
+        <dia:rectangle val="53.2115,-80.7241;75.3355,-77.0678"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -3593,8 +3593,8 @@
         <dia:point val="53.9615,-77.9078"/>
         <dia:point val="55.7115,-77.9078"/>
         <dia:point val="55.7115,-79.9641"/>
-        <dia:point val="73.788,-79.9641"/>
-        <dia:point val="73.788,-78.9141"/>
+        <dia:point val="75.1355,-79.9641"/>
+        <dia:point val="75.1355,-78.9141"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -3745,16 +3745,16 @@
     </dia:object>
     <dia:object type="UML - Association" version="2" id="O18">
       <dia:attribute name="obj_pos">
-        <dia:point val="85.3955,-75.4141"/>
+        <dia:point val="88.0905,-75.4141"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="77.7479,-76.1741;89.2286,-61.157"/>
+        <dia:rectangle val="77.7479,-76.1741;89.6905,-61.157"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="85.3955,-75.4141"/>
+        <dia:point val="88.0905,-75.4141"/>
         <dia:point val="89.1786,-75.4141"/>
         <dia:point val="89.1786,-62.1732"/>
         <dia:point val="77.7979,-62.1732"/>
@@ -4288,18 +4288,18 @@
     </dia:object>
     <dia:object type="UML - Association" version="2" id="O21">
       <dia:attribute name="obj_pos">
-        <dia:point val="85.3955,-77.0141"/>
+        <dia:point val="88.0905,-77.0141"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="80.0175,-82.6775;87.1955,-76.1741"/>
+        <dia:rectangle val="80.0175,-82.6775;89.8905,-76.1741"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="85.3955,-77.0141"/>
-        <dia:point val="87.1455,-77.0141"/>
-        <dia:point val="87.1455,-79.7958"/>
+        <dia:point val="88.0905,-77.0141"/>
+        <dia:point val="89.8405,-77.0141"/>
+        <dia:point val="89.8405,-79.7958"/>
         <dia:point val="80.0675,-79.7958"/>
         <dia:point val="80.0675,-82.6275"/>
       </dia:attribute>

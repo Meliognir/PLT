@@ -23,7 +23,11 @@ using namespace state;
 using namespace render;
 using namespace engine;
 using namespace ai;
-
+*/
+int main() {
+    return 0;
+}
+/*
 class Request
 {
 public:
@@ -132,11 +136,7 @@ static void request_completed(void *cls, struct MHD_Connection *connection, void
         *con_cls = nullptr;
     }
 }
-*/
-int main() {
-    return 0;
-}
-/*
+
 int main(int argc, char const *argv[])
 {
     if (argc > 1)
