@@ -78,12 +78,13 @@ void Player::moveCardToDeck() {
     activeCard = -1;
 }
 
-void Player::moveWithDirection (int distance, int direction){
+void Player::moveWithDirection (int distance, int direction){ // ajouter taille de map parametre
     int currentPos = this->getPosition();
     signed int nextPos = currentPos + distance*direction;
     std::cout << "nextPos: " << nextPos << "\r\n" << std::endl;
     if(nextPos > 0){this->setPosition(nextPos);}
-    else{this->setPosition(0);}
+    //if(nextPos > Map::getSize()){this->setPosition(Map::getSize());}
+    if(nextPos < 0){this->setPosition(0);}
 }
 
 void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount, int skipSelection){
@@ -200,6 +201,11 @@ void Player::setActiveCard(int activeCard){
 
 const std::vector <Player*>& Player::getOpponentsList() const{
     return opponentsList;
+}
+
+void Player::setOpponentsList(const std::vector<Player *> &opponentsList)
+{
+    this->opponentsList = opponentsList;
 }
 
 int Player::getFirePower() const{

@@ -127,6 +127,23 @@ bool InputHandler::chooseTimeDice(int die1, int die2){
     return input == "1";
 }
 
+int InputHandler::chooseOpponent(size_t opponentsNb)
+{
+    size_t choice = 0;
+    while (true) {
+        std::cout<<"Choose an opponent, enter an index between 1 and "<< opponentsNb << std::endl;
+        std::cin >> choice;
+
+        if (std::cin.fail() || choice < 1 || choice > opponentsNb) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout<<"Invalid input. Please enter a valid index."<<std::endl;
+        } else {
+            return choice - 1;
+        }
+    }
+}
+
 int InputHandler::chooseCanonNb(int totalNb){
     if (totalNb <= 0) {
         std::cout << "You don't have any available canons." << std::endl;

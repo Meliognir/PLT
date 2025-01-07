@@ -14,7 +14,8 @@ void ResourceHandlingState::handle(){
 
     int nbOpponent = 0;
     Player *activePlayer = game->getActivePlayer();
-    
+    std::vector<state::Player *> opponentsList = {};
+        
     //player's total resource quantity he can pay for resourcetoPayType
     int activePlayerPos = activePlayer->getPosition();
     std::string resourceToPayType = game->map->getResourceType(activePlayerPos);
@@ -56,11 +57,12 @@ void ResourceHandlingState::handle(){
 
     //checks activeplayer's opponent presence
     for (Player *player : game->getPlayerList()) {
-        if (player->getPosition() == activePlayerPos) {
+        if (player->getPosition() == activePlayerPos && player->getPlayerId() != activePlayer->getPlayerId()) {
             nbOpponent += 1;
+            opponentsList.push_back(player);
         }
     }
-    nbOpponent -= 1;
+    activePlayer->setOpponentsList(opponentsList);
     std::cout <<"there are: " << nbOpponent << " opponents on this tile\r\n"<< std::endl;
 
     //no duel if activeplayer has moved
