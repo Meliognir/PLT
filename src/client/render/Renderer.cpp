@@ -12,15 +12,16 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
     int mapSize = map.getSize();          // Nombre total de tuiles
-    sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
+    float mapScale = 1/((float)mapSize);
+    sf::Vector2f center(windowWidth/3.1f, windowHeight/2.0f);        // Centre du cercle (positionné à gauche dans la fenêtre)
     
     // Rayon du cercle
-    float radius = 3*globalScale/5;
-    float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
+    float radius = globalScale/2;
+    float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
 
     sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("../src/boardGameData/board.png")) {
-        std::cerr << "Error loading board.png!" << std::endl;
+    if (!backgroundTexture.loadFromFile("../src/boardGameData/BackgroundJamaicaPLT.png")) {
+        std::cerr << "Error loading BackgroundJamaicaPLT.png!" << std::endl;
         return;
     }
     sf::Sprite backgroundSprite;
@@ -63,14 +64,14 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     sf::Sprite sunSprite;
     sunSprite.setTexture(sunTexture);
     sunSprite.setTextureRect(sf::IntRect(0, 0, 400, 400));
-    sunSprite.setPosition(windowWidth/2.7, windowHeight/2.35);
-    sunSprite.setScale(sf::Vector2f(globalScale/1050, globalScale/1050));
+    sunSprite.setPosition(windowWidth/16.0f, windowHeight/14.5f);
+    sunSprite.setScale(sf::Vector2f(globalScale/2100, globalScale/2100));
 
     sf::Sprite moonSprite;
     moonSprite.setTexture(moonTexture);
     moonSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
-    moonSprite.setPosition(windowWidth/1.83, windowHeight/2.3);
-    moonSprite.setScale(sf::Vector2f(globalScale/450, globalScale/450));
+    moonSprite.setPosition(windowWidth/1.9f, windowHeight/12.9f);
+    moonSprite.setScale(sf::Vector2f(globalScale/900, globalScale/900));
 
     window.draw(backgroundSprite);
     
@@ -88,25 +89,25 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             tileSprite.setTextureRect(sf::IntRect(32+4*tileWidth, 96, tileWidth, tileHeight)); // Première tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
-            tileSprite.setScale(sf::Vector2f(globalScale/1000, globalScale/1000));
+            tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
             window.draw(tileSprite);
         } else if (tile->tileResourceType == "Gold") {
             tileSprite.setTextureRect(sf::IntRect(32+2*tileWidth, 96, tileWidth, tileHeight)); // Deuxième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
-            tileSprite.setScale(sf::Vector2f(globalScale/1000, globalScale/1000));
+            tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
             window.draw(tileSprite);
         } else if (tile->treasureAvailable) {
             tileSprite.setTextureRect(sf::IntRect(32, 96, tileWidth, tileHeight)); // Troisième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
-            tileSprite.setScale(sf::Vector2f(globalScale/1000, globalScale/1000));
+            tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
             window.draw(tileSprite);
         } else {
             portRoyalSprite.setTextureRect(sf::IntRect(0, 0, 192, 192)); // Par défaut (première tuile)
             portRoyalSprite.setOrigin(tileWidth / 2, tileHeight / 2);
-            portRoyalSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
-            portRoyalSprite.setPosition(x-10, y-20);
+            portRoyalSprite.setScale(sf::Vector2f(globalScale/4000, globalScale/4000));
+            portRoyalSprite.setPosition(center.x - globalScale/80.0f + radius, center.y - globalScale/80.0f);
             window.draw(portRoyalSprite);
         }
 
@@ -129,6 +130,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
     sf::Texture playerTexture;
     if (!playerTexture.loadFromFile("../src/boardGameData/Boats.png")) {
         std::cerr << "Error loading player texture!" << std::endl;
@@ -159,7 +161,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             // Calculer la position de la tuile correspondante
             float angleStep = 2 * PI / map.getSize();   // Angle entre chaque tuile
             float angle = playerPosition * angleStep;
-            float radius = 400.0f;                     // Même rayon que dans renderMap
+            float radius = globalScale/2;                     // Même rayon que dans renderMap
             sf::Vector2f center(windowWidth/2, windowHeight/2);             // Centre de la carte
 
             float x = center.x + radius * cos(angle);
@@ -200,8 +202,8 @@ void render::Renderer::renderDice(sf::RenderWindow &window, int dayDie, int nigh
     sf::Sprite dayDieSprite;
     sf::Sprite nightDieSprite;
 
-    sf::Vector2f dayDiePosition(windowWidth/2.7, windowHeight/2);   
-    sf::Vector2f nightDiePosition(windowWidth/1.83, windowHeight/2);  
+    sf::Vector2f dayDiePosition(windowWidth/7.3f, windowHeight/20.0f);   
+    sf::Vector2f nightDiePosition(windowWidth/2.5, windowHeight/20.0f);  
 
     if (dayDie > 0) {
         dayDieSprite.setTexture(diceTexture);
