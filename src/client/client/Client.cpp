@@ -27,6 +27,8 @@
 #define ADD_GOLD 3
 #define ADD_CANONS 4
 
+#define COMBATDIE 1
+
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
 #define ONLINE_MULTIPLAYER 2
@@ -118,6 +120,9 @@ namespace client {
         bool validChosenBoathold;
         int chosenOpponentId;
         std::vector<state::Player *> opponentsList;
+        state::Player* combatPlayer;
+        int playerNbCanons;
+        
 
         // Init every game loop command
         engine::AssignDice* assignDice;
@@ -125,7 +130,8 @@ namespace client {
         engine::AddToBoathold* addToBoathold;
         engine::ChoosePath* choosePath; //unused
         engine::ChooseOpponent* chooseOpponent;
-        engine::ChooseCanons* chooseCanons; //unused
+        engine::RollDice* rollDice;
+        engine::ChooseCanons* chooseCanons;
 
         // Game loop State behavior
         int endloop = 0;
@@ -245,7 +251,7 @@ namespace client {
                         std::cout << "actionCounter%2 == 1\r\n" << std::endl;
                         actionType = actionCard->getNightAction();
                         currentDie = gameInstance->nightDie;
-                        std::cout << "getNightAction" << actionType << ".\r\n" << std::endl;
+                        std::cout << "getNightAction: " << actionType << ".\r\n" << std::endl;
                     }
                     switch (actionType)
                     {
@@ -338,13 +344,14 @@ namespace client {
                         
                     opponentsList = activePlayer->getOpponentsList();
                     for (size_t i = 0; i < opponentsList.size(); ++i) {
-                        std::cout << i + 1 << ". " << opponentsList[i]->getName() << std::endl;
+                        std::cout << i + 1 << ". " << opponentsList[i]->getName() << "\r\n" << std::endl;
                     }
                     chosenOpponentId = inputHandler.chooseOpponent(opponentsList.size());
-                    chosenOpponentId = activePlayer->getOpponentsList().at(chosenOpponentId)->getPlayerId();
+                    chosenOpponentId = opponentsList.at(chosenOpponentId)->getPlayerId();
                     chooseOpponent = new engine::ChooseOpponent(activePlayerIndex, chosenOpponentId);
                     chooseOpponent->launchCommand(gameInstance);
-                    std::cout << "You chose this bad guy: " << gameInstance->getDefendingPlayer()->getName() << "\r\n" << std::endl;
+                    combatPlayer = gameInstance->getDefendingPlayer();
+                    std::cout << "You chose this bad guy: " << combatPlayer->getName() << "\r\n" << std::endl;
                     
                     gameInstance->request(); // from OpponentChoiceState to CombatAttackingState
                     break;
@@ -352,15 +359,55 @@ namespace client {
 
                 case COMBAT_ATTACKING_STATE:
                     std::cout << "Client now entering COMBAT_ATTACKING_STATE\r\n" << std::endl;
-                    //do command truc
-                    gameInstance->request();
+                    
+                    //checker que le state se passe après le client
+
+                    combatPlayer = gameInstance->getAttackingPlayer();
+                    playerNbCanons = 0;
+
+                    for (state::BoatHold *bh : combatPlayer->getBoatHolds()){
+                        if (bh->hasResourceType("Canon")) {
+                            playerNbCanons += bh->getQuantity();
+                        }
+                    }
+
+                    std::cout << "Atacking Player:" << combatPlayer->getName() << " has: " << playerNbCanons << " Canons.\r\n" << std::endl;
+
+                    playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
+                    chooseCanons = new engine::ChooseCanons(combatPlayer->getPlayerId(), playerNbCanons);
+                    chooseCanons->launchCommand(gameInstance);
+
+                    rollDice = new engine::RollDice(COMBATDIE, combatPlayer->getPlayerId());
+                    rollDice->launchCommand(gameInstance);
+
+                    gameInstance->request(); // from CombatAttackingState to CombatDefendingState or StealResourceState if condition
                     break;
 
 
                 case COMBAT_DEFENDING_STATE:
                     std::cout << "Client now entering COMBAT_DEFENDING_STATE\r\n" << std::endl;
-                    //do command truc
-                    gameInstance->request();
+
+                    //checker que le state se passe après le client
+
+                    combatPlayer = gameInstance->getDefendingPlayer();
+                    playerNbCanons = 0;
+
+                    for (state::BoatHold *bh : combatPlayer->getBoatHolds()){
+                        if (bh->hasResourceType("Canon")) {
+                            playerNbCanons += bh->getQuantity();
+                        }
+                    }
+                    
+                    std::cout << "Defending Player:" << combatPlayer->getName() << " has: " << playerNbCanons << " Canons.\r\n" << std::endl;
+
+                    playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
+                    chooseCanons = new engine::ChooseCanons(combatPlayer->getPlayerId(), playerNbCanons);
+                    chooseCanons->launchCommand(gameInstance);
+
+                    rollDice = new engine::RollDice(COMBATDIE, combatPlayer->getPlayerId());
+                    rollDice->launchCommand(gameInstance);
+
+                    gameInstance->request(); // from CombatDefendingState to CardActionState or StealResourceState if condition
                     break;
 
 

@@ -12,15 +12,20 @@ namespace state{
 
 
 void CombatAttackingState::handle(){
+
     Player * attacker = game->getAttackingPlayer();
-    int attackpower = attacker->getFirePower(); 
+    int attackpower = attacker->getFirePower();
+
     if (attackpower>1000){
+
         game->setCombatWinner(attacker);
+
         std::cout <<"Transitioning to StealResource state..."<< std::endl;
         game->transitionTo(new StealResourceState);
         notifyObservers();
     }
     else {
+        std::cout <<"Transitioning to CombatDefending state..."<< std::endl;
         game->transitionTo(new CombatDefendingState);
         notifyObservers();
     }
