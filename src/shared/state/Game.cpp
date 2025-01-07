@@ -218,11 +218,13 @@ bool Game::checkGameEndCondition(){
     return false;
 }
 
+//unused
 void Game::rollDice(){
     dayDie = rand() % 6 + 1;
     nightDie = rand() % 6 + 1;
 }
 
+//unused
 void movePlayer(state::Player * player, int direction, int value){
     //ResourceManager resourceManager2;
     //state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition());
