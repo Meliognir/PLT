@@ -118,7 +118,7 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
         tileText.setString(std::to_string(tile->tileCost));  
         tileText.setCharacterSize(14);
         tileText.setFillColor(sf::Color::Black);
-        tileText.setPosition(x - 10, y - 10);
+        tileText.setPosition(x - globalScale/80.0f, y - globalScale/80.0f);
 
         window.draw(tileText);
         window.draw(sunSprite);
