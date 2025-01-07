@@ -3505,7 +3505,7 @@
             </dia:composite>
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#die 2#</dia:string>
+                <dia:string>#die2#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#int#</dia:string>
@@ -5400,7 +5400,7 @@
         <dia:point val="47.8284,12.7823"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="47.0784,12.0323;62.024,24.9477"/>
+        <dia:rectangle val="47.0784,12.0223;62.024,24.1477"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>

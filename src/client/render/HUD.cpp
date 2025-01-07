@@ -92,7 +92,7 @@ void render::HUD::askMapSize(sf::RenderWindow &window){
     window.draw(Text);
 }
 
-void render::HUD::askDayDice(sf::RenderWindow &window){
+void render::HUD::askDayDice(sf::RenderWindow &window, int die1, int die2){
         sf::Font font;
     font.loadFromFile("../src/boardGameData/Arial.ttf"); 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
