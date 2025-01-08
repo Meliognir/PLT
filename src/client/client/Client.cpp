@@ -147,9 +147,6 @@ namespace client {
 
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
-
-                    
-                    soloGameConfigInit(); // is the soloGameConfigInit the same for every playing mode ?
                 
                     localGameConfigInit(); // is the soloGameConfigInit the same for every playing mode ?
 
