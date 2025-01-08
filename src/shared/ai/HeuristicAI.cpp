@@ -115,21 +115,19 @@ int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
         std::cout << i + 1 << ". " << handCards[i] << std::endl;
     }
 
-    int choice = HEURISTIC_PLACE_HOLDER;
+    int choice;
     bool foundNonCanonCard = false;
 
-    // Check for cards without "CANON"
-    for (size_t i = 1; i < handCards.size(); ++i) {
-        if (handCards[i]!=5 ||handCards[i]!=6 ||handCards[i]!=10 ||handCards[i]!=11) {
-            choice = i+1;
-            foundNonCanonCard = true;
-            break;
-        }
-    }
 
-    // If all cards have "CANON", default to the first card
-    if (!foundNonCanonCard) {
-        choice = 1;
+    for (size_t i = 0; i < handCards.size(); ++i) {
+        if (handCards[i] != 4 && handCards[i] != 5 && handCards[i] != 9 && handCards[i] != 10) {
+            choice = i ; // Adjust for 1-based index
+            foundNonCanonCard = true;
+        }
+        // If no cards without "CANON" are found, default to the first card
+        if (!foundNonCanonCard) {
+            choice = 1; // Default to the first card
+        }
     }
 
     std::cout << "Chosen card index: " << choice << std::endl;
@@ -137,13 +135,46 @@ int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
 }
 
 
-bool ai::HeuristicAI::chooseTimeDice(int die1, int die2){
-    int input;
+
+
+bool ai::HeuristicAI::chooseTimeDice(int die1, int die2) {
     std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
               << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
+    int choice;
+    bool foundNonCanonCard = false;
 
-    return input == 1;
+
+    for (size_t i = 0; i < controlledPlayer->getHandCards().size(); ++i) {
+        if (controlledPlayer->getHandCards().at(i) != 4 && controlledPlayer->getHandCards().at(i) != 5 && controlledPlayer->getHandCards().at(i) != 9 && controlledPlayer->getHandCards().at(i) != 10) {
+            choice = i ; // Adjust for 1-based index
+            foundNonCanonCard = true;
+        }
+        // If no cards without "CANON" are found, default to the first card
+        if (!foundNonCanonCard) {
+            choice = 1; // Default to the first card
+        }
+    }
+
+
+        if (die1>=die2 && (controlledPlayer->getHandCards().at(choice)==1 ||controlledPlayer->getHandCards().at(choice)==3 ||controlledPlayer->getHandCards().at(choice)==0 ||controlledPlayer->getHandCards().at(choice)==7)) {
+            std::cout << "You choosed " <<die1 <<" ."<< std::endl;
+            return die1;
+        } else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==1 ||controlledPlayer->getHandCards().at(choice)==3 ||controlledPlayer->getHandCards().at(choice)==0 ||controlledPlayer->getHandCards().at(choice)==7)) {
+            std::cout << "You choosed " <<die2 <<" ."<< std::endl;
+            return die2;
+        } else if (die1>=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
+            std::cout << "You choosed " <<die2 <<" ."<< std::endl;
+            return die2;
+        }else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
+            std::cout << "You choosed " <<die1 <<" ."<< std::endl;
+            return die1;
+        }else {
+            std::cout << "You choosed " <<die1 <<" as the day number."<< std::endl;
+            return die1;
+        }
 }
+
+
 
 int ai::HeuristicAI::chooseCanonNb(int totalNb){
     if (totalNb <= 0) {

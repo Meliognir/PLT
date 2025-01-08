@@ -235,3 +235,17 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 >>>* ChoosePlayerName : permet aux joueurs de choisir leur pseudo.
 >>>* RollDice : génère deux dés de façon "random".
 >>>* StealResources : permet de voler des ressources après un combat.
+>>>
+## 5-Intelligence Artificiel
+>### 5.1 Stratégie
+>> #### 5.1.1 IA Random
+>> L'IA Random renvoie à chaque input une valeur aléatoire qui dépend
+>> de l'action à faire.
+>>>Par exemple : elle renvoie un entier entre 1 et 3 quand il faut choisir une carte 
+>> et un entier entre 1 et 6 quand il faut choisir un boathold.
+> 
+>> #### 5.1.2 IA Heuristic
+>> Cette IA agit comme le ferait un humain, mais avec une stratégie prédéfinie pour chaque action :
+>> * le choix de l'emplacement à utiliser quand on obtient une ressource : si un emplacement est libre, l'IA le prend sinon
+>> elle regarde s'il y a des canons et les remplacent. Dans le cas où il n'y a pas de canons, on regarde la quantité de chaque ressource(s) restante(s) et on remplace la plus faible si c'est possible. 
+>> * le choix des cartes : l'objectif est de choisir les cartes qui ne possède pas de canon.
