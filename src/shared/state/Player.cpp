@@ -74,8 +74,16 @@ void Player::moveCardToDeck() {
         std::cerr << "Error: No active card to move to the deck." << std::endl;
         return;
     }
+    //ajout de la valeur activeCard en fin de cardDeck
     cardDeck.push_back(activeCard);
+    //erase prend un indice
+    //handCards.erase(); handCards.begin() + activeCard
+    this->usedCardNb++;
     activeCard = -1;
+    //8 activeCards were used
+    if(this->usedCardNb == 8){
+        this->shuffleDeck();
+    }
 }
 
 void Player::moveWithDirection (int distance, int direction){ // ajouter taille de map parametre
