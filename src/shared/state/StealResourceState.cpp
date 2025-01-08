@@ -13,6 +13,11 @@ StealResourceState::~StealResourceState(){
 }
 
 void StealResourceState::handle(){
+
+    Player * winner = game->getCombatWinner();
+    Player * loser = game->getCombatLoser();
+    std::cout << "Player: " << winner->getName() << " wins and Player: " << loser->getName() << " loses." << std::endl;
+
     std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
     game->transitionTo(new ResourceHandlingState);
     notifyObservers();

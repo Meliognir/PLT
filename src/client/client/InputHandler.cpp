@@ -60,11 +60,16 @@ int InputHandler::getMapSize(){
         }
     return mapSize;
 }
-size_t InputHandler::selectUserBoatHold(size_t boatHoldCount){
+size_t InputHandler::selectUserBoatHold(size_t boatHoldCount, bool steal){
     std::string tempString;
     size_t index = 0;
     while (true) {
-        std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : " << std::endl;
+        if(steal){
+            std::cout << "You can steal one of " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : " << std::endl;
+        }
+        else{
+            std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : " << std::endl;
+        }
         std::cin >> tempString;
         try {
             index = stoi(tempString);

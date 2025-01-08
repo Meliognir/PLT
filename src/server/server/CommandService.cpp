@@ -1,11 +1,11 @@
-/*#include "CommandService.h"
+#include "CommandService.h"
 #include "ServiceException.h"
 
 #include <iostream>
 using namespace server;
 using namespace std;
 
-CommandService::CommandService(engine::GameEngine &engine) : AbstractService("/command"), engine(engine)
+CommandService::CommandService (engine::GameEngine* engine) : AbstractService("/command"), engine(engine)
 {
     commands["size"] = 0;
     commands["commands"] = Json::Value(Json::arrayValue);
@@ -13,10 +13,10 @@ CommandService::CommandService(engine::GameEngine &engine) : AbstractService("/c
     commandsHistoric["commands"] = Json::Value(Json::arrayValue);
 }
 
-HttpStatus CommandService::get(Json::Value &out, int id)
+HttpStatus CommandService::get (Json::Value& out, int id)
 {
     // only new commands
-    out = commands;
+    out =  commands;
 
     // for each get , reinitialize the dynamic list of commands
     commands["size"] = 0;
@@ -25,8 +25,7 @@ HttpStatus CommandService::get(Json::Value &out, int id)
     return HttpStatus::OK;
 }
 
-HttpStatus CommandService::post(Json::Value *out, Json::Value *in)
-{
+HttpStatus CommandService::post(Json::Value& out, Json::Value& in){
     commands["commands"][commands["size"].asUInt()] = in;
     commands["size"] = commands["size"].asUInt() + 1;
 
@@ -37,6 +36,6 @@ HttpStatus CommandService::post(Json::Value *out, Json::Value *in)
     return HttpStatus::NO_CONTENT;
 }
 
-Json::Value CommandService::getCommandsHistoric(){
+Json::Value CommandService::getCommandHistoric (){
     return commandsHistoric;
-}*/
+}

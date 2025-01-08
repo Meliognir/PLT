@@ -1,4 +1,4 @@
-/*
+
 #include "AbstractService.h"
 #include "ServiceException.h"
 #include <iostream>
@@ -14,23 +14,22 @@ AbstractService::AbstractService(std::string pattern)
 AbstractService::~AbstractService() {
     
 }
-const std::string& AbstractService::getPattern() const {
+const std::string AbstractService::getPattern (){
     return this->pattern;
 }
 
-HttpStatus AbstractService::get (Json::value* out, int id)  {
+HttpStatus AbstractService::get (Json::Value& out, int id)  {
     throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Not Implemented");
 }
 
-HttpStatus AbstractService::put (Json::value* in, int id) {
+HttpStatus AbstractService::put (Json::Value& in, int id) {
     throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Not Implemented");
 }
 
-HttpStatus AbstractService::post (Json::value* out,  Json::value* in) {
+HttpStatus AbstractService::post (Json::Value& out,  Json::Value& in) {
     throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Not Implemented");
 }
 
 HttpStatus AbstractService::remove (int id) {
     throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Not Implemented");
 }
-*/
