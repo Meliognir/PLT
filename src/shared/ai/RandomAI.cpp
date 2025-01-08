@@ -23,15 +23,11 @@ std::string ai::RandomAI::getPlayerName(int playerIndex){
 
 size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount){
     size_t index = 0;
-    while (true) {
-        std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
-        index=getRandomInput(0,5);
-        if (index < 1 || index > boatHoldCount) {
-            std::cout << "Invalid index. Please enter a number between 1 and " << boatHoldCount << ".\n";
-            continue;
-        }
-        return index;
-    }
+
+    std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
+    index=getRandomInput(1, boatHoldCount);
+    return index;
+
 }
 
 bool ai::RandomAI::confirmBoatHoldReplace(){
