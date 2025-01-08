@@ -13,9 +13,6 @@ namespace state{
 
 void state::CombatDefendingState::handle(){
 
-    Player *activePlayer = game->getActivePlayer();
-    activePlayer->setPrevDuel(true); // à déplacer après la fin du combat dans stealresourcestate
-
     Player * attacker = game->getAttackingPlayer();
     int attackpower = attacker->getFirePower(); 
     Player * defender = game->getDefendingPlayer();
@@ -31,9 +28,11 @@ void state::CombatDefendingState::handle(){
     }
     else if (attackpower > defensepower){
         game->setCombatWinner(attacker);
+        game->setCombatLoser(defender);
     }
     else {
         game->setCombatWinner(defender);
+        game->setCombatLoser(attacker);
     }
 
     std::cout <<"Transitioning to StealResource state..."<< std::endl;
