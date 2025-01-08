@@ -9,7 +9,7 @@ int getRandomInput(int min, int max) {
     return min + std::rand() % ((max - min) + 1);
 }
 
-ai::RandomAI::RandomAI() {}
+ai::RandomAI::RandomAI(state::Game* game): AI(game) {}
 
 
 

@@ -13,8 +13,11 @@
 
 #define DEEP_PLACE_HOLDER 1
 
-ai::DeepAI::DeepAI() {}
-    //when demande input : rand() response
+ai::DeepAI::DeepAI(state::Game* game): AI(game) {
+
+}
+
+//when demande input : rand() response
 
 
 
