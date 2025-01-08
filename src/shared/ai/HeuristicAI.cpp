@@ -121,7 +121,7 @@ int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
     // Check for cards without "CANON"
     for (size_t i = 1; i < handCards.size(); ++i) {
         if (handCards[i]!=5 ||handCards[i]!=6 ||handCards[i]!=10 ||handCards[i]!=11) {
-            choice = i;
+            choice = i+1;
             foundNonCanonCard = true;
             break;
         }
@@ -159,7 +159,7 @@ int ai::HeuristicAI::chooseCanonNb(int totalNb){
 
 int ai::HeuristicAI::chooseOpponent(size_t listSize)
 {
-    return 0;
+    return HEURISTIC_PLACE_HOLDER;
 }
 
 ai::HeuristicAI::~HeuristicAI()
