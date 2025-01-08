@@ -124,6 +124,7 @@ namespace client {
         int playerNbCanons;
         state::Player* winner;
         state::Player* loser;
+        int winnerBoatholdId;
 
         // Init every game loop command
         engine::AssignDice* assignDice;
@@ -463,7 +464,7 @@ namespace client {
                 case STEAL_RESOURCE_STATE:
                     std::cout << "Client now entering STEAL_RESOURCE_STATE\r\n" << std::endl;
 
-                    //winner chooses a boatHold to steal from loser
+                    //winner chooses one loser's boatHold to steal and one of his to get stolen Resources
                     winner = gameInstance->getCombatWinner();
                     loser = gameInstance->getCombatLoser();
 
@@ -477,7 +478,9 @@ namespace client {
 
                     boatHoldCount = loser->getBoatHolds().size();
                     chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount, true);
-                    stealResource = new engine::StealResource(chosenBoatholdId, winner->getPlayerId(), loser->getPlayerId());
+                    boatHoldCount = winner->getBoatHolds().size();
+                    winnerBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount, false);
+                    stealResource = new engine::StealResource(chosenBoatholdId, winner->getPlayerId(), loser->getPlayerId(), winnerBoatholdId);
                     stealResource->launchCommand(gameInstance);
                     delete stealResource;
 
