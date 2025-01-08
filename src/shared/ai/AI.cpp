@@ -1,7 +1,11 @@
 #include "AI.h"
 
-ai::AI::AI()
+#include <state/Game.h>
+
+ai::AI::AI(state::Game* game)
 {
+    gameView=game;
+    //controlledPlayer=gameView->getActivePlayer();
 }
 
 std::string ai::AI::getPlayerName(int playerIndex)

@@ -14,7 +14,7 @@ void const engine::ChooseAI::launchCommand(state::Game *GamePtr)
         break;
     case 1:
         //ai::AI *aiInstance = new ai::RandomAI();
-        targetedPlayer->set_AI(new ai::RandomAI());
+        targetedPlayer->set_AI(new ai::RandomAI(GamePtr));
         break;
     case 2:
         //ai::AI *aiInstance = new ai::HeuristicAI();

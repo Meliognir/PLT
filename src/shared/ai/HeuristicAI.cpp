@@ -7,33 +7,93 @@
 #include <iostream>
 #include <cstdlib>
 #include <limits>
+#include <state/BoatHold.h>
+#include <state/Player.h>
 
 #define HEURISTIC_PLACE_HOLDER 1
 
 
-ai::HeuristicAI::HeuristicAI() {}
+ai::HeuristicAI::HeuristicAI(state::Game* game): AI(game) {
+
+
+}
 
 
 std::string ai::HeuristicAI::getPlayerName(int playerIndex){
     std::string playerName;
-    std::cout << "Enter name for player : Débutant";
-    playerName= "Débutant";
+    std::cout << "Enter name for player : Moyen";
+    playerName= "Moyen";
     return playerName;
 }
 
 
-size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount){
+size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount) {
     size_t index = 0;
-    while (true) {
-        std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
-        index=HEURISTIC_PLACE_HOLDER;
-        if (index < 1 || index > boatHoldCount) {
-            std::cout << "Invalid index. Please enter a number between 1 and " << boatHoldCount << ".\n";
-            continue;
+
+    bool found = false;
+
+    // Vérifier s'il existe un BoatHold vide
+    while (!found) {
+        int i = 0;
+        std::cout << "You have " << boatHoldCount << " BoatHolds. Picking the first empty one..." << std::endl;
+
+        for (state::BoatHold* boathold : controlledPlayer->getBoatHolds()) {
+            if (boathold->isEmpty()) {
+                index = i;
+                found = true;
+                break;
+            }
+            i++;
         }
-        return index;
+
+        if (!found) {
+            std::cout << "All boat holds are occupied. No empty boat hold found." << std::endl;
+
+            // Enlever les ressources de type CANON si aucun BoatHold n'est vide
+            bool removedCanon = false;
+            for (state::BoatHold* boathold : controlledPlayer->getBoatHolds()) {
+                if (boathold->hasResourceType("CANON")) {
+                    boathold->removeResource(boathold->getQuantity());
+                    std::cout << "Removed 'CANON' from BoatHold." << std::endl;
+                    removedCanon = true;
+                    break;
+                }
+            }
+
+            if (!removedCanon) {
+                // Trouver le BoatHold avec le moins de ressources et enlever ces ressources
+                state::BoatHold* boatHoldWithLeastResources = nullptr;
+                size_t leastResourceCount = SIZE_MAX;
+
+                for (state::BoatHold* boathold : controlledPlayer->getBoatHolds()) {
+                    if (boathold->getQuantity() < leastResourceCount) {
+                        leastResourceCount = boathold->getQuantity();
+                        boatHoldWithLeastResources = boathold;
+                    }
+                }
+
+                if (boatHoldWithLeastResources) {
+                    // Si la ressource est différente, enlevez là où il y en a le moins
+                    int quantity = boatHoldWithLeastResources->getQuantity();
+                    if (quantity > 0) {
+                        boatHoldWithLeastResources->removeResource(boatHoldWithLeastResources->getQuantity());
+                        std::cout << "Removed resources from BoatHold with least resources." << std::endl;
+                    }
+                }
+            }
+        }
     }
+
+    // S'assurer que l'index est dans une plage valide si trouvé
+    if (index < 0 || index >= boatHoldCount) {
+        std::cout << "Invalid index. Returning default placeholder index." << std::endl;
+        index = HEURISTIC_PLACE_HOLDER;
+    }
+
+    return index;
 }
+
+
 
 bool ai::HeuristicAI::confirmBoatHoldReplace(){
     std::string input;
@@ -63,17 +123,11 @@ int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
 }
 
 bool ai::HeuristicAI::chooseTimeDice(int die1, int die2){
-    std::string input;
-    while (true) {
-        std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
-                  << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
-        input=HEURISTIC_PLACE_HOLDER;
-        if (input == "1" || input == "2") {
-            break;
-        }
-        std::cout << "Entrée invalide. Veuillez entrer '1' ou '2'.\n";
-    }
-    return input == "1";
+    int input;
+    std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
+              << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
+
+    return input == 1;
 }
 
 int ai::HeuristicAI::chooseCanonNb(int totalNb){
