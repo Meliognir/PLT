@@ -5,7 +5,7 @@
 ai::AI::AI(state::Game* game)
 {
     gameView=game;
-    //controlledPlayer=gameView->getActivePlayer();
+    controlledPlayer=gameView->getActivePlayer();
 }
 
 std::string ai::AI::getPlayerName(int playerIndex)
