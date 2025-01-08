@@ -30,8 +30,10 @@ void ResourceHandlingState::handle(){
     std::cout <<"the tile costs: " << resourceToPayCost << " resourceToPayType: " << resourceToPayType << "\r\n"<< std::endl;
 
     //player can't pay
-    while(quantityResource < resourceToPayCost){
+    while(quantityResource < resourceToPayCost && activePlayerPos != 0){
         
+        std::cout <<"player: " << activePlayer->getName() << " is bankrupting for this tile.\r\n"<< std::endl;
+
         //player pays as much as he can afford
         activePlayer->setResTypeToPay(resourceToPayType);
         activePlayer->setAmountToPay(quantityResource);
