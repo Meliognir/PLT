@@ -249,3 +249,9 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 >> * le choix de l'emplacement à utiliser quand on obtient une ressource : si un emplacement est libre, l'IA le prend sinon
 >> elle regarde s'il y a des canons et les remplacent. Dans le cas où il n'y a pas de canons, on regarde la quantité de chaque ressource(s) restante(s) et on remplace la plus faible si c'est possible. 
 >> * le choix des cartes : l'objectif est de choisir les cartes qui ne possède pas de canon.
+>> * le choix des dés : on regarde ses cartes en mains et on met le dé avec la valuer la plus élevée en fonction des cartes que l'on a :
+>> 
+>>> si l'IA a une carte avec avancée à gauche le dé avec la valeur la plus élevée ira à gauche donc le jour. Si la carte à l'action avancéE à droite l'IA met le dé avec la plus grande valuer la nuit. Pour le reste s'agissant de ressources tout est correct.
+>> * le choix du nombre de canons pour un combat : nous avons décidé qu'une stratégie envisageable est deprendre tous las canons dès qu'on le peut.
+>> * le choix de l'adversaire quand il y a combat : l'IA Heuristic va compter le nombre de canons de chaques adversaires et le voir s'i'l y a des cales avec plus de 2 ressources autres que canon et attribué 
+>> un score en fonction de la réponse : -0.5 par canons et +1 par câles avec plus de deux ressources. Le joueur ayant le score le plus élevé sera choisi pour le combat.
