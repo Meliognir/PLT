@@ -37,6 +37,9 @@
 
 ## 5-Intelligence Artificielle
 
+** 5.1 Stratégie **
+
+** 5.2 Conception logiciel **
 
 
 
@@ -255,3 +258,7 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 >> * le choix du nombre de canons pour un combat : nous avons décidé qu'une stratégie envisageable est deprendre tous las canons dès qu'on le peut.
 >> * le choix de l'adversaire quand il y a combat : l'IA Heuristic va compter le nombre de canons de chaques adversaires et le voir s'i'l y a des cales avec plus de 2 ressources autres que canon et attribué 
 >> un score en fonction de la réponse : -0.5 par canons et +1 par câles avec plus de deux ressources. Le joueur ayant le score le plus élevé sera choisi pour le combat.
+> ### 5.2 Conception logiciel
+>> Chaqu'une des IA fonctionne avec les mêmes fonctions qui diffèrent en complexité en fonction du niveau demandé.
+>> Voici le dia avec les fonctions de chaque IA :
+>> ![Image de AI.dia](rapport/images/IA1.0.png "Image de IA.dia")
