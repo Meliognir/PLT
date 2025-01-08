@@ -77,12 +77,20 @@ void Player::moveCardToDeck() {
     //ajout de la valeur activeCard en fin de cardDeck
     cardDeck.push_back(activeCard);
     //erase prend un indice
-    //handCards.erase(); handCards.begin() + activeCard
+    auto it = std::find(handCards.begin(), handCards.end(), activeCard);
+    if (it != handCards.end()) {
+        activeCardId = std::distance(handCards.begin(), it);
+    } else {
+        std::cerr << "Error: activeCard not found in handCards." << std::endl;
+        activeCardId = -1;
+    }
+    handCards.erase(handCards.begin() + activeCardId);
     this->usedCardNb++;
-    activeCard = -1;
+    this->activeCard = -1;
     //8 activeCards were used
     if(this->usedCardNb == 8){
         this->shuffleDeck();
+        this->usedCardNb = 0;
     }
 }
 
