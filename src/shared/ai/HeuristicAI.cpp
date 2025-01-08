@@ -110,17 +110,32 @@ bool ai::HeuristicAI::confirmBoatHoldReplace(){
 }
 
 int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
-    std::cout<<"Your 3 handCards:"<<std::endl;
+    std::cout << "Your 3 handCards:" << std::endl;
     for (size_t i = 0; i < handCards.size(); ++i) {
         std::cout << i + 1 << ". " << handCards[i] << std::endl;
     }
 
-    int choice = 0;
-    std::cout<<"Choose a card, enter an index between 1 and 3:"<<std::endl;
-    choice=HEURISTIC_PLACE_HOLDER;
+    int choice = HEURISTIC_PLACE_HOLDER;
+    bool foundNonCanonCard = false;
 
+    // Check for cards without "CANON"
+    for (size_t i = 1; i < handCards.size(); ++i) {
+        if (handCards[i]!=5 ||handCards[i]!=6 ||handCards[i]!=10 ||handCards[i]!=11) {
+            choice = i;
+            foundNonCanonCard = true;
+            break;
+        }
+    }
+
+    // If all cards have "CANON", default to the first card
+    if (!foundNonCanonCard) {
+        choice = 1;
+    }
+
+    std::cout << "Chosen card index: " << choice << std::endl;
     return choice;
 }
+
 
 bool ai::HeuristicAI::chooseTimeDice(int die1, int die2){
     int input;
