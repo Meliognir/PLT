@@ -46,16 +46,16 @@ std::string InputHandler::getPlayerName(int playerIndex){
 
 int InputHandler::getMapSize(){
     int mapSize = 0;
-        while (mapSize <= 1) {
+        while (abs(mapSize - 45) <= 15) {
             std::cout << "Enter the size of the map: ";
             std::cin >> mapSize;
             if (std::cin.fail()) { 
                 std::cin.clear();   
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                std::cout << "Invalid input. Please enter a number." << std::endl;
+                std::cout << "Invalid input. Please enter a valid number." << std::endl;
                 mapSize = 0; 
             } else if (mapSize <= 1) {
-                std::cout << "Invalid map size. Please enter a number higher than 1." << std::endl;
+                std::cout << "Invalid map size. Please enter a value between 30 and 60." << std::endl;
             }
         }
     return mapSize;
@@ -135,6 +135,10 @@ bool InputHandler::chooseTimeDice(int die1, int die2){
 int InputHandler::chooseOpponent(size_t opponentsNb)
 {
     size_t choice = 0;
+    if (opponentsNb == 1){
+        std::cout << "You had no choice, prepare to fight." << std::endl; 
+        return 0;
+    }
     while (true) {
         std::cout<<"Choose an opponent, enter an index between 1 and "<< opponentsNb << std::endl;
         std::cin >> choice;

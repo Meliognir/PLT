@@ -26,7 +26,7 @@ size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount){
 
     std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
     index=getRandomInput(1, boatHoldCount);
-    return index;
+    return index-1;
 
 }
 
