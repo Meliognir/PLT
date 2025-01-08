@@ -260,4 +260,5 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 >> un score en fonction de la réponse : -0.5 par canons et +1 par câles avec plus de deux ressources. Le joueur ayant le score le plus élevé sera choisi pour le combat.
 > ### 5.2 Conception logiciel
 >> Chaqu'une des IA fonctionne avec les mêmes fonctions qui diffèrent en complexité en fonction du niveau demandé.
+>> Voici le dia avec les fonctions de chaque IA :
 >> ![Image de AI.dia](rapport/images/IA1.0.png "Image de IA.dia")
