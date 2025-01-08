@@ -88,6 +88,11 @@ int ai::HeuristicAI::chooseCanonNb(int totalNb){
     return chosenNb;
 }
 
+int ai::HeuristicAI::chooseOpponent(size_t listSize)
+{
+    return 0;
+}
+
 ai::HeuristicAI::~HeuristicAI()
 {
 }

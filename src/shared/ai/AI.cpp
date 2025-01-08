@@ -34,6 +34,11 @@ int ai::AI::chooseCanonNb(int totalNb)
     return 0;
 }
 
+int ai::AI::chooseOpponent(size_t listSize)
+{
+    return 0;
+}
+
 ai::AI::~AI()
 {
 }
