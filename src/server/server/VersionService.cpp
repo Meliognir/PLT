@@ -1,4 +1,4 @@
-/*#include <json/json.h>
+#include <json/json.h>
 #include <iostream>
 #include "VersionService.h"
 
@@ -9,8 +9,7 @@ VersionService::VersionService () : AbstractService("/version") {
 
 
 
-HttpStatus VersionService::get (Json::Value* out, int id) {
+HttpStatus VersionService::get (Json::Value& out, int id) {
     out["version"] = "0.1";
     return HttpStatus::OK;
 }
-*/

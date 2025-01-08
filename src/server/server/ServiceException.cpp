@@ -1,15 +1,12 @@
-/*#include "ServiceException.h"
+#include "ServiceException.h"
 
 using namespace server;
 
 
-ServiceException::ServiceException(HttpStatus status, std::string msg)
-    : HttpStatus(status), msg(msg)
-{
+ServiceException::ServiceException (HttpStatus status, std::string msg):msg(msg),status_value(status){
 }
 
 HttpStatus ServiceException::status()
 {
-    return HttpStatus;
+    return status_value;
 }
-*/

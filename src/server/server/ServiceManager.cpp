@@ -1,7 +1,10 @@
-/*#include "ServiceManager.h"
+#include "ServiceManager.h"
 #include "ServiceException.h"
 #include <iostream>
 #include <sys/types.h>
+#include <json/json.h>
+#include <iostream>
+#include <string>
 
 
 using namespace server;
@@ -23,7 +26,8 @@ AbstractService *ServiceManager::findService(std::string url)
     return nullptr;
 }
 
-HttpStatus ServiceManager::queryService(std::string &out, std::string &in, std::string url, std::string method)
+
+HttpStatus ServiceManager::queryService(Json::Value& in, Json::Value& out, std::string url, std::string method)
 {
     AbstractService *service = findService(url);
     if (!service) throw ServiceException(HttpStatus::NOT_FOUND, "Service " + url + " not found");
@@ -56,28 +60,34 @@ HttpStatus ServiceManager::queryService(std::string &out, std::string &in, std::
     }
     else if (method == "PUT")
     {
-        Json::Reader jsonReader;
+        Json::CharReaderBuilder builder;
+        Json::CharReader* reader = builder.newCharReader();
+        std::string errs;
         Json::Value jsonIn;
-        if (!jsonReader.parse(in, jsonIn))
-            throw ServiceException(HttpStatus::BAD_REQUEST, "Invalid data: " + jsonReader.getFormattedErrorMessages());
+        std::string inStr = in.toStyledString();
+        if (!reader->parse(inStr.c_str(), inStr.c_str() + inStr.size(), &jsonIn, &errs))
+            throw ServiceException(HttpStatus::BAD_REQUEST, "Invalid data: " + errs);
+        delete reader;
         return service->put(jsonIn, id);
     }
     else if (method == "POST")
     {
-        Json::Reader jsonReader;
+        Json::CharReaderBuilder builder;
+        Json::CharReader* reader = builder.newCharReader();
+        std::string errs;
         Json::Value jsonIn;
-        if (!jsonReader.parse(in, jsonIn))
-            throw ServiceException(HttpStatus::BAD_REQUEST, "Invalid data: " + jsonReader.getFormattedErrorMessages());
+        std::string inStr = in.toStyledString();
+        if (!reader->parse(inStr.c_str(), inStr.c_str() + inStr.size(), &jsonIn, &errs))
+            throw ServiceException(HttpStatus::BAD_REQUEST, "Invalid data: " + errs);
+        delete reader;
         Json::Value jsonOut;
         HttpStatus status = service->post(jsonOut, jsonIn);
         out = jsonOut.toStyledString();
         return status;
     }
-
     else if (method == "DELETE")
     {
         return service->remove(id);
     }
     throw ServiceException(HttpStatus::BAD_REQUEST, "Method " + method + " invalide");
 }
-*/
