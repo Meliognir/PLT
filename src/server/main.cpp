@@ -149,7 +149,7 @@ int main(int argc, char const *argv[])
 
             std::string commands_file = "res/replay.txt";
 
-            engine::Engine ngine{"game"};
+            engine::GameEngine engine{"game"};
 
             ngine.setEnableRecord(true);
             ngine.getState().initializeMapCell();
