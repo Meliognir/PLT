@@ -81,6 +81,12 @@ int ai::RandomAI::chooseCanonNb(int totalNb){
     return chosenNb;
 }
 
+int ai::RandomAI::chooseOpponent(size_t listSize)
+{
+    int chosenOpponent = getRandomInput(1, listSize);
+    return chosenOpponent;
+}
+
 ai::RandomAI::~RandomAI()
 {
 }
