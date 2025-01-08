@@ -24,10 +24,10 @@ int Map::getSize() const{
 }
 
 std::string Map::getResourceType (int position) {
-   return listOfTiles.at(position)->tileResourceType;
+   return listOfTiles.at(position % getSize())->tileResourceType;
 }
 
 int Map::getResourceCost (int position) {
-    return listOfTiles.at(position)->tileCost;
+    return listOfTiles.at(position % getSize())->tileCost;
 }
 }
