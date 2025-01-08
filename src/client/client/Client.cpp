@@ -216,10 +216,10 @@ namespace client {
                         gameInstance->displayState();
                         // Pick a card
                         if (activePlayer->get_AI()==nullptr){ //real player
-                            chosenOpponentId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
+                            chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                         }
                         else { // AI input
-                            chosenOpponentId = activePlayer->get_AI()->chooseCardFromHand(activePlayer->getHandCards());
+                            chosenCardId = activePlayer->get_AI()->chooseCardFromHand(activePlayer->getHandCards());
                         }
                         //chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards()); //old code
                         chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);

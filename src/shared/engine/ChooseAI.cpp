@@ -18,11 +18,11 @@ void const engine::ChooseAI::launchCommand(state::Game *GamePtr)
         break;
     case 2:
         //ai::AI *aiInstance = new ai::HeuristicAI();
-        targetedPlayer->set_AI(new ai::HeuristicAI());
+        targetedPlayer->set_AI(new ai::HeuristicAI(GamePtr));
         break;
     case 3:
         //ai::AI *aiInstance = new ai::DeepAI();
-        targetedPlayer->set_AI(new ai::DeepAI());
+        targetedPlayer->set_AI(new ai::DeepAI(GamePtr));
         break;
     
     default:
