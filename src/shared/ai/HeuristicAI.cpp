@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <limits>
 #include <state/BoatHold.h>
+#include <state/Game.h>
 #include <state/Player.h>
 
 #define HEURISTIC_PLACE_HOLDER 1
@@ -157,16 +158,16 @@ bool ai::HeuristicAI::chooseTimeDice(int die1, int die2) {
 
 
         if (die1>=die2 && (controlledPlayer->getHandCards().at(choice)==1 ||controlledPlayer->getHandCards().at(choice)==3 ||controlledPlayer->getHandCards().at(choice)==0 ||controlledPlayer->getHandCards().at(choice)==7)) {
-            std::cout << "You choosed " <<die1 <<" ."<< std::endl;
+            std::cout << "You choosed " <<die1 <<" as the day number."<< std::endl;
             return die1;
         } else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==1 ||controlledPlayer->getHandCards().at(choice)==3 ||controlledPlayer->getHandCards().at(choice)==0 ||controlledPlayer->getHandCards().at(choice)==7)) {
-            std::cout << "You choosed " <<die2 <<" ."<< std::endl;
+            std::cout << "You choosed " <<die2 <<" as the day number."<< std::endl;
             return die2;
         } else if (die1>=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
-            std::cout << "You choosed " <<die2 <<" ."<< std::endl;
+            std::cout << "You choosed " <<die2 <<" as the day number."<< std::endl;
             return die2;
         }else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
-            std::cout << "You choosed " <<die1 <<" ."<< std::endl;
+            std::cout << "You choosed " <<die1 <<" as the day number."<< std::endl;
             return die1;
         }else {
             std::cout << "You choosed " <<die1 <<" as the day number."<< std::endl;
@@ -177,21 +178,41 @@ bool ai::HeuristicAI::chooseTimeDice(int die1, int die2) {
 
 
 int ai::HeuristicAI::chooseCanonNb(int totalNb){
-    if (totalNb <= 0) {
-        std::cout << "You don't have any available canons." << std::endl;
-        return 0;
+    return totalNb;
+}
+
+int ai::HeuristicAI::chooseOpponent(size_t listSize) {
+    int bestOpponentIndex = 0;
+    double highestScore = -std::numeric_limits<double>::infinity();
+
+    for (size_t opponentIndex = 0; opponentIndex < listSize; ++opponentIndex) {
+        double score = 0.0;
+
+        state::Player* opponent = gameView->getPlayerList().at(opponentIndex);
+        if (opponent->getPosition() != controlledPlayer->getPosition()  || gameView->getPlayerList().at(opponentIndex)->getPlayerId()==controlledPlayer->getPlayerId()) {
+            continue; // Skip opponents not on the same square
+            }
+        for (state::BoatHold* boathold : opponent->getBoatHolds()) {
+            if (boathold->hasResourceType("CANON")) {
+                score -= 0.5 * boathold->getQuantity();
+            }
+            if (boathold->hasResourceType("FOOD") && boathold->getQuantity() > 2) {
+                score += 1;
+            }
+            if (boathold->hasResourceType("GOLD") && boathold->getQuantity() > 2) {
+                score += 1;
+            }
+        }
+
+        if (score > highestScore) {
+            highestScore = score;
+            bestOpponentIndex = opponentIndex;
+        }
     }
-    int chosenNb = 0;
 
-    std::cout << "You have " << totalNb << " available canons. How many do you want to use ? ";
-    chosenNb=HEURISTIC_PLACE_HOLDER;
-    return chosenNb;
+    return bestOpponentIndex;
 }
 
-int ai::HeuristicAI::chooseOpponent(size_t listSize)
-{
-    return HEURISTIC_PLACE_HOLDER;
-}
 
 ai::HeuristicAI::~HeuristicAI()
 {
