@@ -106,7 +106,7 @@ namespace client {
         int die2;
         bool chosenDice;
         state::Player* activePlayer;
-        int chosenCardId;
+        int chosenCardVal;
         state::ActionCard *actionCard;
         int chosenBoatholdId;
         std::string chosenBoatholdResType;
@@ -189,6 +189,15 @@ namespace client {
                     assignDice->launchCommand(gameInstance);
                     delete assignDice;
 
+                    //moves activeCard from handDeck to cardDeck
+                    turn = gameInstance->getTurn();
+                    if(turn > 1){
+                        for(state::Player * pl : gameInstance->getPlayerList()){
+                            pl->moveCardToDeck();
+                            pl->moveCardToHand();
+                        }
+                    }
+
                     gameInstance->request();
                     break;
 
@@ -216,15 +225,17 @@ namespace client {
                         gameInstance->displayState();
                         // Pick a card
                         if (activePlayer->get_AI()==nullptr){ //real player
-                            chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
+                            chosenCardVal = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                         }
                         else { // AI input
-                            chosenCardId = activePlayer->get_AI()->chooseCardFromHand(activePlayer->getHandCards());
+                            chosenCardVal = activePlayer->get_AI()->chooseCardFromHand(activePlayer->getHandCards());
                         }
-                        //chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards()); //old code
-                        chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
+
+                        //chosenCardVal = inputHandler.chooseCardFromHand(activePlayer->getHandCards()); //old code
+                        chooseCard = new engine::ChooseCard(activePlayer, chosenCardVal);
                         chooseCard->launchCommand(gameInstance);
                         delete chooseCard;
+
                     }
                     activePlayerIndex = captainIndex;
                     gameInstance->setActivePlayerIndex(activePlayerIndex);
@@ -253,9 +264,9 @@ namespace client {
                     activePlayer->setHasMoved(false);
 
                     // logique de déplacement sans input
-                    chosenCardId = activePlayer->getActiveCard();
+                    chosenCardVal = activePlayer->getActiveCard();
                     // checks if current action is a movement or a Resource, do we use resourceManager ?
-                    actionCard = state::Game::collectionOfCards.at(chosenCardId);
+                    actionCard = state::Game::collectionOfCards.at(chosenCardVal);
                     boatHoldCount = activePlayer->getBoatHolds().size();
                     if(actionCounter%2 == 0){ //day
                         std::cout << "actionCounter%2 == 0\r\n" << std::endl;
