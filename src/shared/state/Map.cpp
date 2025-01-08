@@ -25,16 +25,16 @@ int Map::getSize() const{
 }
 
 std::string Map::getResourceType (int position) {
-    std::cout << "les problèmes1... ------" << std::endl;
+    //std::cout << "les problèmes1... ------" << std::endl;
     return listOfTiles.at(position % getSize())->tileResourceType;
-    std::cout << "les problèmes1... ------" << std::endl;
+    //std::cout << "les problèmes1... ------" << std::endl;
 
 }
 
 int Map::getResourceCost (int position) {
-    std::cout << "les problèmes2... ------" << std::endl;
+    //std::cout << "les problèmes2... ------" << std::endl;
     return listOfTiles.at(position % getSize())->tileCost;
-    std::cout << "les problèmes2... ------" << std::endl;
+    //std::cout << "les problèmes2... ------" << std::endl;
 
 }
 }

@@ -46,19 +46,20 @@ std::string InputHandler::getPlayerName(int playerIndex){
 
 int InputHandler::getMapSize(){
     int mapSize = 0;
-        while (abs(mapSize - 45) <= 15) {
-            std::cout << "Enter the size of the map: ";
-            std::cin >> mapSize;
-            if (std::cin.fail()) { 
-                std::cin.clear();   
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                std::cout << "Invalid input. Please enter a valid number." << std::endl;
-                mapSize = 0; 
-            } else if (mapSize <= 1) {
-                std::cout << "Invalid map size. Please enter a value between 30 and 60." << std::endl;
-            }
+    while (true) {
+        std::cout << "Enter the size of the map: ";
+        std::cin >> mapSize;
+        if (std::cin.fail()) { 
+            std::cin.clear();   
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+            std::cout << "Invalid input. Please enter a valid number." << std::endl;
+            mapSize = 0; 
+        } else if (abs(mapSize - 45) <= 15) {
+            return mapSize;
+        } else {
+            std::cout << "Invalid map size. Please enter a value between 30 and 60." << std::endl;
         }
-    return mapSize;
+    }
 }
 size_t InputHandler::selectUserBoatHold(size_t boatHoldCount, bool steal){
     std::string tempString;
