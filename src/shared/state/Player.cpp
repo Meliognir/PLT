@@ -59,7 +59,6 @@ void Player::shuffleDeck(){
     std::shuffle(cardDeck.begin(), cardDeck.end(), g);
 }
 
-
 void Player::moveCardToHand () {
     if (cardDeck.empty()) {
         std::cerr << "Error: Cannot move card to hand. The card deck is empty." << std::endl;
@@ -76,7 +75,7 @@ void Player::moveCardToDeck() {
     }
     //ajout de la valeur activeCard en fin de cardDeck
     cardDeck.push_back(activeCard);
-    //erase prend un indice
+    //effaçage de activeCard dans handCards
     auto it = std::find(handCards.begin(), handCards.end(), activeCard);
     if (it != handCards.end()) {
         activeCardId = std::distance(handCards.begin(), it);

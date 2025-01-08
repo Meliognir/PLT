@@ -120,6 +120,7 @@ int Game::getTurn() const
 
 void Game::setTurn(int turn)
 {
+    this->turn = turn;
 }
 
 const std::vector<Player *> &Game::getPlayerList() const{
