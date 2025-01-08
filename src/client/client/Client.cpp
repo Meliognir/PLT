@@ -147,9 +147,12 @@ namespace client {
 
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
+
                     
                     soloGameConfigInit(); // is the soloGameConfigInit the same for every playing mode ?
-                    
+                
+                    localGameConfigInit(); // is the soloGameConfigInit the same for every playing mode ?
+
                     gameInstance->request();
                     break;
 
@@ -213,7 +216,14 @@ namespace client {
                         activePlayer = gameInstance->getActivePlayer();
                         std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely\r\n" << std::endl;
                         gameInstance->displayState();
-                        chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
+                        // Pick a card
+                        if (activePlayer->get_AI()==nullptr){ //real player
+                            chosenOpponentId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
+                        }
+                        else { // AI input
+                            chosenOpponentId = activePlayer->get_AI()->chooseCardFromHand(activePlayer->getHandCards());
+                        }
+                        //chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards()); //old code
                         chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
                         chooseCard->launchCommand(gameInstance);
                         delete chooseCard;
@@ -288,7 +298,14 @@ namespace client {
                         validChosenBoathold = false;
                         while(!validChosenBoathold){
                             auto boatHolds = activePlayer->getBoatHolds();
-                            chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                            // Pick a boat hold
+                            if (activePlayer->get_AI()==nullptr){ //real player
+                                chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                            }
+                            else { // AI input
+                                chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount);
+                            }
+                            //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount); //old code
                             chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
                             if(chosenBoatholdResType == resTypeToAdd){
                                 std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
@@ -322,7 +339,14 @@ namespace client {
                         std::cout << "Player: "<< activePlayer->getName() << " has to pay: " << remainToPay << " " << resTypeToPay << ".\n";
                         while (remainToPay > 0){
                             auto boatHolds = activePlayer->getBoatHolds();
-                            chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                            // Pick a boat hold
+                            if (activePlayer->get_AI()==nullptr){ //real player
+                                chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                            }
+                            else { // AI input
+                                chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount);
+                            }
+                            //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount); //old code
                             chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
                             if(chosenBoatholdResType != resTypeToPay){
                                 std::cout << "Invalid Resource Type. You chose a Boathold with: " << chosenBoatholdResType << " Please choose a BoatHold with: " << resTypeToPay << ".\n";
@@ -356,8 +380,18 @@ namespace client {
                     for (size_t i = 0; i < opponentsList.size(); ++i) {
                         std::cout << i + 1 << ". " << opponentsList[i]->getName() << "\r\n" << std::endl;
                     }
-                    chosenOpponentId = inputHandler.chooseOpponent(opponentsList.size());
+                    
+                    // Pick an opponent
+                    if (activePlayer->get_AI()==nullptr){ //real player
+                        chosenOpponentId = inputHandler.chooseOpponent(opponentsList.size());
+                    }
+                    else { // AI input
+                        chosenOpponentId = activePlayer->get_AI()->chooseOpponent(opponentsList.size());
+                    }
+                    
+                    //chosenOpponentId = inputHandler.chooseOpponent(opponentsList.size()); //old code
                     chosenOpponentId = opponentsList.at(chosenOpponentId)->getPlayerId();
+
                     chooseOpponent = new engine::ChooseOpponent(activePlayerIndex, chosenOpponentId);
                     chooseOpponent->launchCommand(gameInstance);
                     delete chooseOpponent;
@@ -488,7 +522,7 @@ namespace client {
     }
 
 
-    int Client::soloGameConfigInit()
+    int Client::localGameConfigInit()
     {
 
         engine::ChooseNbOfPlayers* chooseNbOfPlayers;
@@ -517,7 +551,6 @@ namespace client {
             currentPlayer = gameInstance->getPlayerList().at(playerIndex);
             chooseAI = new engine::ChooseAI(levelAI, playerIndex);
             chooseAI->launchCommand(gameInstance);
-
             // Set the username
             if (currentPlayer->get_AI()==nullptr){ //real player
                 playerName = inputHandler.getPlayerName(playerIndex);
