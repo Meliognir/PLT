@@ -23,16 +23,12 @@ using namespace state;
 using namespace render;
 using namespace engine;
 using namespace ai;
-*/
-int main() {
-    return 0;
-}
-/*
+
 class Request
 {
 public:
     struct MHD_PostProcessor *pp = nullptr;
-    string data;
+    Json::Value &data;
     ~Request()
     {
         if (pp)
@@ -40,14 +36,73 @@ public:
     }
 };
 
-static int post_iterator(void *cls,
-                         enum MHD_ValueKind kind,
-                         const char *key,
-                         const char *filename,
-                         const char *content_type,
-                         const char *transfer_encoding,
-                         const char *data, uint64_t off, size_t size)
-{
+#include <microhttpd.h>
+
+
+// POST iterator function
+static MHD_Result post_iterator(void *coninfo_cls, enum MHD_ValueKind kind, const char *key, const char *filename, const char *content_type, const char *transfer_encoding, const char *data, uint64_t off, size_t size) {
+    // Your implementation here
+    return MHD_YES; // or MHD_NO, based on your logic
+}
+
+// Function to setup POST processor
+void setupPostProcessor(MHD_Connection *connection, Request *request) {
+    request->pp = MHD_create_post_processor(connection, 1024, &post_iterator, request);
+    if (!request->pp) {
+        throw ServiceException(HttpStatus::CREATED, "Failed to create POST processor");
+    }
+}
+
+// Example usage in your application
+void handleRequest(MHD_Connection *connection) {
+    Request* request;
+    try {
+        setupPostProcessor(connection, request);
+        // Additional request handling code
+    } catch (const ServiceException& e) {
+        // Handle exception
+    }
+}
+
+*/
+
+int main () {
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Laisser ce qui est dessous en commentaire pour l'instant
+//.........................................................
+
+
+
+
+
+#include <microhttpd.h>
+/*
+static MHD_Result post_iterator(void *coninfo_cls,
+    enum MHD_ValueKind kind,
+    const char *key,
+    const char *filename,
+    const char *content_type,
+    const char *transfer_encoding,
+    const char *data, uint64_t off,
+    size_t size) {
+
     return MHD_NO;
 }
 
@@ -63,7 +118,7 @@ static int handler(void *cls,
 
     if (!request)
     {
-        request = new Request();
+
         if (!request)
         {
             return MHD_NO;
@@ -93,10 +148,10 @@ static int handler(void *cls,
     }
 
     HttpStatus status;
-    string response;
+    Json::Value &response;
     try
     {
-        ServicesManager *manager = (ServicesManager *)cls;
+        ServiceManager *manager = (ServiceManager *)cls;
         status = manager->queryService(response, request->data, url, method);
     }
     catch (ServiceException &e)
@@ -151,12 +206,12 @@ int main(int argc, char const *argv[])
 
             engine::GameEngine engine{"game"};
 
-            ngine.setEnableRecord(true);
-            ngine.getState().initializeMapCell();
-            ngine.getState().initializeCharacters();
+            engine.setEnableRecord(true);
+            engine.getState().initializeMapCell();
+            engine.getState().initializeCharacters();
 
-            HeuristicAI hai1{ngine, 1};
-            HeuristicAI hai2{ngine, 2};
+            HeuristicAI hai1{engine, 1};
+            HeuristicAI hai2{engine, 2};
 
             cout << "\t\t--- Record ---" << endl;
             cout << "On enregistre 12 tours de jeu dans le fichier " << commands_file << endl;
@@ -165,17 +220,17 @@ int main(int argc, char const *argv[])
             cout << "--> Début de l'enregistrement <--" << endl;
 
             // On simule 12 tours
-            while (ngine.getState().getTurn() != 13)
+            while (engine.getState().getTurn() != 13)
             {
                 // hai1 player1
-                if (ngine.getState().getTurn() % 2 != 0)
+                if (engine.getState().getTurn() % 2 != 0)
                 {
-                    hai1.run(ngine);
+                    hai1.run(engine);
                 }
                 //hai2 player2
                 else
                 {
-                    hai2.run(ngine);
+                    hai2.run(engine);
                 }
             }
             cout << "--> Fin de l'enregistrement <--" << endl;
@@ -186,7 +241,7 @@ int main(int argc, char const *argv[])
             if (written_file)
             {
 
-                Json::Value root = ngine.getRecord();
+                Json::Value root = engine.getRecord();
                 cout << root << endl;
 
                 // Ecriture dans le fichier du tableau de commandes de cette partie
@@ -206,8 +261,8 @@ int main(int argc, char const *argv[])
         {
             try
             {
-                Game game;
-                ServicesManager servicesManager;
+                Game* game;
+                ServiceManager servicesManager;
 
                 std::unique_ptr<AbstractService> ptr_versionService(new VersionService());
                 servicesManager.registerService(move(ptr_versionService));
@@ -218,7 +273,7 @@ int main(int argc, char const *argv[])
                 std::unique_ptr<AbstractService> ptr_gameService(new GameService(ref(game)));
                 servicesManager.registerService(move(ptr_gameService));
 
-                std::unique_ptr<AbstractService> ptr_commandService(new CommandsService(game.getEngine()));
+                std::unique_ptr<AbstractService> ptr_commandService(new CommandService(game.getEngine()));
                 servicesManager.registerService(move(ptr_commandService));
 
                 struct MHD_Daemon *d;

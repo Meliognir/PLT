@@ -56,7 +56,7 @@ int ai::RandomAI::chooseCardFromHand(const std::vector<int>& handCards) {
 
     int choice = 0;
     std::cout<<"Choose a card, enter an index between 1 and 3:"<<std::endl;
-    choice=getRandomInput(1,3);
+    choice=getRandomInput(0,2);
 
     return choice;
 }
@@ -84,7 +84,7 @@ int ai::RandomAI::chooseCanonNb(int totalNb){
 int ai::RandomAI::chooseOpponent(size_t listSize)
 {
     int chosenOpponent = getRandomInput(1, listSize);
-    return chosenOpponent;
+    return chosenOpponent-1;
 }
 
 ai::RandomAI::~RandomAI()
