@@ -98,7 +98,7 @@ int ai::DeepAI::chooseCanonNb(int totalNb){
 
 int ai::DeepAI::chooseOpponent(size_t listSize)
 {
-    return 0;
+    return DEEP_PLACE_HOLDER;
 }
 
 ai::DeepAI::~DeepAI()

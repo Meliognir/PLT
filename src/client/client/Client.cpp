@@ -544,11 +544,12 @@ namespace client {
         state::Player* currentPlayer;
         int levelAI = 0;
         for(int playerIndex = 0; playerIndex < playerNumber; playerIndex++){
+            gameInstance->setActivePlayer(gameInstance->getPlayerList().at(playerIndex));
 
             // Set the AI
             std::string playerName;
             levelAI = inputHandler.pickAnAI(playerIndex);
-            currentPlayer = gameInstance->getPlayerList().at(playerIndex);
+            currentPlayer = gameInstance->getActivePlayer();
             chooseAI = new engine::ChooseAI(levelAI, playerIndex);
             chooseAI->launchCommand(gameInstance);
             // Set the username
