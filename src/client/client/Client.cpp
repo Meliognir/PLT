@@ -122,7 +122,8 @@ namespace client {
         std::vector<state::Player *> opponentsList;
         state::Player* combatPlayer;
         int playerNbCanons;
-        
+        state::Player* winner;
+        state::Player* loser;
 
         // Init every game loop command
         engine::AssignDice* assignDice;
@@ -132,6 +133,7 @@ namespace client {
         engine::ChooseOpponent* chooseOpponent;
         engine::RollDice* rollDice;
         engine::ChooseCanons* chooseCanons;
+        engine::StealResource* stealResource;
 
         // Game loop State behavior
         int endloop = 0;
@@ -145,7 +147,9 @@ namespace client {
 
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
+                    
                     soloGameConfigInit(); // is the soloGameConfigInit the same for every playing mode ?
+                    
                     gameInstance->request();
                     break;
 
@@ -182,6 +186,8 @@ namespace client {
                     if (chosenDice == 1){assignDice = new engine::AssignDice(die1, die2);}
                     else{assignDice = new engine::AssignDice(die2, die1);}
                     assignDice->launchCommand(gameInstance);
+                    delete assignDice;
+
                     gameInstance->request();
                     break;
 
@@ -210,9 +216,11 @@ namespace client {
                         chosenCardId = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
                         chooseCard = new engine::ChooseCard(activePlayer, chosenCardId);
                         chooseCard->launchCommand(gameInstance);
+                        delete chooseCard;
                     }
                     activePlayerIndex = captainIndex;
                     gameInstance->setActivePlayerIndex(activePlayerIndex);
+                    
                     gameInstance->request(); // from cardchoicestate to cardactionstate
                     break;
 
@@ -290,12 +298,14 @@ namespace client {
                         }
                         addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId + 1, currentDie, resTypeToAdd);
                         addToBoathold->launchCommand(gameInstance);
+                        delete addToBoathold;
                     }
 
                     std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
                     
                     actionCounter += 1;
                     gameInstance->actionCounter = actionCounter;
+                    
                     gameInstance->request(); // from cardactionstate to resourcehandlingstate or captaindicestate if condition
                     break;
 
@@ -336,7 +346,7 @@ namespace client {
                     }
 
                     gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
-                break;
+                    break;
 
 
                 case OPPONENT_CHOICE_STATE:
@@ -350,6 +360,8 @@ namespace client {
                     chosenOpponentId = opponentsList.at(chosenOpponentId)->getPlayerId();
                     chooseOpponent = new engine::ChooseOpponent(activePlayerIndex, chosenOpponentId);
                     chooseOpponent->launchCommand(gameInstance);
+                    delete chooseOpponent;
+
                     combatPlayer = gameInstance->getDefendingPlayer();
                     std::cout << "You chose this bad guy: " << combatPlayer->getName() << "\r\n" << std::endl;
                     
@@ -362,6 +374,7 @@ namespace client {
                     
                     //checker que le state se passe après le client
 
+                    //attacking player chooses his canons and rolls combat dice
                     combatPlayer = gameInstance->getAttackingPlayer();
                     playerNbCanons = 0;
 
@@ -376,9 +389,11 @@ namespace client {
                     playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
                     chooseCanons = new engine::ChooseCanons(combatPlayer->getPlayerId(), playerNbCanons);
                     chooseCanons->launchCommand(gameInstance);
+                    delete chooseCanons;
 
                     rollDice = new engine::RollDice(COMBATDIE, combatPlayer->getPlayerId());
                     rollDice->launchCommand(gameInstance);
+                    delete rollDice;
 
                     gameInstance->request(); // from CombatAttackingState to CombatDefendingState or StealResourceState if condition
                     break;
@@ -389,6 +404,7 @@ namespace client {
 
                     //checker que le state se passe après le client
 
+                    //defending player chooses his canons and rolls combat dice
                     combatPlayer = gameInstance->getDefendingPlayer();
                     playerNbCanons = 0;
 
@@ -403,9 +419,11 @@ namespace client {
                     playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
                     chooseCanons = new engine::ChooseCanons(combatPlayer->getPlayerId(), playerNbCanons);
                     chooseCanons->launchCommand(gameInstance);
+                    delete chooseCanons;
 
                     rollDice = new engine::RollDice(COMBATDIE, combatPlayer->getPlayerId());
                     rollDice->launchCommand(gameInstance);
+                    delete rollDice;
 
                     gameInstance->request(); // from CombatDefendingState to CardActionState or StealResourceState if condition
                     break;
@@ -413,7 +431,25 @@ namespace client {
 
                 case STEAL_RESOURCE_STATE:
                     std::cout << "Client now entering STEAL_RESOURCE_STATE\r\n" << std::endl;
-                    //do command truc
+
+                    //winner chooses a boatHold to steal from loser
+                    winner = gameInstance->getCombatWinner();
+                    loser = gameInstance->getCombatLoser();
+
+                    std::cout << "Cales de " << loser->getName() << ": " << std::endl;
+                    boatHoldCount = 0;
+                    for(state::BoatHold *bh : loser->getBoatHolds()){
+                        std::cout<< "BoatHold N°" << boatHoldCount << " : \r\n" << std::endl;
+                        bh->showContent();
+                        boatHoldCount++;
+                    }
+
+                    boatHoldCount = loser->getBoatHolds().size();
+                    chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount, true);
+                    stealResource = new engine::StealResource(chosenBoatholdId, winner->getPlayerId(), loser->getPlayerId());
+                    stealResource->launchCommand(gameInstance);
+                    delete stealResource;
+
                     gameInstance->request();
                     break;
 
@@ -421,6 +457,7 @@ namespace client {
                 case GAME_OVER_STATE:
                     std::cout << "Client now entering GAME_OVER_STATE\r\n" << std::endl;
                     //do command truc
+                    
                     gameInstance->request();
                     endloop = 1;
                     break;
@@ -537,8 +574,6 @@ namespace client {
             }
             std::cout<< "Trésors de "<< player->getName()<<" :" << std::endl;
         }
-
-        // to be continued
 
         //Un std::unique_ptr est un pointeur intelligent qui garantit
         //qu'il ne peut y avoir qu'un seul propriétaire de l'objet

@@ -255,11 +255,11 @@ Player *Game::getDefendingPlayer(){
 }
 
 Player *Game::getCombatWinner(){
-    return CombatWinner;
+    return combatWinner;
 }
 
 void Game::setCombatWinner(Player *player){
-    CombatWinner=player;
+    combatWinner=player;
 }
 
 Map *Game::getMap(){
@@ -276,6 +276,16 @@ void Game::setMapReady(bool ready){
 
 bool Game::isMapInitialized(){
     return isMapReady;
+}
+
+Player *Game::getCombatLoser()
+{
+    return this->combatLoser;
+}
+
+void Game::setCombatLoser(Player *player)
+{
+    this->combatLoser = player;
 }
 
 int Game::getActivePlayerIndex() const{
