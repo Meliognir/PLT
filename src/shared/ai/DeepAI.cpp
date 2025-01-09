@@ -39,10 +39,28 @@ int getBehavior(int nbPlayerAround, size_t nbPlayer, int mapSize, int myposition
     return behavior;
 }
 
-void getResourceNeed(){
-    
+void getMyResourceNeed(){
+    //needFood 0
+    //needGold 1
+    //needCanons 2
     return;
 }
+
+std::vector<int> getOtherPlayerBehavior(std::vector<state::Player *> playerList){
+
+    std::vector<int> playerBehaviors; //needFood 0 needGold 1 needCanons 2
+
+    return playerBehaviors;
+}
+
+
+
+
+
+
+
+
+
 
 std::string ai::DeepAI::getPlayerName(int playerIndex){
     std::string playerName;
@@ -79,16 +97,33 @@ bool ai::DeepAI::confirmBoatHoldReplace(){
     }
 }
 
+//choisit dé puis carte
+//check ses hand cartes 
+//prédit sa future position et celle des autres joueurs si dé connu (ils ont pas tous choisi ) ou sa
+//
 int ai::DeepAI::chooseCardFromHand(const std::vector<int>& handCards) {
-    std::cout<<"Your 3 handCards:"<<std::endl;
+
+    std::cout << "Your 3 handCards:" << std::endl;
     for (size_t i = 0; i < handCards.size(); ++i) {
         std::cout << i + 1 << ". " << handCards[i] << std::endl;
     }
 
-    int choice = 0;
-    std::cout<<"Choose a card, enter an index between 1 and 3:"<<std::endl;
-    choice=DEEP_PLACE_HOLDER;
+    int choice;
+    bool foundNonCanonCard = false;
 
+
+    for (size_t i = 0; i < handCards.size(); ++i) {
+        if (handCards[i] != 4 && handCards[i] != 5 && handCards[i] != 9 && handCards[i] != 10) {
+            choice = i ; // Adjust for 1-based index
+            foundNonCanonCard = true;
+        }
+        // If no cards without "CANON" are found, default to the first card
+        if (!foundNonCanonCard) {
+            choice = 1; // Default to the first card
+        }
+    }
+
+    std::cout << "Chosen card index: " << choice << std::endl;
     return choice;
 }
 
@@ -122,6 +157,8 @@ int ai::DeepAI::chooseOpponent(size_t listSize)
 {
     int bestOpponentIndex = 0;
     double highestScore = -std::numeric_limits<double>::infinity();
+    
+    std::vector<state::Player *> playerList = gameView->getPlayerList();
 
     for (size_t opponentIndex = 0; opponentIndex < listSize; ++opponentIndex) {
         double score = 0.0;
@@ -134,7 +171,7 @@ int ai::DeepAI::chooseOpponent(size_t listSize)
                 if (boathold->hasResourceType("CANON")) {
                     score -= 0.5 * boathold->getQuantity();
                 }
-                if (boathold->hasResourceType("FOOD") && boathold->getQuantity() > 2) { //à modifier mettre 
+                if (boathold->hasResourceType("FOOD") && boathold->getQuantity() > 2) { //à modifier
                     score += 1;
                 }
                 if (boathold->hasResourceType("GOLD") && boathold->getQuantity() > 2) { //à modifier
