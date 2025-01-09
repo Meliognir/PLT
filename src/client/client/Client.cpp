@@ -116,6 +116,7 @@ namespace client {
         int boatHoldQuantity;
         std::string resTypeToAdd;
         int actionType;
+        bool gettingResources;
         int currentDie;
         bool validChosenBoathold;
         bool isNaked;
@@ -257,12 +258,15 @@ namespace client {
                     // 2 actions day, night, 1 no action
                     if(actionCounter > 0 && actionCounter%2 == 0){activePlayerIndex = (activePlayerIndex + 1) % numberOfPlayers;}
                     gameInstance->setActivePlayerIndex(activePlayerIndex);
-                    gameInstance->setActivePlayer(gameInstance->getPlayerList().at(activePlayerIndex));
-                    activePlayer = gameInstance->getActivePlayer();
+                    activePlayer = gameInstance->getPlayerList().at(activePlayerIndex);
+                    gameInstance->setActivePlayer(activePlayer);
                     std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
 
                     activePlayer->setPrevDuel(false);
                     activePlayer->setHasMoved(false);
+                    activePlayer->setHasToPay(false);
+                    gettingResources = false;
+
 
                     // logique de déplacement sans input
                     chosenCardVal = activePlayer->getActiveCard();
@@ -284,26 +288,47 @@ namespace client {
                     switch (actionType)
                     {
                     case MOVE_FORWARD:
-                        activePlayer->setHasMoved(true);
                         activePlayer->moveWithDirection(currentDie, 1);
+                        activePlayer->setHasMoved(true);
+                        activePlayer->setHasToPay(true);
                         break;
                     case MOVE_BACKWARD:
-                        activePlayer->setHasMoved(true);
                         activePlayer->moveWithDirection(currentDie, -1);
+                        activePlayer->setHasMoved(true);
+                        activePlayer->setHasToPay(true);
                         break;
                     case ADD_FOOD:
                         resTypeToAdd = "Food";
+                        gettingResources = true;
                         break;
                     case ADD_GOLD:
                         resTypeToAdd = "Gold";
+                        gettingResources = true;
                         break;
                     case ADD_CANONS:
                         resTypeToAdd = "Canon";
+                        gettingResources = true;
                         break;
                     default:
+                        std::cout << "You are now in the default case of the action card switch. How did you get there ??" << std::endl;
                         break;
                     }
-                    if(actionType != MOVE_BACKWARD && actionType != MOVE_FORWARD){
+
+                    std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
+                    
+                    actionCounter += 1;
+                    gameInstance->actionCounter = actionCounter;
+                    
+                    gameInstance->request(); // from cardactionstate to resourcehandlingstate, or captaindicestate, or gameoverstate (according to condition)
+                    break;
+
+
+                case RESOURCE_HANDLING_STATE:
+                    std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
+
+                    // if the player didn't move :
+                    if(gettingResources){
+                        gettingResources = false;
                         std::cout << "Player: "<< activePlayer->getName() << " receives: " << currentDie << " " << resTypeToAdd << ", Please choose a BoatHold to store this Resource\n";
                         validChosenBoathold = false;
                         while(!validChosenBoathold){
@@ -328,20 +353,9 @@ namespace client {
                         delete addToBoathold;
                     }
 
-                    std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: " << activePlayerIndex << " id: " << activePlayer->getPlayerId() << " position: "<< activePlayer->getPosition() << "\r\n"<< std::endl;
-                    
-                    actionCounter += 1;
-                    gameInstance->actionCounter = actionCounter;
-                    
-                    gameInstance->request(); // from cardactionstate to resourcehandlingstate or captaindicestate if condition
-                    break;
+                    else{ //case where the player moved
 
-
-                case RESOURCE_HANDLING_STATE:
-                    std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
-
-                    //player selects boatholds to pay
-                    //prevents from paying two times the same tile
+                    //player selects boatholds to pay the new tile
                     if(activePlayer->getHasToPay() && activePlayer->getHasMoved()){
                         boatHoldCount = activePlayer->getBoatHolds().size();
                         resTypeToPay = activePlayer->getResTypeToPay();
@@ -378,6 +392,7 @@ namespace client {
                             }
                         }
                         activePlayer->setHasToPay(false);
+                    }
                     }
 
                     gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
@@ -430,8 +445,12 @@ namespace client {
                     }
 
                     std::cout << "Atacking Player:" << combatPlayer->getName() << " has: " << playerNbCanons << " Canons.\r\n" << std::endl;
-
-                    playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
+                    if (gameInstance->getAttackingPlayer()->get_AI() == nullptr){
+                        playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
+                    }
+                    else {
+                        playerNbCanons = gameInstance->getAttackingPlayer()->get_AI()->chooseCanonNb(playerNbCanons);
+                    }
                     chooseCanons = new engine::ChooseCanons(combatPlayer->getPlayerId(), playerNbCanons);
                     chooseCanons->launchCommand(gameInstance);
                     delete chooseCanons;
@@ -460,8 +479,13 @@ namespace client {
                     }
                     
                     std::cout << "Defending Player:" << combatPlayer->getName() << " has: " << playerNbCanons << " Canons.\r\n" << std::endl;
-
-                    playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
+                    
+                    if (gameInstance->getDefendingPlayer()->get_AI() == nullptr){
+                        playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
+                    }
+                    else {
+                        playerNbCanons = gameInstance->getDefendingPlayer()->get_AI()->chooseCanonNb(playerNbCanons);
+                    }
                     chooseCanons = new engine::ChooseCanons(combatPlayer->getPlayerId(), playerNbCanons);
                     chooseCanons->launchCommand(gameInstance);
                     delete chooseCanons;
