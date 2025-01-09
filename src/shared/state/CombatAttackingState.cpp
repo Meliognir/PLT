@@ -22,7 +22,7 @@ void CombatAttackingState::handle(){
     Player * defender = game->getDefendingPlayer();
     int defensepower = defender->getFirePower();
 
-    if (attackpower>1000){
+    if (attackpower>=1000){
         std::cout << "Player: " << attacker->getName() << " wins because attackpower > 1000" << std::endl;
 
         game->setCombatWinner(attacker);
