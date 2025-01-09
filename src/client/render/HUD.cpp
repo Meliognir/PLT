@@ -92,7 +92,7 @@ void render::HUD::askMapSize(sf::RenderWindow &window){
     window.draw(Text);
 }
 
-void render::HUD::askDayDice(sf::RenderWindow &window, int die1, int die2){
+void render::HUD::askDayDice(sf::RenderWindow &window, int die1, int die2, std::string playerName){
     sf::Font font;
     font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -102,12 +102,12 @@ void render::HUD::askDayDice(sf::RenderWindow &window, int die1, int die2){
     Text.setFont(font);    
     Text.setCharacterSize(windowWidth/40);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n Dé 1 : " + std::to_string(die1) + " Dé 2 : " + std::to_string(die2));  
+    Text.setString(playerName + ". Choose the die that will be the die for the day. \nThe other one will be the die for the night. (1 or 2)\nDie 1 : " + std::to_string(die1) + " Die 2 : " + std::to_string(die2));  
     Text.setPosition(windowWidth/100,windowHeight/4 );
     window.draw(Text);
 }
 
-void render::HUD::askCard(sf::RenderWindow &window){ 
+void render::HUD::askCard(sf::RenderWindow &window, std::string playerName){ 
     sf::Font font;
     font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -117,12 +117,12 @@ void render::HUD::askCard(sf::RenderWindow &window){
     Text.setFont(font);    
     Text.setCharacterSize(windowWidth/40);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Choose a card, enter an index between 1 and 3:");  
+    Text.setString(playerName + ". Choose a card, enter an index between 1 and 3:");  
     Text.setPosition(windowWidth/100,windowHeight/4 );
     window.draw(Text);
 }
 
-void render::HUD::askPlaceResource(sf::RenderWindow &window){ //TODO33
+void render::HUD::askPlaceResource(sf::RenderWindow &window, std::string playerName, int boatholdCount, int amount, std::string resource){ //TODO33
         sf::Font font;
     font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -132,13 +132,13 @@ void render::HUD::askPlaceResource(sf::RenderWindow &window){ //TODO33
     Text.setFont(font);    
     Text.setCharacterSize(windowWidth/40);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = duel)");  
+    Text.setString(playerName+"receives "+std::to_string(amount)+" "+resource+". Please choose a boathold to store this resource.\n You have "+std::to_string(boatholdCount)+" boatholds. Pick one (1-"+std::to_string(boatholdCount)+")");  
     Text.setPosition(windowWidth/100,windowHeight/4 );
     window.draw(Text);
 }
 
-void render::HUD::askBoatholdToPay(sf::RenderWindow &window){
-        sf::Font font;
+void render::HUD::askBoatholdToPay(sf::RenderWindow &window, std::string playerName, int boatholdCount, int payAmount, std::string resource){
+    sf::Font font;
     font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
@@ -147,13 +147,13 @@ void render::HUD::askBoatholdToPay(sf::RenderWindow &window){
     Text.setFont(font);    
     Text.setCharacterSize(windowWidth/40);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = duel)");  
+    Text.setString(playerName + " has to pay " + std::to_string(payAmount) + " amount of " + resource +"\n You have " + std::to_string(boatholdCount) + " boatholds. Pick one (1-" + std::to_string(boatholdCount) + ")");  
     Text.setPosition(windowWidth/100,windowHeight/4 );
     window.draw(Text);
 }
 
-void render::HUD::askOpponent(sf::RenderWindow &window){
-        sf::Font font;
+void render::HUD::askOpponent(sf::RenderWindow &window, std::string playerName, std::vector<state::Player*> players){
+    sf::Font font;
     font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
@@ -162,7 +162,15 @@ void render::HUD::askOpponent(sf::RenderWindow &window){
     Text.setFont(font);    
     Text.setCharacterSize(windowWidth/40);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = duel)");  
+    Text.setString(playerName + ". Choose an opponent, enter an index between 1 and" + std::to_string(players.size()));  
     Text.setPosition(windowWidth/100,windowHeight/4 );
     window.draw(Text);
+    int i;
+    for (i=0; i<players.size(), i++;){
+        Text.setString(std::to_string(i+1) + players[i]->getName());  
+        Text.setPosition(windowWidth/100,windowHeight/4 + (i+1)*windowHeight/16 );
+        window.draw(Text);
+    }
 }
+
+                  

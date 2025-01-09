@@ -46,6 +46,15 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
         std::cerr << "Error loading PortRoyal.png!" << std::endl;
         return;
     }
+    sf::Texture resourceTexture;
+    if (!resourceTexture.loadFromFile("../src/boardGameData/CardSprSheet.png")) {
+        std::cerr << "Error loading card texture!" << std::endl;
+        return;
+    }
+    sf::Sprite resourceSprite;
+    resourceSprite.setTexture(resourceTexture);
+    resourceSprite.setTextureRect(sf::IntRect(600,175,1,1));
+
     sf::Sprite tileSprite;
     sf::Sprite portRoyalSprite;
     tileSprite.setTexture(beachTileset);
@@ -88,17 +97,29 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             tileSprite.setTextureRect(sf::IntRect(32+4*tileWidth, 96, tileWidth, tileHeight)); // Première tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
+            resourceSprite.setTextureRect(sf::IntRect(30, 29, 30, 30));
+            resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            resourceSprite.setPosition(x, y);
             window.draw(tileSprite);
+            window.draw(resourceSprite);
         } else if (tile->tileResourceType == "Gold") {
             tileSprite.setTextureRect(sf::IntRect(32+2*tileWidth, 96, tileWidth, tileHeight)); // Deuxième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
+            resourceSprite.setTextureRect(sf::IntRect(60, 29, 30, 30));
+            resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            resourceSprite.setPosition(x, y);
             window.draw(tileSprite);
+            window.draw(resourceSprite);
         } else if (tile->treasureAvailable) {
             tileSprite.setTextureRect(sf::IntRect(32, 96, tileWidth, tileHeight)); // Troisième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
+            resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
+            resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            resourceSprite.setPosition(x, y);
             window.draw(tileSprite);
+            window.draw(resourceSprite);
         } else {
             portRoyalSprite.setTextureRect(sf::IntRect(0, 0, 192, 192)); // Par défaut (première tuile)
             portRoyalSprite.setOrigin(tileWidth / 2, tileHeight / 2);
