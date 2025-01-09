@@ -27,6 +27,7 @@ void state::CombatDefendingState::handle(){
         std::cout <<"Egalite : Transitioning to ResourceHandlingState state..."<< std::endl;
         game->transitionTo(new ResourceHandlingState);
         notifyObservers();
+        return;
     }
     else if (attackpower > defensepower){
         game->setCombatWinner(attacker);
@@ -40,6 +41,7 @@ void state::CombatDefendingState::handle(){
     std::cout <<"Transitioning to StealResource state..."<< std::endl;
     game->transitionTo(new StealResourceState);
     notifyObservers();
+    return;
 }
 
 int CombatDefendingState::getStateId(){
