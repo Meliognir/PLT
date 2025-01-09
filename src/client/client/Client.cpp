@@ -509,7 +509,7 @@ namespace client {
                     rollDice->launchCommand(gameInstance);
                     delete rollDice;
 
-                    gameInstance->request(); // from CombatDefendingState to CardActionState or StealResourceState if condition
+                    gameInstance->request(); // from CombatDefendingState to ResourceHandlingState or StealResourceState if condition
                     break;
 
 

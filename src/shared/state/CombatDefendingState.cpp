@@ -1,5 +1,5 @@
 #include "CombatDefendingState.h"
-#include "CardActionState.h"
+#include "ResourceHandlingState.h"
 #include "StealResourceState.h"
 #include "Game.h"
 #include "Player.h"
@@ -22,8 +22,10 @@ void state::CombatDefendingState::handle(){
     
     if (attackpower == defensepower){
 
-        std::cout <<"Egalite : Transitioning to CardAction state..."<< std::endl;
-        game->transitionTo(new CardActionState);
+        //std::cout <<"Egalite : Transitioning to CardAction state..."<< std::endl;
+        //game->transitionTo(new CardActionState);
+        std::cout <<"Egalite : Transitioning to ResourceHandlingState state..."<< std::endl;
+        game->transitionTo(new ResourceHandlingState);
         notifyObservers();
     }
     else if (attackpower > defensepower){
