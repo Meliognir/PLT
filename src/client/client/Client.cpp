@@ -775,7 +775,12 @@ namespace client {
     }
     void Client::update(const std::string &eventType, const std::string &data){
         //la je lance une commande je sais pas trop comment
-        
+        if (eventType == "chooseNbOfPlayers"){
+            engine::ChooseNbOfPlayers* chooseNbOfPlayers = new engine::ChooseNbOfPlayers(stoi(data));
+            chooseNbOfPlayers->launchCommand(gameInstance);
+            gameInstance->getPlayerList();
+            std::cout << gameInstance->getPlayerList().size() << std::endl;
+        }
     }
     
     Client::~Client()
