@@ -42,6 +42,14 @@ std::unique_ptr<T> make_unique(Args&&... args) {
 
 
 namespace client {
+    bool Client::modeChosen = false;
+    bool Client::nbPlayerChosen = false;
+    bool Client::isPlayerTypeChosen = false;
+    bool Client::isPlayerAI = false;
+    bool Client::allPlayerSet = false;
+    int Client::die1 = 0;
+    int Client::die2 = 0;
+
     Client::Client()
     {
         // Instantiates a new Game context and runs concrete state GameConfigState
@@ -59,6 +67,7 @@ namespace client {
         int playingMode = 1;
         while(playingMode){
             playingMode = inputHandler.selectGameMode(); //Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)
+            modeChosen=true;
             switch (playingMode){                        //quel est le mode 3 ? c'est SINGLE_PLAYER ou IA ?
                 case EXIT_GAME :
                     break;
@@ -102,8 +111,6 @@ namespace client {
         int activePlayerIndex;
         int captainIndex;
         int turn;
-        int die1;
-        int die2;
         bool chosenDice;
         state::Player* activePlayer;
         int chosenCardVal;
@@ -597,6 +604,7 @@ namespace client {
         // Sets number of player
         int playerNumber = inputHandler.getNumberofPlayers();
         std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
+        nbPlayerChosen=true;
         chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
         chooseNbOfPlayers->launchCommand(gameInstance);
         delete chooseNbOfPlayers;
@@ -605,6 +613,7 @@ namespace client {
         state::Player* currentPlayer;
         int levelAI = 0;
         for(int playerIndex = 0; playerIndex < playerNumber; playerIndex++){
+            isPlayerTypeChosen=false;
             gameInstance->setActivePlayer(gameInstance->getPlayerList().at(playerIndex));
 
             // Set the AI
@@ -624,7 +633,7 @@ namespace client {
             choosePlayerName->launchCommand(gameInstance);
             delete choosePlayerName;
         }
-
+        allPlayerSet=true;
         // Sets MapSize
         int mapSize = inputHandler.getMapSize();
         std::cout <<"MapSize set to: " << std::to_string(mapSize)<< std::endl;
