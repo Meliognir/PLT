@@ -105,6 +105,11 @@ void Game::transitionTo(State *state){
     if (this->state != nullptr){
         delete this->state;
     }
+    for(Player * pl : this->playerList){
+        if(pl->getPosition() >= map->getSize()){
+            this->gameOver = true;
+        }
+    }
     this->state = state;
     this->state->setContext(this);
 }
@@ -299,6 +304,16 @@ Player* Game::getActivePlayer(){
 
 void Game::setActivePlayerIndex(int index){
     activePlayerIndex = index;
+}
+
+bool Game::getGameOver() const
+{
+    return this->gameOver;
+}
+
+void Game::setGameOver(bool gameOver)
+{
+    this->gameOver = gameOver;
 }
 
 void Game::setActivePlayer(Player *player){

@@ -1,5 +1,6 @@
 #include "CardActionState.h"
 #include "Game.h"
+#include "GameOverState.h"
 #include "ResourceHandlingState.h"
 #include "CaptainDiceState.h"
 #include "Observable.h"
@@ -18,8 +19,14 @@ void CardActionState::handle(){
     //fin des actions de tous les joueurs
     if(actionCounter > game->getPlayerList().size()*2) {
         //end of turn
-        std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
-        game->transitionTo(new CaptainDiceState);
+        if(game->getGameOver()){
+            std::cout <<"Transitioning to GameOver state..."<< std::endl;
+            game->transitionTo(new GameOverState);
+        }
+        else{
+            std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
+            game->transitionTo(new CaptainDiceState);
+        }
         notifyObservers();
     }
     else{
