@@ -550,8 +550,6 @@ namespace client {
                 case GAME_OVER_STATE:
                     std::cout << "Client now entering GAME_OVER_STATE\r\n" << std::endl;
 
-
-
                     gameInstance->request(); // remains in GameOverState
                     endloop = 1;
                     break;
