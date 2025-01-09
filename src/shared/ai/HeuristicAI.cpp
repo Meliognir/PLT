@@ -28,7 +28,7 @@ std::string ai::HeuristicAI::getPlayerName(int playerIndex){
 }
 
 
-size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount) {
+size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeToPay, int currentPlayerIndex) {
     size_t index = 0;
 
     bool found = false;
