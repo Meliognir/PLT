@@ -6,8 +6,6 @@
 #include "Gold.h"
 #include "Food.h"
 #include "Canon.h"
-#include "../engine/ActionProcessor.h"
-#include "../engine/CombatManager.h"
 #include "../engine/ResourceManager.h"
 #include "../../client/client/InputHandler.h"
 #include <iostream>
