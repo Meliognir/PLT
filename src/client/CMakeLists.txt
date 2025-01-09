@@ -17,6 +17,7 @@ target_include_directories(${lib_client_target} PUBLIC
   ${SFML_INCLUDE_DIR}
   ${jsoncpp_include_dir}
   ${CMAKE_CURRENT_SOURCE_DIR}/../shared
+  ${CMAKE_CURRENT_SOURCE_DIR}/../server
   )
 target_link_libraries(${lib_client_target} PUBLIC
   ${SFML_LIBRARIES}

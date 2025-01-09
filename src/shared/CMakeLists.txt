@@ -33,6 +33,7 @@ add_dependencies(${lib_shared_target} generate-headers)
 target_include_directories(${lib_shared_target} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${jsoncpp_include_dir}
+  ${CMAKE_CURRENT_SOURCE_DIR}/../server
   )
 
 # vim: set sw=2 sts=2 et:
