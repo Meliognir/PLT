@@ -150,11 +150,17 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
     for (size_t i = 0; i < players.size(); ++i) {
         const auto& player = players[i];
         int playerPosition = player->getPosition();  // Position du joueur (index de la tuile)
-
+        int mapSize = map.getSize();
+        if (playerPosition < 0){
+            playerPosition = mapSize - (-playerPosition)%mapSize;
+        }
+        else if (playerPosition >= mapSize){
+            playerPosition = playerPosition%mapSize;
+        } 
         // Vérifier si la position est valide dans la carte
         if (playerPosition >= 0 && playerPosition < static_cast<int>(map.listOfTiles.size())) {
             // Calculer la position de la tuile correspondante
-            float angleStep = 2 * PI / map.getSize();   // Angle entre chaque tuile
+            float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
             float angle = playerPosition * angleStep;
             float radius = std::min(desktopMode.width, desktopMode.height)/3;                  // Même rayon que dans renderMap
             sf::Vector2f center(windowWidth/2, windowHeight/2);             // Centre de la carte
