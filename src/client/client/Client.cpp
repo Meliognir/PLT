@@ -557,7 +557,7 @@ namespace client {
                             else { // AI input
                                 winnerBoatholdId = winner->get_AI()->selectUserBoatHold(boatHoldCount);
                             }
-                            chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
+                            chosenBoatholdResType = boatHolds.at(winnerBoatholdId)->getResourceType();
                             if(chosenBoatholdResType != resTypeToAdd){
                                 validChosenBoathold = true;
                             }
@@ -565,9 +565,6 @@ namespace client {
                                 std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
                             }
                         }
-
-                        //winnerBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
-                        //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount, true); //old code
 
                         stealResource = new engine::StealResource(chosenBoatholdId, winner->getPlayerId(), loser->getPlayerId(), winnerBoatholdId);
                         stealResource->launchCommand(gameInstance);
