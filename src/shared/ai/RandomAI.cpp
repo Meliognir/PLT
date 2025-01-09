@@ -42,7 +42,7 @@ size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resTyp
             }
         }
     }
-    std::cout << currentPlayer->getName() << " selected the boat hold " << index << std::endl;
+    std::cout << currentPlayer->getName() << " selected the boat hold " << index << "." << std::endl;
     return index-1;
 
 }

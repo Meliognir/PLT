@@ -17,8 +17,9 @@ void CardActionState::handle(){
     unsigned actionCounter = (unsigned) game->actionCounter;
 
     //fin des actions de tous les joueurs
-    if(actionCounter > game->getPlayerList().size()*2) {
+    if(actionCounter >= game->getPlayerList().size()*2) {
         //end of turn
+        //game->actionCounter = 0; or is it too soon ?
         if(game->getGameOver()){
             std::cout <<"Transitioning to GameOver state..."<< std::endl;
             game->transitionTo(new GameOverState);
