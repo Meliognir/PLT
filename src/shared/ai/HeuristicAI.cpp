@@ -31,65 +31,93 @@ std::string ai::HeuristicAI::getPlayerName(int playerIndex){
 size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeToPay, int currentPlayerIndex) {
     size_t index = 0;
 
-    bool found = false;
 
-    // Vérifier s'il existe un BoatHold vide
-    while (!found) {
-        int i = 0;
-        std::cout << "You have " << boatHoldCount << " BoatHolds. Picking the first empty one..." << std::endl;
+    if (resTypeToPay == ""){
+        bool found = false;
 
-        for (state::BoatHold* boathold : controlledPlayer->getBoatHolds()) {
-            if (boathold->isEmpty()) {
-                index = i;
-                found = true;
-                break;
-            }
-            i++;
-        }
+        // Vérifier s'il existe un BoatHold vide
+        while (!found) {
+            int i = 0;
+            std::cout << "You have " << boatHoldCount << " BoatHolds. Picking the first empty one..." << std::endl;
 
-        if (!found) {
-            std::cout << "All boat holds are occupied. No empty boat hold found." << std::endl;
-
-            // Enlever les ressources de type CANON si aucun BoatHold n'est vide
-            bool removedCanon = false;
             for (state::BoatHold* boathold : controlledPlayer->getBoatHolds()) {
-                if (boathold->hasResourceType("CANON")) {
-                    boathold->removeResource(boathold->getQuantity());
-                    std::cout << "Removed 'CANON' from BoatHold." << std::endl;
-                    removedCanon = true;
+                if (boathold->isEmpty()) {
+                    index = i;
+                    found = true;
                     break;
                 }
+                i++;
             }
 
-            if (!removedCanon) {
-                // Trouver le BoatHold avec le moins de ressources et enlever ces ressources
-                state::BoatHold* boatHoldWithLeastResources = nullptr;
-                size_t leastResourceCount = SIZE_MAX;
+            if (!found) {
+                std::cout << "All boat holds are occupied. No empty boat hold found." << std::endl;
 
+                // Enlever les ressources de type CANON si aucun BoatHold n'est vide
+                bool removedCanon = false;
                 for (state::BoatHold* boathold : controlledPlayer->getBoatHolds()) {
-                    if (boathold->getQuantity() < leastResourceCount) {
-                        leastResourceCount = boathold->getQuantity();
-                        boatHoldWithLeastResources = boathold;
+                    if (boathold->hasResourceType("CANON")) {
+                        boathold->removeResource(boathold->getQuantity());
+                        std::cout << "Removed 'CANON' from BoatHold." << std::endl;
+                        removedCanon = true;
+                        break;
                     }
                 }
 
-                if (boatHoldWithLeastResources) {
-                    // Si la ressource est différente, enlevez là où il y en a le moins
-                    int quantity = boatHoldWithLeastResources->getQuantity();
-                    if (quantity > 0) {
-                        boatHoldWithLeastResources->removeResource(boatHoldWithLeastResources->getQuantity());
-                        std::cout << "Removed resources from BoatHold with least resources." << std::endl;
+                if (!removedCanon) {
+                    // Trouver le BoatHold avec le moins de ressources et enlever ces ressources
+                    state::BoatHold* boatHoldWithLeastResources = nullptr;
+                    size_t leastResourceCount = SIZE_MAX;
+
+                    for (state::BoatHold* boathold : controlledPlayer->getBoatHolds()) {
+                        if (boathold->getQuantity() < leastResourceCount) {
+                            leastResourceCount = boathold->getQuantity();
+                            boatHoldWithLeastResources = boathold;
+                        }
+                    }
+
+                    if (boatHoldWithLeastResources) {
+                        // Si la ressource est différente, enlevez là où il y en a le moins
+                        int quantity = boatHoldWithLeastResources->getQuantity();
+                        if (quantity > 0) {
+                            boatHoldWithLeastResources->removeResource(boatHoldWithLeastResources->getQuantity());
+                            std::cout << "Removed resources from BoatHold with least resources." << std::endl;
+                        }
                     }
                 }
             }
         }
+
     }
 
     // S'assurer que l'index est dans une plage valide si trouvé
-    if (index < 0 || index >= boatHoldCount) {
-        std::cout << "Invalid index. Returning default placeholder index." << std::endl;
-        index = HEURISTIC_PLACE_HOLDER;
-    }
+    if (index < 0 || index >= boatHoldCount) {/*
+        std::cout << "Invalid index. Returning a valid random input." << std::endl;
+
+        index = 0;
+        bool invalidInput = true;
+
+        if (currentPlayerIndex == -1){
+            currentPlayerIndex = gameView->getActivePlayerIndex();
+        }
+
+        state::Player* currentPlayer = gameView->getPlayerList().at(currentPlayerIndex);
+        std::vector <state::BoatHold *> currentPlayerBoatHolds = currentPlayer->getBoatHolds();
+        std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
+        while (invalidInput){
+            index=getRandomInput(1, boatHoldCount);
+            if (resTypeToPay == ""){
+                invalidInput = false;
+            }
+            else{
+                if (resTypeToPay == currentPlayerBoatHolds.at(index-1)->getResourceType()){
+                    invalidInput = false;
+                }
+            }
+        }
+        std::cout << currentPlayer->getName() << " selected the boat hold " << index << "." << std::endl;*/
+        return index-1;
+        
+        }
 
     return index;
 }

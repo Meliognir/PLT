@@ -309,11 +309,13 @@ namespace client {
                         activePlayer->moveWithDirection(currentDie, 1);
                         activePlayer->setHasMoved(true);
                         activePlayer->setHasToPay(true);
+                        gettingResources = false;
                         break;
                     case MOVE_BACKWARD:
                         activePlayer->moveWithDirection(currentDie, -1);
                         activePlayer->setHasMoved(true);
                         activePlayer->setHasToPay(true);
+                        gettingResources = false;
                         break;
                     case ADD_FOOD:
                         resTypeToAdd = "Food";
@@ -726,11 +728,11 @@ namespace client {
             }
 
 
-            std::cout << "\n\n\nDo you wish to continue the game ? -------------------------------" << std::endl;
-            std::cin >> waitConfirm;
-            if (waitConfirm[0] == 'n'){
-                endloop = 1;
-            }
+            //std::cout << "\n\n\nDo you wish to continue the game ? -------------------------------" << std::endl;
+            //std::cin >> waitConfirm;
+            //if (waitConfirm[0] == 'n'){
+            //    endloop = 1;
+            //}
 
         }
         
