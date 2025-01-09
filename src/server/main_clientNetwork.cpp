@@ -1,29 +1,46 @@
-
-#include <SFML/Network.hpp>
+#include "server/NetworkClient.h"
 #include <iostream>
 
 int main() {
-    sf::TcpSocket socket;
-    sf::Socket::Status status = socket.connect("127.0.0.1", 53000);
-    if (status != sf::Socket::Done) {
-        std::cerr << "Erreur : Impossible de se connecter au serveur.\n";
+    // Créer une instance du client réseau
+    server::NetworkClient client;
+
+    // Connecter au serveur
+    client.connectToServer("127.0.0.1", 53000);
+
+    // Vérifier si la connexion a réussi
+    if (client.recieveGameState().empty()) {
+        std::cerr << "Erreur : Impossible de se connecter au serveur ou état non reçu." << std::endl;
         return -1;
     }
-    std::cout << "Connecté au serveur.\n";
 
-    // Boucle pour envoyer des messages
+    // Boucle pour interagir avec le serveur
     while (true) {
-        std::string message;
-        std::cout << "Entrez un message : ";
-        std::getline(std::cin, message);
+        std::string command;
+        std::cout << "Entrez une commande (move/end_turn/quit) : ";
+        std::cin >> command;
 
-        sf::Packet packet;
-        packet << message;  // Encode le message pour l'envoi
-        if (socket.send(packet) != sf::Socket::Done) {
-            std::cerr << "Erreur lors de l'envoi du message.\n";
+        if (command == "move") {
+            int distance, direction;
+            std::cout << "Entrez la distance et la direction : ";
+            std::cin >> distance >> direction;
+
+            // Envoyer la commande au serveur
+            client.sendCommand(command, {distance, direction});
+        } else if (command == "end_turn") {
+            // Envoyer une commande de fin de tour
+            client.sendCommand(command, {});
+        } else if (command == "quit") {
+            std::cout << "Déconnexion..." << std::endl;
+            break;
         } else {
-            std::cout << "Message envoyé avec succès.\n";
+            std::cerr << "Commande inconnue !" << std::endl;
         }
+
+        // Recevoir l'état du jeu mis à jour
+        std::string gameState = client.recieveGameState();
+        std::cout << "État du jeu : " << gameState << std::endl;
     }
+
     return 0;
 }
