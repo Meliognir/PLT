@@ -49,6 +49,10 @@ namespace client {
     bool Client::allPlayerSet = false;
     int Client::die1 = 0;
     int Client::die2 = 0;
+    int Client::currentDie = 0;
+    std::string Client::resTypeToAdd = "Null";
+    std::string Client::resTypeToPay = "Null";
+    bool Client::gettingResources = false;
 
     Client::Client()
     {
@@ -119,12 +123,8 @@ namespace client {
         std::string chosenBoatholdResType;
         int boatHoldCount;
         int remainToPay;
-        std::string resTypeToPay;
         int boatHoldQuantity;
-        std::string resTypeToAdd;
         int actionType;
-        bool gettingResources;
-        int currentDie;
         bool validChosenBoathold;
         bool isNaked;
         int chosenOpponentId;

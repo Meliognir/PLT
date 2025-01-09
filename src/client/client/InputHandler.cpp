@@ -212,6 +212,7 @@ int InputHandler::selectLevelAI()
         std::cout << "What is the level of this AI ? (0, 1, 2, 3)"<< std::endl;;
         std::cin >> setLevel;
         if (setLevel == "0" || setLevel == "cancel") {
+            Client::isPlayerTypeChosen=false;
             std::cout << "User cancelled" << std::endl;
             return 0;
         }

@@ -73,7 +73,9 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, client::Client::die1, client::Client::die2);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
-                instHUD->askDayDice(*window, client::Client::die1, client::Client::die2);
+                int captainIndex = game->getCaptainIndex();
+                state::Player * captain = game->getPlayerList().at(captainIndex);
+                instHUD->askDayDice(*window, client::Client::die1, client::Client::die2, captain->getName());
                 break;
             }
             
@@ -85,9 +87,10 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 if (!game->getActivePlayer()) {
                     break;
                 }
-                std::vector<int> playerHand = game->getActivePlayer()->getHandCards();
+                state::Player * currentPlayer = game->getActivePlayer();
+                std::vector<int> playerHand = currentPlayer->getHandCards();
                 renderer->renderHand(*window, playerHand);
-                instHUD->askCard(*window);
+                instHUD->askCard(*window, currentPlayer->getName());
                 break;
             }
 
@@ -109,7 +112,15 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 if (!game->getActivePlayer()) {
                     break;
                 }
-                renderer->renderBoatholds(*window, game->getActivePlayer());
+                state::Player * currentPlayer = game->getActivePlayer();
+                renderer->renderBoatholds(*window, currentPlayer);
+                
+                if (client::Client::gettingResources){
+                    instHUD->askPlaceResource(*window, currentPlayer->getName(), currentPlayer->getBoatHolds().size(), client::Client::currentDie, client::Client::resTypeToAdd);
+                }
+                if(currentPlayer->getHasToPay() && currentPlayer->getHasMoved()){
+                    instHUD->askBoatholdToPay(*window, currentPlayer->getName(), currentPlayer->getBoatHolds().size(), currentPlayer->getAmountToPay(),client::Client::resTypeToPay);
+                }
                 break;
             }
             case OPPONENT_CHOICE_STATE:{
@@ -120,7 +131,9 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 if (!game->getActivePlayer()) {
                     break;
                 }
+                state::Player * currentPlayer = game->getActivePlayer();
                 renderer->renderBoatholds(*window, game->getActivePlayer());
+                instHUD->askOpponent(*window, currentPlayer->getName(), currentPlayer->getOpponentsList());
                 break;
             }
             case COMBAT_ATTACKING_STATE:{
