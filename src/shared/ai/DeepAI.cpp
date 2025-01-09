@@ -83,19 +83,7 @@ size_t ai::DeepAI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeT
     }
 }
 
-bool ai::DeepAI::confirmBoatHoldReplace(){
-    std::string input;
-    while (true) {
-        std::cout << "This boathold contains other resources. Do you want to replace them ? (y/n) : ";
-        input=="y";
 
-        if (input == "y" || input == "n") {
-            return input == "y";
-        }
-
-        std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
-    }
-}
 
 //choisit dé puis carte
 //check ses hand cartes 

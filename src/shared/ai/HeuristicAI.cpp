@@ -95,21 +95,6 @@ size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string res
 }
 
 
-
-bool ai::HeuristicAI::confirmBoatHoldReplace(){
-    std::string input;
-    while (true) {
-        std::cout << "This boathold contains other resources. Do you want to replace them ? (y/n) : ";
-        input=="y";
-
-        if (input == "y" || input == "n") {
-            return input == "y";
-        }
-
-        std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
-    }
-}
-
 int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
     std::cout << "Your 3 handCards:" << std::endl;
     for (size_t i = 0; i < handCards.size(); ++i) {

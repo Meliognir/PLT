@@ -18,10 +18,6 @@ size_t ai::AI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeToPay
     return size_t();
 }
 
-bool ai::AI::confirmBoatHoldReplace()
-{
-    return false;
-}
 
 int ai::AI::chooseCardFromHand(const std::vector<int> &handCards)
 {
