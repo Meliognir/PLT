@@ -31,16 +31,30 @@ int Map::getSize() const{
 }
 
 std::string Map::getResourceType (int position) {
-    //std::cout << "les problèmes1... ------" << std::endl;
-    return listOfTiles.at(clamp(position /*% getSize()*/, 0, getSize()))->tileResourceType;
-    //std::cout << "les problèmes1... ------" << std::endl;
+    std::cout << "les problèmes1... ------" << std::endl;
+    int actualPosition = position;
+    if (actualPosition < 0){
+        actualPosition = getSize() - (-actualPosition)%getSize();
+    }
+    else if (actualPosition > getSize()-1){
+        actualPosition = actualPosition%getSize();
+    } 
+    std::cout << "la case du joueur a pour indice " << position << " qui devient donc " << actualPosition%getSize() << std::endl;
+    return listOfTiles.at(actualPosition)->tileResourceType;
 
 }
 
 int Map::getResourceCost (int position) {
-    //std::cout << "les problèmes2... ------" << std::endl;
-    return listOfTiles.at(clamp(position /*% getSize()*/, 0, getSize()))->tileCost;
-    //std::cout << "les problèmes2... ------" << std::endl;
+    std::cout << "les problèmes1... ------" << std::endl;
+    int actualPosition = position;
+    if (actualPosition < 0){
+        actualPosition = getSize() - (-actualPosition)%getSize();
+    }
+    else if (actualPosition > getSize()-1){
+        actualPosition = actualPosition%getSize();
+    }
+    std::cout << "la case du joueur a pour indice " << position << " qui devient donc " << actualPosition%getSize() << std::endl;
+    return listOfTiles.at(actualPosition)->tileCost;
 
 }
 }

@@ -335,7 +335,6 @@ namespace client {
 
                     // if the player didn't move :
                     if(gettingResources){
-                        gettingResources = false;
                         std::cout << "Player: "<< activePlayer->getName() << " receives: " << currentDie << " " << resTypeToAdd << ", Please choose a BoatHold to store this Resource\n";
                         validChosenBoathold = false;
                         while(!validChosenBoathold){
@@ -358,47 +357,48 @@ namespace client {
                         addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId /*+ 1*/, currentDie, resTypeToAdd);
                         addToBoathold->launchCommand(gameInstance);
                         delete addToBoathold;
+                        gettingResources = false;
                     }
 
                     else{ //case where the player moved
 
-                    //player selects boatholds to pay the new tile
-                    if(activePlayer->getHasToPay() && activePlayer->getHasMoved()){
-                        boatHoldCount = activePlayer->getBoatHolds().size();
-                        resTypeToPay = activePlayer->getResTypeToPay();
-                        remainToPay = activePlayer->getAmountToPay();
-                        std::cout << "Player: "<< activePlayer->getName() << " has to pay: " << remainToPay << " " << resTypeToPay << ".\n";
-                        while (remainToPay > 0){
-                            auto boatHolds = activePlayer->getBoatHolds();
-                            // Pick a boat hold
-                            if (activePlayer->get_AI()==nullptr){ //real player
-                                chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
-                            }
-                            else { // AI input
-                                chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount, resTypeToPay, activePlayer->getPlayerId());
-                            }
-                            chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
-                            if(chosenBoatholdResType != resTypeToPay){
-                                std::cout << "Invalid Resource Type. You chose a Boathold with: " << chosenBoatholdResType << " Please choose a BoatHold with: " << resTypeToPay << ".\n";
-                            }
-                            else{
-                                state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
-                                boatHoldQuantity = bh->getQuantity();
-                                if(boatHoldQuantity >= remainToPay){
-                                    activePlayer->removeFromBoatHold(chosenBoatholdId, remainToPay);// à faire plutôt depuis l'engine
-                                    remainToPay = 0;
-                                    activePlayer->setAmountToPay(remainToPay);
+                        //player selects boatholds to pay the new tile
+                        if(activePlayer->getHasToPay() && activePlayer->getHasMoved()){
+                            boatHoldCount = activePlayer->getBoatHolds().size();
+                            resTypeToPay = activePlayer->getResTypeToPay();
+                            remainToPay = activePlayer->getAmountToPay();
+                            std::cout << "Player: "<< activePlayer->getName() << " has to pay: " << remainToPay << " " << resTypeToPay << ".\n";
+                            while (remainToPay > 0){
+                                auto boatHolds = activePlayer->getBoatHolds();
+                                // Pick a boat hold
+                                if (activePlayer->get_AI()==nullptr){ //real player
+                                    chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                                }
+                                else { // AI input
+                                    chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount, resTypeToPay, activePlayer->getPlayerId());
+                                }
+                                chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
+                                if(chosenBoatholdResType != resTypeToPay){
+                                    std::cout << "Invalid Resource Type. You chose a Boathold with: " << chosenBoatholdResType << " Please choose a BoatHold with: " << resTypeToPay << ".\n";
                                 }
                                 else{
-                                    activePlayer->removeFromBoatHold(chosenBoatholdId, boatHoldQuantity);
-                                    remainToPay = activePlayer->getAmountToPay() - boatHoldQuantity;
-                                    activePlayer->setAmountToPay(remainToPay);
+                                    state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
+                                    boatHoldQuantity = bh->getQuantity();
+                                    if(boatHoldQuantity >= remainToPay){
+                                        activePlayer->removeFromBoatHold(chosenBoatholdId, remainToPay);// à faire plutôt depuis l'engine
+                                        remainToPay = 0;
+                                        activePlayer->setAmountToPay(remainToPay);
+                                    }
+                                    else{
+                                        activePlayer->removeFromBoatHold(chosenBoatholdId, boatHoldQuantity);
+                                        remainToPay = activePlayer->getAmountToPay() - boatHoldQuantity;
+                                        activePlayer->setAmountToPay(remainToPay);
+                                    }
+                                    std::cout << "There remain: " << remainToPay << " " << resTypeToPay << " to pay.\n";
                                 }
-                                std::cout << "There remain: " << remainToPay << " " << resTypeToPay << " to pay.\n";
                             }
+                            activePlayer->setHasToPay(false);
                         }
-                        activePlayer->setHasToPay(false);
-                    }
                     }
 
                     gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
