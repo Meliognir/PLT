@@ -46,6 +46,9 @@ void getMyResourceNeed(){
     return;
 }
 
+//regarde les handcards de chaque joueur
+//regarde les boathold de chaque joueur
+//estime leur comportement
 std::vector<int> getOtherPlayerBehavior(std::vector<state::Player *> playerList){
 
     std::vector<int> playerBehaviors; //needFood 0 needGold 1 needCanons 2
