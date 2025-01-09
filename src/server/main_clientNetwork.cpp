@@ -19,7 +19,7 @@ int main() {
     sockaddr_in serverAddr{};
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(53000);
-    inet_pton(AF_INET, "10.0.2.15", &serverAddr.sin_addr);
+    inet_pton(AF_INET, "192.168.193.200", &serverAddr.sin_addr);
 
     // Connexion au serveur
     if (connect(sock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
