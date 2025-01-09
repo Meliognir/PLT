@@ -161,10 +161,10 @@ bool ai::HeuristicAI::chooseTimeDice(int die1, int die2) {
             std::cout << "You choosed " <<die1 <<" as the day number."<< std::endl;
             return die1;
         } else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==1 ||controlledPlayer->getHandCards().at(choice)==3 ||controlledPlayer->getHandCards().at(choice)==0 ||controlledPlayer->getHandCards().at(choice)==7)) {
-            std::cout << "You choosed " <<die2 <<" as the day number."<< std::endl;
+            std::cout << "You choosed " <<die2 <<" as the day number and it's a good choice."<< std::endl;
             return die2;
         } else if (die1>=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
-            std::cout << "You choosed " <<die2 <<" as the day number."<< std::endl;
+            std::cout << "You choosed " <<die2 <<" as the day number and it's a good choice ."<< std::endl;
             return die2;
         }else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
             std::cout << "You choosed " <<die1 <<" as the day number."<< std::endl;
@@ -189,6 +189,7 @@ int ai::HeuristicAI::chooseOpponent(size_t listSize) {
         double score = 0.0;
 
         state::Player* opponent = controlledPlayer->getOpponentsList().at(opponentIndex);
+
         if (opponent->getPlayerId()!=controlledPlayer->getPlayerId()) {
 
             for (state::BoatHold* boathold : opponent->getBoatHolds()) {
