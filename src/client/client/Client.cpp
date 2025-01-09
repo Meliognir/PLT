@@ -558,7 +558,7 @@ namespace client {
                                 winnerBoatholdId = winner->get_AI()->selectUserBoatHold(boatHoldCount);
                             }
                             chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
-                            if(chosenBoatholdResType == resTypeToAdd){
+                            if(chosenBoatholdResType != resTypeToAdd){
                                 validChosenBoathold = true;
                             }
                             else {
