@@ -104,11 +104,11 @@ void Player::moveWithDirection (int distance, int direction){ // ajouter taille 
 void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount, int skipSelection){
     auto& boatHolds = this->getBoatHolds();
     state::BoatHold *selectedHold;
-    if (skipSelection){
-        selectedHold = boatHolds.at(skipSelection-1);
+    if (skipSelection < 0 || skipSelection > 6){
+        selectedHold = boatHolds.at(boatholdIndex);
     }
     else {
-        selectedHold = boatHolds.at(boatholdIndex-1);
+        selectedHold = boatHolds.at(skipSelection);
     }
     int quantityToRemove = selectedHold->getQuantity();
     selectedHold->removeResource(quantityToRemove);

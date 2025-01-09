@@ -355,7 +355,7 @@ namespace client {
                             }
                             validChosenBoathold = true;
                         }
-                        addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId + 1, currentDie, resTypeToAdd);
+                        addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId /*+ 1*/, currentDie, resTypeToAdd);
                         addToBoathold->launchCommand(gameInstance);
                         delete addToBoathold;
                     }
@@ -377,7 +377,6 @@ namespace client {
                             else { // AI input
                                 chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount, resTypeToPay, activePlayer->getPlayerId());
                             }
-                            //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount); //old code
                             chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
                             if(chosenBoatholdResType != resTypeToPay){
                                 std::cout << "Invalid Resource Type. You chose a Boathold with: " << chosenBoatholdResType << " Please choose a BoatHold with: " << resTypeToPay << ".\n";
