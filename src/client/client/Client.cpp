@@ -65,7 +65,6 @@ namespace client {
     Client::Client()
     {
         // Instantiates a new Game context and runs concrete state GameConfigState
-        Renderer renderer; //unused
         state::State *gameState = new state::GameConfigState();
         gameEngine = engine::GameEngine::getInstance(gameState);
         gameInstance = gameEngine->game;
