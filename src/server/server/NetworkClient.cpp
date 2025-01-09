@@ -1,10 +1,10 @@
 #include "NetworkClient.h"
 #include <iostream>
-#include <cstring>      // Pour memset
-#include <sys/socket.h> // Pour socket, connect, send, recv
-#include <netinet/in.h> // Pour sockaddr_in
-#include <arpa/inet.h>  // Pour inet_addr
-#include <unistd.h>     // Pour close
+#include <cstring>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 namespace server {
 
@@ -39,20 +39,20 @@ namespace server {
         std::cout << "Connexion réussie au serveur " << ip << ":" << port << "." << std::endl;
     }
 
-    std::string NetworkClient::recieveGameState() {
+    std::string NetworkClient::receiveCommand() {
         char buffer[1024];
         memset(buffer, 0, sizeof(buffer));
 
         int bytesRead = recv(socketFd, buffer, sizeof(buffer) - 1, 0);
         if (bytesRead < 0) {
-            std::cerr << "Erreur lors de la réception de l'état du jeu." << std::endl;
+            std::cerr << "Erreur lors de la réception de la commande." << std::endl;
             return "";
         }
 
         return std::string(buffer, bytesRead);
     }
 
-    void server::NetworkClient::sendCommand(const std::string& command, const std::vector<int>& params) {
+    void NetworkClient::sendCommand(const std::string& command, const std::vector<int>& params) {
         std::string data = command;
         for (int param : params) {
             data += " " + std::to_string(param);
@@ -62,10 +62,5 @@ namespace server {
             std::cerr << "Erreur lors de l'envoi de la commande." << std::endl;
         }
     }
-}
 
-
-
-
-
-
+} // namespace server
