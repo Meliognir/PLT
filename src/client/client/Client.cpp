@@ -128,12 +128,15 @@ namespace client {
         state::ActionCard *actionCard;
         int chosenBoatholdId;
         std::string chosenBoatholdResType;
+        std::string resourceTypeToPay;
         int boatHoldCount;
         int remainToPay;
         int boatHoldQuantity;
         int actionType;
         bool validChosenBoathold;
         bool isNaked;
+        bool hasFought;
+        int nbOpponent;
         int chosenOpponentId;
         std::vector<state::Player *> opponentsList;
         state::Player* combatPlayer;
@@ -184,6 +187,7 @@ namespace client {
 
                     std::cout << "Client now entering CAPTAIN_DICE_STATE\r\n" << std::endl;
                     srand(time(NULL));
+                    hasFought = false;
                     captainIndex = gameInstance->getCaptainIndex();
                     turn = gameInstance->getTurn();
                     if(turn > 0){captainIndex = (captainIndex + 1) % numberOfPlayers;}
@@ -276,7 +280,7 @@ namespace client {
                     gameInstance->setActivePlayer(activePlayer);
                     std::cout << "player: " << activePlayer->getName() << " activePlayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << " Do your Action. Dew it.\r\n" << std::endl;                                
 
-                    activePlayer->setPrevDuel(false);
+                    activePlayer->setMustFight(false);
                     activePlayer->setHasMoved(false);
                     activePlayer->setHasToPay(false);
                     gettingResources = false;
@@ -340,6 +344,8 @@ namespace client {
                 case RESOURCE_HANDLING_STATE:
                     std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
 
+                    activePlayer = gameInstance->getActivePlayer();
+
                     // if the player didn't move :
                     if(gettingResources){
                         std::cout << "Player: "<< activePlayer->getName() << " receives: " << currentDie << " " << resTypeToAdd << ", Please choose a BoatHold to store this Resource\n";
@@ -351,9 +357,7 @@ namespace client {
                                 chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
                             }
                             else { // AI input
-                                std::cout << "Là c'est normal." << std::endl;
                                 chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount);
-                                std::cout << "Là ça devient bizarre." << std::endl;
                             }
                             chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
                             if(chosenBoatholdResType != resTypeToAdd){
@@ -369,10 +373,125 @@ namespace client {
                         gettingResources = false;
                     }
 
-                    else{ //case where the player moved
+                    else{
+
+                        if(activePlayer->getHasToPay()){// The player moved on a new tile and must pay something (or pay 0 and get a treasure), and he could trigger a fight
+                            nbOpponent = 0;
+                            std::vector<state::Player *> opponentsList = {};
+                                
+                            //player's total resource quantity he can pay for resourceTypeToPay
+                            int activePlayerPos = activePlayer->getPosition();
+                            resourceTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
+                            int resourceToPayCost = gameInstance->map->getResourceCost(activePlayerPos);
+                            int quantityResource = 0;
+                            for (state::BoatHold *bh : activePlayer->getBoatHolds()) {
+                                if (bh->hasResourceType(resourceTypeToPay)) {
+                                    quantityResource += bh->getQuantity();
+                                }
+                            }
+                            std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " resourceToPayType: " << resourceTypeToPay << "\r\n"<< std::endl;
+                            std::cout <<"the tile costs: " << resourceToPayCost << " resourceToPayType: " << resourceTypeToPay << "\r\n"<< std::endl;
+
+                            //player can't pay
+                            while(quantityResource < resourceToPayCost){
+                                
+                                std::cout <<"player: " << activePlayer->getName() << " is bankrupting for this tile.\r\n"<< std::endl;
+
+                                if (quantityResource > 0){
+                                    boatHoldCount = activePlayer->getBoatHolds().size();
+                                    resTypeToPay = activePlayer->getResTypeToPay();
+                                    remainToPay = activePlayer->getAmountToPay();
+                                    std::cout << "Player: "<< activePlayer->getName() << " has to pay: " << remainToPay << " " << resTypeToPay << ".\n";
+                                    while (quantityResource > 0){
+                                        auto boatHolds = activePlayer->getBoatHolds();
+                                        // Pick a boat hold
+                                        if (activePlayer->get_AI()==nullptr){ //real player
+                                            chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                                        }
+                                        else { // AI input
+                                            chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount, resTypeToPay, activePlayer->getPlayerId());
+                                        }
+                                        chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
+                                        if(chosenBoatholdResType != resTypeToPay){
+                                            std::cout << "Invalid Resource Type. You chose a Boathold with: " << chosenBoatholdResType << " Please choose a BoatHold with: " << resTypeToPay << ".\n";
+                                        }
+                                        else{
+                                            state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
+                                            activePlayer->removeFromBoatHold(chosenBoatholdId, boatHoldQuantity);
+                                            quantityResource = quantityResource - boatHoldQuantity;
+                                            std::cout << "There remain: " << quantityResource << " " << resTypeToPay << " to pay.\n";
+                                        }
+                                    }
+                                }               
+
+                                //player moves backward
+                                activePlayer->moveWithDirection(1, -1);
+                                activePlayer->setHasMoved(true);
+
+                                //player's total resource quantity he can pay for resourceTypeToPay
+                                activePlayerPos = activePlayer->getPosition();
+                                resourceTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
+                                resourceToPayCost = gameInstance->map->getResourceCost(activePlayerPos);
+                                quantityResource = 0;
+                                for (state::BoatHold *bh : activePlayer->getBoatHolds()) {
+                                    if (bh->hasResourceType(resourceTypeToPay)) {
+                                        quantityResource += bh->getQuantity();
+                                    }
+                                }
+                                std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " resourceToPayType: " << resourceTypeToPay << "\r\n"<< std::endl;
+                                std::cout <<"the tile costs: " << resourceToPayCost << " resourceToPayType: " << resourceTypeToPay << "\r\n"<< std::endl;
+                            }
+                            
+                            // recall what the player now has to pay
+                            activePlayerPos = activePlayer->getPosition();
+                            resourceTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
+                            resourceToPayCost = gameInstance->map->getResourceCost(activePlayerPos);
+                            activePlayer->setHasToPay(true);
+
+                            if (hasFought){
+                                hasFought = false;
+                                activePlayer->setMustFight(false);
+                                activePlayer->setHasToPay(true); //no enemy ? then it's time to pay your debt
+
+                            }
+                            else {
+
+                                //checks activeplayer's opponent presence before paying anything
+                                for (state::Player *player : gameInstance->getPlayerList()) {
+                                    if (player->getPosition() == activePlayerPos && player->getPlayerId() != activePlayer->getPlayerId()) {
+                                        nbOpponent += 1;
+                                        opponentsList.push_back(player);
+                                    }
+                                }
+                                activePlayer->setOpponentsList(opponentsList);
+                                std::cout <<"there are: " << nbOpponent << " opponents on this tile\r\n"<< std::endl;
+                                                
+                                //duel only if there are players
+                                if (nbOpponent) {
+                                    std::cout <<" and Player: " << activePlayer->getName() << " must fight before he can pay the cost of this tile\r\n"<< std::endl;
+                                    activePlayer->setMustFight(true);
+                                    activePlayer->setAmountToPay(resourceToPayCost);
+                                    activePlayer->setResTypeToPay(resourceTypeToPay);
+
+                                    activePlayer->setHasToPay(false);
+                                }
+                                else{
+                                    std::cout <<"Pon atencion Thorfinn, no tienes enemigos\r\n"<< std::endl;
+                                    activePlayer->setMustFight(false);
+                                    activePlayer->setHasToPay(true); //no enemy ? then it's time to pay your debt
+                                }
+                            }
+                        }
+                        /*
+                        else {
+                            //in this case, the player is most likely coming back from a duel state
+                            // I don't think there is anything to change
+                        }
+                        */
+
 
                         //player selects boatholds to pay the new tile
-                        if(activePlayer->getHasToPay() && activePlayer->getHasMoved()){
+                        if(activePlayer->getHasToPay()){
                             boatHoldCount = activePlayer->getBoatHolds().size();
                             resTypeToPay = activePlayer->getResTypeToPay();
                             remainToPay = activePlayer->getAmountToPay();
@@ -416,7 +535,11 @@ namespace client {
 
                 case OPPONENT_CHOICE_STATE:
                     std::cout << "Client now entering OPPONENT_CHOICE_STATE\r\n" << std::endl;
-                        
+
+                    activePlayer->setMustFight(false);
+                    hasFought = true;
+
+
                     opponentsList = activePlayer->getOpponentsList();
                     for (size_t i = 0; i < opponentsList.size(); ++i) {
                         std::cout << i + 1 << ". " << opponentsList[i]->getName() << "\r\n" << std::endl;
@@ -481,8 +604,6 @@ namespace client {
                 case COMBAT_DEFENDING_STATE:
                     std::cout << "Client now entering COMBAT_DEFENDING_STATE\r\n" << std::endl;
 
-                    //checker que le state se passe après le client : oui
-
                     //defending player chooses his canons and rolls combat dice
                     combatPlayer = gameInstance->getDefendingPlayer();
                     playerNbCanons = 0;
@@ -519,6 +640,8 @@ namespace client {
                     //winner chooses one loser's boatHold to steal and one of his to get stolen Resources
                     winner = gameInstance->getCombatWinner();
                     loser = gameInstance->getCombatLoser();
+                    
+                    std::cout << "Player: " << winner->getName() << " wins and Player: " << loser->getName() << " loses." << std::endl;
 
                     std::cout << "Cales de " << loser->getName() << ": " << std::endl;
                     boatHoldCount = 0;
@@ -580,7 +703,7 @@ namespace client {
                         stealResource->launchCommand(gameInstance);
                         delete stealResource;
                     }
-
+                    activePlayer->setHasToPay(true);
                     gameInstance->request(); // from StealResourceState to ResourceHandlingState
                     break;
 
@@ -731,9 +854,9 @@ namespace client {
             std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
             player->setTreasures(initialTreasures);
             auto goldResource = make_unique<state::Gold>();
-            resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3,1);
+            resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3, 0);
             auto foodResource = make_unique<state::Food>();
-            resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3,2);    
+            resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3, 1);    
         }
 
         // Displays Tiles' cost

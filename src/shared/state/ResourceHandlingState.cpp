@@ -11,7 +11,9 @@
 namespace state {
 
 void ResourceHandlingState::handle(){
+        Player *activePlayer = game->getActivePlayer();
 
+/*
     int nbOpponent = 0;
     Player *activePlayer = game->getActivePlayer();
     std::vector<state::Player *> opponentsList = {};
@@ -71,19 +73,23 @@ void ResourceHandlingState::handle(){
     if(!(activePlayer->getHasMoved())){
         activePlayer->setPrevDuel(true);
     }
-
+*/
     //condition for duel
-    if(nbOpponent > 0 && !(activePlayer->getPrevDuel())){
+//    if(nbOpponent > 0 && !(activePlayer->getPrevDuel())){
+    if (activePlayer->getMustFight()){
         std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
         game->transitionTo(new OpponentChoiceState);
         notifyObservers();
     }
     //condition to exit ResourceHandlingState
-    if(nbOpponent == 0 || activePlayer->getPrevDuel()){
+//    if(nbOpponent == 0 || activePlayer->getPrevDuel()){
+    else{
+        /*
         //player pays resourceToPayCost
         activePlayer->setResTypeToPay(resourceToPayType);
         activePlayer->setAmountToPay(resourceToPayCost);
         activePlayer->setHasToPay(true);
+        */
         std::cout <<"Transitioning to CardActionState state..."<< std::endl;
         game->transitionTo(new CardActionState);
         notifyObservers();  

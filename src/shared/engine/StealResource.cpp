@@ -12,7 +12,7 @@ void const StealResource::launchCommand(state::Game * GamePtr){
     state::BoatHold *stolenHold = loser->getBoatHolds().at(stolenBoatholdId);
     std::string resourceType = stolenHold->getResourceType();
     int quantity = stolenHold->getQuantity();
-    winner->addResourcesToBoatHold(resourceType, winnerBoatholdId, quantity, 0);
+    winner->addResourcesToBoatHold(resourceType, winnerBoatholdId, quantity);
     loser->removeFromBoatHold(stolenBoatholdId, quantity);
 }
 

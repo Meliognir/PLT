@@ -101,15 +101,10 @@ void Player::moveWithDirection (int distance, int direction){ // ajouter taille 
     this->setPosition(nextPos);
 }
 
-void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount, int skipSelection){
+void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount){
     auto& boatHolds = this->getBoatHolds();
     state::BoatHold *selectedHold;
-    if (skipSelection < 0 || skipSelection > 6){
-        selectedHold = boatHolds.at(boatholdIndex);
-    }
-    else {
-        selectedHold = boatHolds.at(skipSelection);
-    }
+    selectedHold = boatHolds.at(boatholdIndex);
     int quantityToRemove = selectedHold->getQuantity();
     selectedHold->removeResource(quantityToRemove);
     if (resourceType == "Food"){
@@ -262,13 +257,13 @@ void Player::setChosenBoatholdIndex(int chosenBoatholdIndex)
 {
     this->chosenBoatholdIndex = chosenBoatholdIndex;
 }
-bool Player::getPrevDuel() const
+bool Player::getMustFight() const
 {
-    return this->prevDuel;
+    return this->mustFight;
 }
-void Player::setPrevDuel(bool prevDuel)
+void Player::setMustFight(bool mustFight)
 {
-    this->prevDuel = prevDuel;
+    this->mustFight = mustFight;
 }
 bool Player::getHasToPay() const
 {
