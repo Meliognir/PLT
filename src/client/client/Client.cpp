@@ -340,6 +340,8 @@ namespace client {
                 case RESOURCE_HANDLING_STATE:
                     std::cout << "Client now entering RESOURCE_HANDLING_STATE\r\n" << std::endl;
 
+                    //le code suivant doit se produire après celui de resourcehandlingstate ...
+
                     //player selects boatholds to pay
                     //prevents from paying two times the same tile
                     if(activePlayer->getHasToPay() && activePlayer->getHasMoved()){
@@ -416,7 +418,7 @@ namespace client {
                 case COMBAT_ATTACKING_STATE:
                     std::cout << "Client now entering COMBAT_ATTACKING_STATE\r\n" << std::endl;
                     
-                    //checker que le state se passe après le client
+                    //checker que le state se passe après le client : oui
 
                     //attacking player chooses his canons and rolls combat dice
                     combatPlayer = gameInstance->getAttackingPlayer();
@@ -446,7 +448,7 @@ namespace client {
                 case COMBAT_DEFENDING_STATE:
                     std::cout << "Client now entering COMBAT_DEFENDING_STATE\r\n" << std::endl;
 
-                    //checker que le state se passe après le client
+                    //checker que le state se passe après le client : oui
 
                     //defending player chooses his canons and rolls combat dice
                     combatPlayer = gameInstance->getDefendingPlayer();
