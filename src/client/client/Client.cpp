@@ -451,6 +451,9 @@ namespace client {
 
                             if (hasFought){
                                 hasFought = false;
+                                activePlayer->setMustFight(false);
+                                activePlayer->setHasToPay(true); //no enemy ? then it's time to pay your debt
+
                             }
                             else {
 
@@ -533,7 +536,11 @@ namespace client {
 
                 case OPPONENT_CHOICE_STATE:
                     std::cout << "Client now entering OPPONENT_CHOICE_STATE\r\n" << std::endl;
-                        
+
+                    activePlayer->setMustFight(false);
+                    hasFought = true;
+
+
                     opponentsList = activePlayer->getOpponentsList();
                     for (size_t i = 0; i < opponentsList.size(); ++i) {
                         std::cout << i + 1 << ". " << opponentsList[i]->getName() << "\r\n" << std::endl;
@@ -563,8 +570,6 @@ namespace client {
 
                 case COMBAT_ATTACKING_STATE:
                     std::cout << "Client now entering COMBAT_ATTACKING_STATE\r\n" << std::endl;
-
-                    activePlayer->setMustFight(false);
                     
                     //checker que le state se passe après le client : oui
 
