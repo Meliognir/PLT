@@ -85,8 +85,7 @@ void Server::handleConnections() {
                     clients[clientId] = clientFd;
                     std::cout << "Nouveau client connecté : ID " << clientId << std::endl;
 
-                    // Exemple de demande initiale
-                    requestInputFromClient(clientFd, "selectGameMode");
+
                 } else {
                     handleClientMessage(fd);
                 }
@@ -117,9 +116,9 @@ void Server::handleClientMessage(int clientFd) {
         std::cout << "Nombre de joueurs choisis : " << Nb << std::endl;
         notifyObservers("chooseNbOfPlayers", std::to_string(Nb));
         // Demander une autre information
-        requestInputFromClient(clientFd, "getPlayerName");
+        requestInputFromClient(clientFd, "chooseNbOfPlayers");
     }
-    if (starts_with(message,"gameMode")) {
+    else if (starts_with(message,"gameMode")) {
         int mode = std::stoi(message.substr(9));
         std::cout << "Mode de jeu choisi : " << mode << std::endl;
         notifyObservers("gameModeSelected", std::to_string(mode));
