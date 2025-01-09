@@ -161,10 +161,10 @@ bool ai::HeuristicAI::chooseTimeDice(int die1, int die2) {
             std::cout << "You choosed " <<die1 <<" as the day number."<< std::endl;
             return die1;
         } else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==1 ||controlledPlayer->getHandCards().at(choice)==3 ||controlledPlayer->getHandCards().at(choice)==0 ||controlledPlayer->getHandCards().at(choice)==7)) {
-            std::cout << "You choosed " <<die2 <<" as the day number."<< std::endl;
+            std::cout << "You choosed " <<die2 <<" as the day number and it's a good choice."<< std::endl;
             return die2;
         } else if (die1>=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
-            std::cout << "You choosed " <<die2 <<" as the day number."<< std::endl;
+            std::cout << "You choosed " <<die2 <<" as the day number and it's a good choice ."<< std::endl;
             return die2;
         }else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
             std::cout << "You choosed " <<die1 <<" as the day number."<< std::endl;
@@ -188,25 +188,26 @@ int ai::HeuristicAI::chooseOpponent(size_t listSize) {
     for (size_t opponentIndex = 0; opponentIndex < listSize; ++opponentIndex) {
         double score = 0.0;
 
-        state::Player* opponent = gameView->getPlayerList().at(opponentIndex);
-        if (opponent->getPosition() != controlledPlayer->getPosition()  || gameView->getPlayerList().at(opponentIndex)->getPlayerId()==controlledPlayer->getPlayerId()) {
-            continue; // Skip opponents not on the same square
-            }
-        for (state::BoatHold* boathold : opponent->getBoatHolds()) {
-            if (boathold->hasResourceType("CANON")) {
-                score -= 0.5 * boathold->getQuantity();
-            }
-            if (boathold->hasResourceType("FOOD") && boathold->getQuantity() > 2) {
-                score += 1;
-            }
-            if (boathold->hasResourceType("GOLD") && boathold->getQuantity() > 2) {
-                score += 1;
-            }
-        }
+        state::Player* opponent = controlledPlayer->getOpponentsList().at(opponentIndex);
 
-        if (score > highestScore) {
-            highestScore = score;
-            bestOpponentIndex = opponentIndex;
+        if (opponent->getPlayerId()!=controlledPlayer->getPlayerId()) {
+
+            for (state::BoatHold* boathold : opponent->getBoatHolds()) {
+                if (boathold->hasResourceType("CANON")) {
+                    score -= 0.5 * boathold->getQuantity();
+                }
+                if (boathold->hasResourceType("FOOD") && boathold->getQuantity() > 2) {
+                    score += 1;
+                }
+                if (boathold->hasResourceType("GOLD") && boathold->getQuantity() > 2) {
+                    score += 1;
+                }
+            }
+
+            if (score > highestScore) {
+                highestScore = score;
+                bestOpponentIndex = opponentIndex;
+            }
         }
     }
 
