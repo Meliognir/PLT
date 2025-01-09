@@ -1,6 +1,10 @@
 
 #include "AI.h"
 #include "RandomAI.h"
+#include <state/BoatHold.h>
+#include <state/Game.h>
+#include <state/Player.h>
+
 #include <iostream>
 #include <cstdlib>
 
@@ -21,11 +25,24 @@ std::string ai::RandomAI::getPlayerName(int playerIndex){
 }
 
 
-size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount){
+size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeToPay, int currentPlayerIndex){
     size_t index = 0;
-
+    bool invalidInput = true;
+    state::Player* currentPlayer = gameView->getPlayerList().at(currentPlayerIndex);
+    std::vector <state::BoatHold *> currentPlayerBoatHolds = currentPlayer->getBoatHolds();
     std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
-    index=getRandomInput(1, boatHoldCount);
+    while (invalidInput){
+        index=getRandomInput(1, boatHoldCount);
+        if (resTypeToPay == ""){
+            invalidInput = false;
+        }
+        else{
+            if (resTypeToPay == currentPlayerBoatHolds.at(index-1)->getResourceType()){
+                invalidInput = false;
+            }
+        }
+    }
+    std::cout << currentPlayer->getName() << " selected the boat hold " << index << std::endl;
     return index-1;
 
 }

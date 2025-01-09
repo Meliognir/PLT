@@ -13,7 +13,7 @@ std::string ai::AI::getPlayerName(int playerIndex)
     return std::string();
 }
 
-size_t ai::AI::selectUserBoatHold(size_t boatHoldCount)
+size_t ai::AI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeToPay, int currentPlayerIndex)
 {
     return size_t();
 }

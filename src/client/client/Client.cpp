@@ -354,27 +354,28 @@ namespace client {
                                 chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
                             }
                             else { // AI input
-                                chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount);
+                                chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount, resTypeToPay, activePlayer->getPlayerId());
                             }
                             //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount); //old code
                             chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
                             if(chosenBoatholdResType != resTypeToPay){
                                 std::cout << "Invalid Resource Type. You chose a Boathold with: " << chosenBoatholdResType << " Please choose a BoatHold with: " << resTypeToPay << ".\n";
-                                continue;
-                            }
-                            state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
-                            boatHoldQuantity = bh->getQuantity();
-                            if(boatHoldQuantity >= remainToPay){
-                                activePlayer->removeFromBoatHold(chosenBoatholdId, remainToPay);// à faire dans une nouvelle commande
-                                remainToPay = 0;
-                                activePlayer->setAmountToPay(remainToPay);
                             }
                             else{
-                                activePlayer->removeFromBoatHold(chosenBoatholdId, boatHoldQuantity);
-                                remainToPay = activePlayer->getAmountToPay() - boatHoldQuantity;
-                                activePlayer->setAmountToPay(remainToPay);
+                                state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
+                                boatHoldQuantity = bh->getQuantity();
+                                if(boatHoldQuantity >= remainToPay){
+                                    activePlayer->removeFromBoatHold(chosenBoatholdId, remainToPay);// à faire plutôt depuis l'engine
+                                    remainToPay = 0;
+                                    activePlayer->setAmountToPay(remainToPay);
+                                }
+                                else{
+                                    activePlayer->removeFromBoatHold(chosenBoatholdId, boatHoldQuantity);
+                                    remainToPay = activePlayer->getAmountToPay() - boatHoldQuantity;
+                                    activePlayer->setAmountToPay(remainToPay);
+                                }
+                                std::cout << "There remain: " << remainToPay << " " << resTypeToPay << " to pay.\n";
                             }
-                            std::cout << "There remain: " << remainToPay << " " << resTypeToPay << " to pay.\n";
                         }
                         activePlayer->setHasToPay(false);
                     }
