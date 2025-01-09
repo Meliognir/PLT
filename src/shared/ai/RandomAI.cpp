@@ -28,6 +28,11 @@ std::string ai::RandomAI::getPlayerName(int playerIndex){
 size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeToPay, int currentPlayerIndex){
     size_t index = 0;
     bool invalidInput = true;
+
+    if (currentPlayerIndex == -1){
+        currentPlayerIndex = gameView->getActivePlayerIndex();
+    }
+
     state::Player* currentPlayer = gameView->getPlayerList().at(currentPlayerIndex);
     std::vector <state::BoatHold *> currentPlayerBoatHolds = currentPlayer->getBoatHolds();
     std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";

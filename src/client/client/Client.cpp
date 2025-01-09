@@ -8,6 +8,14 @@
 #include <bits/unique_ptr.h>
 #include "Client.h"
 
+// ---- Network includes --------
+#include "../../server/server/NetworkClient.h"
+#include <cstring>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+// ------------------------------
+
 #define GAME_CONFIG_STATE 0
 #define CAPTAIN_DICE_STATE 1
 #define CARD_CHOICE_STATE 2
@@ -344,15 +352,17 @@ namespace client {
                                 chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
                             }
                             else { // AI input
+                                std::cout << "Là c'est normal." << std::endl;
                                 chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount);
+                                std::cout << "Là ça devient bizarre." << std::endl;
                             }
-                            //chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount); //old code
                             chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
-                            if(chosenBoatholdResType == resTypeToAdd){
-                                std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
-                                continue;
+                            if(chosenBoatholdResType != resTypeToAdd){
+                                validChosenBoathold = true;
                             }
-                            validChosenBoathold = true;
+                            else {
+                                std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
+                            }
                         }
                         addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId /*+ 1*/, currentDie, resTypeToAdd);
                         addToBoathold->launchCommand(gameInstance);
@@ -542,6 +552,7 @@ namespace client {
                             }
                             else {
                                 std::cout << "You picked an empty hold. You must choose an other hold." << std::endl;
+                                std::cout << "However, the value of isNaked is " << isNaked << std::endl;
                             }
                         }
                         resTypeToAdd = chosenBoatholdResType;
@@ -604,6 +615,61 @@ namespace client {
 
     int Client::runOnlineGame()
     {
+        // Création du socket
+        int sock = socket(AF_INET, SOCK_STREAM, 0);
+        if (sock < 0) {
+            perror("Socket creation failed");
+            return 1;
+        }
+
+        // Configuration de l'adresse du serveur
+        sockaddr_in serverAddr{};
+        serverAddr.sin_family = AF_INET;
+        serverAddr.sin_port = htons(53000);
+        inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
+
+        // Connexion au serveur
+        if (connect(sock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+            perror("Connection failed");
+            close(sock);
+            return 1;
+        }
+
+        std::cout << "Connecté au serveur. Tapez 'exit' pour quitter." << std::endl;
+
+        char buffer[1024];
+        while (true) {
+            // Saisie de l'utilisateur
+            std::cout << "Votre commande : ";
+            std::string input;
+            std::getline(std::cin, input);
+
+            // Envoi de la commande
+            if (send(sock, input.c_str(), input.size(), 0) < 0) {
+                perror("Erreur lors de l'envoi de la commande");
+                break;
+            }
+
+            if (input == "exit") {
+                std::cout << "Déconnexion." << std::endl;
+                break;
+            }
+
+            // Réception de la réponse
+            memset(buffer, 0, sizeof(buffer));
+            int bytesRead = recv(sock, buffer, sizeof(buffer) - 1, 0);
+            if (bytesRead > 0) {
+                std::cout << "Réponse du serveur : " << buffer << std::endl;
+            } else if (bytesRead == 0) {
+                std::cout << "Le serveur a fermé la connexion." << std::endl;
+                break;
+            } else {
+                perror("Erreur lors de la réception");
+                break;
+            }
+        }
+
+        close(sock);
         return 0;
     }
 
