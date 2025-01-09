@@ -18,8 +18,11 @@
 namespace state {
 
     void GameOverState::handle() {
-        int playerScore=0;
-       //quand un joueur atteint la dernière tile chaque joueur fini son tour et on compte alors les points
+
+        //quand un joueur atteint la dernière tile chaque joueur fini son tour et on compte alors les points
+        Player * winner;
+        int maxScore = 0;
+
         for(Player * playerEnd : game->getPlayerList()) {
             int positionEnding=playerEnd->getPosition();
             int bhGold = 0;
@@ -61,8 +64,13 @@ namespace state {
                 }
             }
             playerScore+=bhGold;
-            std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << " ."<< std::endl;
+            std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << "."<< std::endl;
+            if(playerScore > maxScore){
+                maxScore = playerScore;
+                winner = playerEnd;
+            }
         }
+        std::cout<< "Player : " << winner->getName() << " has won with a score of : " << maxScore << "."<< std::endl;
     }
 
     int GameOverState::getStateId (){
