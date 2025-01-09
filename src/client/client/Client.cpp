@@ -317,14 +317,20 @@ namespace client {
                         break;
                     case ADD_FOOD:
                         resTypeToAdd = "Food";
+                        activePlayer->setHasMoved(false);
+                        activePlayer->setHasToPay(false);
                         gettingResources = true;
                         break;
                     case ADD_GOLD:
                         resTypeToAdd = "Gold";
+                        activePlayer->setHasMoved(false);
+                        activePlayer->setHasToPay(false);
                         gettingResources = true;
                         break;
                     case ADD_CANONS:
                         resTypeToAdd = "Canon";
+                        activePlayer->setHasMoved(false);
+                        activePlayer->setHasToPay(false);
                         gettingResources = true;
                         break;
                     default:
@@ -720,13 +726,15 @@ namespace client {
             }
 
 
-            std::cout << "\n\nDo you wish to continue the game ? -------------------------------\n\n\n" << std::endl;
+            std::cout << "\n\n\nDo you wish to continue the game ? -------------------------------" << std::endl;
             std::cin >> waitConfirm;
             if (waitConfirm[0] == 'n'){
                 endloop = 1;
             }
 
         }
+        
+        std::cout << "\n\nExiting the game loop\n\n\n" << std::endl;
         return 0;
     }
 
