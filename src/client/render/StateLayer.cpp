@@ -36,18 +36,44 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 window->close();
         }
         window->clear();
-        // Rendu de la carte
         switch(currentStateID){
             case GAME_CONFIG_STATE:{
-                renderer->renderBackground(*window);
-                instHUD->askGamemode(*window);
+                renderer->renderBackground(*window); 
+                if (client::Client::modeChosen && !client::Client::nbPlayerChosen){
+                    instHUD->askNumberofPlayers(*window);
+                }
+                else if (!client::Client::modeChosen){
+                    instHUD->askGamemode(*window);
+                }
+                if (!game->getActivePlayer()) {
+                    break;
+                }
+                state::Player * currentPlayer = game->getActivePlayer();
+                if (!client::Client::allPlayerSet){
+                    if (client::Client::nbPlayerChosen && !client::Client::isPlayerTypeChosen){
+                        instHUD->askIsPlayerAI(*window, currentPlayer->getPlayerId()+1);
+                    }
+                    if (client::Client::isPlayerTypeChosen){
+                        if (!client::Client::isPlayerAI){
+                            instHUD->askPlayerName(*window, currentPlayer->getPlayerId()+1);
+                        }
+                        if (client::Client::isPlayerAI) {
+                            instHUD->askAIDifficulty(*window);
+                        }  
+                    }
+                     
+                }
+                else {
+                    instHUD->askMapSize(*window);
+                }
                 break;
             }
             case CAPTAIN_DICE_STATE:{
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
-                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
+                renderer->renderDice(*window, client::Client::die1, client::Client::die2);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                instHUD->askDayDice(*window, client::Client::die1, client::Client::die2);
                 break;
             }
             
@@ -61,6 +87,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 }
                 std::vector<int> playerHand = game->getActivePlayer()->getHandCards();
                 renderer->renderHand(*window, playerHand);
+                instHUD->askCard(*window);
                 break;
             }
 
@@ -90,6 +117,10 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                if (!game->getActivePlayer()) {
+                    break;
+                }
+                renderer->renderBoatholds(*window, game->getActivePlayer());
                 break;
             }
             case COMBAT_ATTACKING_STATE:{
@@ -97,6 +128,10 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                if (!game->getActivePlayer()) {
+                    break;
+                }
+                renderer->renderBoatholds(*window, game->getActivePlayer());
                 break;
             }
             case COMBAT_DEFENDING_STATE:{
@@ -104,6 +139,10 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                if (!game->getActivePlayer()) {
+                    break;
+                }
+                renderer->renderBoatholds(*window, game->getActivePlayer());
                 break;
             }
             case STEAL_RESOURCE_STATE:{
@@ -111,6 +150,10 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                if (!game->getActivePlayer()) {
+                    break;
+                }
+                renderer->renderBoatholds(*window, game->getActivePlayer());
                 break;
             }
             case GAME_OVER_STATE:{

@@ -4,6 +4,7 @@
 #include <string>
 #include <limits>
 #include "state.h"
+#include "../client.h"
 
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
@@ -205,6 +206,7 @@ int InputHandler::selectGameMode()
 
 int InputHandler::selectLevelAI()
 {
+    Client::isPlayerAI = true;
     std::string setLevel;
     while(1){
         std::cout << "What is the level of this AI ? (0, 1, 2, 3)"<< std::endl;;
@@ -237,9 +239,13 @@ int InputHandler::pickAnAI(int playerIndex)
         std::cout << "Is Player " << playerIndex+1 << " an AI ? (y/n)"<< std::endl;
         std::cin >> setAnAI;
         if (setAnAI == "n" || setAnAI == "no") {
+            Client::isPlayerAI = false;
+            Client::isPlayerTypeChosen=true;
             return 0;
         }
         else if (setAnAI == "y" || setAnAI == "yes") {
+            Client::isPlayerAI = true;
+            Client::isPlayerTypeChosen=true;
             SelectionAI = selectLevelAI();
             if (SelectionAI){
                 return SelectionAI;
