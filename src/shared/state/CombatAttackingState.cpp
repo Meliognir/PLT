@@ -13,14 +13,14 @@ namespace state{
 
 void CombatAttackingState::handle(){
 
-    //set prevduel to true so that you don't fight 2 times on the same tile
+    //set mustFight to false so that you don't again until the next move
     Player *activePlayer = game->getActivePlayer();
-    activePlayer->setPrevDuel(true);
+    activePlayer->setMustFight(false);
 
     Player * attacker = game->getAttackingPlayer();
     int attackpower = attacker->getFirePower();
     Player * defender = game->getDefendingPlayer();
-    int defensepower = defender->getFirePower();
+    //int defensepower = defender->getFirePower();
 
     if (attackpower>=1000){
         std::cout << "Player: " << attacker->getName() << " wins because attackpower > 1000" << std::endl;
