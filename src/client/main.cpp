@@ -28,7 +28,6 @@ int main(int argc,char* argv[])
 {
     sf::RenderWindow* window;
     client::Client *client = new client::Client();
-    Observable::addObserver(client);
     Game * game = client->gameInstance;
     render::Renderer* renderer = new render::Renderer();
     render::HUD* hud = new render::HUD();

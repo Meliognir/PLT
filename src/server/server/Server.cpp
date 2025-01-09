@@ -115,11 +115,13 @@ void Server::handleClientMessage(int clientFd) {
     if (starts_with(message,"gameMode")) {
         int mode = std::stoi(message.substr(9));
         std::cout << "Mode de jeu choisi : " << mode << std::endl;
+        notifyObservers("gameModeSelected", std::to_string(mode));
         // Demander une autre information
         requestInputFromClient(clientFd, "getPlayerName");
     } else if (starts_with(message,"playerName")) {
         std::string playerName = message.substr(11);
         std::cout << "Nom du joueur reçu : " << playerName << std::endl;
+        notifyObservers("playerNameReceived", playerName);
         // Continuer avec d'autres étapes du jeu
     } else {
         std::cout << "Commande inconnue reçue : " << message << std::endl;

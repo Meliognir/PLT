@@ -773,8 +773,9 @@ namespace client {
 
         return 0;
     }
-    void Client::update()
-    {
+    void Client::update(const std::string &eventType, const std::string &data){
+        //la je lance une commande je sais pas trop comment
+        
     }
     
     Client::~Client()
