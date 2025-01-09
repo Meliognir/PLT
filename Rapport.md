@@ -43,7 +43,9 @@
 
 ## 6-Modularisation
 
-**5.1 Stratégie**
+**6.1 Organisation**
+
+**6.2 Conception logiciel**
 
 
 

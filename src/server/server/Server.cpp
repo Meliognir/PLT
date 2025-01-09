@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <algorithm> // Pour std::max
-
+bool starts_with(const std::string& str, const std::string& prefix) { return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0; }
 namespace server {
 
 Server::Server() : listenerFd(-1), nextClientId(0), maxFd(0) {
@@ -57,8 +57,6 @@ void Server::start(int port) {
     handleConnections();
 }
 
-
-
 void Server::handleConnections() {
     while (true) {
         fd_set readSet = masterSet;
@@ -87,8 +85,10 @@ void Server::handleConnections() {
                     clients[clientId] = clientFd;
                     std::cout << "Nouveau client connecté : ID " << clientId << std::endl;
 
-                    // Lancer le client automatiquement
-                    launchCommand();
+                    // Exemple de demande initiale
+                    requestInputFromClient(clientFd, "selectGameMode");
+                } else {
+                    handleClientMessage(fd);
                 }
             }
         }
@@ -104,36 +104,38 @@ void Server::handleClientMessage(int clientFd) {
         std::cerr << "Client déconnecté (fd: " << clientFd << ")." << std::endl;
         close(clientFd);
         FD_CLR(clientFd, &masterSet);
-
-        for (auto it = clients.begin(); it != clients.end(); ++it) {
-            if (it->second == clientFd) {
-                clients.erase(it);
-                break;
-            }
-        }
+        clients.erase(clientFd);
         return;
     }
 
     std::string message(buffer, bytesRead);
-    std::cout << "Message reçu : " << message << " (fd: " << clientFd << ")" << std::endl;
+    std::cout << "Message reçu du client : " << message << std::endl;
 
-    broadcastGameState("Etat du jeu mis à jour");
-}
-
-void Server::broadcastGameState(const std::string& gameState) {
-    for (const auto& [id, fd] : clients) {
-        if (send(fd, gameState.c_str(), gameState.size(), 0) < 0) {
-            std::cerr << "Erreur lors de l'envoi à client (fd: " << fd << ")." << std::endl;
-        }
+    // Traiter les réponses reçues
+    if (starts_with(message,"gameMode")) {
+        int mode = std::stoi(message.substr(9));
+        std::cout << "Mode de jeu choisi : " << mode << std::endl;
+        // Demander une autre information
+        requestInputFromClient(clientFd, "getPlayerName");
+    } else if (starts_with(message,"playerName")) {
+        std::string playerName = message.substr(11);
+        std::cout << "Nom du joueur reçu : " << playerName << std::endl;
+        // Continuer avec d'autres étapes du jeu
+    } else {
+        std::cout << "Commande inconnue reçue : " << message << std::endl;
     }
 }
 
-void Server::launchCommand () {
-    std::cout << "Lancement du client ./../bin/client..." << std::endl;
-    int result = std::system("./../bin/client &"); // Le '&' exécute le client en arrière-plan
-    if (result != 0) {
-        std::cerr << "Erreur lors du lancement du client." << std::endl;
+void Server::sendCommandToClient(int clientFd, const std::string& command) {
+    if (send(clientFd, command.c_str(), command.size(), 0) < 0) {
+        std::cerr << "Erreur lors de l'envoi de la commande au client (fd: " << clientFd << ")." << std::endl;
+    } else {
+        std::cout << "Commande envoyée au client (fd: " << clientFd << ") : " << command << std::endl;
     }
+}
+
+void Server::requestInputFromClient (int clientFd, const std::string& inputType) {
+    sendCommandToClient(clientFd, inputType);
 }
 
 } // namespace server
