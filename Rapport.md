@@ -198,6 +198,15 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 >> La map est une liste de vecteur de type Tile qui on ce qu'elle coûte, le nombre de player dessus ainsi que le nombre de trésors dessus. Le path n'est pas encore utilisé.
 > 
+## 3-Rendu : Stratégie et Conception 
+
+### 3.1 Stratégie de rendu d'un état**
+La classe StateLayer est un Observer des classes State dans state https://refactoring.guru/design-patterns/observer/cpp/example#lang-features. A chaque changement d'état de State, les observateurs sont notifiés. On peut donc suivre l'état du jeu dans render qui a lui même sa machine à état qui celle de state (nous avons utilisé un switch/case au lieu du design pattern State car manque de temps et plus simple à mettre en place).
+Pour le rendu, on utilise la librairie SFML. On utilise une fenêtre SFML (sf::RenderWindow) pour afficher une fenêtre ou apparaitra le rendu du jeu. 
+On utilise nos propres images qu'on associe à des textures SFML (sf::Texture). On peut ensuite crée un ou plusieurs sprites (sf::Sprite) liés à une texture pour ensuite les afficher sur la fenêtre SFML grâce à la fonction draw() de sf::RenderWindow. Il y a aussi la possibilité d'afficher des textes (sf::Text) avec la police désirée (sf::Font).  
+### 3.2 Conception logiciel**
+render.dia 
+StateLayer gère la machine à état, Renderer affiche les tous les sprites et HUD affiche le texte pour indiquer les actions aux joueurs. 
  ## 4-Règles de changement d'états et moteur de jeu 
 
 > ### 4.1 Horloge globale
