@@ -1,46 +1,67 @@
 #include "server/NetworkClient.h"
 #include <iostream>
 
+#include <iostream>
+#include <cstring>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
 int main() {
-    // Créer une instance du client réseau
-    server::NetworkClient client;
-
-    // Connecter au serveur
-    client.connectToServer("127.0.0.1", 53000);
-
-    // Vérifier si la connexion a réussi
-    if (client.recieveGameState().empty()) {
-        std::cerr << "Erreur : Impossible de se connecter au serveur ou état non reçu." << std::endl;
-        return -1;
+    // Création du socket
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock < 0) {
+        perror("Socket creation failed");
+        return 1;
     }
 
-    // Boucle pour interagir avec le serveur
+    // Configuration de l'adresse du serveur
+    sockaddr_in serverAddr{};
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(53000);
+    inet_pton(AF_INET, "172.18.0.1", &serverAddr.sin_addr);
+
+    // Connexion au serveur
+    if (connect(sock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+        perror("Connection failed");
+        close(sock);
+        return 1;
+    }
+
+    std::cout << "Connecté au serveur. Tapez 'exit' pour quitter." << std::endl;
+
+    char buffer[1024];
     while (true) {
-        std::string command;
-        std::cout << "Entrez une commande (move/end_turn/quit) : ";
-        std::cin >> command;
+        // Saisie de l'utilisateur
+        std::cout << "Votre commande : ";
+        std::string input;
+        std::getline(std::cin, input);
 
-        if (command == "move") {
-            int distance, direction;
-            std::cout << "Entrez la distance et la direction : ";
-            std::cin >> distance >> direction;
-
-            // Envoyer la commande au serveur
-            client.sendCommand(command, {distance, direction});
-        } else if (command == "end_turn") {
-            // Envoyer une commande de fin de tour
-            client.sendCommand(command, {});
-        } else if (command == "quit") {
-            std::cout << "Déconnexion..." << std::endl;
+        // Envoi de la commande
+        if (send(sock, input.c_str(), input.size(), 0) < 0) {
+            perror("Erreur lors de l'envoi de la commande");
             break;
-        } else {
-            std::cerr << "Commande inconnue !" << std::endl;
         }
 
-        // Recevoir l'état du jeu mis à jour
-        std::string gameState = client.recieveGameState();
-        std::cout << "État du jeu : " << gameState << std::endl;
+        if (input == "exit") {
+            std::cout << "Déconnexion." << std::endl;
+            break;
+        }
+
+        // Réception de la réponse
+        memset(buffer, 0, sizeof(buffer));
+        int bytesRead = recv(sock, buffer, sizeof(buffer) - 1, 0);
+        if (bytesRead > 0) {
+            std::cout << "Réponse du serveur : " << buffer << std::endl;
+        } else if (bytesRead == 0) {
+            std::cout << "Le serveur a fermé la connexion." << std::endl;
+            break;
+        } else {
+            perror("Erreur lors de la réception");
+            break;
+        }
     }
 
+    close(sock);
     return 0;
 }

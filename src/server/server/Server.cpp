@@ -57,6 +57,8 @@ void Server::start(int port) {
     handleConnections();
 }
 
+
+
 void Server::handleConnections() {
     while (true) {
         fd_set readSet = masterSet;
@@ -68,10 +70,11 @@ void Server::handleConnections() {
 
         for (int fd = 0; fd <= maxFd; fd++) {
             if (FD_ISSET(fd, &readSet)) {
-                if (fd == listenerFd) {
+                if (fd == listenerFd) { // Nouveau client
                     sockaddr_in clientAddr{};
                     socklen_t clientLen = sizeof(clientAddr);
                     int clientFd = accept(listenerFd, (struct sockaddr*)&clientAddr, &clientLen);
+
                     if (clientFd < 0) {
                         perror("Erreur lors de l'acceptation d'une connexion.");
                         continue;
@@ -84,8 +87,8 @@ void Server::handleConnections() {
                     clients[clientId] = clientFd;
                     std::cout << "Nouveau client connecté : ID " << clientId << std::endl;
 
-                } else {
-                    handleClientMessage(fd);
+                    // Lancer le client automatiquement
+                    launchCommand();
                 }
             }
         }
@@ -122,6 +125,14 @@ void Server::broadcastGameState(const std::string& gameState) {
         if (send(fd, gameState.c_str(), gameState.size(), 0) < 0) {
             std::cerr << "Erreur lors de l'envoi à client (fd: " << fd << ")." << std::endl;
         }
+    }
+}
+
+void Server::launchCommand () {
+    std::cout << "Lancement du client ./../bin/client..." << std::endl;
+    int result = std::system("./../bin/client &"); // Le '&' exécute le client en arrière-plan
+    if (result != 0) {
+        std::cerr << "Erreur lors du lancement du client." << std::endl;
     }
 }
 
