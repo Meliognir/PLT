@@ -319,7 +319,7 @@ void render::Renderer::renderHand(sf::RenderWindow &window, const std::vector<in
     }
 }
 
-void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *player){
+void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *player, int offset){
     sf::Font font;
     font.loadFromFile("../src/boardGameData/Arial.ttf"); 
     sf::Texture boatholdTexture;
@@ -344,7 +344,7 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
 
     for (i = 0; i<boatHoldCount; i++){
         boatholdSprite.setTextureRect(sf::IntRect(530,0, 90, 90));
-        boatholdSprite.setPosition(100+i*100, 300); //TODO : scale
+        boatholdSprite.setPosition(100+i*100, 300 + offset); //TODO : scale
         state::BoatHold* hold = boatholds[i];
         resourceSprite.setTextureRect(sf::IntRect(600,175,1,1));
         if (hold->getResourceType()=="Food"){
@@ -356,9 +356,9 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
         if (hold->getResourceType()=="Canon"){
             resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
         }
-        resourceSprite.setPosition(100+i*100, 300);
+        resourceSprite.setPosition(100+i*100, 300 + offset);
         quantityText.setString(std::to_string(hold->getQuantity()));  
-        quantityText.setPosition(100+i*105, 320);
+        quantityText.setPosition(100+i*105, 320 + offset);
 
         window.draw(boatholdSprite);
         window.draw(resourceSprite);

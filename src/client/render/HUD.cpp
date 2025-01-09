@@ -166,11 +166,29 @@ void render::HUD::askOpponent(sf::RenderWindow &window, std::string playerName, 
     Text.setPosition(windowWidth/100,windowHeight/4 );
     window.draw(Text);
     int i;
-    for (i=0; i<players.size(), i++;){
-        Text.setString(std::to_string(i+1) + players[i]->getName());  
-        Text.setPosition(windowWidth/100,windowHeight/4 + (i+1)*windowHeight/16 );
-        window.draw(Text);
+    for (i=0; i<players.size(); i++){
+        sf::Text playerText;
+        playerText.setFont(font);
+        playerText.setCharacterSize(windowWidth / 50);
+        playerText.setFillColor(sf::Color::Black);
+        playerText.setString(std::to_string(i + 1) + ": " + players[i]->getName());
+        playerText.setPosition(windowWidth / 100, windowHeight / 4 + (i + 1) * windowHeight / 16);
+        window.draw(playerText);
     }
 }
 
-                  
+void render::HUD::askCanonNb(sf::RenderWindow &window, std::string playerName, int availableNb){
+    sf::Font font;
+    font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    sf::Text Text;
+    Text.setFont(font);    
+    Text.setCharacterSize(windowWidth/40);
+    Text.setFillColor(sf::Color::Black);
+    Text.setString(playerName + "You have " + std::to_string(availableNb) + " available canons. How many do you want to use ? ");  
+    Text.setPosition(windowWidth/100,windowHeight/4 );
+    window.draw(Text);
+}
+

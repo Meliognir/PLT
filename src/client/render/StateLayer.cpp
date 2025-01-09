@@ -75,6 +75,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
                 int captainIndex = game->getCaptainIndex();
                 state::Player * captain = game->getPlayerList().at(captainIndex);
+                 renderer->renderBoatholds(*window, captain, 0);
                 instHUD->askDayDice(*window, client::Client::die1, client::Client::die2, captain->getName());
                 break;
             }
@@ -89,6 +90,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 }
                 state::Player * currentPlayer = game->getActivePlayer();
                 std::vector<int> playerHand = currentPlayer->getHandCards();
+                renderer->renderBoatholds(*window, game->getActivePlayer(), 0);
                 renderer->renderHand(*window, playerHand);
                 instHUD->askCard(*window, currentPlayer->getName());
                 break;
@@ -102,7 +104,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 if (!game->getActivePlayer()) {
                     break;
                 }
-                renderer->renderBoatholds(*window, game->getActivePlayer());
+                renderer->renderBoatholds(*window, game->getActivePlayer(), 0);
                 break;}
             case RESOURCE_HANDLING_STATE: {
                 renderer->renderBackground(*window);
@@ -113,7 +115,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                     break;
                 }
                 state::Player * currentPlayer = game->getActivePlayer();
-                renderer->renderBoatholds(*window, currentPlayer);
+                renderer->renderBoatholds(*window, currentPlayer, 0);
                 
                 if (client::Client::gettingResources){
                     instHUD->askPlaceResource(*window, currentPlayer->getName(), currentPlayer->getBoatHolds().size(), client::Client::currentDie, client::Client::resTypeToAdd);
@@ -132,7 +134,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                     break;
                 }
                 state::Player * currentPlayer = game->getActivePlayer();
-                renderer->renderBoatholds(*window, game->getActivePlayer());
+                renderer->renderBoatholds(*window, game->getActivePlayer(), 0);
                 instHUD->askOpponent(*window, currentPlayer->getName(), currentPlayer->getOpponentsList());
                 break;
             }
@@ -141,10 +143,17 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
-                if (!game->getActivePlayer()) {
+                if (!game->getAttackingPlayer()) {
                     break;
                 }
-                renderer->renderBoatholds(*window, game->getActivePlayer());
+                int playerNbCanons = 0;
+                for (state::BoatHold *bh : game->getAttackingPlayer()->getBoatHolds()){
+                    if (bh->hasResourceType("Canon")) {
+                        playerNbCanons += bh->getQuantity();
+                    }
+                }
+                renderer->renderBoatholds(*window, game->getAttackingPlayer(), 0);
+                instHUD->askCanonNb(*window, game->getAttackingPlayer()->getName(), playerNbCanons);
                 break;
             }
             case COMBAT_DEFENDING_STATE:{
@@ -152,13 +161,20 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
-                if (!game->getActivePlayer()) {
+                if (!game->getDefendingPlayer()) {
                     break;
                 }
-                renderer->renderBoatholds(*window, game->getActivePlayer());
+                int playerNbCanons = 0;
+                for (state::BoatHold *bh : game->getDefendingPlayer()->getBoatHolds()){
+                    if (bh->hasResourceType("Canon")) {
+                        playerNbCanons += bh->getQuantity();
+                    }
+                }
+                renderer->renderBoatholds(*window, game->getDefendingPlayer(), 0);
+                instHUD->askCanonNb(*window, game->getDefendingPlayer()->getName(), playerNbCanons);
                 break;
             }
-            case STEAL_RESOURCE_STATE:{
+            case STEAL_RESOURCE_STATE:{ //TODO : instHUD->affichagedetextecaleavoler et instHUD->affichagedetextecaleadeposer
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
@@ -166,7 +182,8 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 if (!game->getActivePlayer()) {
                     break;
                 }
-                renderer->renderBoatholds(*window, game->getActivePlayer());
+                renderer->renderBoatholds(*window, game->getCombatLoser(), 0);
+                renderer->renderBoatholds(*window, game->getCombatWinner(), 100);
                 break;
             }
             case GAME_OVER_STATE:{
