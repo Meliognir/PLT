@@ -188,25 +188,25 @@ int ai::HeuristicAI::chooseOpponent(size_t listSize) {
     for (size_t opponentIndex = 0; opponentIndex < listSize; ++opponentIndex) {
         double score = 0.0;
 
-        state::Player* opponent = gameView->getPlayerList().at(opponentIndex);
-        if (opponent->getPosition() != controlledPlayer->getPosition()  || gameView->getPlayerList().at(opponentIndex)->getPlayerId()==controlledPlayer->getPlayerId()) {
-            continue; // Skip opponents not on the same square
-            }
-        for (state::BoatHold* boathold : opponent->getBoatHolds()) {
-            if (boathold->hasResourceType("CANON")) {
-                score -= 0.5 * boathold->getQuantity();
-            }
-            if (boathold->hasResourceType("FOOD") && boathold->getQuantity() > 2) {
-                score += 1;
-            }
-            if (boathold->hasResourceType("GOLD") && boathold->getQuantity() > 2) {
-                score += 1;
-            }
-        }
+        state::Player* opponent = controlledPlayer->getOpponentsList().at(opponentIndex);
+        if (opponent->getPlayerId()!=controlledPlayer->getPlayerId()) {
 
-        if (score > highestScore) {
-            highestScore = score;
-            bestOpponentIndex = opponentIndex;
+            for (state::BoatHold* boathold : opponent->getBoatHolds()) {
+                if (boathold->hasResourceType("CANON")) {
+                    score -= 0.5 * boathold->getQuantity();
+                }
+                if (boathold->hasResourceType("FOOD") && boathold->getQuantity() > 2) {
+                    score += 1;
+                }
+                if (boathold->hasResourceType("GOLD") && boathold->getQuantity() > 2) {
+                    score += 1;
+                }
+            }
+
+            if (score > highestScore) {
+                highestScore = score;
+                bestOpponentIndex = opponentIndex;
+            }
         }
     }
 
