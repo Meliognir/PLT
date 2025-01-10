@@ -4,7 +4,7 @@ engine::ChooseCanons::ChooseCanons(int player, int quantity) : playerIndex(playe
 }
 
 void const engine::ChooseCanons::launchCommand (state::Game * GamePtr){
-    state::Player* player = GamePtr->getPlayerList()[playerIndex];
+    state::Player* player = GamePtr->getPlayerList().at(playerIndex);
     player->setFirePower(quantity);
 }
 
