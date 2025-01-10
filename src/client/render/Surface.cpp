@@ -4,7 +4,7 @@ bool render::Surface::loadTextures(state::State *state, sf::Texture *tilesetText
 {
     sf::RenderWindow window(sf::VideoMode(2100, 1400), "My window");
         sf::Texture texture;
-    if (!texture.loadFromFile("../src/boardGameData/BackgroundJamaicaPLT.png"))
+    if (!texture.loadFromFile("../src/boardGameData/board.png"))
         {
         // error...
         std::cout << "error opening map image" << std::endl;
