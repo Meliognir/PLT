@@ -5,11 +5,11 @@
 #define PI 3.14159265358979323846
 #define WIDTHFAC 1.0
 #define HEIGHTFAC 1.0
-//beach tileset 576 * 288
-void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map){
+void render::Renderer::renderBackground(sf::RenderWindow &window){
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+
     float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
     int mapSize = map.getSize();          // Nombre total de tuiles
     float mapScale = 1/((float)mapSize);
@@ -30,6 +30,18 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
         static_cast<float>(windowWidth) / backgroundTexture.getSize().x,
         static_cast<float>(windowHeight) / backgroundTexture.getSize().y
     );
+    window.draw(backgroundSprite);
+}
+// beach tileset 576 * 288
+void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map){
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    int mapSize = map.getSize();          // Nombre total de tuiles
+    float radius = std::min(desktopMode.width, desktopMode.height)/3;
+    //float radius = 400.0f;                // Rayon du cercle
+    sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
+    float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
 
     sf::Font font;
     font.loadFromFile("../src/boardGameData/Arial.ttf");   
@@ -44,6 +56,15 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
         std::cerr << "Error loading PortRoyal.png!" << std::endl;
         return;
     }
+    sf::Texture resourceTexture;
+    if (!resourceTexture.loadFromFile("../src/boardGameData/CardSprSheet.png")) {
+        std::cerr << "Error loading card texture!" << std::endl;
+        return;
+    }
+    sf::Sprite resourceSprite;
+    resourceSprite.setTexture(resourceTexture);
+    resourceSprite.setTextureRect(sf::IntRect(600,175,1,1));
+
     sf::Sprite tileSprite;
     sf::Sprite portRoyalSprite;
     tileSprite.setTexture(beachTileset);
@@ -90,24 +111,46 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
             tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
+
+            resourceSprite.setTextureRect(sf::IntRect(30, 29, 30, 30));
+            resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            resourceSprite.setPosition(x, y);
+            //resourceSprite.setScale(sf::Vector2f(0.2f,0.2f)); //TODO
+
             window.draw(tileSprite);
+            window.draw(resourceSprite);
         } else if (tile->tileResourceType == "Gold") {
             tileSprite.setTextureRect(sf::IntRect(32+2*tileWidth, 96, tileWidth, tileHeight)); // Deuxième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
             tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
+
+            resourceSprite.setTextureRect(sf::IntRect(60, 29, 30, 30));
+            resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            resourceSprite.setPosition(x, y);
+            //resourceSprite.setScale(sf::Vector2f(0.2f,0.2f));
+
             window.draw(tileSprite);
+            window.draw(resourceSprite);
         } else if (tile->treasureAvailable) {
             tileSprite.setTextureRect(sf::IntRect(32, 96, tileWidth, tileHeight)); // Troisième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
             tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
+
+            resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
+            resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            resourceSprite.setPosition(x, y);
+            //resourceSprite.setScale(sf::Vector2f(0.2f,0.2f));
+
             window.draw(tileSprite);
+            window.draw(resourceSprite);
         } else {
             portRoyalSprite.setTextureRect(sf::IntRect(0, 0, 192, 192)); // Par défaut (première tuile)
             portRoyalSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             portRoyalSprite.setScale(sf::Vector2f(globalScale/4000, globalScale/4000));
             portRoyalSprite.setPosition(center.x - globalScale/80.0f + radius, center.y - globalScale/80.0f);
+
             window.draw(portRoyalSprite);
         }
 
@@ -155,13 +198,21 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
     for (size_t i = 0; i < players.size(); ++i) {
         const auto& player = players[i];
         int playerPosition = player->getPosition();  // Position du joueur (index de la tuile)
-
+        int mapSize = map.getSize();
+        if (playerPosition < 0){
+            playerPosition = mapSize-1 - (-playerPosition)%mapSize;
+        }
+        else if (playerPosition >= mapSize){
+            playerPosition = playerPosition%mapSize;
+        } 
         // Vérifier si la position est valide dans la carte
         if (playerPosition >= 0 && playerPosition < static_cast<int>(map.listOfTiles.size())) {
             // Calculer la position de la tuile correspondante
-            float angleStep = 2 * PI / map.getSize();   // Angle entre chaque tuile
+            float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
             float angle = playerPosition * angleStep;
+
             float radius = globalScale/2;                     // Même rayon que dans renderMap
+
             sf::Vector2f center(windowWidth/2, windowHeight/2);             // Centre de la carte
 
             float x = center.x + radius * cos(angle);
@@ -171,8 +222,9 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             sf::Sprite playerSprite;
             playerSprite.setTexture(playerTexture);
             playerSprite.setTextureRect(sf::IntRect(0, 0, spriteWidth, spriteHeight));
-            playerSprite.setOrigin(spriteWidth / 2, spriteHeight / 2);
-            playerSprite.setPosition(x, y);
+            playerSprite.setOrigin(spriteWidth/2, spriteHeight/2);
+            playerSprite.setScale(sf::Vector2f(2.f, 2.f));
+            playerSprite.setPosition(x + 16*i - 32, y + 16*i - 32);
 
             // Créer et configurer le texte pour le nom du joueur
             sf::Text playerNameText;
@@ -181,7 +233,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             playerNameText.setCharacterSize(16);
             playerNameText.setFillColor(playerColors[i % playerColors.size()]);  
             playerNameText.setStyle(sf::Text::Bold);
-            playerNameText.setPosition(x - spriteWidth / 2, y + spriteHeight / 2 + 5);  // Position sous le sprite
+            playerNameText.setPosition(x - spriteWidth / 2 + 16*i - 32, y + spriteHeight / 2 + 5 + 16*i - 32);  // Position sous le sprite
 
             window.draw(playerSprite);
             window.draw(playerNameText);
@@ -298,7 +350,9 @@ void render::Renderer::renderHand(sf::RenderWindow &window, const std::vector<in
     }
 }
 
-void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *player){
+void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *player, int offset){
+    sf::Font font;
+    font.loadFromFile("../src/boardGameData/Arial.ttf"); 
     sf::Texture boatholdTexture;
     if (!boatholdTexture.loadFromFile("../src/boardGameData/CardSprSheet.png")) {
         std::cerr << "Error loading card texture!" << std::endl;
@@ -314,9 +368,14 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     int i;
+    sf::Text quantityText;
+    quantityText.setFont(font);    
+    quantityText.setCharacterSize(20);
+    quantityText.setFillColor(sf::Color::Red);
+
     for (i = 0; i<boatHoldCount; i++){
         boatholdSprite.setTextureRect(sf::IntRect(530,0, 90, 90));
-        boatholdSprite.setPosition(100+i*100, 300); //TODO : scale
+        boatholdSprite.setPosition(100+i*100, 300 + offset); //TODO : scale
         state::BoatHold* hold = boatholds[i];
         resourceSprite.setTextureRect(sf::IntRect(600,175,1,1));
         if (hold->getResourceType()=="Food"){
@@ -328,8 +387,12 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
         if (hold->getResourceType()=="Canon"){
             resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
         }
-        resourceSprite.setPosition(100+i*100, 300);
+        resourceSprite.setPosition(100+i*100, 300 + offset);
+        quantityText.setString(std::to_string(hold->getQuantity()));  
+        quantityText.setPosition(100+i*105, 320 + offset);
+
         window.draw(boatholdSprite);
         window.draw(resourceSprite);
+        window.draw(quantityText);
     }
 }

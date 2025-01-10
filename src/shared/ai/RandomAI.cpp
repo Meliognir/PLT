@@ -1,6 +1,10 @@
 
 #include "AI.h"
 #include "RandomAI.h"
+#include <state/BoatHold.h>
+#include <state/Game.h>
+#include <state/Player.h>
+
 #include <iostream>
 #include <cstdlib>
 
@@ -9,7 +13,7 @@ int getRandomInput(int min, int max) {
     return min + std::rand() % ((max - min) + 1);
 }
 
-ai::RandomAI::RandomAI() {}
+ai::RandomAI::RandomAI(state::Game* game): AI(game) {}
 
 
 
@@ -21,32 +25,33 @@ std::string ai::RandomAI::getPlayerName(int playerIndex){
 }
 
 
-size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount){
+size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeToPay, int currentPlayerIndex){
     size_t index = 0;
-    while (true) {
-        std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
-        index=getRandomInput(0,5);
-        if (index < 1 || index > boatHoldCount) {
-            std::cout << "Invalid index. Please enter a number between 1 and " << boatHoldCount << ".\n";
-            continue;
-        }
-        return index;
+    bool invalidInput = true;
+
+    if (currentPlayerIndex == -1){
+        currentPlayerIndex = gameView->getActivePlayerIndex();
     }
+
+    state::Player* currentPlayer = gameView->getPlayerList().at(currentPlayerIndex);
+    std::vector <state::BoatHold *> currentPlayerBoatHolds = currentPlayer->getBoatHolds();
+    std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
+    while (invalidInput){
+        index=getRandomInput(1, boatHoldCount);
+        if (resTypeToPay == ""){
+            invalidInput = false;
+        }
+        else{
+            if (currentPlayerBoatHolds.at(index-1)->hasResourceType(resTypeToPay)){
+                invalidInput = false;
+            }
+        }
+    }
+    std::cout << currentPlayer->getName() << " selected the boat hold " << index << "." << std::endl;
+    return index-1;
+
 }
 
-bool ai::RandomAI::confirmBoatHoldReplace(){
-    std::string input;
-    while (true) {
-        std::cout << "This boathold contains other resources. Do you want to replace them ? (y/n) : ";
-        input=="y";
-
-        if (input == "y" || input == "n") {
-            return input == "y";
-        }
-
-        std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
-    }
-}
 
 int ai::RandomAI::chooseCardFromHand(const std::vector<int>& handCards) {
     std::cout<<"Your 3 handCards:"<<std::endl;
@@ -56,7 +61,7 @@ int ai::RandomAI::chooseCardFromHand(const std::vector<int>& handCards) {
 
     int choice = 0;
     std::cout<<"Choose a card, enter an index between 1 and 3:"<<std::endl;
-    choice=getRandomInput(1,3);
+    choice=getRandomInput(0,2);
 
     return choice;
 }
@@ -79,6 +84,12 @@ int ai::RandomAI::chooseCanonNb(int totalNb){
     std::cout << "You have " << totalNb << " available canons. How many do you want to use ? ";
     chosenNb=getRandomInput(0,totalNb);
     return chosenNb;
+}
+
+int ai::RandomAI::chooseOpponent(size_t listSize)
+{
+    int chosenOpponent = getRandomInput(1, listSize);
+    return chosenOpponent-1;
 }
 
 ai::RandomAI::~RandomAI()

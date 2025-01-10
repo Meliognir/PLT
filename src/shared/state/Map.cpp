@@ -1,4 +1,11 @@
 #include "Map.h"
+#include <iostream>
+#include <algorithm>
+
+template <typename T>
+constexpr const T& clamp(const T& value, const T& lower, const T& upper) {
+    return (value < lower) ? lower : (value > upper ? upper : value);
+}
 
 namespace state {
 
@@ -24,10 +31,26 @@ int Map::getSize() const{
 }
 
 std::string Map::getResourceType (int position) {
-   return listOfTiles.at(position)->tileResourceType;
+    int actualPosition = position;
+    if (actualPosition < 0){
+        actualPosition = getSize()-1 - (-actualPosition)%getSize();
+    }
+    else if (actualPosition > getSize()-1){
+        actualPosition = actualPosition%getSize();
+    } 
+    return listOfTiles.at(actualPosition)->tileResourceType;
+
 }
 
 int Map::getResourceCost (int position) {
-    return listOfTiles.at(position)->tileCost;
+    int actualPosition = position;
+    if (actualPosition < 0){
+        actualPosition = getSize()-1 - (-actualPosition)%getSize();
+    }
+    else if (actualPosition > getSize()-1){
+        actualPosition = actualPosition%getSize();
+    }
+    return listOfTiles.at(actualPosition)->tileCost;
+
 }
 }

@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "CardActionState.h"
 #include "OpponentChoiceState.h"
+#include "GameOverState.h"
+#include "CaptainDiceState.h"
 #include "Observable.h"
 #include <iostream>
 #include "Map.h"
@@ -11,78 +13,36 @@
 namespace state {
 
 void ResourceHandlingState::handle(){
-
-    int nbOpponent = 0;
     Player *activePlayer = game->getActivePlayer();
-    
-    //player's total resource quantity he can pay for resourcetoPayType
-    int activePlayerPos = activePlayer->getPosition();
-    std::string resourceToPayType = game->map->getResourceType(activePlayerPos);
-    int resourceToPayCost = game->map->getResourceCost(activePlayerPos);
-    int quantityResource = 0;
-    for (BoatHold *bh : activePlayer->getBoatHolds()) {
-        if (bh->hasResourceType(resourceToPayType)) {
-            quantityResource += bh->getQuantity();
-        }
-    }
-    std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " resourceToPayType: " << resourceToPayType << "\r\n"<< std::endl;
-    std::cout <<"the tile costs: " << resourceToPayCost << " resourceToPayType: " << resourceToPayType << "\r\n"<< std::endl;
-
-    //player can't pay
-    while(quantityResource < resourceToPayCost){
-        
-        //player pays as much as he can afford
-        activePlayer->setResTypeToPay(resourceToPayType);
-        activePlayer->setAmountToPay(quantityResource);
-        activePlayer->setHasToPay(true);
-
-        //player moves backward
-        activePlayer->moveWithDirection(1, -1);
-        activePlayer->setPrevDuel(false);
-
-        //player's total resource quantity he can pay for resourcetoPayType
-        activePlayerPos = activePlayer->getPosition();
-        resourceToPayType = game->map->getResourceType(activePlayerPos);
-        resourceToPayCost = game->map->getResourceCost(activePlayerPos);
-        quantityResource = 0;
-        for (BoatHold *bh : activePlayer->getBoatHolds()) {
-            if (bh->hasResourceType(resourceToPayType)) {
-                quantityResource += bh->getQuantity();
-            }
-        }
-        std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " resourceToPayType: " << resourceToPayType << "\r\n"<< std::endl;
-        std::cout <<"the tile costs: " << resourceToPayCost << " resourceToPayType: " << resourceToPayType << "\r\n"<< std::endl;
-    }
-
-    //checks activeplayer's opponent presence
-    for (Player *player : game->getPlayerList()) {
-        if (player->getPosition() == activePlayerPos) {
-            nbOpponent += 1;
-        }
-    }
-    nbOpponent -= 1;
-    std::cout <<"there are: " << nbOpponent << " opponents on this tile\r\n"<< std::endl;
-
-    //no duel if activeplayer has moved
-    if(!(activePlayer->getHasMoved())){
-        activePlayer->setPrevDuel(true);
-    }
-
-    //condition for duel
-    if(nbOpponent > 0 && !(activePlayer->getPrevDuel())){
+    if (activePlayer->getMustFight()){
         std::cout <<"Transitioning to OpponentChoice state..."<< std::endl;
         game->transitionTo(new OpponentChoiceState);
         notifyObservers();
     }
-    //condition to exit ResourceHandlingState
-    if(nbOpponent == 0 || activePlayer->getPrevDuel()){
-        //player pays resourceToPayCost
-        activePlayer->setResTypeToPay(resourceToPayType);
-        activePlayer->setAmountToPay(resourceToPayCost);
-        activePlayer->setHasToPay(true);
-        std::cout <<"Transitioning to CardActionState state..."<< std::endl;
-        game->transitionTo(new CardActionState);
-        notifyObservers();  
+    else{
+
+        unsigned actionCounter = (unsigned) game->actionCounter;
+
+        //fin des actions de tous les joueurs
+        if(actionCounter >= game->getPlayerList().size()*2) {
+            //end of turn
+            if(game->getGameOver()){
+                std::cout <<"Transitioning to GameOver state..."<< std::endl;
+                game->transitionTo(new GameOverState);
+            }
+            else{
+                std::cout <<"Transitioning to CaptainDice state..."<< std::endl;
+                game->transitionTo(new CaptainDiceState);
+            }
+            notifyObservers();
+        }
+        else{
+
+
+            std::cout <<"Transitioning to CardActionState state..."<< std::endl;
+            game->transitionTo(new CardActionState);
+            notifyObservers();  
+        }
     }
     
 }

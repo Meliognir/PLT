@@ -8,6 +8,7 @@ namespace engine{
     void const RollDice::launchCommand(state::Game * GamePtr){
         if(!dieType){
             //Normal Die
+            //unused
             GamePtr->rollDice();
         }
         else{

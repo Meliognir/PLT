@@ -105,6 +105,11 @@ void Game::transitionTo(State *state){
     if (this->state != nullptr){
         delete this->state;
     }
+    for(Player * pl : this->playerList){
+        if(pl->getPosition() >= map->getSize()){
+            this->gameOver = true;
+        }
+    }
     this->state = state;
     this->state->setContext(this);
 }
@@ -120,6 +125,7 @@ int Game::getTurn() const
 
 void Game::setTurn(int turn)
 {
+    this->turn = turn;
 }
 
 const std::vector<Player *> &Game::getPlayerList() const{
@@ -218,18 +224,20 @@ bool Game::checkGameEndCondition(){
     return false;
 }
 
+//unused
 void Game::rollDice(){
     dayDie = rand() % 6 + 1;
     nightDie = rand() % 6 + 1;
 }
 
+//unused
 void movePlayer(state::Player * player, int direction, int value){
     //ResourceManager resourceManager2;
-    //state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition());
+    //state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition() % map.getSize());
     int nextPosition = player->getPosition()+value*direction;
     int nextPath = player->getPath();
     /*
-    if (Map->path1.at(nextPosition).isForking()){
+    if (Map->path1.at(nextPosition % map.getSize()).isForking()){
         nextPath = InputHandler::pick_a_path();
     }*/
     player->setPosition(nextPosition);
@@ -253,11 +261,11 @@ Player *Game::getDefendingPlayer(){
 }
 
 Player *Game::getCombatWinner(){
-    return CombatWinner;
+    return combatWinner;
 }
 
 void Game::setCombatWinner(Player *player){
-    CombatWinner=player;
+    combatWinner=player;
 }
 
 Map *Game::getMap(){
@@ -276,6 +284,16 @@ bool Game::isMapInitialized(){
     return isMapReady;
 }
 
+Player *Game::getCombatLoser()
+{
+    return this->combatLoser;
+}
+
+void Game::setCombatLoser(Player *player)
+{
+    this->combatLoser = player;
+}
+
 int Game::getActivePlayerIndex() const{
     return activePlayerIndex;
 }
@@ -286,6 +304,16 @@ Player* Game::getActivePlayer(){
 
 void Game::setActivePlayerIndex(int index){
     activePlayerIndex = index;
+}
+
+bool Game::getGameOver() const
+{
+    return this->gameOver;
+}
+
+void Game::setGameOver(bool gameOver)
+{
+    this->gameOver = gameOver;
 }
 
 void Game::setActivePlayer(Player *player){

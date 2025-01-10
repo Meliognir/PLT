@@ -37,6 +37,16 @@
 
 ## 5-Intelligence Artificielle
 
+**5.1 Stratégie**
+
+**5.2 Conception logiciel**
+
+## 6-Modularisation
+
+**6.1 Organisation**
+
+**6.2 Conception logiciel**
+
 
 
 
@@ -124,45 +134,47 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >>* Lorsque l'on vole le trésor 6e cale, on en vole aussi le contenu. 
 
 >### 1.3 Ressources
->Les ressources nous avons pour ce jeu est le jeu physique en lui-même. 
+>Les ressources que nous avons pour ce jeu est le jeu physique en lui-même. 
 > Nous avons essayer de trouver des sprites libre de droit sur internet.
-> Et nous avons affevtuer certains sprites à la main.
-
+> Et nous avons affectuer certains sprites à la main. Voici les sprites réalisés à la main :
+> 
+>![Image des sprites](rapport/images/sprites.png "Image des sprites")
+> Le reste des images viennent soit d'IA soit de sprites libre de droit trouvés sur internet.
 ## 2-Description et conception des états
 
 >### 2.1 Descriptions des états
 >Un état du jeu est formée par un ensemble d'éléments fixes (la map) et un ensemble d'éléments mobiles (les bateaux). Les éléments possèdent les propriétés suivantes :
 >>* Position sur la map et un identifiant pour les éléments moblies 
->>* Des ressources ( nourriture ou gold ) pour chaque case de la map 
+>>* Des ressources (nourriture ou gold) pour chaque case de la map 
 >
 >#### 1-Eléments fixes
 >La map est formé par un tableau d'éléments qui sont les cases. La taille de ce tableau est fixé au début de la partie. Les types de cases sont :  
 >>  **Cases Or** :
 > Les cases coûtant de l'or à chaque bâteau passant dessus.  
 >> **Cases Nourriture** :
-> Les cases coûtant de la nourriture  à chaque bâteau passant dessus.  
+> Les cases coûtant de la nourriture à chaque bâteau passant dessus.  
 >> **Cases libres/trésors** : 
-> Ces cases possèdent un trésor mais une fois elles sont gratuite pour tous les joueurs. Il peut aussi y avoir des des cases qui ne coûtent rien sans trésors.
+> Ces cases possèdent un trésor mais une fois le trésor récupérer elles sont gratuite pour tous les joueurs.
 >
 >#### 2-Eléments mobiles
 > Il s'agit du bâteau se déplaçant sur les cases, représenté par Player dans le state.dia, il possède les attributs de la photo suivante :
 >>![Image de la classe Player](rapport/images/Player1.3.png "Image classe Player")
-> On voit que pour la localisation sur la map nous avons un int position qui détermine la position du player dans le tableau de la map.
+> On voit que pour la localisation sur la map nous avons un int position. Celui-ci détermine la position du player dans le tableau de la map.
 > Chaque Player à un playerID et un Name qui servent à identifier un player.
-> Il possède aussi tous les éléments qui nous permettent de vérifier cahque règle et effectuer les actions voulu.
+> Il possède aussi tous les éléments qui nous permettent de vérifier chaque règle et effectuer les actions voulues.
 
 
 >### 2.2 Conception logiciel
 >>![Image du state.dia](rapport/images/state1.2.png "Images state.dia")
->Ceci est une version du state.dia dans sa globalité, nous allons par la suite détaillé les états des parties importantes et visibles pour le joueur.
+>Ceci est une version du state.dia dans sa globalité, nous allons par la suite détailler les états des parties importantes et visibles pour le joueur.
 > 
 > **Classe Player** : comme vu ci-dessus player la classe player possède un getter de sa position. De plus la classe possède toutes les caractéristiques pour 
-> savoir l'état dans lequel un player est à un moment donné donc : sa position, ce qu'il à dans ses câles, le choix des cartes, le choix de la position des dés, l'ajout de ressources dans sa câle...
+> savoir l'état dans lequel un player est à un moment donné donc : sa position, ce qu'il a dans ses câles, le choix des cartes, le choix de la position des dés, l'ajout de ressources dans sa câle...
 > Il possède aussi des attributs pour vérifier certaines règles comme le fait qu'il n'est pas de quoi payer une case par exemple.
 > 
 > 
 > **Classe Game** : la classe game, elle (voir en dessous), permet de passer d'un état à un autre en passant par la classe state et la méthode transitionTo.
-> Dans cette classe on retient qui à été le capitaine du tour en cours, on regarde les modifcations apportés à la map par les commandes de l'engine.
+> Dans cette classe, on retient qui a été le capitaine du tour en cours, on regarde les modifcations apportés à la map par les commandes de l'engine.
 >![Image du de la classe Game](rapport/images/Game1.2.png "Image state.dia")
 > 
 > - [https://refactoring.guru/design-patterns/state](./https://refactoring.guru/design-patterns/state)  
@@ -181,7 +193,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 >![Image du des classes ActionCard, BoatHold et Treasure](rapport/images/BoatHold1.1.png "Image des classe ActionCard, Boathold et Treasure.")
 > 
->> - **Treasure** : pour l'instant un trésors n'est qu'un bonus ou malus de gold, il ne s'agit donc que d'entier à ajouter ou enlever dans le décompte final de gold.
+>> - **Treasure** : pour l'instant un trésor n'est qu'un bonus ou malus de gold, il ne s'agit donc que d'entier à ajouter ou enlever dans le décompte final de gold.
 >> - **BoatHold** : c'est une câle, donc on regarde si on doit ajouter ou non une ressource, si une cale d'un player est vide ou non... il s'agit principalement de getter des ressources de chaque boathold. 
 >>
 >> Pour avoir le type de ressource à prendre il y a la classe resources :
@@ -193,13 +205,23 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >
 >![Image de la classe Map](rapport/images/Map1.1.png "Image de la classe map.")
 > 
->> La map est une liste de vecteur de type Tile qui on ce qu'elle coûte, le nombre de player dessus ainsi que le nombre de trésors dessus. Le path n'est pas encore utilisé.
+>> La map est une liste de vecteur de type Tile qui sont représentées par ce qu'elle coûte, le nombre de players dessus ainsi que le nombre de trésors dessus. Le path n'est pas encore utilisé.
 > 
+## 3-Rendu : Stratégie et Conception 
+
+>### 3.1 Stratégie de rendu d'un état**
+>>La classe StateLayer est un Observer des classes State dans state https://refactoring.guru/design-patterns/observer/cpp/example#lang-features. A chaque changement d'état de State, les observateurs sont notifiés. On peut donc suivre l'état du jeu dans render qui a lui même sa machine à état qui celle de state (nous avons utilisé un switch/case au lieu du design pattern State car manque de temps et plus simple à mettre en place).
+Pour le rendu, on utilise la librairie SFML. On utilise une fenêtre SFML (sf::RenderWindow) pour afficher une fenêtre ou apparaitra le rendu du jeu. 
+On utilise nos propres images qu'on associe à des textures SFML (sf::Texture). On peut ensuite crée un ou plusieurs sprites (sf::Sprite) liés à une texture pour ensuite les afficher sur la fenêtre SFML grâce à la fonction draw() de sf::RenderWindow. Il y a aussi la possibilité d'afficher des textes (sf::Text) avec la police désirée (sf::Font).  
+>### 3.2 Conception logiciel**
+>>![Image du render.dia](rapport/images/render1.0.png "Image du render.dia.")
+>>StateLayer gère la machine à état, Renderer affiche les tous les sprites et HUD affiche le texte pour indiquer les actions aux joueurs. 
+
  ## 4-Règles de changement d'états et moteur de jeu 
 
 > ### 4.1 Horloge globale
->>Les changements d'état sont fait à la chaîne sans horloge. Nous allons mettre des délais pour laissé le temps aux joueurs
->>de comprendre l'affichage qui change. Les changement d'états sur la console se font après confirmation avec un "y" donc on attend l'avale
+>>Les changements d'état sont fait à la chaîne sans horloge. Nous allons mettre des délais pour laisser le temps aux joueurs
+>>de comprendre l'affichage qui change. Les changements d'états sur la console se font après confirmation avec un "y" donc on attend l'avale
 >> du joueur physique ou IA pour continuer à jouer.
 > ### 4.2 Changements extérieurs
 >>Les changements extérieurs sont provoqués par des commandes extérieures, comme la pression sur un
@@ -235,3 +257,46 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 >>>* ChoosePlayerName : permet aux joueurs de choisir leur pseudo.
 >>>* RollDice : génère deux dés de façon "random".
 >>>* StealResources : permet de voler des ressources après un combat.
+>>>
+## 5-Intelligence Artificiel
+>### 5.1 Stratégie
+>> #### 5.1.1 IA Random
+>> L'IA Random renvoie à chaque input une valeur aléatoire qui dépend
+>> de l'action à faire.
+>>>Par exemple : elle renvoie un entier entre 1 et 3 quand il faut choisir une carte 
+>> et un entier entre 1 et 6 quand il faut choisir un boathold.
+> 
+>> #### 5.1.2 IA Heuristic
+>> Cette IA agit comme le ferait un humain, mais avec une stratégie prédéfinie pour chaque action :
+>> * le choix de l'emplacement à utiliser quand on obtient une ressource : si un emplacement est libre, l'IA le prend sinon
+>> elle regarde s'il y a des canons et les remplacent. Dans le cas où il n'y a pas de canons, on regarde la quantité de chaque ressource(s) restante(s) et on remplace la plus faible si c'est possible. 
+>> * le choix des cartes : l'objectif est de choisir les cartes qui ne possède pas de canon.
+>> * le choix des dés : on regarde ses cartes en mains et on met le dé avec la valuer la plus élevée en fonction des cartes que l'on a :
+>> 
+>>> si l'IA a une carte avec avancée à gauche le dé avec la valeur la plus élevée ira à gauche donc le jour. Si la carte à l'action avancéE à droite l'IA met le dé avec la plus grande valuer la nuit. Pour le reste s'agissant de ressources tout est correct.
+>> * le choix du nombre de canons pour un combat : nous avons décidé qu'une stratégie envisageable est deprendre tous las canons dès qu'on le peut.
+>> * le choix de l'adversaire quand il y a combat : l'IA Heuristic va compter le nombre de canons de chaques adversaires et le voir s'i'l y a des cales avec plus de 2 ressources autres que canon et attribué 
+>> un score en fonction de la réponse : -0.5 par canons et +1 par câles avec plus de deux ressources. Le joueur ayant le score le plus élevé sera choisi pour le combat.
+> ### 5.2 Conception logiciel
+>> Chaqu'une des IA fonctionne avec les mêmes fonctions qui diffèrent en complexité en fonction du niveau demandé.
+>> Voici le dia avec les fonctions de chaque IA :
+>> ![Image de AI.dia](rapport/images/IA1.0.png "Image de IA.dia")
+> 
+> ## 6-Modularisation
+> 
+>> ### 6.1 Organisation
+> 
+>> Pour la partie serveur nous n'avons pas vraiment eu le temps de nous pencher dessus. Néanmoins, nous avons réussi a connecter deux
+>> clientau même serveur deux ordinateurs différents et afficher la map.
+>> 
+>>Le but est que quand le premier joueur décide de faire sa partie en ligne en entrant l'input 2 après la première requête nous lançions le jeu pour chaque client. 
+>> Malheureusement quand nous effectuons la commande 2 (runGameOnline) le serveur affiche à l'infini la même ligne qui demande un input sans que nous puissions avoir le temps de lui répondre.
+>> 
+>> ## 6.2 Conception logiciel 
+>> Voici donc le dia du server, il est accompagné d'un main et d'un autre clientNetwork qui a la même fonctionnalité que le runGameOnline du client de src.  
+>> ![Image de server.dia](rapport/images/server.png "Image du server.dia")
+>>
+> 
+>> La plupart des fonctions qui servent à modifier le jeu et donc les inputs sont le de client de src qui est donc le suivant :
+>> ![Image du client.dia](rapport/images/client.png "Image du client.dia")
+>> Toutes commandes sont envoyées depuis le client et appellent donc l'engine pour modifier le state.

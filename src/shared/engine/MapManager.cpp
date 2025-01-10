@@ -15,11 +15,11 @@ namespace engine {
 
 void MapManager::movePlayer(state::Player *player, int direction, int value) {
     //ResourceManager resourceManager2;
-    //state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition());
+    //state::Tile * currentTile = state::Game::map->listOfTiles.at(player->getPosition() % map.getSize());
     int nextPosition = player->getPosition()+value*direction;
     int nextPath = player->getPath();
     /*
-    if (Map->path1.at(nextPosition).isForking()){
+    if (Map->path1.at(nextPosition % map.getSize()).isForking()){
         nextPath = InputHandler::pick_a_path();
     }*/
     player->setPosition(nextPosition);

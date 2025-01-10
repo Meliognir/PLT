@@ -6,8 +6,6 @@
 #include "Gold.h"
 #include "Food.h"
 #include "Canon.h"
-#include "../engine/ActionProcessor.h"
-#include "../engine/CombatManager.h"
 #include "../engine/ResourceManager.h"
 #include "../../client/client/InputHandler.h"
 #include <iostream>
@@ -59,7 +57,6 @@ void Player::shuffleDeck(){
     std::shuffle(cardDeck.begin(), cardDeck.end(), g);
 }
 
-
 void Player::moveCardToHand () {
     if (cardDeck.empty()) {
         std::cerr << "Error: Cannot move card to hand. The card deck is empty." << std::endl;
@@ -74,27 +71,40 @@ void Player::moveCardToDeck() {
         std::cerr << "Error: No active card to move to the deck." << std::endl;
         return;
     }
+    //ajout de la valeur activeCard en fin de cardDeck
     cardDeck.push_back(activeCard);
-    activeCard = -1;
+    //effaçage de activeCard dans handCards
+    auto it = std::find(handCards.begin(), handCards.end(), activeCard);
+    if (it != handCards.end()) {
+        activeCardId = std::distance(handCards.begin(), it);
+    } else {
+        std::cerr << "Error: activeCard not found in handCards." << std::endl;
+        activeCardId = -1;
+    }
+    handCards.erase(handCards.begin() + activeCardId);
+    this->usedCardNb++;
+    this->activeCard = -1;
+    //8 activeCards were used
+    if(this->usedCardNb == 8){
+        this->shuffleDeck();
+        this->usedCardNb = 0;
+    }
 }
 
-void Player::moveWithDirection (int distance, int direction){
+void Player::moveWithDirection (int distance, int direction){ // ajouter taille de map parametre
     int currentPos = this->getPosition();
     signed int nextPos = currentPos + distance*direction;
     std::cout << "nextPos: " << nextPos << "\r\n" << std::endl;
-    if(nextPos > 0){this->setPosition(nextPos);}
-    else{this->setPosition(0);}
+    //if(nextPos > 0){this->setPosition(nextPos);}
+    //if(nextPos > Map::getSize()){this->setPosition(Map::getSize());}
+    //if(nextPos < 0){this->setPosition(0);}
+    this->setPosition(nextPos);
 }
 
-void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount, int skipSelection){
+void Player::addResourcesToBoatHold(std::string resourceType, int boatholdIndex, int amount){
     auto& boatHolds = this->getBoatHolds();
     state::BoatHold *selectedHold;
-    if (skipSelection){
-        selectedHold = boatHolds.at(skipSelection-1);
-    }
-    else {
-        selectedHold = boatHolds.at(boatholdIndex-1);
-    }
+    selectedHold = boatHolds.at(boatholdIndex);
     int quantityToRemove = selectedHold->getQuantity();
     selectedHold->removeResource(quantityToRemove);
     if (resourceType == "Food"){
@@ -202,6 +212,11 @@ const std::vector <Player*>& Player::getOpponentsList() const{
     return opponentsList;
 }
 
+void Player::setOpponentsList(const std::vector<Player *> &opponentsList)
+{
+    this->opponentsList = opponentsList;
+}
+
 int Player::getFirePower() const{
     return firePower;
 }
@@ -242,13 +257,13 @@ void Player::setChosenBoatholdIndex(int chosenBoatholdIndex)
 {
     this->chosenBoatholdIndex = chosenBoatholdIndex;
 }
-bool Player::getPrevDuel() const
+bool Player::getMustFight() const
 {
-    return this->prevDuel;
+    return this->mustFight;
 }
-void Player::setPrevDuel(bool prevDuel)
+void Player::setMustFight(bool mustFight)
 {
-    this->prevDuel = prevDuel;
+    this->mustFight = mustFight;
 }
 bool Player::getHasToPay() const
 {

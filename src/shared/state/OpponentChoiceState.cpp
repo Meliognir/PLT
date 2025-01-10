@@ -9,20 +9,16 @@
 
 namespace state{
 void OpponentChoiceState::handle(){
-
-    Player *activePlayer = game->getActivePlayer();
-
-    activePlayer->setPrevDuel(true); // à déplacer après la fin du combat dans stealresourcestate
-    
+   
     //test
-    std::cout <<"Transitioning to ResourceHandlingState state..."<< std::endl;
-    game->transitionTo(new ResourceHandlingState);
-    notifyObservers();
+    // std::cout <<"Transitioning to ResourceHandlingState state..."<< std::endl;
+    // game->transitionTo(new ResourceHandlingState);
+    // notifyObservers();
 
     //à décommenter
-    // std::cout <<"Transitioning to CombatAttacking state..."<< std::endl;
-    // game->transitionTo(new CombatAttackingState);
-    // notifyObservers();
+    std::cout <<"Transitioning to CombatAttacking state..."<< std::endl;
+    game->transitionTo(new CombatAttackingState);
+    notifyObservers();
 }
 
 OpponentChoiceState::~OpponentChoiceState(){

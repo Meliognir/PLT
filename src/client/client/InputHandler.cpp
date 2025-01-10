@@ -4,6 +4,7 @@
 #include <string>
 #include <limits>
 #include "state.h"
+#include "../client.h"
 
 #define EXIT_GAME 0
 #define LOCAL_MULTIPLAYER 1
@@ -46,25 +47,31 @@ std::string InputHandler::getPlayerName(int playerIndex){
 
 int InputHandler::getMapSize(){
     int mapSize = 0;
-        while (mapSize <= 1) {
-            std::cout << "Enter the size of the map: ";
-            std::cin >> mapSize;
-            if (std::cin.fail()) { 
-                std::cin.clear();   
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                std::cout << "Invalid input. Please enter a number." << std::endl;
-                mapSize = 0; 
-            } else if (mapSize <= 1) {
-                std::cout << "Invalid map size. Please enter a number higher than 1." << std::endl;
-            }
+    while (true) {
+        std::cout << "Enter the size of the map: ";
+        std::cin >> mapSize;
+        if (std::cin.fail()) { 
+            std::cin.clear();   
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+            std::cout << "Invalid input. Please enter a valid number." << std::endl;
+            mapSize = 0; 
+        } else if (abs(mapSize - 45) <= 15) {
+            return mapSize;
+        } else {
+            std::cout << "Invalid map size. Please enter a value between 30 and 60." << std::endl;
         }
-    return mapSize;
+    }
 }
-size_t InputHandler::selectUserBoatHold(size_t boatHoldCount){
+size_t InputHandler::selectUserBoatHold(size_t boatHoldCount, bool steal){
     std::string tempString;
     size_t index = 0;
     while (true) {
-        std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : " << std::endl;
+        if(steal){
+            std::cout << "You can steal one of " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : " << std::endl;
+        }
+        else{
+            std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : " << std::endl;
+        }
         std::cin >> tempString;
         try {
             index = stoi(tempString);
@@ -127,6 +134,27 @@ bool InputHandler::chooseTimeDice(int die1, int die2){
     return input == "1";
 }
 
+int InputHandler::chooseOpponent(size_t opponentsNb)
+{
+    size_t choice = 0;
+    if (opponentsNb == 1){
+        std::cout << "You had no choice, prepare to fight." << std::endl; 
+        return 0;
+    }
+    while (true) {
+        std::cout<<"Choose an opponent, enter an index between 1 and "<< opponentsNb << std::endl;
+        std::cin >> choice;
+
+        if (std::cin.fail() || choice < 1 || choice > opponentsNb) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout<<"Invalid input. Please enter a valid index."<<std::endl;
+        } else {
+            return choice - 1;
+        }
+    }
+}
+
 int InputHandler::chooseCanonNb(int totalNb){
     if (totalNb <= 0) {
         std::cout << "You don't have any available canons." << std::endl;
@@ -178,11 +206,13 @@ int InputHandler::selectGameMode()
 
 int InputHandler::selectLevelAI()
 {
+    Client::isPlayerAI = true;
     std::string setLevel;
     while(1){
         std::cout << "What is the level of this AI ? (0, 1, 2, 3)"<< std::endl;;
         std::cin >> setLevel;
         if (setLevel == "0" || setLevel == "cancel") {
+            Client::isPlayerTypeChosen=false;
             std::cout << "User cancelled" << std::endl;
             return 0;
         }
@@ -210,9 +240,13 @@ int InputHandler::pickAnAI(int playerIndex)
         std::cout << "Is Player " << playerIndex+1 << " an AI ? (y/n)"<< std::endl;
         std::cin >> setAnAI;
         if (setAnAI == "n" || setAnAI == "no") {
+            Client::isPlayerAI = false;
+            Client::isPlayerTypeChosen=true;
             return 0;
         }
         else if (setAnAI == "y" || setAnAI == "yes") {
+            Client::isPlayerAI = true;
+            Client::isPlayerTypeChosen=true;
             SelectionAI = selectLevelAI();
             if (SelectionAI){
                 return SelectionAI;

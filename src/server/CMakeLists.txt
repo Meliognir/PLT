@@ -32,3 +32,17 @@ if(BUILD_CODE_COVERAGE)
 endif()
 
 # vim: set sw=2 sts=2 et:
+
+# Compile "client_network" executable
+set(client_server_target client_network)
+add_executable(${client_server_target} main_clientNetwork.cpp
+        server/NetworkClient.cpp
+        server/Server.cpp
+)
+find_package(SFML 2.5 COMPONENTS network REQUIRED)
+target_link_libraries(${client_server_target} ${lib_server_target})
+if(BUILD_CODE_COVERAGE)
+  add_dependencies(code-coverage ${server_target})
+endif()
+
+# vim: set sw=2 sts=2 et:
