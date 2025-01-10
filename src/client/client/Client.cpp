@@ -128,7 +128,6 @@ namespace client {
         state::ActionCard *actionCard;
         int chosenBoatholdId;
         std::string chosenBoatholdResType;
-        std::string resourceTypeToPay;
         int boatHoldCount;
         int remainToPay;
         int boatHoldQuantity;
@@ -375,35 +374,36 @@ namespace client {
                                 std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
                             }
                         }
-                        addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId /*+ 1*/, currentDie, resTypeToAdd);
+                        addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId, currentDie, resTypeToAdd);
                         addToBoathold->launchCommand(gameInstance);
                         delete addToBoathold;
                         gettingResources = false;
                     }
 
                     else{
-
                         if(activePlayer->getHasToPay()){// The player moved on a new tile and must pay something (or pay 0 and get a treasure), and he could trigger a fight
                             nbOpponent = 0;
                             std::vector<state::Player *> opponentsList = {};
-                                
-                            //player's total resource quantity he can pay for resourceTypeToPay
+     
+                            //player's total resource quantity he can pay for resTypeToPay
                             int activePlayerPos = activePlayer->getPosition();
-                            resourceTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
-                            int resourceToPayCost = gameInstance->map->getResourceCost(activePlayerPos);
+                            resTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
+                            remainToPay = gameInstance->map->getResourceCost(activePlayerPos);
+                            activePlayer->setResTypeToPay(resTypeToPay);
+                            activePlayer->setAmountToPay(remainToPay);
                             int quantityResource = 0;
                             for (state::BoatHold *bh : activePlayer->getBoatHolds()) {
-                                if (bh->hasResourceType(resourceTypeToPay)) {
+                                if (bh->hasResourceType(resTypeToPay)) {
                                     quantityResource += bh->getQuantity();
                                 }
                             }
-                            std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " resourceToPayType: " << resourceTypeToPay << "\r\n"<< std::endl;
-                            std::cout <<"the tile costs: " << resourceToPayCost << " resourceToPayType: " << resourceTypeToPay << "\r\n"<< std::endl;
+                            std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " resourceToPayType: " << resTypeToPay << "\r\n"<< std::endl;
+                            std::cout <<"the tile costs: " << remainToPay << " resourceToPayType: " << resTypeToPay << "\r\n"<< std::endl;
 
                             //player can't pay
-                            while(quantityResource < resourceToPayCost){
+                            while(quantityResource < remainToPay){
                                 
-                                std::cout <<"player: " << activePlayer->getName() << " is bankrupting for this tile.\r\n"<< std::endl;
+                                std::cout <<"player: " << activePlayer->getName() << " is going BANKRUPT for this tile.\r\n"<< std::endl;
 
                                 if (quantityResource > 0){
                                     boatHoldCount = activePlayer->getBoatHolds().size();
@@ -425,6 +425,7 @@ namespace client {
                                         }
                                         else{
                                             state::BoatHold *bh = boatHolds.at(chosenBoatholdId);
+                                            boatHoldQuantity = bh->getQuantity();
                                             activePlayer->removeFromBoatHold(chosenBoatholdId, boatHoldQuantity);
                                             quantityResource = quantityResource - boatHoldQuantity;
                                             std::cout << "There remain: " << quantityResource << " " << resTypeToPay << " to pay.\n";
@@ -436,24 +437,24 @@ namespace client {
                                 activePlayer->moveWithDirection(1, -1);
                                 activePlayer->setHasMoved(true);
 
-                                //player's total resource quantity he can pay for resourceTypeToPay
+                                //player's total resource quantity he can pay for resTypeToPay
                                 activePlayerPos = activePlayer->getPosition();
-                                resourceTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
-                                resourceToPayCost = gameInstance->map->getResourceCost(activePlayerPos);
+                                resTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
+                                remainToPay = gameInstance->map->getResourceCost(activePlayerPos);
                                 quantityResource = 0;
                                 for (state::BoatHold *bh : activePlayer->getBoatHolds()) {
-                                    if (bh->hasResourceType(resourceTypeToPay)) {
+                                    if (bh->hasResourceType(resTypeToPay)) {
                                         quantityResource += bh->getQuantity();
                                     }
                                 }
-                                std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " resourceToPayType: " << resourceTypeToPay << "\r\n"<< std::endl;
-                                std::cout <<"the tile costs: " << resourceToPayCost << " resourceToPayType: " << resourceTypeToPay << "\r\n"<< std::endl;
+                                std::cout <<"player: " << activePlayer->getName() << " has: " << quantityResource << " resourceToPayType: " << resTypeToPay << "\r\n"<< std::endl;
+                                std::cout <<"the tile costs: " << remainToPay << " resourceToPayType: " << resTypeToPay << "\r\n"<< std::endl;
                             }
                             
                             // recall what the player now has to pay
                             activePlayerPos = activePlayer->getPosition();
-                            resourceTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
-                            resourceToPayCost = gameInstance->map->getResourceCost(activePlayerPos);
+                            resTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
+                            remainToPay = gameInstance->map->getResourceCost(activePlayerPos);
                             activePlayer->setHasToPay(true);
 
                             if (hasFought){
@@ -475,11 +476,11 @@ namespace client {
                                 std::cout <<"there are: " << nbOpponent << " opponents on this tile\r\n"<< std::endl;
                                                 
                                 //duel only if there are players
-                                if (nbOpponent) {
+                                if (nbOpponent > 0) {
                                     std::cout <<" and Player: " << activePlayer->getName() << " must fight before he can pay the cost of this tile\r\n"<< std::endl;
                                     activePlayer->setMustFight(true);
-                                    activePlayer->setAmountToPay(resourceToPayCost);
-                                    activePlayer->setResTypeToPay(resourceTypeToPay);
+                                    activePlayer->setAmountToPay(remainToPay);
+                                    activePlayer->setResTypeToPay(resTypeToPay);
 
                                     activePlayer->setHasToPay(false);
                                 }
