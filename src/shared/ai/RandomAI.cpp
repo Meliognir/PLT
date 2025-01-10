@@ -42,7 +42,7 @@ size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resTyp
             invalidInput = false;
         }
         else{
-            if (resTypeToPay == currentPlayerBoatHolds.at(index-1)->getResourceType()){
+            if (currentPlayerBoatHolds.at(index-1)->hasResourceType(resTypeToPay)){
                 invalidInput = false;
             }
         }

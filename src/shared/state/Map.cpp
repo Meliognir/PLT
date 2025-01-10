@@ -33,7 +33,7 @@ int Map::getSize() const{
 std::string Map::getResourceType (int position) {
     int actualPosition = position;
     if (actualPosition < 0){
-        actualPosition = getSize() - (-actualPosition)%getSize();
+        actualPosition = getSize()-1 - (-actualPosition)%getSize();
     }
     else if (actualPosition > getSize()-1){
         actualPosition = actualPosition%getSize();
@@ -45,7 +45,7 @@ std::string Map::getResourceType (int position) {
 int Map::getResourceCost (int position) {
     int actualPosition = position;
     if (actualPosition < 0){
-        actualPosition = getSize() - (-actualPosition)%getSize();
+        actualPosition = getSize()-1 - (-actualPosition)%getSize();
     }
     else if (actualPosition > getSize()-1){
         actualPosition = actualPosition%getSize();

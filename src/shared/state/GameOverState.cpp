@@ -18,7 +18,6 @@
 namespace state {
 
     void GameOverState::handle() {
-
         //quand un joueur atteint la dernière tile chaque joueur fini son tour et on compte alors les points
         Player * winner;
         int maxScore = 0;
@@ -71,6 +70,8 @@ namespace state {
             }
         }
         std::cout<< "Player : " << winner->getName() << " has won with a score of : " << maxScore << "."<< std::endl;
+        game->setGameOver(false);
+        return;
     }
 
     int GameOverState::getStateId (){

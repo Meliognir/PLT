@@ -100,6 +100,7 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             resourceSprite.setTextureRect(sf::IntRect(30, 29, 30, 30));
             resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             resourceSprite.setPosition(x, y);
+            //resourceSprite.setScale(sf::Vector2f(0.2f,0.2f));
             window.draw(tileSprite);
             window.draw(resourceSprite);
         } else if (tile->tileResourceType == "Gold") {
@@ -109,6 +110,7 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             resourceSprite.setTextureRect(sf::IntRect(60, 29, 30, 30));
             resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             resourceSprite.setPosition(x, y);
+            //resourceSprite.setScale(sf::Vector2f(0.2f,0.2f));
             window.draw(tileSprite);
             window.draw(resourceSprite);
         } else if (tile->treasureAvailable) {
@@ -118,11 +120,13 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
             resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             resourceSprite.setPosition(x, y);
+            //resourceSprite.setScale(sf::Vector2f(0.2f,0.2f));
             window.draw(tileSprite);
             window.draw(resourceSprite);
         } else {
             portRoyalSprite.setTextureRect(sf::IntRect(0, 0, 192, 192)); // Par défaut (première tuile)
             portRoyalSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            //portRoyalSprite.setScale(sf::Vector2f(0.1f,0.1f));
             portRoyalSprite.setScale(sf::Vector2f(0.5f,0.5f));
             portRoyalSprite.setPosition(x-10, y-20);
             window.draw(portRoyalSprite);
@@ -173,7 +177,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
         int playerPosition = player->getPosition();  // Position du joueur (index de la tuile)
         int mapSize = map.getSize();
         if (playerPosition < 0){
-            playerPosition = mapSize - (-playerPosition)%mapSize;
+            playerPosition = mapSize-1 - (-playerPosition)%mapSize;
         }
         else if (playerPosition >= mapSize){
             playerPosition = playerPosition%mapSize;
