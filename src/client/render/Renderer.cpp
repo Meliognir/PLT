@@ -10,15 +10,6 @@ void render::Renderer::renderBackground(sf::RenderWindow &window){
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
 
-    float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
-    int mapSize = map.getSize();          // Nombre total de tuiles
-    float mapScale = 1/((float)mapSize);
-    sf::Vector2f center(windowWidth/3.1f, windowHeight/2.0f);        // Centre du cercle (positionné à gauche dans la fenêtre)
-    
-    // Rayon du cercle
-    float radius = globalScale/2;
-    float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
-
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("../src/boardGameData/BackgroundJamaicaPLT.png")) {
         std::cerr << "Error loading BackgroundJamaicaPLT.png!" << std::endl;
@@ -37,11 +28,17 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+
+    float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
     int mapSize = map.getSize();          // Nombre total de tuiles
-    float radius = std::min(desktopMode.width, desktopMode.height)/3;
-    //float radius = 400.0f;                // Rayon du cercle
-    sf::Vector2f center(windowWidth/2, windowHeight/2);        // Centre du cercle (position de la fenêtre)
-    float angleStep = 2 * PI / mapSize;   // Angle entre chaque tuile
+    float mapScale = 1/((float)mapSize);
+    sf::Vector2f center(windowWidth/3.1f, windowHeight/2.0f);        // Centre du cercle (positionné à gauche dans la fenêtre)
+    
+    // Rayon du cercle
+    float radius = globalScale/2;
+    float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
+
+
 
     sf::Font font;
     font.loadFromFile("../src/boardGameData/Arial.ttf");   
@@ -93,8 +90,6 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     moonSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
     moonSprite.setPosition(windowWidth/1.9f, windowHeight/12.9f);
     moonSprite.setScale(sf::Vector2f(globalScale/900, globalScale/900));
-
-    window.draw(backgroundSprite);
     
     // Parcourir toutes les tuiles de la carte
     for (int i = 0; i < mapSize; ++i) {
