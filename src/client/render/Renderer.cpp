@@ -177,7 +177,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
         int playerPosition = player->getPosition();  // Position du joueur (index de la tuile)
         int mapSize = map.getSize();
         if (playerPosition < 0){
-            playerPosition = mapSize - (-playerPosition)%mapSize;
+            playerPosition = mapSize-1 - (-playerPosition)%mapSize;
         }
         else if (playerPosition >= mapSize){
             playerPosition = playerPosition%mapSize;
