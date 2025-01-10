@@ -1,7 +1,7 @@
 #include "CardActionState.h"
 #include "Game.h"
-#include "GameOverState.h"
 #include "ResourceHandlingState.h"
+#include "GameOverState.h"
 #include "CaptainDiceState.h"
 #include "Observable.h"
 #include <iostream>
@@ -14,6 +14,7 @@ int gameTurn = 0;
 namespace state {
 void CardActionState::handle(){
 
+/*
     unsigned actionCounter = (unsigned) game->actionCounter;
 
     //fin des actions de tous les joueurs
@@ -30,11 +31,12 @@ void CardActionState::handle(){
         }
         notifyObservers();
     }
-    else{
+*/
+    //else{
         std::cout <<"Transitioning to ResourceHandling state..."<< std::endl;
         game->transitionTo(new ResourceHandlingState);
         notifyObservers();
-    }   
+    //}   
 }
 
 int CardActionState::getStateId(){
