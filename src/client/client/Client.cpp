@@ -358,8 +358,8 @@ namespace client {
                     if(gettingResources){
                         isFull = true;
                         auto boatHolds = activePlayer->getBoatHolds();
-                        for (int i = 0; i < boatHolds.size(); i++){
-                            isFull = isFull && boatHolds.at(i)->hasResourceType(resTypeToAdd);
+                        for (state::BoatHold *bh : boatHolds) {
+                            isFull = isFull && bh->hasResourceType(resTypeToAdd);
                         }
 
                         if(isFull){
@@ -752,30 +752,41 @@ namespace client {
                             }
                         }
                         resTypeToAdd = chosenBoatholdResType;
-                        std::cout << "Player: "<< winner->getName() << " receives: " << boatHoldQuantity << " " << resTypeToAdd << ". Please choose a boat hold to store this resource\n";
-                        boatHoldCount = winner->getBoatHolds().size();
-                        validChosenBoathold = false;
-                        while(!validChosenBoathold){
-                            auto boatHolds = winner->getBoatHolds();
-                            // Pick a boat hold
-                            if (winner->get_AI()==nullptr){ //real player
-                                winnerBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
-                            }
-                            else { // AI input
-                                winnerBoatholdId = winner->get_AI()->selectUserBoatHold(boatHoldCount);
-                            }
-                            chosenBoatholdResType = boatHolds.at(winnerBoatholdId)->getResourceType();
-                            if(chosenBoatholdResType != resTypeToAdd){
-                                validChosenBoathold = true;
-                            }
-                            else {
-                                std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
-                            }
-                        }
 
-                        stealResource = new engine::StealResource(chosenBoatholdId, winner->getPlayerId(), loser->getPlayerId(), winnerBoatholdId);
-                        stealResource->launchCommand(gameInstance);
-                        delete stealResource;
+                        auto boatHolds = winner->getBoatHolds();
+                        isFull = true;
+                        for (state::BoatHold *bh : boatHolds) {
+                            isFull = isFull && bh->hasResourceType(resTypeToAdd);
+                        }
+                        if(isFull){
+                            std::cout << "Player: "<< activePlayer->getName() << " was full and couldn't steal the Resource: " << resTypeToAdd << std::endl;
+                        }
+                        else {
+
+                            std::cout << "Player: "<< winner->getName() << " receives: " << boatHoldQuantity << " " << resTypeToAdd << ". Please choose a boat hold to store this resource\n";
+                            boatHoldCount = winner->getBoatHolds().size();
+                            validChosenBoathold = false;
+                            while(!validChosenBoathold){
+                                // Pick a boat hold
+                                if (winner->get_AI()==nullptr){ //real player
+                                    winnerBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                                }
+                                else { // AI input
+                                    winnerBoatholdId = winner->get_AI()->selectUserBoatHold(boatHoldCount);
+                                }
+                                chosenBoatholdResType = boatHolds.at(winnerBoatholdId)->getResourceType();
+                                if(chosenBoatholdResType != resTypeToAdd){
+                                    validChosenBoathold = true;
+                                }
+                                else {
+                                    std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
+                                }
+                            }
+
+                            stealResource = new engine::StealResource(chosenBoatholdId, winner->getPlayerId(), loser->getPlayerId(), winnerBoatholdId);
+                            stealResource->launchCommand(gameInstance);
+                            delete stealResource;
+                        }
                     }
                     activePlayer->setHasToPay(true);
                     gameInstance->request(); // from StealResourceState to ResourceHandlingState
