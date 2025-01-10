@@ -1,8 +1,6 @@
 #include "CardActionState.h"
 #include "Game.h"
 #include "ResourceHandlingState.h"
-#include "GameOverState.h"
-#include "CaptainDiceState.h"
 #include "Observable.h"
 #include <iostream>
 #include <SFML/System/Time.hpp>

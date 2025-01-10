@@ -134,6 +134,7 @@ namespace client {
         int actionType;
         bool validChosenBoathold;
         bool isNaked;
+        bool isFull;
         bool hasFought;
         int nbOpponent;
         int chosenOpponentId;
@@ -355,28 +356,39 @@ namespace client {
 
                     // if the player didn't move :
                     if(gettingResources){
-                        std::cout << "Player: "<< activePlayer->getName() << " receives: " << currentDie << " " << resTypeToAdd << ", Please choose a BoatHold to store this Resource\n";
-                        validChosenBoathold = false;
-                        while(!validChosenBoathold){
-                            auto boatHolds = activePlayer->getBoatHolds();
-                            // Pick a boat hold
-                            if (activePlayer->get_AI()==nullptr){ //real player
-                                chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
-                            }
-                            else { // AI input
-                                chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount);
-                            }
-                            chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
-                            if(chosenBoatholdResType != resTypeToAdd){
-                                validChosenBoathold = true;
-                            }
-                            else {
-                                std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
-                            }
+                        isFull = true;
+                        auto boatHolds = activePlayer->getBoatHolds();
+                        for (int i = 0; i < boatHolds.size(); i++){
+                            isFull = isFull && boatHolds.at(i)->hasResourceType(resTypeToAdd);
                         }
-                        addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId, currentDie, resTypeToAdd);
-                        addToBoathold->launchCommand(gameInstance);
-                        delete addToBoathold;
+
+                        if(isFull){
+                            std::cout << "Player: "<< activePlayer->getName() << " was full and couldn't receive: " << currentDie << " " << resTypeToAdd << std::endl;
+                        }
+                        else {
+
+                            std::cout << "Player: "<< activePlayer->getName() << " receives: " << currentDie << " " << resTypeToAdd << ", Please choose a BoatHold to store this Resource\n";
+                            validChosenBoathold = false;
+                            while(!validChosenBoathold){
+                                // Pick a boat hold
+                                if (activePlayer->get_AI()==nullptr){ //real player
+                                    chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                                }
+                                else { // AI input
+                                    chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount);
+                                }
+                                chosenBoatholdResType = boatHolds.at(chosenBoatholdId)->getResourceType();
+                                if(chosenBoatholdResType != resTypeToAdd){
+                                    validChosenBoathold = true;
+                                }
+                                else {
+                                    std::cout << "Invalid Boathold Type. You must choose a Boathold without : " << resTypeToAdd << ".\n";
+                                }
+                            }
+                            addToBoathold = new engine::AddToBoathold(activePlayerIndex, chosenBoatholdId, currentDie, resTypeToAdd);
+                            addToBoathold->launchCommand(gameInstance);
+                            delete addToBoathold;
+                        }
                         gettingResources = false;
                     }
 
@@ -440,7 +452,9 @@ namespace client {
                                 //player's total resource quantity he can pay for resTypeToPay
                                 activePlayerPos = activePlayer->getPosition();
                                 resTypeToPay = gameInstance->map->getResourceType(activePlayerPos);
+                                activePlayer->setResTypeToPay(resTypeToPay);
                                 remainToPay = gameInstance->map->getResourceCost(activePlayerPos);
+                                activePlayer->setAmountToPay(remainToPay);
                                 quantityResource = 0;
                                 for (state::BoatHold *bh : activePlayer->getBoatHolds()) {
                                     if (bh->hasResourceType(resTypeToPay)) {
@@ -706,7 +720,7 @@ namespace client {
 
                     std::cout << "Cales de " << loser->getName() << ": " << std::endl;
                     boatHoldCount = 0;
-                    isNaked == true;
+                    isNaked = true;
                     for(state::BoatHold *bh : loser->getBoatHolds()){
                         boatHoldCount++;
                         std::cout<< "BoatHold N°" << boatHoldCount << " : \r\n" << std::endl;
@@ -735,7 +749,6 @@ namespace client {
                             }
                             else {
                                 std::cout << "You picked an empty hold. You must choose an other hold." << std::endl;
-                                //std::cout << "However, the value of isNaked is " << isNaked << std::endl;
                             }
                         }
                         resTypeToAdd = chosenBoatholdResType;
@@ -772,8 +785,8 @@ namespace client {
                 case GAME_OVER_STATE:
                     std::cout << "Client now entering GAME_OVER_STATE\r\n" << std::endl;
 
-                    gameInstance->request(); // remains in GameOverState
-                    endloop = 1;
+                    gameInstance->request(); // display the results
+                    endloop = 1; // exit this game mode
                     break;
 
                 default :
