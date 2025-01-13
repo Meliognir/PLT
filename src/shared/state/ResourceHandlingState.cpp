@@ -23,6 +23,20 @@ void ResourceHandlingState::handle(){
 
         unsigned actionCounter = (unsigned) game->actionCounter;
 
+        // check the end condition:
+        if (!game->getGameOver()){
+            for(Player * pl : game->getPlayerList()){
+                if(pl->getPosition() == game->getMap()->getSize()){
+                    game->setGameOver(true);
+                }
+            }
+            if (game->getGameOver() && actionCounter % 2){
+                actionCounter++;
+            }
+        }
+
+        // transition to next state accordingly
+
         //fin des actions de tous les joueurs
         if(actionCounter >= game->getPlayerList().size()*2) {
             //end of turn

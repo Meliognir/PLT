@@ -100,8 +100,6 @@ namespace client {
             //cliquer aux bons endroits pour choisir le mode de jeu souhaité
             std::cout << "We hope you enjoyed your game !" << std::endl;
             std::string waitConfirm;
-            //wait user confirmation
-            std::cin >> waitConfirm;
         }
         running = false;
         return 0;
@@ -146,6 +144,8 @@ namespace client {
         int winnerBoatholdId;
 
         // Init every game loop command
+        engine::MapManager* mapManager;
+
         engine::AssignDice* assignDice;
         engine::ChooseCard* chooseCard;
         engine::AddToBoathold* addToBoathold;
@@ -169,7 +169,7 @@ namespace client {
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
                 
                     localGameConfigInit(); // is the soloGameConfigInit the same for every playing mode ?
-
+                    mapManager->setMapPtr(gameInstance->getMap());
                     gameInstance->request();
                     break;
 
@@ -306,13 +306,15 @@ namespace client {
                     switch (actionType)
                     {
                     case MOVE_FORWARD:
-                        activePlayer->moveWithDirection(currentDie, 1);
+                        //activePlayer->moveWithDirection(currentDie, 1);
+                        mapManager->movePlayer(activePlayer, 1, currentDie);
                         activePlayer->setHasMoved(true);
                         activePlayer->setHasToPay(true);
                         gettingResources = false;
                         break;
                     case MOVE_BACKWARD:
-                        activePlayer->moveWithDirection(currentDie, -1);
+                        //activePlayer->moveWithDirection(currentDie, -1);
+                        mapManager->movePlayer(activePlayer, -1, currentDie);
                         activePlayer->setHasMoved(true);
                         activePlayer->setHasToPay(true);
                         gettingResources = false;
@@ -336,7 +338,7 @@ namespace client {
                         gettingResources = true;
                         break;
                     default:
-                        std::cout << "You are now in the default case of the action card switch. How did you get there ??" << std::endl;
+                        std::cout << "You have played your last turn and the game is ending soon. You cannot play your night action." << std::endl;
                         break;
                     }
 
@@ -446,7 +448,8 @@ namespace client {
                                 }               
 
                                 //player moves backward
-                                activePlayer->moveWithDirection(1, -1);
+                                //activePlayer->moveWithDirection(1, -1);
+
                                 activePlayer->setHasMoved(true);
 
                                 //player's total resource quantity he can pay for resTypeToPay
@@ -490,18 +493,18 @@ namespace client {
                                 std::cout <<"there are: " << nbOpponent << " opponents on this tile\r\n"<< std::endl;
                                                 
                                 //duel only if there are players
-                                if (nbOpponent > 0) {
+                                if (nbOpponent <= 0 || gameInstance->getMap()->getResourceType(activePlayerPos) == "Port Royale") {
+                                    std::cout <<"Pon atencion Thorfinn, no tienes enemigos\r\n"<< std::endl;
+                                    activePlayer->setMustFight(false);
+                                    activePlayer->setHasToPay(true); //no enemy ? then it's time to pay your debt
+                                }
+                                else{
                                     std::cout <<" and Player: " << activePlayer->getName() << " must fight before he can pay the cost of this tile\r\n"<< std::endl;
                                     activePlayer->setMustFight(true);
                                     activePlayer->setAmountToPay(remainToPay);
                                     activePlayer->setResTypeToPay(resTypeToPay);
 
                                     activePlayer->setHasToPay(false);
-                                }
-                                else{
-                                    std::cout <<"Pon atencion Thorfinn, no tienes enemigos\r\n"<< std::endl;
-                                    activePlayer->setMustFight(false);
-                                    activePlayer->setHasToPay(true); //no enemy ? then it's time to pay your debt
                                 }
                             }
                         }
@@ -890,10 +893,11 @@ namespace client {
         engine::ChooseAI* chooseAI;
         engine::ChoosePlayerName* choosePlayerName;
         engine::ChooseMapSize* chooseMapSize;
-        engine::ResourceManager resource_manager;
+        engine::ResourceManager* resourceManager;
         
         state::Game *gameInstance = gameEngine->game;
         gameInstance->setTurn(0);
+
         // Sets number of player
         int playerNumber = inputHandler.getNumberofPlayers();
         std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
@@ -941,9 +945,9 @@ namespace client {
             std::vector<state::Treasure> initialTreasures = { state::Treasure(0, 0) };
             player->setTreasures(initialTreasures);
             auto goldResource = make_unique<state::Gold>();
-            resource_manager.addResourcesToBoathold(player,std::move(goldResource), 3, 0);
+            resourceManager->addResourcesToBoathold(player,std::move(goldResource), 3, 0);
             auto foodResource = make_unique<state::Food>();
-            resource_manager.addResourcesToBoathold(player,std::move(foodResource), 3, 1);    
+            resourceManager->addResourcesToBoathold(player,std::move(foodResource), 3, 1);    
         }
 
         // Displays Tiles' cost

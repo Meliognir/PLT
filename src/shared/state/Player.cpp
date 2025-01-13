@@ -95,9 +95,7 @@ void Player::moveWithDirection (int distance, int direction){ // ajouter taille 
     int currentPos = this->getPosition();
     signed int nextPos = currentPos + distance*direction;
     std::cout << "nextPos: " << nextPos << "\r\n" << std::endl;
-    //if(nextPos > 0){this->setPosition(nextPos);}
-    //if(nextPos > Map::getSize()){this->setPosition(Map::getSize());}
-    //if(nextPos < 0){this->setPosition(0);}
+    //if(nextPos >= Map::getSize()){this->setPosition(Map::getSize());}
     this->setPosition(nextPos);
 }
 

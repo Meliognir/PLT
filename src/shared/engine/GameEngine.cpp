@@ -1,4 +1,6 @@
 #include "GameEngine.h"
+#include "MapManager.h"
+#include "ResourceManager.h"
 #include "../state.h"
 #include "../state/GameOverState.h"
 #include "../../client/client.h"
