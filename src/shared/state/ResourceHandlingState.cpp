@@ -28,10 +28,13 @@ void ResourceHandlingState::handle(){
             for(Player * pl : game->getPlayerList()){
                 if(pl->getPosition() == game->getMap()->getSize()){
                     game->setGameOver(true);
+                    std::cout <<"\nSetting the game over signal..."<< std::endl;
                 }
             }
-            if (game->getGameOver() && !(actionCounter % 2)){
+            if (game->getGameOver() && (actionCounter % 2)){
                 actionCounter++;
+                game->actionCounter = actionCounter;
+                std::cout <<"\nTherefore, skipping the night turn..."<< std::endl;
             }
         }
 
