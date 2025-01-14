@@ -157,7 +157,8 @@ namespace client {
         engine::StealResource* stealResource;
 
         // Game loop State behavior
-        int endloop = 0;
+        bool endloop = false;
+        int gameDays = 0;
         std::string waitConfirm;
         std::cout << "Client now entering the game loop\r\n" << std::endl;
         while (!endloop){
@@ -171,6 +172,7 @@ namespace client {
                 
                     localGameConfigInit();
                     mapManager->setMapPtr(gameInstance->getMap());
+                    gameDays = 0;
                     gameInstance->request();
                     break;
 
@@ -548,6 +550,11 @@ namespace client {
                     }
 
                     gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
+                    gameDays++;
+                    if (gameDays == 3000){
+                        std::cout << "You all should just give up at this point." << std::endl;
+                        gameInstance->setGameOver(true);
+                    }
                     break;
 
 
@@ -799,7 +806,7 @@ namespace client {
                     std::cout << "Client now entering GAME_OVER_STATE\r\n" << std::endl;
 
                     gameInstance->request(); // display the results
-                    endloop = 1; // exit this game mode
+                    endloop = true; // exit this game mode
                     break;
 
                 default :
