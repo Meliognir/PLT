@@ -158,14 +158,14 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 >
 >#### 2-Eléments mobiles
 > Il s'agit du bâteau se déplaçant sur les cases, représenté par Player dans le state.dia, il possède les attributs de la photo suivante :
->>![Image de la classe Player](rapport/images/Player1.3.png "Image classe Player")
+>>![Image de la classe Player](rapport/images/Player1.4.png "Image classe Player")
 > On voit que pour la localisation sur la map nous avons un int position. Celui-ci détermine la position du player dans le tableau de la map.
 > Chaque Player à un playerID et un Name qui servent à identifier un player.
 > Il possède aussi tous les éléments qui nous permettent de vérifier chaque règle et effectuer les actions voulues.
 
 
 >### 2.2 Conception logiciel
->>![Image du state.dia](rapport/images/state1.2.png "Images state.dia")
+>>![Image du state.dia](rapport/images/State1.3.png "Images state.dia")
 >Ceci est une version du state.dia dans sa globalité, nous allons par la suite détailler les états des parties importantes et visibles pour le joueur.
 > 
 > **Classe Player** : comme vu ci-dessus player la classe player possède un getter de sa position. De plus la classe possède toutes les caractéristiques pour 
@@ -175,7 +175,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 > **Classe Game** : la classe game, elle (voir en dessous), permet de passer d'un état à un autre en passant par la classe state et la méthode transitionTo.
 > Dans cette classe, on retient qui a été le capitaine du tour en cours, on regarde les modifcations apportés à la map par les commandes de l'engine.
->![Image du de la classe Game](rapport/images/Game1.2.png "Image state.dia")
+>![Image du de la classe Game](rapport/images/Game1.3.png "Image state.dia")
 > 
 > - [https://refactoring.guru/design-patterns/state](./https://refactoring.guru/design-patterns/state)  
 >
@@ -191,8 +191,8 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 > **Classes ActionCard, Treasure, BoatHold** : 
 > 
->![Image du des classes ActionCard, BoatHold et Treasure](rapport/images/BoatHold1.1.png "Image des classe ActionCard, Boathold et Treasure.")
-> 
+>![Image des classes ActionCard, BoatHold et Treasure](rapport/images/BoatHold1.2.png "Image des classe ActionCard, Boathold et Treasure.")
+
 >> - **Treasure** : pour l'instant un trésor n'est qu'un bonus ou malus de gold, il ne s'agit donc que d'entier à ajouter ou enlever dans le décompte final de gold.
 >> - **BoatHold** : c'est une câle, donc on regarde si on doit ajouter ou non une ressource, si une cale d'un player est vide ou non... il s'agit principalement de getter des ressources de chaque boathold. 
 >>
@@ -203,7 +203,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 > 
 >**Classe Map** :
 >
->![Image de la classe Map](rapport/images/Map1.1.png "Image de la classe map.")
+>![Image de la classe Map](rapport/images/Map1.2.png "Image de la classe map.")
 > 
 >> La map est une liste de vecteur de type Tile qui sont représentées par ce qu'elle coûte, le nombre de players dessus ainsi que le nombre de trésors dessus. Le path n'est pas encore utilisé.
 > 
@@ -214,7 +214,7 @@ Lorsque  la pioche est épuisée et que l'on doit reprend une carte en main, on 
 Pour le rendu, on utilise la librairie SFML. On utilise une fenêtre SFML (sf::RenderWindow) pour afficher une fenêtre ou apparaitra le rendu du jeu. 
 On utilise nos propres images qu'on associe à des textures SFML (sf::Texture). On peut ensuite crée un ou plusieurs sprites (sf::Sprite) liés à une texture pour ensuite les afficher sur la fenêtre SFML grâce à la fonction draw() de sf::RenderWindow. Il y a aussi la possibilité d'afficher des textes (sf::Text) avec la police désirée (sf::Font).  
 >### 3.2 Conception logiciel**
->>![Image du render.dia](rapport/images/render1.0.png "Image du render.dia.")
+>>![Image du render.dia](rapport/images/render1.1.png "Image du render.dia.")
 >>StateLayer gère la machine à état, Renderer affiche les tous les sprites et HUD affiche le texte pour indiquer les actions aux joueurs. 
 
  ## 4-Règles de changement d'états et moteur de jeu 
@@ -243,7 +243,7 @@ On utilise nos propres images qu'on associe à des textures SFML (sf::Texture). 
 >>Le diagramme des classes pour le moteur du jeu est présenté ci-dessous. L’ensemble du moteur de jeu
 >>repose sur un patron de conception de type Command, et a pour but la mise en œuvre différée de commandes
 >>extérieures sur l’état du jeu.
-> ![Image des commandes et engine](rapport/images/engine-commande1.0.png "Image des commandes et de l'engine.")
+> ![Image des commandes et engine](rapport/images/engine-command1.1.png "Image des commandes et de l'engine.")
 >>>**Classes Command :** Le rôle de ces classes est de représenter une commande, quelque soit sa source. Notons bien que ces classes ne gère absolument pas l’origine des com-
 mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriquerons les instances de ces classes.
 >>>* AssignDice : demande le dé à mettre sur jour au joueur.
@@ -257,7 +257,9 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 >>>* ChoosePlayerName : permet aux joueurs de choisir leur pseudo.
 >>>* RollDice : génère deux dés de façon "random".
 >>>* StealResources : permet de voler des ressources après un combat.
->>>
+>>> ![Image de engine](rapport/images/engine1.0.png "Image de l'engine.")
+>>> L'engine est ce qui va dire au state de changer : il reçoit les informations du client et donne la commande à sur suivre pour qu'il y ait un changement d'état. 
+
 ## 5-Intelligence Artificiel
 >### 5.1 Stratégie
 >> #### 5.1.1 IA Random
@@ -280,7 +282,7 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 > ### 5.2 Conception logiciel
 >> Chaqu'une des IA fonctionne avec les mêmes fonctions qui diffèrent en complexité en fonction du niveau demandé.
 >> Voici le dia avec les fonctions de chaque IA :
->> ![Image de AI.dia](rapport/images/IA1.0.png "Image de IA.dia")
+>> ![Image de AI.dia](rapport/images/IA1.1.png "Image de IA.dia")
 > 
 > ## 6-Modularisation
 > 
@@ -293,8 +295,9 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 >> Malheureusement quand nous effectuons la commande 2 (runGameOnline) le serveur affiche à l'infini la même ligne qui demande un input sans que nous puissions avoir le temps de lui répondre.
 >> 
 >> ## 6.2 Conception logiciel 
->> Voici donc le dia du server, il est accompagné d'un main et d'un autre clientNetwork qui a la même fonctionnalité que le runGameOnline du client de src.  
->> ![Image de server.dia](rapport/images/server.png "Image du server.dia")
+>> Voici donc le dia du server, il est accompagné d'un main et d'un autre clientNetwork qui a la même fonctionnalité que le runGameOnline du client de src. 
+>> Il permet de se connecter à un serveur et de faire quelques actions.
+>> ![Image de server.dia](rapport/images/server1.1.png "Image du server.dia")
 >>
 > 
 >> La plupart des fonctions qui servent à modifier le jeu et donc les inputs sont le de client de src qui est donc le suivant :
