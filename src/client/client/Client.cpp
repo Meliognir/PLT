@@ -143,9 +143,10 @@ namespace client {
         state::Player* loser;
         int winnerBoatholdId;
 
-        // Init every game loop command
-        engine::MapManager* mapManager;
+        // Get the mapManager for movement logic
+        engine::MapManager* mapManager = new engine::MapManager();
 
+        // Init every game loop command
         engine::AssignDice* assignDice;
         engine::ChooseCard* chooseCard;
         engine::AddToBoathold* addToBoathold;
@@ -168,7 +169,7 @@ namespace client {
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
                 
-                    localGameConfigInit(); // is the soloGameConfigInit the same for every playing mode ?
+                    localGameConfigInit();
                     mapManager->setMapPtr(gameInstance->getMap());
                     gameInstance->request();
                     break;
@@ -306,14 +307,12 @@ namespace client {
                     switch (actionType)
                     {
                     case MOVE_FORWARD:
-                        //activePlayer->moveWithDirection(currentDie, 1);
                         mapManager->movePlayer(activePlayer, 1, currentDie);
                         activePlayer->setHasMoved(true);
                         activePlayer->setHasToPay(true);
                         gettingResources = false;
                         break;
                     case MOVE_BACKWARD:
-                        //activePlayer->moveWithDirection(currentDie, -1);
                         mapManager->movePlayer(activePlayer, -1, currentDie);
                         activePlayer->setHasMoved(true);
                         activePlayer->setHasToPay(true);
@@ -448,7 +447,7 @@ namespace client {
                                 }               
 
                                 //player moves backward
-                                //activePlayer->moveWithDirection(1, -1);
+                                mapManager->moveOneTileBack(activePlayer);
 
                                 activePlayer->setHasMoved(true);
 
