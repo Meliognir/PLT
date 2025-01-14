@@ -105,11 +105,6 @@ void Game::transitionTo(State *state){
     if (this->state != nullptr){
         delete this->state;
     }
-    for(Player * pl : this->playerList){
-        if(pl->getPosition() >= map->getSize()){
-            this->gameOver = true;
-        }
-    }
     this->state = state;
     this->state->setContext(this);
 }
