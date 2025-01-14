@@ -22,44 +22,45 @@ namespace state {
         //quand un joueur atteint la dernière tile chaque joueur fini son tour et on compte alors les points
         Player * winner;
         int maxScore = -50;
-        int positionEnding;
-        int playerScore;
         int mapSize = game->map->getSize();
+        int positionEnding;
+        int relativePosition;
+        int playerScore;
         for(Player * playerEnd : game->getPlayerList()) {
             positionEnding=playerEnd->getPosition();
+            relativePosition = positionEnding-mapSize;
             playerScore = 0;
             for(BoatHold *currentBoathold : playerEnd->getBoatHolds()){
                 if (currentBoathold->hasResourceType("Gold")) {
                     playerScore += currentBoathold->getQuantity();
                 }
             }
-            if (positionEnding <= mapSize - 15) {
+            if (relativePosition <= -15) {
                 playerScore -= 5;
             }
             else {
-                int relativePosition = positionEnding+1-mapSize;
-                if (relativePosition >= 0){
+                if (relativePosition == 0){
                     playerScore += 15;
                 }
                     else{
 
                     switch (relativePosition) {
-                        case 6:
+                        case -6:
                             playerScore += 0;
                             break;
-                        case 5:
+                        case -5:
                             playerScore += 1;
                             break;
-                        case 4:
+                        case -4:
                             playerScore += 3;
                             break;
-                        case 3:
+                        case -3:
                             playerScore += 5;
                             break;
-                        case 2:
+                        case -2:
                             playerScore += 7;
                             break;
-                        case 1:
+                        case -1:
                             playerScore += 10;
                             break;
                         default:
