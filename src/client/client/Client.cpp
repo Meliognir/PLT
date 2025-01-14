@@ -982,15 +982,6 @@ namespace client {
             std::cout<< "Trésors de "<< player->getName()<<" :" << std::endl;
         }
 
-        //Un std::unique_ptr est un pointeur intelligent qui garantit
-        //qu'il ne peut y avoir qu'un seul propriétaire de l'objet
-        //pointé, assurant ainsi une gestion mémoire automatique et
-        //une prévention des fuites de mémoire.
-        //En utilisant std::move, cela transfère directement l’objet
-        //au lieu d'en faire une copie, ce qui est essentiel pour les
-        //unique_ptr car ils ne peuvent pas être copiés. Sans std::move,
-        //cela ne compilerait pas car un unique_ptr ne supporte pas la copie
-
         return 0;
     }
     void Client::update(const std::string &eventType, const std::string &data){
