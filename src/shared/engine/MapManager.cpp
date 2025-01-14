@@ -24,7 +24,7 @@ void MapManager::movePlayer(state::Player *player, int direction, int value)
     int nextPosition = player->getPosition()+value*direction;
     //int nextPath = player->getPath();
                                                     
-    int lastTile = mapPtr->getSize()-1;
+    int lastTile = mapPtr->getSize();
     if (nextPosition > lastTile) nextPosition = lastTile;
     /*
     if (Map->path1.at(nextPosition % map.getSize()).isForking()){
