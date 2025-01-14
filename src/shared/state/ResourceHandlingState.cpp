@@ -30,7 +30,7 @@ void ResourceHandlingState::handle(){
                     game->setGameOver(true);
                 }
             }
-            if (game->getGameOver() && actionCounter % 2){
+            if (game->getGameOver() && !(actionCounter % 2)){
                 actionCounter++;
             }
         }

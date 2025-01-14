@@ -492,7 +492,7 @@ namespace client {
                                 std::cout <<"there are: " << nbOpponent << " opponents on this tile\r\n"<< std::endl;
                                                 
                                 //duel only if there are players
-                                if (nbOpponent <= 0 || gameInstance->getMap()->getResourceType(activePlayerPos) == "Port Royale") {
+                                if (nbOpponent <= 0 || gameInstance->getMap()->getResourceType(activePlayerPos) == "Port Royal") {
                                     std::cout <<"Pon atencion Thorfinn, no tienes enemigos\r\n"<< std::endl;
                                     activePlayer->setMustFight(false);
                                     activePlayer->setHasToPay(true); //no enemy ? then it's time to pay your debt
