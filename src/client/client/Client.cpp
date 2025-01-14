@@ -172,6 +172,7 @@ namespace client {
                 
                     localGameConfigInit();
                     mapManager->setMapPtr(gameInstance->getMap());
+                    gameDays = 0;
                     gameInstance->request();
                     break;
 
