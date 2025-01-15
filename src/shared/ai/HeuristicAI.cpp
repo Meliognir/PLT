@@ -13,17 +13,31 @@
 
 #define HEURISTIC_PLACE_HOLDER 1
 
+std::vector <int> ai::HeuristicAI::takenNamesIndex = {};
+
+std::string getHeuristicName(std::vector <int> *takenNamesIndex){
+    std::vector <std::string> nameList = {"Master Yoda", "Master Oogway", "Master Roshi", "Professor Chen", "Professor X", "Professor Tournesol"};
+    int select;
+    bool validName = false;
+    while (!validName){
+        validName = true;
+        select = rand()%nameList.size();
+        for (int takenIndex : *takenNamesIndex){
+            validName = validName && (select != takenIndex);
+        }
+    }
+    (*takenNamesIndex).push_back(select);
+    return nameList.at(select);
+}
 
 ai::HeuristicAI::HeuristicAI(state::Game* game): AI(game) {
-
-
 }
 
 
 std::string ai::HeuristicAI::getPlayerName(int playerIndex){
     std::string playerName;
-    std::cout << "Enter name for player : Moyen";
-    playerName= "Moyen";
+    std::cout << "Enter name for player : ";
+    playerName= getHeuristicName(&takenNamesIndex);
     return playerName;
 }
 

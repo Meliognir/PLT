@@ -17,6 +17,24 @@
 
 #define DEEP_PLACE_HOLDER 1
 
+std::vector <int> ai::DeepAI::takenNamesIndex = {};
+
+std::string getDeepName(std::vector <int> *takenNamesIndex){
+    std::vector <std::string> nameList = {"Doctor Who", "Doctor Chopper", "Doctor Strange", "Doctor Frankenstein", "Doctor Watson", "Doctor House"};
+    int select;
+    bool validName = false;
+    while (!validName){
+        validName = true;
+        select = rand()%nameList.size();
+        for (int takenIndex : *takenNamesIndex){
+            validName = validName && (select != takenIndex);
+        }
+    }
+    (*takenNamesIndex).push_back(select);
+    return nameList.at(select);
+}
+
+
 ai::DeepAI::DeepAI(state::Game* game): AI(game) {
 
 }
@@ -59,16 +77,10 @@ std::vector<int> getOtherPlayerBehavior(std::vector<state::Player *> playerList)
 
 
 
-
-
-
-
-
-
 std::string ai::DeepAI::getPlayerName(int playerIndex){
     std::string playerName;
-    std::cout << "Enter name for player : Deep";
-    playerName= "Deep";
+    std::cout << "Enter name for player : ";
+    playerName= getDeepName(&takenNamesIndex);
     return playerName;
 }
 
