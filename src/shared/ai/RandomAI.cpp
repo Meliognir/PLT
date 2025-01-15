@@ -15,7 +15,7 @@ int getRandomInput(int min, int max) {
 }
 
 std::string getRandName(std::vector <int> *takenNamesIndex){
-    std::vector <std::string> nameList = {"Joke6", "Joke5", "Joke4", "Joke3", "Joke2", "Joke1"};
+    std::vector <std::string> nameList = {"Luffy", "Flunky", "Pikachu", "Macron", "E.T.", "Wormtail", "The Grinch", "Groot", "Yoshi", "Toad", "Garfield", "Homer", "Tinky Winky", "Kon", "Happy", "Powder", "Vomito"};
     int select;
     bool validName = false;
     while (!validName){

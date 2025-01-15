@@ -20,7 +20,7 @@
 std::vector <int> ai::DeepAI::takenNamesIndex = {};
 
 std::string getDeepName(std::vector <int> *takenNamesIndex){
-    std::vector <std::string> nameList = {"Doctor Who", "Doctor Chopper", "Doctor Strange", "Doctor Frankenstein", "Doctor Watson", "Doctor House"};
+    std::vector <std::string> nameList = {"Doctor Who", "Doctor Chopper", "Doctor Strange", "Doctor Frankenstein", "Doctor Watson", "Doctor House", "Doctor Heisenberg"};
     int select;
     bool validName = false;
     while (!validName){

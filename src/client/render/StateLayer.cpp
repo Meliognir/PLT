@@ -75,7 +75,9 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
                 int captainIndex = game->getCaptainIndex();
                 state::Player * captain = game->getPlayerList().at(captainIndex);
-                 renderer->renderBoatholds(*window, captain, 0);
+                std::vector<int> playerHand = captain->getHandCards();
+                renderer->renderHand(*window, playerHand);
+                renderer->renderBoatholds(*window, captain, 0);
                 instHUD->askDayDice(*window, client::Client::die1, client::Client::die2, captain->getName());
                 break;
             }
