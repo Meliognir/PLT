@@ -351,7 +351,7 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
 
     for (i = 0; i<boatHoldCount; i++){
         boatholdSprite.setTextureRect(sf::IntRect(530,0, 90, 90));
-        boatholdSprite.setPosition(100+i*100, 300 + offset); //TODO : scale
+        boatholdSprite.setPosition(100+i*100, 150 + offset); //TODO : scale
         state::BoatHold* hold = boatholds[i];
         resourceSprite.setTextureRect(sf::IntRect(600,175,1,1));
         if (hold->getResourceType()=="Food"){
@@ -363,7 +363,7 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
         if (hold->getResourceType()=="Canon"){
             resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
         }
-        resourceSprite.setPosition(100+i*100, 300 + offset);
+        resourceSprite.setPosition(100+i*100, 150 + offset);
         quantityText.setString(std::to_string(hold->getQuantity()));  
         quantityText.setPosition(100+i*105, 320 + offset);
 
