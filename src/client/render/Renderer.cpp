@@ -365,7 +365,7 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
         }
         resourceSprite.setPosition(100+i*100, 150 + offset);
         quantityText.setString(std::to_string(hold->getQuantity()));  
-        quantityText.setPosition(100+i*105, 320 + offset);
+        quantityText.setPosition(100+i*105, 150 + offset);
 
         window.draw(boatholdSprite);
         window.draw(resourceSprite);
