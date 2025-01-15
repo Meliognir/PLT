@@ -8,10 +8,27 @@
 #include <iostream>
 #include <cstdlib>
 
+std::vector <int> ai::RandomAI::takenNamesIndex = {};
 
 int getRandomInput(int min, int max) {
     return min + std::rand() % ((max - min) + 1);
 }
+
+std::string getRandName(std::vector <int> *takenNamesIndex){
+    std::vector <std::string> nameList = {"Joke6", "Joke5", "Joke4", "Joke3", "Joke2", "Joke1"};
+    int select;
+    bool validName = false;
+    while (!validName){
+        validName = true;
+        select = rand()%nameList.size();
+        for (int takenIndex : *takenNamesIndex){
+            validName = validName && (select != takenIndex);
+        }
+    }
+    (*takenNamesIndex).push_back(select);
+    return nameList.at(select);
+}
+
 
 ai::RandomAI::RandomAI(state::Game* game): AI(game) {}
 
@@ -19,8 +36,8 @@ ai::RandomAI::RandomAI(state::Game* game): AI(game) {}
 
 std::string ai::RandomAI::getPlayerName(int playerIndex){
     std::string playerName;
-    std::cout << "Enter name for player : Débutant" << std::endl;
-    playerName= "Débutant";
+    std::cout << "Enter name for player : " << std::endl;
+    playerName = getRandName(&takenNamesIndex);
     return playerName;
 }
 

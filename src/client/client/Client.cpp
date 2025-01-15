@@ -2,6 +2,7 @@
 #include "state.h"
 #include "state/Player.h"
 #include "../shared/engine.h"
+#include "../shared/ai.h"
 
 #include <iostream>
 #include <limits>
@@ -169,7 +170,9 @@ namespace client {
 
                 case GAME_CONFIG_STATE:
                     std::cout << "Client now entering GAME_CONFIG_STATE\r\n" << std::endl;
-                
+                    ai::DeepAI::takenNamesIndex = {};
+                    ai::HeuristicAI::takenNamesIndex = {};
+                    ai::RandomAI::takenNamesIndex = {};
                     localGameConfigInit();
                     mapManager->setMapPtr(gameInstance->getMap());
                     gameDays = 0;
