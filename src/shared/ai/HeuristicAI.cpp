@@ -16,7 +16,7 @@
 std::vector <int> ai::HeuristicAI::takenNamesIndex = {};
 
 std::string getHeuristicName(std::vector <int> *takenNamesIndex){
-    std::vector <std::string> nameList = {"Master Yoda", "Master Oogway", "Master Roshi", "Professor Chen", "Professor X", "Professor Tournesol"};
+    std::vector <std::string> nameList = {"Master Yoda", "Master Oogway", "Master Roshi", "Professor Chen", "Professor X", "Professor Tournesol", "Professor Sadok", "Professor Tauvel", "Professor Bares", "Professor Nguyen"};
     int select;
     bool validName = false;
     while (!validName){
