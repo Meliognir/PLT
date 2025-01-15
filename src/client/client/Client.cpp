@@ -9,6 +9,9 @@
 #include <bits/unique_ptr.h>
 #include "Client.h"
 
+#include <thread>
+#include <chrono>
+
 // ---- Network includes --------
 #include "../../server/server/NetworkClient.h"
 #include <cstring>
@@ -43,6 +46,7 @@
 #define ONLINE_MULTIPLAYER 2
 //#define DUEL_GAME 3
 
+#define WAIT std::this_thread::sleep_for(std::chrono::milliseconds(500))
 
 template <typename T, typename... Args>
 std::unique_ptr<T> make_unique(Args&&... args) {
@@ -160,7 +164,7 @@ namespace client {
         // Game loop State behavior
         bool endloop = false;
         int gameDays = 0;
-        std::string waitConfirm;
+        //std::string waitConfirm;
         std::cout << "Client now entering the game loop\r\n" << std::endl;
         while (!endloop){
 
@@ -452,6 +456,7 @@ namespace client {
                                 }               
 
                                 //player moves backward
+                                WAIT;
                                 mapManager->moveOneTileBack(activePlayer);
 
                                 activePlayer->setHasMoved(true);
@@ -552,12 +557,15 @@ namespace client {
                         }
                     }
 
-                    gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
                     gameDays++;
                     if (gameDays == 3000){
                         std::cout << "You all should just give up at this point." << std::endl;
                         gameInstance->setGameOver(true);
                     }
+                    
+                    WAIT;
+                    gameInstance->request(); // from resourcehandlingstate to OpponentChoicestate or CardActionState if condition
+                    
                     break;
 
 
