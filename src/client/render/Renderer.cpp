@@ -202,7 +202,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             playerSprite.setTextureRect(sf::IntRect(0, 0, spriteWidth, spriteHeight));
             playerSprite.setOrigin(spriteWidth/2, spriteHeight/2);
             playerSprite.setScale(sf::Vector2f(1.f, 1.f));
-            playerSprite.setPosition(x + 16*i - 32, y + 16*i - 32);
+            playerSprite.setPosition(x + 16*i - 10, y + 16*i - 10);
 
             // Créer et configurer le texte pour le nom du joueur
             sf::Text playerNameText;
@@ -211,7 +211,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             playerNameText.setCharacterSize(16);
             playerNameText.setFillColor(playerColors[i % playerColors.size()]);  
             playerNameText.setStyle(sf::Text::Bold);
-            playerNameText.setPosition(x - spriteWidth / 2 + 16*i - 32, y + spriteHeight / 2 + 5 + 16*i - 32);  // Position sous le sprite
+            playerNameText.setPosition(x - spriteWidth / 2 + 16*i - 10, y + spriteHeight / 2 + 5 + 16*i - 10);  // Position sous le sprite
 
             window.draw(playerSprite);
             window.draw(playerNameText);
