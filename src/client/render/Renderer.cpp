@@ -97,37 +97,40 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             tileSprite.setTextureRect(sf::IntRect(32+4*tileWidth, 96, tileWidth, tileHeight)); // Première tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
+            tileSprite.setScale(sf::Vector2f(0.3f,0.3f));
             resourceSprite.setTextureRect(sf::IntRect(30, 29, 30, 30));
             resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
-            resourceSprite.setPosition(x, y);
-            //resourceSprite.setScale(sf::Vector2f(0.2f,0.2f));
+            resourceSprite.setPosition(x+15, y+15);
+            resourceSprite.setScale(sf::Vector2f(0.7f,0.7f));
             window.draw(tileSprite);
             window.draw(resourceSprite);
         } else if (tile->tileResourceType == "Gold") {
             tileSprite.setTextureRect(sf::IntRect(32+2*tileWidth, 96, tileWidth, tileHeight)); // Deuxième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
+            tileSprite.setScale(sf::Vector2f(0.3f,0.3f));
             resourceSprite.setTextureRect(sf::IntRect(60, 29, 30, 30));
             resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
-            resourceSprite.setPosition(x, y);
-            //resourceSprite.setScale(sf::Vector2f(0.2f,0.2f));
+            resourceSprite.setPosition(x+15, y+15);
+            resourceSprite.setScale(sf::Vector2f(0.7f,0.7f));
             window.draw(tileSprite);
             window.draw(resourceSprite);
         } else if (tile->treasureAvailable) {
             tileSprite.setTextureRect(sf::IntRect(32, 96, tileWidth, tileHeight)); // Troisième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
-            resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
+            tileSprite.setScale(sf::Vector2f(0.3f,0.3f));
+            /*resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
             resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
-            resourceSprite.setPosition(x, y);
-            //resourceSprite.setScale(sf::Vector2f(0.2f,0.2f));
+            resourceSprite.setPosition(x+15, y+15);
+            resourceSprite.setScale(sf::Vector2f(0.7f,0.7f));*/
             window.draw(tileSprite);
-            window.draw(resourceSprite);
+            //window.draw(resourceSprite);
         } else {
             portRoyalSprite.setTextureRect(sf::IntRect(0, 0, 192, 192)); // Par défaut (première tuile)
             portRoyalSprite.setOrigin(tileWidth / 2, tileHeight / 2);
-            //portRoyalSprite.setScale(sf::Vector2f(0.1f,0.1f));
-            portRoyalSprite.setScale(sf::Vector2f(0.5f,0.5f));
+            portRoyalSprite.setScale(sf::Vector2f(0.15f,0.15f));
+            //portRoyalSprite.setScale(sf::Vector2f(0.5f,0.5f));
             portRoyalSprite.setPosition(x-10, y-20);
             window.draw(portRoyalSprite);
         }
@@ -198,7 +201,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             playerSprite.setTexture(playerTexture);
             playerSprite.setTextureRect(sf::IntRect(0, 0, spriteWidth, spriteHeight));
             playerSprite.setOrigin(spriteWidth/2, spriteHeight/2);
-            playerSprite.setScale(sf::Vector2f(2.f, 2.f));
+            playerSprite.setScale(sf::Vector2f(1.f, 1.f));
             playerSprite.setPosition(x + 16*i - 32, y + 16*i - 32);
 
             // Créer et configurer le texte pour le nom du joueur
