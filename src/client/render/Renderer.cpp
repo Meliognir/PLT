@@ -456,6 +456,7 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+
     int i;
     sf::Text quantityText;
     quantityText.setFont(font);    
@@ -464,7 +465,7 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
 
     for (i = 0; i<boatHoldCount; i++){
         boatholdSprite.setTextureRect(sf::IntRect(530,0, 90, 90));
-        boatholdSprite.setPosition(100+i*100, 150 + offset); //TODO : scale
+        boatholdSprite.setPosition(0.7f * windowWidth +i*windowWidth/36.f, 0.2f * windowHeight + offset); //TODO : scale
         state::BoatHold* hold = boatholds[i];
         resourceSprite.setTextureRect(sf::IntRect(600,175,1,1));
         if (hold->getResourceType()=="Food"){
@@ -476,12 +477,15 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
         if (hold->getResourceType()=="Canon"){
             resourceSprite.setTextureRect(sf::IntRect(90, 29, 30, 30));
         }
-        resourceSprite.setPosition(100+i*100, 150 + offset);
-        quantityText.setString(std::to_string(hold->getQuantity()));  
-        quantityText.setPosition(100+i*105, 150 + offset);
+        int resQuantity = hold->getQuantity();
+        resourceSprite.setPosition(0.7f * windowWidth +i*windowWidth/36.f, 0.21f * windowHeight + offset);
 
         window.draw(boatholdSprite);
         window.draw(resourceSprite);
-        window.draw(quantityText);
+        if (resQuantity) {
+            quantityText.setString(std::to_string(resQuantity));  
+            quantityText.setPosition(0.7f * windowWidth +(i+0.7f)*(windowWidth/36.f), 0.22f * windowHeight + offset);
+            window.draw(quantityText);
+        }
     }
 }
