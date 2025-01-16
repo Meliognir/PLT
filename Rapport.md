@@ -238,6 +238,8 @@ On utilise nos propres images qu'on associe à des textures SFML (sf::Texture). 
 >>>7) Le défenseur fait de même que l'attaquant.
 >>>8) Après un combat le gagnant choisi les ressources à voler au perdant.
 >>>9) Quand un joueur atteint la dernière case, on finit le tour puis on fait le décompte des points et on affiche l'or de chaque joueur.
+> ![Image des states](rapport/images/engine-StateMachinePLT.png "Image des states.")
+
 >### 4.4 Conception logiciel
 >>Le diagramme des classes pour le moteur du jeu est présenté ci-dessous. L’ensemble du moteur de jeu
 >>repose sur un patron de conception de type Command, et a pour but la mise en œuvre différée de commandes
