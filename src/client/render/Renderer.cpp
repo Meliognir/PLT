@@ -32,10 +32,10 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
     float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
     int mapSize = map.getSize();          // Nombre total de tuiles
     float mapScale = 1/((float)mapSize);
-    sf::Vector2f center(windowWidth/3.1f, windowHeight/2.f);        // Centre du cercle (positionné à gauche dans la fenêtre)
+    sf::Vector2f center(windowWidth/3.1f, windowHeight/2.05f);        // Centre du cercle (positionné à gauche dans la fenêtre)
     
     // Rayon du cercle
-    float radius = globalScale/2;
+    float radius = globalScale/1.7f;
     float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
 
     sf::Font font;
@@ -106,13 +106,23 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
         float angle = i * angleStep;
         float x = center.x + (radius *1.2f) * cos(angle);
         float y = center.y + radius * sin(angle);
+        
+        float separatorX = center.x + radius *(1.2f) * cos(angle+angleStep/2.f);
+        float separatorY = center.y + radius * sin(angle+angleStep/2.f);          
 
+        // Tracer une ligne (rayon) entre le centre et la position de la tuile
+        sf::Vertex line[] = {
+            sf::Vertex(sf::Vector2f(0.5f*(separatorX + center.x), 0.5f*(separatorY + center.y)), sf::Color::Black),
+            sf::Vertex(sf::Vector2f(separatorX, separatorY), sf::Color::Black)
+        };
+        window.draw(line, 2, sf::Lines);
+        
         // Déterminer quelle région de la texture utiliser en fonction de la ressource
         if (tile->tileResourceType == "Food") {
             tileSprite.setTextureRect(sf::IntRect(32+4*tileWidth, 96, tileWidth, tileHeight)); // Première tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
-            tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
+            tileSprite.setScale(sf::Vector2f(globalScale/1800.f, globalScale/1800.f));
             resourceSprite.setTextureRect(sf::IntRect(30, 29, 30, 30));
             resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             resourceSprite.setPosition(x+25, y+25);
@@ -123,7 +133,7 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             tileSprite.setTextureRect(sf::IntRect(32+2*tileWidth, 96, tileWidth, tileHeight)); // Deuxième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
-            tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
+            tileSprite.setScale(sf::Vector2f(globalScale/1800.f, globalScale/1800.f));
             resourceSprite.setTextureRect(sf::IntRect(60, 29, 30, 30));
             resourceSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             resourceSprite.setPosition(x+25, y+25);
@@ -134,28 +144,28 @@ void render::Renderer::renderMap(sf::RenderWindow &window, const state::Map &map
             tileSprite.setTextureRect(sf::IntRect(32, 96, tileWidth, tileHeight)); // Troisième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
-            tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
+            tileSprite.setScale(sf::Vector2f(globalScale/1800.f, globalScale/1800.f));
             treasureSprite.setTextureRect(sf::IntRect(8,9,22,19));
             treasureSprite.setOrigin(tileWidth / 2, tileHeight / 2);
-            treasureSprite.setPosition(x+35, y+35);
-            treasureSprite.setScale(sf::Vector2f(0.7f,0.7f));
+            treasureSprite.setPosition(x+30, y+30);
+            treasureSprite.setScale(sf::Vector2f(0.8f,0.8f));
             window.draw(tileSprite);
             window.draw(treasureSprite);
         } else if (tile->tileResourceType == "Port Royal") {
             portRoyalSprite.setTextureRect(sf::IntRect(0, 0, 192, 192)); // Par défaut (première tuile)
             portRoyalSprite.setOrigin(tileWidth / 2, tileHeight / 2);
-            portRoyalSprite.setScale(sf::Vector2f(globalScale/4000, globalScale/4000));
+            portRoyalSprite.setScale(sf::Vector2f(globalScale/3600.f, globalScale/3600.f));
             portRoyalSprite.setPosition(center.x - globalScale/80.0f + radius *1.2f, center.y - globalScale/80.0f);
             window.draw(portRoyalSprite);
         } else {
             tileSprite.setTextureRect(sf::IntRect(32, 96, tileWidth, tileHeight)); // Troisième tuile
             tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
             tileSprite.setPosition(x, y);
-            tileSprite.setScale(sf::Vector2f(globalScale/2000, globalScale/2000));
+            tileSprite.setScale(sf::Vector2f(globalScale/1800.f, globalScale/1800.f));
             treasureSprite.setTextureRect(sf::IntRect(48, 4, 22, 24));
             treasureSprite.setOrigin(tileWidth / 2, tileHeight / 2);
-            treasureSprite.setPosition(x+35, y+35);
-            treasureSprite.setScale(sf::Vector2f(0.7f,0.7f));
+            treasureSprite.setPosition(x+30, y+30);
+            treasureSprite.setScale(sf::Vector2f(0.8f,0.8f));
             window.draw(tileSprite);
             window.draw(treasureSprite);
         }
@@ -183,7 +193,7 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
-    sf::Vector2f center(windowWidth/3.1f, windowHeight/2.f);        // Centre du cercle (positionné à gauche dans la fenêtre)
+    sf::Vector2f center(windowWidth/3.1f, windowHeight/2.05f);        // Centre du cercle (positionné à gauche dans la fenêtre)
 
     sf::Texture playerTexture;
     if (!playerTexture.loadFromFile("../src/boardGameData/Boats.png")) {
@@ -275,12 +285,17 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             float mapScale = 1/((float)mapSize);
             
             // Rayon du cercle
-            float radius = globalScale/2;
+            float radius = globalScale/1.85f;
             float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
 
             float angle = playerPosition * angleStep;
+            /*
             float x = center.x + radius *(1.33f+ 0.05f*i) * cos(angle);
             float y = center.y + radius * (1.05f+ 0.05f*i) * sin(angle);
+            */
+
+            float x = center.x + radius *(1.15f - 0.11f*i) * cos(angle);
+            float y = center.y + radius * (0.95f - 0.11f*i) * sin(angle);  
 
             // Créer et configurer le sprite
             sf::Sprite playerSprite;
@@ -311,12 +326,18 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
             float mapScale = 1/((float)mapSize);
             
             // Rayon du cercle
-            float radius = globalScale/2;
+            float radius = globalScale/1.9f;
             float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
 
             float angle = playerPosition * angleStep;
+            /*
             float x = center.x + radius *(1.33f+ 0.05f*i) * cos(angle);
             float y = center.y + radius * (1.05f+ 0.05f*i) * sin(angle);
+            */
+
+            float x = center.x + radius *(1.15f - 0.15f*i) * cos(angle);
+            float y = center.y + radius * (0.95f - 0.15f*i) * sin(angle);  
+
 
             // Créer et configurer le texte pour le nom du joueur
             sf::Text playerNameText;
