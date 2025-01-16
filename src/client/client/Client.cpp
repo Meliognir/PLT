@@ -205,6 +205,18 @@ namespace client {
                     gameInstance->actionCounter = 0;
                     activePlayer = gameInstance->getPlayerList().at(captainIndex);
                     gameInstance->setTurn(turn + 1);
+
+
+                    //moves activeCard from handDeck to cardDeck
+                    turn = gameInstance->getTurn();
+                    if(turn > 1){
+                        for(state::Player * pl : gameInstance->getPlayerList()){
+                            pl->moveCardToDeck();
+                            pl->moveCardToHand();
+                        }
+                    }
+
+                    //roll new dice
                     die1 = rand()%6+1;
                     die2 = rand()%6+1;
                     std::cout << "Capitaine " << gameInstance->getPlayerList().at(captainIndex)->getName() << " : choisissez vos dés ! \r\n" << std::endl;
@@ -218,15 +230,6 @@ namespace client {
                     else{assignDice = new engine::AssignDice(die2, die1);}
                     assignDice->launchCommand(gameInstance);
                     delete assignDice;
-
-                    //moves activeCard from handDeck to cardDeck
-                    turn = gameInstance->getTurn();
-                    if(turn > 1){
-                        for(state::Player * pl : gameInstance->getPlayerList()){
-                            pl->moveCardToDeck();
-                            pl->moveCardToHand();
-                        }
-                    }
 
                     gameInstance->request();
                     break;
