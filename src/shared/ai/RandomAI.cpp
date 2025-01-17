@@ -42,15 +42,15 @@ std::string ai::RandomAI::getPlayerName(int playerIndex){
 }
 
 
-size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resType, int currentPlayerIndex, bool hasToPay){
+size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resType, int PlayerIndex, bool hasToPay){
     size_t index = 0;
     bool invalidInput = true;
 
-    if (currentPlayerIndex == -1){
-        currentPlayerIndex = gameView->getActivePlayerIndex();
+    if (PlayerIndex == -1){
+        PlayerIndex = gameView->getActivePlayerIndex();
     }
 
-    state::Player* currentPlayer = gameView->getPlayerList().at(currentPlayerIndex);
+    state::Player* currentPlayer = gameView->getPlayerList().at(PlayerIndex);
     std::vector <state::BoatHold *> currentPlayerBoatHolds = currentPlayer->getBoatHolds();
     std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
     while (invalidInput){

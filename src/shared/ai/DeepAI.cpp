@@ -86,7 +86,7 @@ std::string ai::DeepAI::getPlayerName(int playerIndex){
 }
 
 
-size_t ai::DeepAI::selectUserBoatHold(size_t boatHoldCount, std::string resType, int currentPlayerIndex, bool hasToPay){
+size_t ai::DeepAI::selectUserBoatHold(size_t boatHoldCount, std::string resType, int PlayerIndex, bool hasToPay){
     size_t index = 0;
     while (true) {
         std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
