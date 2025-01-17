@@ -68,7 +68,7 @@ void removeOneBoatHold(size_t boatHoldCount, std::vector<state::BoatHold *> cont
         // Trouver le BoatHold avec le moins de ressources et enlever ses ressources
         // Cela peut enlever des ressources Gold ou Food
         state::BoatHold* boatHoldWithLeastResources = nullptr;
-        int leastResourceAmount = SIZE_MAX;
+        int leastResourceAmount = 1000;
 
         for (state::BoatHold* bh : controlledBoatHold) {
             // Si plusieurs min trouvés, le premier trouvé est return
@@ -199,28 +199,106 @@ size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string res
 
 //IDEA : regarder les dés et tester les 3 combinaisons, même méthode que pour les dés dans la moitié des cas
 int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
+    
     std::cout << "Your 3 handCards:" << std::endl;
     for (size_t i = 0; i < handCards.size(); ++i) {
         std::cout << i + 1 << ". " << handCards[i] << std::endl;
     }
 
-    int choice;
-    bool foundNonCanonCard = false;
+    int cardValue;
+    state::ActionCard *actionCard;
+    int actionType;
+    int currentPos = controlledPlayer->getPosition();
+    int currentDie;
+    std::string resType;
+    int resCost;
+    int tempScore = 0;
+    int maxScore = -1000;
+    int maxScoreCard;
+    int malus = 0;
 
+    for (size_t i = 0; i < controlledPlayer->getHandCards().size(); i++) { // 3 handCards
 
-    for (size_t i = 0; i < handCards.size(); ++i) {
-        if (handCards[i] != 4 && handCards[i] != 5 && handCards[i] != 9 && handCards[i] != 10) {
-            choice = i ; // Adjust for 1-based index
-            foundNonCanonCard = true;
+        tempScore = 0;
+        for (int j = 0; j < 2; j++){ // day or night
+
+            cardValue = controlledPlayer->getHandCards().at(i);
+            actionCard = state::Game::collectionOfCards.at(cardValue);
+            if(j == 0){
+                currentDie = gameView->dayDie;
+                actionType = actionCard->getDayAction();
+            }
+            if(j == 1){
+                currentDie = gameView->nightDie;
+                actionType = actionCard->getNightAction();
+            }
+
+            switch (actionType)
+            {
+            case MOVE_FORWARD:
+                resType = gameView->getMap()->getResourceType(currentPos + currentDie);
+                resCost = gameView->getMap()->getResourceCost(currentPos + currentDie);
+                if(resType == "Gold"){
+                    malus = 1;
+                }
+                if(resType == "Food"){
+                    malus = 2;
+                }
+                tempScore = tempScore - malus*resCost;
+                break;
+            case MOVE_BACKWARD:
+                // reculer c'est grave
+                resType = gameView->getMap()->getResourceType(currentPos - currentDie);
+                resCost = gameView->getMap()->getResourceCost(currentPos - currentDie);
+                if(resType == "Gold"){
+                    malus = 1;
+                }
+                if(resType == "Food"){
+                    malus = 2;
+                }
+                tempScore = tempScore - malus*resCost*2;
+                break;
+            case ADD_FOOD:
+                tempScore += currentDie*2;
+                break;
+            case ADD_GOLD:
+                tempScore += currentDie*1;
+                break;
+            case ADD_CANONS:
+                // les canons ne sont pas utiles
+                tempScore -= 1;
+                break;
+            default:
+                std::cout << "AI : Error getting action type." << std::endl;
+                break;
+            }
+        }    
+        if(tempScore > maxScore){
+            maxScore = tempScore;
+            maxScoreCard = i;
         }
-        // If no cards without "CANON" are found, default to the first card
-        if (!foundNonCanonCard) {
-            choice = 1; // Default to the first card
-        }
+        
     }
 
-    std::cout << "AI : Chosen card index: " << choice << std::endl;
-    return choice;
+    return maxScoreCard;
+
+    // int choice;
+    // bool foundNonCanonCard = false;
+
+
+    // for (size_t i = 0; i < handCards.size(); ++i) {
+    //     if (handCards[i] != 4 && handCards[i] != 5 && handCards[i] != 9 && handCards[i] != 10) {
+    //         choice = i ; // Adjust for 1-based index
+    //         foundNonCanonCard = true;
+    //     }
+    //     // If no cards without "CANON" are found, default to the first card
+    //     if (!foundNonCanonCard) {
+    //         choice = 1; // Default to the first card
+    //     }
+    // }
+
+    // std::cout << "AI : Chosen card index: " << choice << std::endl;
+    // return choice;
 }
 
 
@@ -241,8 +319,6 @@ bool ai::HeuristicAI::chooseTimeDice(int die1, int die2) {
     int maxScore = 0;
     int maxScoreDie;
     int malus = 0;
-
-    int choice;
 
     for (size_t i = 0; i < controlledPlayer->getHandCards().size(); i++) { // 3 handCards
 
