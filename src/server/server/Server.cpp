@@ -11,7 +11,7 @@
 bool starts_with(const std::string& str, const std::string& prefix) { return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0; }
 namespace server {
 
-Server::Server() : nextClientId(0), listenerFd(-1), maxFd(0) {
+Server::Server() : nextClientId(0), maxFd(0), listenerFd(-1) {
     FD_ZERO(&masterSet); // Initialiser l'ensemble des sockets
 }
 
