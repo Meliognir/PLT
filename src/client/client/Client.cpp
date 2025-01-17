@@ -224,12 +224,15 @@ namespace client {
                     //roll new dice
                     die1 = rand()%6+1;
                     die2 = rand()%6+1;
+                    assignDice = new engine::AssignDice(die1, die2);
+                    assignDice->launchCommand(gameInstance);
+                    delete assignDice;
                     std::cout << "Capitaine " << gameInstance->getPlayerList().at(captainIndex)->getName() << " : choisissez vos dés ! \r\n" << std::endl;
                     if (activePlayer->get_AI()==nullptr){ //real player
                         chosenDice = inputHandler.chooseTimeDice(die1, die2);
                     }
                     else { // AI input
-                        activePlayer->get_AI()->chooseTimeDice(die1, die2);
+                        chosenDice = activePlayer->get_AI()->chooseTimeDice(die1, die2);
                     }
                     if (chosenDice == 1){assignDice = new engine::AssignDice(die1, die2);}
                     else{assignDice = new engine::AssignDice(die2, die1);}

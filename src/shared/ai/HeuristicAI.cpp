@@ -1,7 +1,3 @@
-//
-// Created by trias on 18/12/24.
-//
-
 #include "AI.h"
 #include "HeuristicAI.h"
 #include <iostream>
@@ -12,6 +8,16 @@
 #include <state/Player.h>
 
 #define HEURISTIC_PLACE_HOLDER 1
+
+#define MOVE_FORWARD 0
+#define MOVE_BACKWARD 1
+#define ADD_FOOD 2
+#define ADD_GOLD 3
+#define ADD_CANONS 4
+
+//------------------------------------------------------
+// Ceci est une AI pacifique mais meilleure que RandomAI
+//------------------------------------------------------
 
 std::vector <int> ai::HeuristicAI::takenNamesIndex = {};
 
@@ -62,7 +68,7 @@ void removeOneBoatHold(size_t boatHoldCount, std::vector<state::BoatHold *> cont
         // Trouver le BoatHold avec le moins de ressources et enlever ses ressources
         // Cela peut enlever des ressources Gold ou Food
         state::BoatHold* boatHoldWithLeastResources = nullptr;
-        size_t leastResourceAmount = SIZE_MAX;
+        int leastResourceAmount = SIZE_MAX;
 
         for (state::BoatHold* bh : controlledBoatHold) {
             // Si plusieurs min trouvés, le premier trouvé est return
@@ -75,7 +81,7 @@ void removeOneBoatHold(size_t boatHoldCount, std::vector<state::BoatHold *> cont
         if (boatHoldWithLeastResources) {
             // condition vraie normalement
             if (leastResourceAmount > 0) {
-                boatHoldWithLeastResources->removeResource(leastResourceAmount);
+                boatHoldWithLeastResources->removeResource(leastResourceAmount); // à faire par l'engine
                 std::cout << "AI : Removed resources (Gold or Food) from BoatHold with the least resources." << std::endl;
             }
         }
@@ -87,10 +93,9 @@ void removeOneBoatHold(size_t boatHoldCount, std::vector<state::BoatHold *> cont
 
 
 // -changer client.cpp car il y a trop de répétition de code, cela devient difficile de gérer tous les cas de selectUserBoatHold
-// -changer de nom currentPlayerIndex en playerIndex juste pour spécifier le joueur cible, si non init ( = -1 ) alors le joueur est l'IA
 // -client.cpp devrait tout le temps appeler avec les 3 inputs, ce n'est pas le cas
 // -l'IA devrait passer par des commandes dans engine pour modifier ses Boatholds
-size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string resType, int currentPlayerIndex, bool hasToPay) {
+size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string resType, int PlayerIndex, bool hasToPay) {
     size_t index = 0;
     std::vector<state::BoatHold *> controlledBoatHold = controlledPlayer->getBoatHolds();
     int stateId = gameView->state->getStateId();
@@ -127,15 +132,16 @@ size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string res
         if(stateId == 8){
 
             // Voler loser player donné par client.cpp
-            if(currentPlayerIndex != -1){
+//IDEA : voler gold, food si j'ai besoin de gold, food
+            if(PlayerIndex != -1){
                 std::cout << "AI : Stealing loser's Resources." << std::endl;
 
-                state::Player* loser = gameView->getPlayerList().at(currentPlayerIndex);
+                state::Player* loser = gameView->getPlayerList().at(PlayerIndex);
                 std::vector<state::BoatHold *> boatholdsToSteal = loser->getBoatHolds();
 
                 // Calculer la Ressource avec le plus de quantité de Gold ou Food
                 int i = 0;
-                size_t maxAmount = 0;
+                int maxAmount = 0;
                 for(state::BoatHold* bh : boatholdsToSteal){
                     if (bh->hasResourceType("Gold") || bh->hasResourceType("Food")){
                         if(bh->getQuantity() > maxAmount){
@@ -191,6 +197,7 @@ size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string res
 }
 
 
+//IDEA : regarder les dés et tester les 3 combinaisons, même méthode que pour les dés dans la moitié des cas
 int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
     std::cout << "Your 3 handCards:" << std::endl;
     for (size_t i = 0; i < handCards.size(); ++i) {
@@ -218,50 +225,116 @@ int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
 
 
 
-
+//IDEA : regarder les 6 combinaisons
+// avancer > gold > food > canon > reculer
 bool ai::HeuristicAI::chooseTimeDice(int die1, int die2) {
-    std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
-              << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
+    std::cout << "AI : Chose the dayDie. The Other will be the nightDie. (1 or 2)\n"
+              << "Die 1 : " << die1 << " Die 2 : " << die2 << std::endl;
+    int cardValue;
+    state::ActionCard *actionCard;
+    int actionType;
+    int currentPos = controlledPlayer->getPosition();
+    int currentDie;
+    std::string resType;
+    int resCost;
+    int tempScore = 0;
+    int maxScore = 0;
+    int maxScoreDie;
+    int malus = 0;
+
     int choice;
-    bool foundNonCanonCard = false;
 
+    for (size_t i = 0; i < controlledPlayer->getHandCards().size(); i++) { // 3 handCards
 
-    for (size_t i = 0; i < controlledPlayer->getHandCards().size(); ++i) {
-        if (controlledPlayer->getHandCards().at(i) != 4 && controlledPlayer->getHandCards().at(i) != 5 && controlledPlayer->getHandCards().at(i) != 9 && controlledPlayer->getHandCards().at(i) != 10) {
-            choice = i ; // Adjust for 1-based index
-            foundNonCanonCard = true;
-        }
-        // If no cards without "CANON" are found, default to the first card
-        if (!foundNonCanonCard) {
-            choice = 1; // Default to the first card
+        for (int d = 0; d < 2; d++){ // die 1 or 2
+            tempScore = 0;
+            for (int j = 0; j < 2; j++){ // day or night
+
+                cardValue = controlledPlayer->getHandCards().at(i);
+                actionCard = state::Game::collectionOfCards.at(cardValue);
+
+                if(d == 0){
+                    if(j == 0){
+                        currentDie = die1;
+                        actionType = actionCard->getDayAction();
+                    }
+                    if(j == 1){
+                        currentDie = die2;
+                        actionType = actionCard->getNightAction();
+                    }
+                }
+                if(d == 1){
+                    if(j == 0){
+                        currentDie = die2;
+                        actionType = actionCard->getDayAction();
+                    }
+                    if(j == 1){
+                        currentDie = die1;
+                        actionType = actionCard->getNightAction();
+                    }
+                }
+
+                switch (actionType)
+                {
+                case MOVE_FORWARD:
+                    resType = gameView->getMap()->getResourceType(currentPos + currentDie);
+                    resCost = gameView->getMap()->getResourceCost(currentPos + currentDie);
+                    if(resType == "Gold"){
+                        malus = 1;
+                    }
+                    if(resType == "Food"){
+                        malus = 2;
+                    }
+                    tempScore = tempScore - malus*resCost;
+                    break;
+                case MOVE_BACKWARD:
+                    // reculer c'est grave
+                    resType = gameView->getMap()->getResourceType(currentPos - currentDie);
+                    resCost = gameView->getMap()->getResourceCost(currentPos - currentDie);
+                    if(resType == "Gold"){
+                        malus = 1;
+                    }
+                    if(resType == "Food"){
+                        malus = 2;
+                    }
+                    tempScore = tempScore - malus*resCost*2;
+                    break;
+                case ADD_FOOD:
+                    tempScore += currentDie*2;
+                    break;
+                case ADD_GOLD:
+                    tempScore += currentDie*1;
+                    break;
+                case ADD_CANONS:
+                    // les canons ne sont pas utiles
+                    tempScore -= 1;
+                    break;
+                default:
+                    std::cout << "AI : Error getting action type." << std::endl;
+                    break;
+                }
+            }
+            if(tempScore > maxScore){
+                maxScore = tempScore;
+                maxScoreDie = d;
+            }
         }
     }
-
-
-        if (die1>=die2 && (controlledPlayer->getHandCards().at(choice)==1 ||controlledPlayer->getHandCards().at(choice)==3 ||controlledPlayer->getHandCards().at(choice)==0 ||controlledPlayer->getHandCards().at(choice)==7)) {
-            std::cout << "AI chose " <<die1 <<" as the day number."<< std::endl;
-            return die1;
-        } else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==1 ||controlledPlayer->getHandCards().at(choice)==3 ||controlledPlayer->getHandCards().at(choice)==0 ||controlledPlayer->getHandCards().at(choice)==7)) {
-            std::cout << "AI chose " <<die2 <<" as the day number and it's a good choice."<< std::endl;
-            return die2;
-        } else if (die1>=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
-            std::cout << "AI chose " <<die2 <<" as the day number and it's a good choice ."<< std::endl;
-            return die2;
-        }else if (die1<=die2 && (controlledPlayer->getHandCards().at(choice)==2 ||controlledPlayer->getHandCards().at(choice)==4 ||controlledPlayer->getHandCards().at(choice)==8)) {
-            std::cout << "AI chose " <<die1 <<" as the day number."<< std::endl;
-            return die1;
-        }else {
-            std::cout << "AI chose " <<die1 <<" as the day number."<< std::endl;
-            return die1;
-        }
+    if(maxScoreDie == 0){
+        return 1; // die1 day die
+    }
+    else{
+        return 0; // die1 night die
+    }
 }
 
 
-
+// L'AI met l'entièreté de ses canons en jeu, de toute manière elle n'aime pas la violence donc elle aura jeté ses canons avant
 int ai::HeuristicAI::chooseCanonNb(int totalNb){
     return totalNb;
 }
 
+// L'AI choisie l'opposant en fonction d'un score qui favorise peu de canon, assez de gold et food
 int ai::HeuristicAI::chooseOpponent(size_t listSize) {
     int bestOpponentIndex = 0;
     double highestScore = -std::numeric_limits<double>::infinity();
