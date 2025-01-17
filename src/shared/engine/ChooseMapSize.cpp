@@ -29,7 +29,7 @@ void const engine::ChooseMapSize::launchCommand (state::Game * GamePtr){
         int cost = rand()%2+rand()%3; // to get a better repartition with less treasures and less cost-3
         //reroll the cost if there are no more treasures available :
         while (!cost && treasureCount > MAX_TREASURES){
-            int cost = rand()%2+rand()%3;
+            cost = rand()%2+rand()%3;
         }
         if (cost){
             resource = 1+(int)((rand()%3)/2);

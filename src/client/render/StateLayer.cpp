@@ -16,7 +16,7 @@
 #define STEAL_RESOURCE_STATE 8
 #define GAME_OVER_STATE 9
 
-render::StateLayer::StateLayer(Renderer * renderer, HUD * hud, state::Game * game, sf::RenderWindow * window) : game(game), instHUD(hud), renderer(renderer), window(window){
+render::StateLayer::StateLayer(Renderer * renderer, HUD * hud, state::Game * game, sf::RenderWindow * window) : game(game), renderer(renderer), instHUD(hud), window(window){
 }
 
 void render::StateLayer::update(){

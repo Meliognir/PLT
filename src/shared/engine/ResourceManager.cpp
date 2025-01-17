@@ -91,12 +91,8 @@ void engine::ResourceManager::addResourcesToBoathold (state::Player *player, std
 }
 
 bool ResourceManager::checkBankrupt(state::Player * player, std::string resourceType, int price) {
-    for (state::BoatHold * boathold : player->getBoatHolds()) {
-        if (boathold->hasResourceType(resourceType)) {
-            if (boathold->getQuantity()>price) {
-                return true;
-            }
-        }
-        return false;
+    if (countResource(player, resourceType) < price) {
+        return true;
     }
+    return false;
 }

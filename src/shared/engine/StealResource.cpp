@@ -4,7 +4,7 @@
 
 namespace engine{
 
-StealResource::StealResource(int stolenBoatholdId, int winnerIndex, int loserIndex, int winnerBoatholdId) : stolenBoatholdId(stolenBoatholdId), winnerIndex(winnerIndex), loserIndex(loserIndex), winnerBoatholdId(winnerBoatholdId){}
+StealResource::StealResource(int stolenBoatholdId, int winnerIndex, int loserIndex, int winnerBoatholdId) : winnerIndex(winnerIndex), stolenBoatholdId(stolenBoatholdId), loserIndex(loserIndex), winnerBoatholdId(winnerBoatholdId){}
 
 void const StealResource::launchCommand(state::Game * GamePtr){
     state::Player* winner = GamePtr->getPlayerList()[winnerIndex];

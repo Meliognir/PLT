@@ -2,7 +2,7 @@
 
 namespace state{
 
-Treasure::Treasure(int bonusGold, int malusGold):bonusGold(bonusGold), malusGold(malusGold)
+Treasure::Treasure(int bonusGold, int malusGold):malusGold(malusGold), bonusGold(bonusGold)
 {
 }
 
