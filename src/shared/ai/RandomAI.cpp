@@ -42,7 +42,7 @@ std::string ai::RandomAI::getPlayerName(int playerIndex){
 }
 
 
-size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeToPay, int currentPlayerIndex){
+size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resType, int currentPlayerIndex, bool hasToPay){
     size_t index = 0;
     bool invalidInput = true;
 
@@ -55,11 +55,11 @@ size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resTyp
     std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
     while (invalidInput){
         index=getRandomInput(1, boatHoldCount);
-        if (resTypeToPay == ""){
+        if (resType == ""){
             invalidInput = false;
         }
         else{
-            if (currentPlayerBoatHolds.at(index-1)->hasResourceType(resTypeToPay)){
+            if (currentPlayerBoatHolds.at(index-1)->hasResourceType(resType)){
                 invalidInput = false;
             }
         }
