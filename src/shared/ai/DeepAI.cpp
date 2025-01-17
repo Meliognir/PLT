@@ -44,6 +44,7 @@ ai::DeepAI::DeepAI(state::Game* game): AI(game) {
 //get player density around me
 int getPlayerDensity(int nbPlayerAround, int mapSize){
     float playerDensity = 0;
+    //profondeur de densité
     int tileDepth = 2*mapSize/10;
     playerDensity = static_cast<int>(std::floor(nbPlayerAround/(tileDepth)));
     return playerDensity;
@@ -85,7 +86,7 @@ std::string ai::DeepAI::getPlayerName(int playerIndex){
 }
 
 
-size_t ai::DeepAI::selectUserBoatHold(size_t boatHoldCount, std::string resTypeToPay, int currentPlayerIndex){
+size_t ai::DeepAI::selectUserBoatHold(size_t boatHoldCount, std::string resType, int currentPlayerIndex, bool hasToPay){
     size_t index = 0;
     while (true) {
         std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
