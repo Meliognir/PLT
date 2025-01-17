@@ -95,7 +95,8 @@ Game::Game(State *state) {
 
         file.close();
     }catch (std::exception e){
-        std::cerr << "Le fichier de carte n'a pas été ouvert correctement..." << std::endl;
+        std::cerr << "Le fichier de cartes n'a pas été ouvert correctement..." << std::endl;
+        //TODO: do something here to stop the game
     }
 
 }

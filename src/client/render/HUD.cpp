@@ -123,7 +123,7 @@ void render::HUD::askCard(sf::RenderWindow &window, std::string playerName){
 }
 
 void render::HUD::askPlaceResource(sf::RenderWindow &window, std::string playerName, int boatholdCount, int amount, std::string resource){ //TODO33
-        sf::Font font;
+    sf::Font font;
     font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
@@ -165,7 +165,7 @@ void render::HUD::askOpponent(sf::RenderWindow &window, std::string playerName, 
     Text.setString(playerName + ", Choose an opponent, enter an index between 1 and" + std::to_string(players.size()));  
     Text.setPosition(windowWidth/100,windowHeight/25 );
     window.draw(Text);
-    int i;
+    size_t i;
     for (i=0; i<players.size(); i++){
         sf::Text playerText;
         playerText.setFont(font);
