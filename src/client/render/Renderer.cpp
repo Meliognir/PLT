@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include <cmath>
 #include <vector>
+#include <SFML/Graphics.hpp>
+#include <string>
 #include <iostream>
 #define PI 3.14159265358979323846
 #define WIDTHFAC 1.0
@@ -508,5 +510,59 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
             quantityText.setPosition(0.7f * windowWidth +(i+0.7f)*(windowWidth/36.f), 0.22f * windowHeight + offset);
             window.draw(quantityText);
         }
+    }
+}
+
+void render::Renderer::renderFinalAnimation(sf::RenderWindow &window)
+{
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+
+    // Dimensions of the animation
+    const int frameWidth = 400;
+    const int frameHeight = 379;
+    const int frameCount = 46;
+    const float frameDuration = 0.1f;
+    const float totalDuration = frameCount*frameDuration;
+
+    // Load the sprite sheet
+    sf::Texture spriteSheet;
+    if (!spriteSheet.loadFromFile("../src/boardGameData/SpritesJamaicaFireworks.png")) {
+        std::cerr << "Erreur : Impossible de charger la sprite sheet.\n";
+        return;
+    }
+
+    // Create the sprite
+    sf::Sprite sprite(spriteSheet);
+    sprite.setPosition(windowWidth/2.f, windowHeight/2.f); // Position du sprite à l'écran
+
+    // Define the first frame rectangle
+    sf::IntRect frameRect(0, 0, frameWidth, frameHeight);
+    sprite.setTextureRect(frameRect);
+
+    sf::Clock clock;       // Chronomètre pour les frames
+    int currentFrame = 0;  // Frame actuelle
+
+    // 
+    while (window.isOpen() && clock.getElapsedTime().asSeconds() < totalDuration) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        // Mettre à jour la frame en fonction du temps écoulé
+        if (clock.getElapsedTime().asSeconds() >= frameDuration) {
+            currentFrame = (currentFrame + 1) % frameCount; // Passer à la frame suivante
+            frameRect.left = currentFrame * frameWidth;    // Calculer la position horizontale de la frame
+            sprite.setTextureRect(frameRect);             // Appliquer la nouvelle frame
+            clock.restart();                              // Réinitialiser le chronomètre
+        }
+
+        // Afficher
+        window.clear(sf::Color::White);
+        window.draw(sprite);
+        window.display();
     }
 }
