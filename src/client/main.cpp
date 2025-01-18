@@ -31,7 +31,8 @@ int main(int argc,char* argv[])
     Game * game = client->gameInstance;
     render::Renderer* renderer = new render::Renderer();
     render::HUD* hud = new render::HUD();
-    render::StateLayer * stateLayer = new render::StateLayer(renderer, hud, game, window);
+    render::UserInputListener * userInputListener = new render::UserInputListener();
+    render::StateLayer * stateLayer = new render::StateLayer(game, renderer, hud, userInputListener, window);
     Observable::addObserver(stateLayer);
     // Démarrer le thread pour le client
     std::thread clientThread(clientThreadFunction, client);
