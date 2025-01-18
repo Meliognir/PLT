@@ -86,21 +86,33 @@ void render::UserInputListener::readInput(sf::RenderWindow *window, client::Inpu
                 break;
         }
     }
-    //echo(window);
 }
 
 void render::UserInputListener::echo(sf::RenderWindow *window)
 {
-    sf::Font font;
-    font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
-    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
-    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
-    sf::Text Text;
-    Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/50);
-    Text.setFillColor(sf::Color::Black);
-    Text.setString(userInput);  
-    Text.setPosition(8.f*windowWidth/10.f,19.f*windowHeight/20.f );
-    window->draw(Text);
+    if (!userInput.empty()){
+        sf::Font font;
+        font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
+        sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+        unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+        unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+
+        sf::Text Text;
+        Text.setFont(font);    
+        Text.setCharacterSize(windowWidth / 60);
+        Text.setFillColor(sf::Color::Black);
+        Text.setString(userInput);  
+        Text.setPosition(7.8f * windowWidth / 10.f, 17.f * windowHeight / 20.f);
+
+        // Create the white box behind the text
+        sf::RectangleShape background;
+        sf::FloatRect textBounds = Text.getGlobalBounds();
+        background.setSize(sf::Vector2f(textBounds.width + 10.f, textBounds.height + 10.f)); // padding around the text
+        background.setFillColor(sf::Color::White);
+        background.setPosition(textBounds.left - 5.f, textBounds.top - 5.f);
+
+        // draw the box first and then the text
+        window->draw(background);
+        window->draw(Text);
+    }
 }

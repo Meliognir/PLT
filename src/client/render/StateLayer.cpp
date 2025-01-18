@@ -203,6 +203,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
         }
+        userInputListener->echo(window);//show their current input to the user
         window->display();
     }
 }

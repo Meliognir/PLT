@@ -2,6 +2,16 @@
 #define WIDTHFAC 1.0
 #define HEIGHTFAC 1.0
 
+void highLightText(sf::RenderWindow *window, sf::Text Text){
+    // Create the white box behind the text
+    sf::RectangleShape background;
+    sf::FloatRect textBounds = Text.getGlobalBounds();
+    background.setSize(sf::Vector2f(textBounds.width + 10.f, textBounds.height + 10.f)); // padding around the text
+    background.setFillColor(sf::Color::White);
+    background.setPosition(textBounds.left - 5.f, textBounds.top - 5.f);
+    window->draw(background);    
+}
+
 void render::HUD::askGamemode(sf::RenderWindow &window){
     sf::Font font;
     font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
@@ -14,6 +24,7 @@ void render::HUD::askGamemode(sf::RenderWindow &window){
     Text.setFillColor(sf::Color::Black);
     Text.setString("What mode do you want to play ?\n(0 = exit, 1 = local, 2 = online)"/*, 3 = duel)"*/);  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -29,6 +40,7 @@ void render::HUD::askNumberofPlayers(sf::RenderWindow &window){
     Text.setFillColor(sf::Color::Black);
     Text.setString("Enter the number of players (2-6): ");  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -44,6 +56,7 @@ void render::HUD::askIsPlayerAI(sf::RenderWindow &window, int index){
     Text.setFillColor(sf::Color::Black);
     Text.setString("Is Player " + std::to_string(index) + " an AI?");  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -59,6 +72,7 @@ void render::HUD::askAIDifficulty(sf::RenderWindow &window){
     Text.setFillColor(sf::Color::Black);
     Text.setString("What is the level of this AI ? (0, 1, 2, 3)");  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -74,6 +88,7 @@ void render::HUD::askPlayerName(sf::RenderWindow &window, int index){
     Text.setFillColor(sf::Color::Black);
     Text.setString("Enter name for player" + std::to_string(index) + ":");  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -89,6 +104,7 @@ void render::HUD::askMapSize(sf::RenderWindow &window){
     Text.setFillColor(sf::Color::Black);
     Text.setString("Enter the size of the map: ");  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -104,6 +120,7 @@ void render::HUD::askDayDice(sf::RenderWindow &window, int die1, int die2, std::
     Text.setFillColor(sf::Color::Black);
     Text.setString(playerName + ", Choose the die that will be the die for the day.\nThe other one will be the die for the night. (1 or 2)\nDie 1 : " + std::to_string(die1) + " Die 2 : " + std::to_string(die2));  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -119,6 +136,7 @@ void render::HUD::askCard(sf::RenderWindow &window, std::string playerName){
     Text.setFillColor(sf::Color::Black);
     Text.setString(playerName + ", Choose a card, enter an index between 1 and 3:");  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -134,6 +152,7 @@ void render::HUD::askPlaceResource(sf::RenderWindow &window, std::string playerN
     Text.setFillColor(sf::Color::Black);
     Text.setString(playerName+" receives "+std::to_string(amount)+" "+resource+". Please choose a boathold to store this resource.\n You have "+std::to_string(boatholdCount)+" boatholds. Pick one (1-"+std::to_string(boatholdCount)+")");  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -149,6 +168,7 @@ void render::HUD::askBoatholdToPay(sf::RenderWindow &window, std::string playerN
     Text.setFillColor(sf::Color::Black);
     Text.setString(playerName + " has to pay " + std::to_string(payAmount) + " amount of " + resource +"\n You have " + std::to_string(boatholdCount) + " boatholds. Pick one (1-" + std::to_string(boatholdCount) + ")");  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
@@ -164,6 +184,7 @@ void render::HUD::askOpponent(sf::RenderWindow &window, std::string playerName, 
     Text.setFillColor(sf::Color::Black);
     Text.setString(playerName + ", Choose an opponent, enter an index between 1 and" + std::to_string(players.size()));  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
     size_t i;
     for (i=0; i<players.size(); i++){
@@ -189,6 +210,7 @@ void render::HUD::askCanonNb(sf::RenderWindow &window, std::string playerName, i
     Text.setFillColor(sf::Color::Black);
     Text.setString(playerName + ", You have " + std::to_string(availableNb) + " available canons.\nHow many do you want to use ? ");  
     Text.setPosition(windowWidth/100,windowHeight/25 );
+    highLightText(&window, Text);
     window.draw(Text);
 }
 
