@@ -262,7 +262,7 @@ int ai::DeepAI::chooseCardFromHand(const std::vector<int>& handCards) {
     std::vector<state::BoatHold *> controlledBoatHold = controlledPlayer->getBoatHolds();
     std::vector<state::Player *> playerList = gameView->getPlayerList();
 
-    for (size_t i = 0; i < controlledPlayer->getHandCards().size(); i++) { // 3 handCards
+    for (int i = 0; i < 3; i++) { // 3 handCards
 
         tempScore = 0;
         foodAmount = 0;
@@ -383,7 +383,7 @@ bool ai::DeepAI::chooseTimeDice(int die1, int die2){
     std::vector<state::BoatHold *> controlledBoatHold = controlledPlayer->getBoatHolds();
     std::vector<state::Player *> playerList = gameView->getPlayerList();
 
-    for (size_t i = 0; i < controlledPlayer->getHandCards().size(); i++) { // 3 handCards
+    for (int i = 0; i < 3; i++) { // 3 handCards
 
         for (int d = 0; d < 2; d++){ // die 1 or 2
 
@@ -454,8 +454,8 @@ bool ai::DeepAI::chooseTimeDice(int die1, int die2){
                     // faire un score pour les duels
                     maxDuelScore = -1000; duelScore = 0;
                     oppCanon = 0; oppGold = 0; oppFood = 0;
-                    for (i = 0; i < playerList.size(); i++) {
-                        state::Player* opponent = playerList.at(i);
+                    for (int k = 0; k < playerList.size(); k++) {
+                        state::Player* opponent = playerList.at(k);
                         if (opponent->getPlayerId() != controlledPlayer->getPlayerId() && opponent->getPosition() == (currentPos + currentDie)){
                             for (state::BoatHold* bh : opponent->getBoatHolds()) {
                                 if (bh->hasResourceType("Canon")) {
@@ -498,8 +498,8 @@ bool ai::DeepAI::chooseTimeDice(int die1, int die2){
                     // faire un score pour les duels
                     maxDuelScore = -1000; duelScore = 0;
                     oppCanon = 0; oppGold = 0; oppFood = 0;
-                    for (i = 0; i < playerList.size(); i++) {
-                        state::Player* opponent = playerList.at(i);
+                    for (int k = 0; k < playerList.size(); k++) {
+                        state::Player* opponent = playerList.at(k);
                         if (opponent->getPlayerId() != controlledPlayer->getPlayerId() && opponent->getPosition() == (currentPos - currentDie)){
                             for (state::BoatHold* bh : opponent->getBoatHolds()) {
                                 if (bh->hasResourceType("Canon")) {
