@@ -228,6 +228,7 @@ namespace client {
                     assignDice->launchCommand(gameInstance);
                     delete assignDice;
                     std::cout << "Capitaine " << gameInstance->getPlayerList().at(captainIndex)->getName() << " : choisissez vos dés ! \r\n" << std::endl;
+                    WAIT;
                     if (activePlayer->get_AI()==nullptr){ //real player
                         chosenDice = inputHandler->chooseTimeDice(die1, die2);
                     }
@@ -264,6 +265,7 @@ namespace client {
                         activePlayer = gameInstance->getActivePlayer();
                         std::cout << "player: " << activePlayer->getName() << " activePLayerIndex: "<< activePlayerIndex << " id: " << activePlayer->getPlayerId() << "'s turn. Choose your card wisely\r\n" << std::endl;
                         gameInstance->displayState();
+                        WAIT;
                         // Pick a card
                         if (activePlayer->get_AI()==nullptr){ //real player
                             chosenCardVal = inputHandler->chooseCardFromHand(activePlayer->getHandCards());

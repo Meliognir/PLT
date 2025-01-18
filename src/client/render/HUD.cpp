@@ -68,10 +68,10 @@ void render::HUD::askAIDifficulty(sf::RenderWindow &window){
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/80);
+    Text.setCharacterSize(windowWidth/27.f);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("What is the level of this AI ? (0, 1, 2, 3)");  
-    Text.setPosition(6.f*windowWidth/10.f,windowHeight/25);
+    Text.setString("What is the level of\nthis AI ? (0, 1, 2, 3)\nPress 0 to cancel.");  
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
     highLightText(&window, Text);
     window.draw(Text);
 }
