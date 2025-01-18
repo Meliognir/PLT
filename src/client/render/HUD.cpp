@@ -12,7 +12,7 @@ void render::HUD::askGamemode(sf::RenderWindow &window){
     Text.setFont(font);    
     Text.setCharacterSize(windowWidth/50);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("What mode do you want to play ?\n(0 = exit, 1 = local, 2 = online, 3 = duel)");  
+    Text.setString("What mode do you want to play ?\n(0 = exit, 1 = local, 2 = online)"/*, 3 = duel)"*/);  
     Text.setPosition(windowWidth/100,windowHeight/25 );
     window.draw(Text);
 }
