@@ -4,6 +4,9 @@
 #include <iostream>
 #include <mutex>
 
+#define WIDTHFAC 1.0
+#define HEIGHTFAC 1.0
+
 std::mutex consoleMutex;
 void safePrint(const std::string &message) { //To use std::cout in several threads
     std::lock_guard<std::mutex> lock(consoleMutex);
@@ -13,13 +16,19 @@ void safePrint(const std::string &message) { //To use std::cout in several threa
 
 render::UserInputListener::UserInputListener()
 {
+    userInput = "";
 }
 
-void render::UserInputListener::readInput(sf::RenderWindow *window, client::Client *client)
+void render::UserInputListener::readInput(sf::RenderWindow *window, client::InputHandler *inputHandler)
 {
+    if (!inputHandler) {
+        std::cerr << "Invalid input handler." << std::endl;
+        return;
+    }
+
     sf::Event event;
     char enteredChar;
-    client->inputHandler.setShouldStartListening(false);
+    inputHandler->setShouldStartListening(false);
     while (window->pollEvent(event)) {
         switch (event.type) {
             // Window closed
@@ -31,8 +40,8 @@ void render::UserInputListener::readInput(sf::RenderWindow *window, client::Clie
             case sf::Event::KeyPressed:
                 if (event.key.code == sf::Keyboard::Enter) {
                     if (!userInput.empty()) {
-                        client->inputHandler.setUserInput(userInput);
-                        client->inputHandler.setWaitingInput(false);
+                        inputHandler->setUserInput(userInput);
+                        inputHandler->setWaitingInput(false);
                         safePrint(userInput);
                         userInput.clear(); // Clear input
                     }
@@ -48,14 +57,14 @@ void render::UserInputListener::readInput(sf::RenderWindow *window, client::Clie
                 if (event.text.unicode < 128) {
                     enteredChar = static_cast<char>(event.text.unicode);
                     if (enteredChar != '\n' && enteredChar != '\r' && enteredChar != '\b'){
-                        if (client->inputHandler.getInputTypeIsString()) {
-                            if (client->inputHandler.getWaitingInput() && userInput.size() < 16) {
+                        if (inputHandler->getInputTypeIsString()) {
+                            if (inputHandler->getWaitingInput() && userInput.size() < 16) {
                                 userInput += enteredChar; // Add valid character
                             }
                         } else {
                             userInput = std::string(1, enteredChar);
-                            client->inputHandler.setUserInput(userInput);
-                            client->inputHandler.setWaitingInput(false);
+                            inputHandler->setUserInput(userInput);
+                            inputHandler->setWaitingInput(false);
                             //safePrint(userInput);
                             userInput.clear(); // Clear input
                         }
@@ -79,3 +88,31 @@ void render::UserInputListener::readInput(sf::RenderWindow *window, client::Clie
     }
 }
 
+void render::UserInputListener::echo(sf::RenderWindow *window)
+{
+    if (!userInput.empty()){
+        sf::Font font;
+        font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
+        sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+        unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+        unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+
+        sf::Text Text;
+        Text.setFont(font);    
+        Text.setCharacterSize(windowWidth / 60);
+        Text.setFillColor(sf::Color::Black);
+        Text.setString(userInput);  
+        Text.setPosition(7.8f * windowWidth / 10.f, 17.f * windowHeight / 20.f);
+
+        // Create the white box behind the text
+        sf::RectangleShape background;
+        sf::FloatRect textBounds = Text.getGlobalBounds();
+        background.setSize(sf::Vector2f(textBounds.width + 10.f, textBounds.height + 10.f)); // padding around the text
+        background.setFillColor(sf::Color::White);
+        background.setPosition(textBounds.left - 5.f, textBounds.top - 5.f);
+
+        // draw the box first and then the text
+        window->draw(background);
+        window->draw(Text);
+    }
+}

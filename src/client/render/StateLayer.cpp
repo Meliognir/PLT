@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "state.h"
 #include "client.h"
+#include "client/InputHandler.h"
 #include "engine.h"
 #include <iostream>
 
@@ -34,7 +35,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
         window->clear();
 
         // Interpret mouse clics and key inputs to read user input or close the window
-        userInputListener->readInput(window, client);
+        userInputListener->readInput(window, client->inputHandler);
 
         switch(currentStateID){
             case GAME_CONFIG_STATE:{
@@ -61,7 +62,6 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                             instHUD->askAIDifficulty(*window);
                         }  
                     }
-                     
                 }
                 else {
                     instHUD->askMapSize(*window);
@@ -203,6 +203,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
         }
+        userInputListener->echo(window);//show their current input to the user
         window->display();
     }
 }
