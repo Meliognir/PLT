@@ -193,18 +193,24 @@ int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
 bool InputHandler::chooseTimeDice(int die1, int die2){
     std::string input;
 
-    //For now this method cannot use the new inputListener because the methode was declared static
+    userInput = "";
+    isInputValid = false;
+    isStringExpected = false;
+    waitingInput = true;
 
     while (true) {
         std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
                   << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
-        std::cin >> input;
+        while (waitingInput);
+        input = userInput;
+
         if (input == "1" || input == "2") {
-            break;
+            isInputValid = true;
+            return input == "1";
         }
         std::cout << "Entrée invalide. Veuillez entrer '1' ou '2'.\n";
+        waitingInput = true;
     }
-    return input == "1";
 }
 
 int InputHandler::chooseOpponent(size_t opponentsNb)
