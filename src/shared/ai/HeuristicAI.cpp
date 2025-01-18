@@ -132,7 +132,6 @@ size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string res
         if(stateId == 8){
 
             // Voler loser player donné par client.cpp
-//IDEA : voler gold, food si j'ai besoin de gold, food
             if(PlayerIndex != -1){
                 std::cout << "AI : Stealing loser's Resources." << std::endl;
 
@@ -200,7 +199,7 @@ size_t ai::HeuristicAI::selectUserBoatHold(size_t boatHoldCount, std::string res
 //IDEA : regarder les dés et tester les 3 combinaisons, même méthode que pour les dés dans la moitié des cas
 int ai::HeuristicAI::chooseCardFromHand(const std::vector<int>& handCards) {
     
-    std::cout << "Your 3 handCards:" << std::endl;
+    std::cout << "AI : My 3 handCards:" << std::endl;
     for (size_t i = 0; i < handCards.size(); ++i) {
         std::cout << i + 1 << ". " << handCards[i] << std::endl;
     }
@@ -423,13 +422,13 @@ int ai::HeuristicAI::chooseOpponent(size_t listSize) {
         if (opponent->getPlayerId()!=controlledPlayer->getPlayerId()) {
 
             for (state::BoatHold* boathold : opponent->getBoatHolds()) {
-                if (boathold->hasResourceType("CANON")) {
+                if (boathold->hasResourceType("Canon")) {
                     score -= 0.5 * boathold->getQuantity();
                 }
-                if (boathold->hasResourceType("FOOD") && boathold->getQuantity() > 2) {
+                if (boathold->hasResourceType("Food") && boathold->getQuantity() > 2) {
                     score += 1;
                 }
-                if (boathold->hasResourceType("GOLD") && boathold->getQuantity() > 2) {
+                if (boathold->hasResourceType("Gold") && boathold->getQuantity() > 2) {
                     score += 1;
                 }
             }
