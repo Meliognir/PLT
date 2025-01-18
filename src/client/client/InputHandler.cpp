@@ -61,7 +61,7 @@ int InputHandler::getNumberofPlayers() {
         }
 
         try {
-            playerNumber = stoi(userInput);
+            playerNumber = stoi(std::string(1, userInput[0]));
             std::cout << playerNumber << std::endl;
 
             if (playerNumber >= 2 && playerNumber <= 6) {
@@ -232,7 +232,7 @@ size_t InputHandler::selectUserBoatHold(size_t boatHoldCount, bool steal){
             }
         }
         try {
-            index = stoi(userInput);
+            index = stoi(std::string(1, userInput[0]));
 
             if (index > 0 && index <= boatHoldCount) {
                 isInputValid = true;
@@ -348,7 +348,7 @@ int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
             }
         }
         try {
-            choice = stoi(userInput);
+            choice = stoi(std::string(1, userInput[0]));
 
             if (choice >=1 && choice <= 3) {
                 isInputValid = true;
@@ -466,7 +466,7 @@ int InputHandler::chooseOpponent(size_t opponentsNb)
             }
         }
         try {
-            choice = stoi(userInput);
+            choice = stoi(std::string(1, userInput[0]));
 
             if (choice >=1 && choice <= opponentsNb) {
                 isInputValid = true;
@@ -599,15 +599,15 @@ int InputHandler::selectGameMode()
         }
         input = userInput;
 
-        if (input == "0" /*|| input == "exit"*/) {
+        if (input == "0" || input == "exit") {
             isInputValid = true;
             return EXIT_GAME;
         }
-        else if (input == "1" /*|| input == "local"*/) {
+        else if (input == "1" || input == "local") {
             isInputValid = true;
             return LOCAL_MULTIPLAYER;
         }
-        else if (input == "2" /*|| input == "online"*/) {
+        else if (input == "2" || input == "online") {
             isInputValid = true;
             return ONLINE_MULTIPLAYER;
         }
@@ -634,7 +634,7 @@ int InputHandler::selectLevelAI()
     int timer = 12;
 
     while(true){
-        std::cout << "What is the level of this AI ? (0 = cancel, 1 = easy, 2 = hard)"<< std::endl;;
+        std::cout << "What is the level of this AI ? (0 = cancel, 1 = easy, 2 = medium, 3 = hard)"<< std::endl;;
 
         auto startTime = std::chrono::high_resolution_clock::now();
         auto endTime = std::chrono::high_resolution_clock::now();
@@ -666,7 +666,7 @@ int InputHandler::selectLevelAI()
         }
         setLevel = userInput;
 
-        if (setLevel == "0" /*|| setLevel == "cancel"*/) {
+        if (setLevel == "0" || setLevel == "cancel") {
             Client::isPlayerTypeChosen=false;
             isInputValid = true;
             std::cout << "User cancelled" << std::endl;
@@ -688,7 +688,7 @@ int InputHandler::selectLevelAI()
             return 3;
         }
         else {
-            std::cout << "Invalid input. Please enter '0', '1', or '2'"<< std::endl;
+            std::cout << "Invalid input. Please enter '0', '1', '2' or '3'"<< std::endl;
         }
         waitingInput = true;
     int timer = 12;
@@ -741,13 +741,13 @@ int InputHandler::pickAnAI(int playerIndex)
         }
         setAnAI = userInput;
 
-        if (setAnAI == "n" /*|| setAnAI == "no"*/) {
+        if (setAnAI == "n" || setAnAI == "no") {
             Client::isPlayerAI = false;
             Client::isPlayerTypeChosen=true;
             isInputValid = true;
             return 0;
         }
-        else if (setAnAI == "y" /*|| setAnAI == "yes"*/) {
+        else if (setAnAI == "y" || setAnAI == "yes") {
             Client::isPlayerAI = true;
             Client::isPlayerTypeChosen=true;
             isInputValid = true;
