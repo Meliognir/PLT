@@ -20,7 +20,7 @@ std::string getRandName(std::vector <int> *takenNamesIndex){
     bool validName = false;
     while (!validName){
         validName = true;
-        select = rand()%nameList.size();
+        select = getRandomInput(0, nameList.size()-1);
         for (int takenIndex : *takenNamesIndex){
             validName = validName && (select != takenIndex);
         }
@@ -55,13 +55,11 @@ size_t ai::RandomAI::selectUserBoatHold(size_t boatHoldCount, std::string resTyp
     std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : ";
     while (invalidInput){
         index=getRandomInput(1, boatHoldCount);
-        if (resType == ""){
+        if (!currentPlayerBoatHolds.at(index-1)->hasResourceType(resType) && !hasToPay){
             invalidInput = false;
         }
-        else{
-            if (currentPlayerBoatHolds.at(index-1)->hasResourceType(resType)){
-                invalidInput = false;
-            }
+        else if (currentPlayerBoatHolds.at(index-1)->hasResourceType(resType) && hasToPay){
+            invalidInput = false;
         }
     }
     std::cout << currentPlayer->getName() << " selected the boat hold " << index << "." << std::endl;

@@ -26,7 +26,7 @@ void clientThreadFunction(client::Client* client) {
 
 int main(int argc,char* argv[])
 {
-    sf::RenderWindow* window;
+    std::srand(std::time(0));    sf::RenderWindow* window;
     client::Client *client = new client::Client();
     Game * game = client->gameInstance;
     render::Renderer* renderer = new render::Renderer();
