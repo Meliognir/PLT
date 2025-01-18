@@ -43,7 +43,7 @@ int InputHandler::getNumberofPlayers() {
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -101,7 +101,7 @@ std::string InputHandler::getPlayerName(int playerIndex){
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -148,7 +148,7 @@ int InputHandler::getMapSize(){
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -215,7 +215,7 @@ size_t InputHandler::selectUserBoatHold(size_t boatHoldCount, bool steal){
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -274,7 +274,7 @@ bool InputHandler::confirmBoatHoldReplace(){
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -331,7 +331,7 @@ int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -389,7 +389,7 @@ bool InputHandler::chooseTimeDice(int die1, int die2){
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -449,7 +449,7 @@ int InputHandler::chooseOpponent(size_t opponentsNb)
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -512,7 +512,7 @@ int InputHandler::chooseCanonNb(int totalNb){
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -581,7 +581,7 @@ int InputHandler::selectGameMode()
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -648,7 +648,7 @@ int InputHandler::selectLevelAI()
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
@@ -723,7 +723,7 @@ int InputHandler::pickAnAI(int playerIndex)
                 }
                 else {
                     if (timer > 3){
-                        std::cout << "The signal from the render window was lost.\nPlease wait " << 14-timer << " seconds so you can enter your inputs here." << std::endl;
+                        std::cout << "The signal from the render window was lost.\nPlease wait " << 12-timer << " seconds so you can enter your inputs here." << std::endl;
                         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                     }
                 }
