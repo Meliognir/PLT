@@ -455,7 +455,7 @@ bool ai::DeepAI::chooseTimeDice(int die1, int die2){
                     maxDuelScore = -1000; duelScore = 0;
                     oppCanon = 0; oppGold = 0; oppFood = 0;
                     for (i = 0; i < playerList.size(); i++) {
-                        state::Player* opponent = controlledPlayer->getOpponentsList().at(i);
+                        state::Player* opponent = playerList.at(i);
                         if (opponent->getPlayerId() != controlledPlayer->getPlayerId() && opponent->getPosition() == (currentPos + currentDie)){
                             for (state::BoatHold* bh : opponent->getBoatHolds()) {
                                 if (bh->hasResourceType("Canon")) {
@@ -499,7 +499,7 @@ bool ai::DeepAI::chooseTimeDice(int die1, int die2){
                     maxDuelScore = -1000; duelScore = 0;
                     oppCanon = 0; oppGold = 0; oppFood = 0;
                     for (i = 0; i < playerList.size(); i++) {
-                        state::Player* opponent = controlledPlayer->getOpponentsList().at(i);
+                        state::Player* opponent = playerList.at(i);
                         if (opponent->getPlayerId() != controlledPlayer->getPlayerId() && opponent->getPosition() == (currentPos - currentDie)){
                             for (state::BoatHold* bh : opponent->getBoatHolds()) {
                                 if (bh->hasResourceType("Canon")) {
