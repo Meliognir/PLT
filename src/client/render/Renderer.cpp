@@ -443,8 +443,8 @@ void render::Renderer::renderHand(sf::RenderWindow &window, const std::vector<in
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
 
     // Positionnement des cartes
-    float startX = (windowWidth - (7 * cardWidth)) / 2.0f; 
-    float y = windowHeight - 5*cardHeight;
+    float startX = windowWidth / 7.5f; 
+    float y = 8.3f * windowHeight/10.f;
     for (size_t i = 0; i < handCards.size() && i < 3; ++i) {
         int cardID = handCards[i];
         // Déterminer la région de la texture

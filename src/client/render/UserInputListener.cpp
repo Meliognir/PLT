@@ -99,10 +99,10 @@ void render::UserInputListener::echo(sf::RenderWindow *window)
 
         sf::Text Text;
         Text.setFont(font);    
-        Text.setCharacterSize(windowWidth / 60);
+        Text.setCharacterSize(windowWidth / 40);
         Text.setFillColor(sf::Color::Black);
         Text.setString(userInput);  
-        Text.setPosition(7.8f * windowWidth / 10.f, 17.f * windowHeight / 20.f);
+        Text.setPosition(6.8f * windowWidth / 10.f, 17.f * windowHeight / 20.f);
 
         // Create the white box behind the text
         sf::RectangleShape background;

@@ -20,10 +20,10 @@ void render::HUD::askGamemode(sf::RenderWindow &window){
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/50);
+    Text.setCharacterSize(windowWidth/27.f);
     Text.setFillColor(sf::Color::Black);
     Text.setString("What mode do you want to play ?\n(0 = exit, 1 = local, 2 = online)"/*, 3 = duel)"*/);  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -36,10 +36,10 @@ void render::HUD::askNumberofPlayers(sf::RenderWindow &window){
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/27.f);
     Text.setFillColor(sf::Color::Black);
     Text.setString("Enter the number of players (2-6): ");  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -52,10 +52,10 @@ void render::HUD::askIsPlayerAI(sf::RenderWindow &window, int index){
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/27.f);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Is Player " + std::to_string(index) + " an AI?");  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString("Is Player" + std::to_string(index) + " an AI? (y/n)");  
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -68,10 +68,10 @@ void render::HUD::askAIDifficulty(sf::RenderWindow &window){
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/27.f);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("What is the level of this AI ? (0, 1, 2, 3)");  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString("What is the level of\nthis AI ? (0, 1, 2, 3)\nPress 0 to cancel.");  
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -84,10 +84,10 @@ void render::HUD::askPlayerName(sf::RenderWindow &window, int index){
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/27.f);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Enter name for player" + std::to_string(index) + ":");  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString("Enter name for player" + std::to_string(index) + ".");  
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -100,10 +100,10 @@ void render::HUD::askMapSize(sf::RenderWindow &window){
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/27.f);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Enter the size of the map: ");  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString("Enter the size of the map\nand press enter. (from 30 to 60)");  
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -116,10 +116,10 @@ void render::HUD::askDayDice(sf::RenderWindow &window, int die1, int die2, std::
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/80);
     Text.setFillColor(sf::Color::Black);
-    Text.setString(playerName + ", Choose the die that will be the die for the day.\nThe other one will be the die for the night. (1 or 2)\nDie 1 : " + std::to_string(die1) + " Die 2 : " + std::to_string(die2));  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString(playerName + ", choose a die for the day.\nThe other die will be for the night. (1 or 2)\nDie 1 : " + std::to_string(die1) + "   and   Die 2 : " + std::to_string(die2));  
+    Text.setPosition(6.f*windowWidth/10.f,windowHeight/25);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -132,10 +132,10 @@ void render::HUD::askCard(sf::RenderWindow &window, std::string playerName){
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/80);
     Text.setFillColor(sf::Color::Black);
-    Text.setString(playerName + ", Choose a card, enter an index between 1 and 3:");  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString(playerName + ", choose a card.\nEnter an index between 1 and 3:");  
+    Text.setPosition(6.f*windowWidth/10.f,windowHeight/25);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -148,10 +148,10 @@ void render::HUD::askPlaceResource(sf::RenderWindow &window, std::string playerN
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/80);
     Text.setFillColor(sf::Color::Black);
-    Text.setString(playerName+" receives "+std::to_string(amount)+" "+resource+". Please choose a boathold to store this resource.\n You have "+std::to_string(boatholdCount)+" boatholds. Pick one (1-"+std::to_string(boatholdCount)+")");  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString(playerName+" receives "+std::to_string(amount)+" "+resource+". Choose a boathold to store this resource.\n(1-"+std::to_string(boatholdCount)+").");  
+    Text.setPosition(6.f*windowWidth/10.f,windowHeight/25);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -164,10 +164,10 @@ void render::HUD::askBoatholdToPay(sf::RenderWindow &window, std::string playerN
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/80);
     Text.setFillColor(sf::Color::Black);
-    Text.setString(playerName + " has to pay " + std::to_string(payAmount) + " amount of " + resource +"\n You have " + std::to_string(boatholdCount) + " boatholds. Pick one (1-" + std::to_string(boatholdCount) + ")");  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString(playerName + " has to pay " + std::to_string(payAmount) + " amount of " + resource +".\nPick one of your boat holds (1-" + std::to_string(boatholdCount) + ")");  
+    Text.setPosition(6.f*windowWidth/10.f,windowHeight/25);
     highLightText(&window, Text);
     window.draw(Text);
 }
@@ -180,10 +180,10 @@ void render::HUD::askOpponent(sf::RenderWindow &window, std::string playerName, 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/80);
     Text.setFillColor(sf::Color::Black);
-    Text.setString(playerName + ", Choose an opponent, enter an index between 1 and" + std::to_string(players.size()));  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString(playerName + ", choose an opponent.\nEnter an index between 1 and" + std::to_string(players.size()));  
+    Text.setPosition(6.f*windowWidth/10.f,windowHeight/25);
     highLightText(&window, Text);
     window.draw(Text);
     size_t i;
@@ -206,10 +206,10 @@ void render::HUD::askCanonNb(sf::RenderWindow &window, std::string playerName, i
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40);
+    Text.setCharacterSize(windowWidth/80);
     Text.setFillColor(sf::Color::Black);
-    Text.setString(playerName + ", You have " + std::to_string(availableNb) + " available canons.\nHow many do you want to use ? ");  
-    Text.setPosition(windowWidth/100,windowHeight/25 );
+    Text.setString(playerName + ", you have " + std::to_string(availableNb) + " available canons.\nHow many do you want to use ?");  
+    Text.setPosition(6.f*windowWidth/10.f,windowHeight/25);
     highLightText(&window, Text);
     window.draw(Text);
 }
