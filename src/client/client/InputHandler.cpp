@@ -77,17 +77,19 @@ int InputHandler::getMapSize(){
     while (true) {
         std::cout << "Enter the size of the map: ";
         while (waitingInput);
-        try {
-            mapSize = stoi(userInput);
+        if (userInput.size() < 3){
+            try {
+                mapSize = stoi(userInput);
 
-            if (abs(mapSize - 45) <= 15) {
-                isInputValid = true;
-                waitingInput = false;
-                std::cout << mapSize << std::endl;
-                return mapSize;
+                if (abs(mapSize - 45) <= 15) {
+                    isInputValid = true;
+                    waitingInput = false;
+                    std::cout << mapSize << std::endl;
+                    return mapSize;
+                }
             }
-        }
-        catch(std::invalid_argument e){
+            catch(std::invalid_argument e){
+            }
         }
         mapSize = 0; 
         std::cout << "Invalid map size. Please enter a value between 30 and 60." << std::endl;
@@ -101,7 +103,7 @@ size_t InputHandler::selectUserBoatHold(size_t boatHoldCount, bool steal){
 
     userInput = "";
     isInputValid = false;
-    isStringExpected = true;
+    isStringExpected = false;
     waitingInput = true;
 
     while (true) {
@@ -172,7 +174,7 @@ int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
         std::cout<<"Choose a card, enter an index between 1 and 3:"<<std::endl;
         while (waitingInput);
         try {
-            choice = stoi(userInput[:1]);
+            choice = stoi(userInput);
 
             if (choice >=1 && choice <= 3) {
                 isInputValid = true;
@@ -283,22 +285,26 @@ int InputHandler::chooseCanonNb(int totalNb){
         std::cout << "You have " << totalNb << " available canons. How many do you want to use ? ";
 
         while (waitingInput);
-        try {
-            chosenNb = stoi(userInput);
-            if (chosenNb < 0) {
-                std::cout << "You cannot use a negative number of canons. " << std::endl;
+        if (userInput.size() < 3){
+            try {
+                chosenNb = stoi(userInput);
+                if (chosenNb < 0) {
+                    std::cout << "You cannot use a negative number of canons. " << std::endl;
+                }
+                else if (chosenNb > totalNb) {
+                    std::cout << "You cannot use more canons than you possess. " << std::endl;
+                }
+                else {
+                    isInputValid = true;
+                    waitingInput = false;
+                    std::cout << chosenNb << std::endl;
+                    return chosenNb;
+                }
             }
-            else if (chosenNb > totalNb) {
-                std::cout << "You cannot use more canons than you possess. " << std::endl;
-            }
-            else {
-                isInputValid = true;
-                waitingInput = false;
-                std::cout << chosenNb << std::endl;
-                return chosenNb;
+            catch(std::invalid_argument e){
             }
         }
-        catch(std::invalid_argument e){
+        else {
             std::cout << "Invalid input. Please enter a number. " << std::endl;
         }
         waitingInput = true;
