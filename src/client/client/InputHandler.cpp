@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <limits>
+#include <chrono>
 #include "state.h"
 #include "../client.h"
 
@@ -25,10 +26,35 @@ int InputHandler::getNumberofPlayers() {
     isInputValid = false;
     isStringExpected = false;
     waitingInput = true;
+    int timer = 10;
 
     while (true) {
         std::cout << "Enter the number of players (2-6): ";
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
 
         try {
             playerNumber = stoi(userInput);
@@ -44,6 +70,7 @@ int InputHandler::getNumberofPlayers() {
         }
         std::cout << "Invalid input. Please enter a number between 2 and 6.\n";
         waitingInput = true;
+    int timer = 10;
     }
 }
 
@@ -54,10 +81,35 @@ std::string InputHandler::getPlayerName(int playerIndex){
     isInputValid = false;
     isStringExpected = true;
     waitingInput = true;
+    int timer = 10;
 
     while (!isInputValid) {
         std::cout << "Enter name for player " << playerIndex+1 << ": ";
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         playerName = userInput;
         isInputValid = true;
         std::cout << playerName << std::endl;
@@ -73,10 +125,35 @@ int InputHandler::getMapSize(){
     isInputValid = false;
     isStringExpected = true;
     waitingInput = true;
+    int timer = 10;
 
     while (true) {
         std::cout << "Enter the size of the map: ";
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         if (userInput.size() < 3){
             try {
                 mapSize = stoi(userInput);
@@ -94,6 +171,7 @@ int InputHandler::getMapSize(){
         mapSize = 0; 
         std::cout << "Invalid map size. Please enter a value between 30 and 60." << std::endl;
         waitingInput = true;
+    int timer = 10;
     }
 }
 
@@ -105,6 +183,7 @@ size_t InputHandler::selectUserBoatHold(size_t boatHoldCount, bool steal){
     isInputValid = false;
     isStringExpected = false;
     waitingInput = true;
+    int timer = 10;
 
     while (true) {
         if(steal){
@@ -114,7 +193,31 @@ size_t InputHandler::selectUserBoatHold(size_t boatHoldCount, bool steal){
             std::cout << "You have " << boatHoldCount << " BoatHolds. Pick one (1-" << boatHoldCount << ") : " << std::endl;
         }
 
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         try {
             index = stoi(userInput);
 
@@ -129,6 +232,7 @@ size_t InputHandler::selectUserBoatHold(size_t boatHoldCount, bool steal){
         }
         std::cout << "Invalid index. Please enter a number between 1 and " << boatHoldCount << "." << std::endl;
         waitingInput = true;
+    int timer = 10;
     }
 }
 
@@ -139,12 +243,37 @@ bool InputHandler::confirmBoatHoldReplace(){
     isInputValid = false;
     isStringExpected = false;
     waitingInput = true;
+    int timer = 10;
     
     while (true) {
         std::cout << "This boathold contains other resources. Do you want to replace them ? (y/n) : ";
         std::cin >> input;
 
-        while(waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         input = userInput;
 
         if (input == "y" || input == "n") {
@@ -154,6 +283,7 @@ bool InputHandler::confirmBoatHoldReplace(){
 
         std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
         waitingInput = true;
+    int timer = 10;
     }
 }
 
@@ -169,10 +299,35 @@ int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
     isInputValid = false;
     isStringExpected = false;
     waitingInput = true;
+    int timer = 10;
 
     while (true) {
         std::cout<<"Choose a card, enter an index between 1 and 3:"<<std::endl;
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         try {
             choice = stoi(userInput);
 
@@ -187,6 +342,7 @@ int InputHandler::chooseCardFromHand(const std::vector<int>& handCards) {
         }
         std::cout<<"Invalid input. Please enter a valid index (1-3)."<<std::endl;
         waitingInput = true;
+    int timer = 10;
     }
 }
 
@@ -197,11 +353,36 @@ bool InputHandler::chooseTimeDice(int die1, int die2){
     isInputValid = false;
     isStringExpected = false;
     waitingInput = true;
+    int timer = 10;
 
     while (true) {
         std::cout << "Choisissez le dé qui sera le dé du jour. L'autre sera le dé de la nuit. (1 ou 2)\n"
                   << "Dé 1 : " << die1 << " Dé 2 : " << die2 << std::endl;
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         input = userInput;
 
         if (input == "1" || input == "2") {
@@ -210,6 +391,7 @@ bool InputHandler::chooseTimeDice(int die1, int die2){
         }
         std::cout << "Entrée invalide. Veuillez entrer '1' ou '2'.\n";
         waitingInput = true;
+    int timer = 10;
     }
 }
 
@@ -221,6 +403,7 @@ int InputHandler::chooseOpponent(size_t opponentsNb)
     isInputValid = false;
     isStringExpected = false;
     waitingInput = true;
+    int timer = 10;
 
     while (true) {
         std::cout<<"Choose an opponent, enter an index between 1 and "<< opponentsNb << std::endl;
@@ -232,7 +415,31 @@ int InputHandler::chooseOpponent(size_t opponentsNb)
             return 0;
         }
 
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         try {
             choice = stoi(userInput);
 
@@ -247,33 +454,10 @@ int InputHandler::chooseOpponent(size_t opponentsNb)
         }
         std::cout<<"Invalid input. Please enter a valid index."<<std::endl;
         waitingInput = true;
+    int timer = 10;
     }
 }
 
-bool InputHandler::getInputValidation()
-{
-    return isInputValid;
-}
-
-bool InputHandler::getInputTypeIsString()
-{
-    return isStringExpected;
-}
-
-bool InputHandler::getWaitingInput() const
-{
-    return waitingInput;
-}
-
-void InputHandler::setWaitingInput(bool waitingInput)
-{
-    this->waitingInput = waitingInput;
-}
-
-void InputHandler::setUserInput(const std::string &userInput)
-{
-    this->userInput = userInput;
-}
 
 int InputHandler::chooseCanonNb(int totalNb){
     if (totalNb <= 0) {
@@ -286,11 +470,36 @@ int InputHandler::chooseCanonNb(int totalNb){
     isInputValid = false;
     isStringExpected = true;
     waitingInput = true;
+    int timer = 10;
 
     while (true) {
         std::cout << "You have " << totalNb << " available canons. How many do you want to use ? ";
 
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         if (userInput.size() < 3){
             try {
                 chosenNb = stoi(userInput);
@@ -314,6 +523,7 @@ int InputHandler::chooseCanonNb(int totalNb){
             std::cout << "Invalid input. Please enter a number. " << std::endl;
         }
         waitingInput = true;
+    int timer = 10;
     }
 }
 
@@ -325,11 +535,36 @@ int InputHandler::selectGameMode()
     isInputValid = false;
     isStringExpected = false;
     waitingInput = true;
+    int timer = 10;
     
     while (true) {
         std::cout << "What mode do you want to play ? (0 = exit, 1 = local, 2 = online)"/*, 3 = duel)"*/ << std::endl;
 
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         input = userInput;
 
         if (input == "0" /*|| input == "exit"*/) {
@@ -350,6 +585,7 @@ int InputHandler::selectGameMode()
         }*/
         std::cout << "Invalid input. Please enter '0', '1', or '2'"/* or '3'." */<< std::endl;
         waitingInput = true;
+    int timer = 10;
     }
     return 0;
 }
@@ -363,11 +599,36 @@ int InputHandler::selectLevelAI()
     isInputValid = false;
     isStringExpected = false;
     waitingInput = true;
+    int timer = 10;
 
     while(true){
         std::cout << "What is the level of this AI ? (0 = cancel, 1 = easy, 2 = hard)"<< std::endl;;
 
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         setLevel = userInput;
 
         if (setLevel == "0" /*|| setLevel == "cancel"*/) {
@@ -395,6 +656,7 @@ int InputHandler::selectLevelAI()
             std::cout << "Invalid input. Please enter '0', '1', or '2'"<< std::endl;
         }
         waitingInput = true;
+    int timer = 10;
     }
     return 1;
 }
@@ -408,12 +670,37 @@ int InputHandler::pickAnAI(int playerIndex)
     isInputValid = false;
     isStringExpected = false;
     waitingInput = true;
+    int timer = 10;
 
     while(true){
         std::cout << "Is Player " << playerIndex+1 << " an AI ? (y/n)"<< std::endl;
 
 
-        while (waitingInput);
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        while (waitingInput){
+            endTime = std::chrono::high_resolution_clock::now();
+            if (shouldStartListening){
+                if (timer > 7){
+                    std::cout << "Please enter your input here :" << std::endl;
+                    waitingInput = false;
+                    std::cin >> userInput;
+                }
+                if (timer > 2){
+                    std::cout << "The signal from the render window was lost.\nPlease wait a few seconds so you can enter your inputs here." << std::endl;
+                }
+                timer = (std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime)).count();
+                
+            }
+            else {
+                if (timer > 2){
+                    std::cout << "The signal from the render window was restored !" << std::endl;
+                }
+                timer = 0;
+            }
+            shouldStartListening = true;
+            startTime = std::chrono::high_resolution_clock::now();
+        }
         setAnAI = userInput;
 
         if (setAnAI == "n" /*|| setAnAI == "no"*/) {
@@ -435,7 +722,38 @@ int InputHandler::pickAnAI(int playerIndex)
             std::cout << "Invalid input : this is a y/n question."<< std::endl;
         }
         waitingInput = true;
+    int timer = 10;
     }
+}
+
+
+bool InputHandler::getInputValidation()
+{
+    return isInputValid;
+}
+
+bool InputHandler::getInputTypeIsString()
+{
+    return isStringExpected;
+}
+
+bool InputHandler::getWaitingInput() const
+{
+    return waitingInput;
+}
+
+void InputHandler::setWaitingInput(bool waitingInput)
+{
+    this->waitingInput = waitingInput;
+}
+
+void InputHandler::setUserInput(const std::string &userInput)
+{
+    this->userInput = userInput;
+}
+
+void InputHandler::setShouldStartListening(bool shouldStartListening){
+    this->shouldStartListening = shouldStartListening;
 }
 
 

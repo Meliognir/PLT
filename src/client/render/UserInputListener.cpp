@@ -19,6 +19,7 @@ void render::UserInputListener::readInput(sf::RenderWindow *window, client::Clie
 {
     sf::Event event;
     char enteredChar;
+    client->inputHandler.setShouldStartListening(false);
     while (window->pollEvent(event)) {
         switch (event.type) {
             // Window closed
