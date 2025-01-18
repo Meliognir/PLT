@@ -16,7 +16,7 @@
 #define STEAL_RESOURCE_STATE 8
 #define GAME_OVER_STATE 9
 
-render::StateLayer::StateLayer(Renderer * renderer, HUD * hud, state::Game * game, sf::RenderWindow * window) : game(game), renderer(renderer), instHUD(hud), window(window){
+render::StateLayer::StateLayer(state::Game * game, Renderer * renderer, HUD * hud, UserInputListener* userInputListener, sf::RenderWindow * window) : game(game), renderer(renderer), instHUD(hud), userInputListener(userInputListener), window(window){
 }
 
 void render::StateLayer::update(){
@@ -29,13 +29,13 @@ void render::StateLayer::setCurrentStateID(int StateID){
 }
 
 void render::StateLayer::runRenderLoop(client::Client* client) {
+    userInputListener->userInput = "";
     while (window->isOpen() && client->running) {
-        sf::Event event;
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window->close();
-        }
         window->clear();
+
+        // Interpret mouse clics and key inputs to read user input or close the window
+        userInputListener->readInput(window, client);
+
         switch(currentStateID){
             case GAME_CONFIG_STATE:{
                 renderer->renderBackground(*window); 
