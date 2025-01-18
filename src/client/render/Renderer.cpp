@@ -523,8 +523,10 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window)
     const int frameWidth = 400;
     const int frameHeight = 379;
     const int frameCount = 46;
+    const int framesPerRow = 23;
     const float frameDuration = 0.1f;
     const float totalDuration = frameCount*frameDuration;
+    const int startFrame = 19;
 
     // Load the sprite sheet
     sf::Texture spriteSheet;
@@ -535,16 +537,12 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window)
 
     // Create the sprite
     sf::Sprite sprite(spriteSheet);
-    sprite.setPosition(windowWidth/2.f, windowHeight/2.f); // Position du sprite à l'écran
+    sprite.setPosition(windowWidth/2.f, windowHeight/2.f);
 
-    // Define the first frame rectangle
-    sf::IntRect frameRect(0, 0, frameWidth, frameHeight);
-    sprite.setTextureRect(frameRect);
+    sf::Clock clock;       // time for the frames
+    int currentFrame = startFrame;
 
-    sf::Clock clock;       // Chronomètre pour les frames
-    int currentFrame = 0;  // Frame actuelle
-
-    // 
+    
     while (window.isOpen() && clock.getElapsedTime().asSeconds() < totalDuration) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -552,15 +550,20 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window)
                 window.close();
         }
 
-        // Mettre à jour la frame en fonction du temps écoulé
+        // Update with the next frame if it is time
         if (clock.getElapsedTime().asSeconds() >= frameDuration) {
-            currentFrame = (currentFrame + 1) % frameCount; // Passer à la frame suivante
-            frameRect.left = currentFrame * frameWidth;    // Calculer la position horizontale de la frame
-            sprite.setTextureRect(frameRect);             // Appliquer la nouvelle frame
-            clock.restart();                              // Réinitialiser le chronomètre
+            currentFrame = (currentFrame + 1) % frameCount; 
+            currentFrame = startFrame + (currentFrame - startFrame + 1) % (frameCount - startFrame); // go to next frame
+
+            int row = currentFrame / framesPerRow; // row of the frame
+            int col = currentFrame % framesPerRow; // Column de la frame
+            sf::IntRect frameRect(col * frameWidth, row * frameHeight, frameWidth, frameHeight);
+            sprite.setTextureRect(frameRect);
+
+            clock.restart(); // reset timer
         }
 
-        // Afficher
+        // display it
         window.clear(sf::Color::White);
         window.draw(sprite);
         window.display();

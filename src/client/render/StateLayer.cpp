@@ -64,7 +64,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                     }
                 }
                 else {
-                    instHUD->askMapSize(*window);
+                    instHUD->askMapSize(*window);renderer->renderFinalAnimation(*window);
                 }
                 break;
             }
