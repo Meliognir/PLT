@@ -245,7 +245,7 @@
             <dia:string>#inputHandler#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#InputHandler#</dia:string>
+            <dia:string>#InputHandler *#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>

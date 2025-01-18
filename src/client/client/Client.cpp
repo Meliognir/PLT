@@ -75,16 +75,16 @@ namespace client {
         state::State *gameState = new state::GameConfigState();
         gameEngine = engine::GameEngine::getInstance(gameState);
         gameInstance = gameEngine->game;
-        InputHandler inputHandler;
+        inputHandler = new InputHandler();
     }
 
     int Client::launch(){
         // Playing Modes
         running=true;
-        //renderer-> show the correct window
+                
         int playingMode = 1;
         while(playingMode){
-            playingMode = inputHandler.selectGameMode(); //Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)
+            playingMode = inputHandler->selectGameMode(); //Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)
             modeChosen=true;
             switch (playingMode){                        //quel est le mode 3 ? c'est SINGLE_PLAYER ou IA ?
                 case EXIT_GAME :
@@ -229,7 +229,7 @@ namespace client {
                     delete assignDice;
                     std::cout << "Capitaine " << gameInstance->getPlayerList().at(captainIndex)->getName() << " : choisissez vos dés ! \r\n" << std::endl;
                     if (activePlayer->get_AI()==nullptr){ //real player
-                        chosenDice = inputHandler.chooseTimeDice(die1, die2);
+                        chosenDice = inputHandler->chooseTimeDice(die1, die2);
                     }
                     else { // AI input
                         chosenDice = activePlayer->get_AI()->chooseTimeDice(die1, die2);
@@ -266,13 +266,13 @@ namespace client {
                         gameInstance->displayState();
                         // Pick a card
                         if (activePlayer->get_AI()==nullptr){ //real player
-                            chosenCardVal = inputHandler.chooseCardFromHand(activePlayer->getHandCards());
+                            chosenCardVal = inputHandler->chooseCardFromHand(activePlayer->getHandCards());
                         }
                         else { // AI input
                             chosenCardVal = activePlayer->get_AI()->chooseCardFromHand(activePlayer->getHandCards());
                         }
 
-                        //chosenCardVal = inputHandler.chooseCardFromHand(activePlayer->getHandCards()); //old code
+                        //chosenCardVal = inputHandler->chooseCardFromHand(activePlayer->getHandCards()); //old code
                         chooseCard = new engine::ChooseCard(activePlayer, chosenCardVal);
                         chooseCard->launchCommand(gameInstance);
                         delete chooseCard;
@@ -393,7 +393,7 @@ namespace client {
                             while(!validChosenBoathold){
                                 // Pick a boat hold
                                 if (activePlayer->get_AI()==nullptr){ //real player
-                                    chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                                    chosenBoatholdId = inputHandler->selectUserBoatHold(boatHoldCount);
                                 }
                                 else { // AI input
                                     chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount, resTypeToAdd);
@@ -447,7 +447,7 @@ namespace client {
                                         auto boatHolds = activePlayer->getBoatHolds();
                                         // Pick a boat hold
                                         if (activePlayer->get_AI()==nullptr){ //real player
-                                            chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                                            chosenBoatholdId = inputHandler->selectUserBoatHold(boatHoldCount);
                                         }
                                         else { // AI input
                                             chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount, resTypeToPay, activePlayer->getPlayerId(), true);
@@ -539,7 +539,7 @@ namespace client {
                                 auto boatHolds = activePlayer->getBoatHolds();
                                 // Pick a boat hold
                                 if (activePlayer->get_AI()==nullptr){ //real player
-                                    chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                                    chosenBoatholdId = inputHandler->selectUserBoatHold(boatHoldCount);
                                 }
                                 else { // AI input
                                     chosenBoatholdId = activePlayer->get_AI()->selectUserBoatHold(boatHoldCount, resTypeToPay, activePlayer->getPlayerId(), true);
@@ -594,13 +594,13 @@ namespace client {
                     
                     // Pick an opponent
                     if (activePlayer->get_AI()==nullptr){ //real player
-                        chosenOpponentId = inputHandler.chooseOpponent(opponentsList.size());
+                        chosenOpponentId = inputHandler->chooseOpponent(opponentsList.size());
                     }
                     else { // AI input
                         chosenOpponentId = activePlayer->get_AI()->chooseOpponent(opponentsList.size());
                     }
                     
-                    //chosenOpponentId = inputHandler.chooseOpponent(opponentsList.size()); //old code
+                    //chosenOpponentId = inputHandler->chooseOpponent(opponentsList.size()); //old code
                     chosenOpponentId = opponentsList.at(chosenOpponentId)->getPlayerId();
 
                     chooseOpponent = new engine::ChooseOpponent(activePlayerIndex, chosenOpponentId);
@@ -631,7 +631,7 @@ namespace client {
 
                     std::cout << "Atacking Player:" << combatPlayer->getName() << " has: " << playerNbCanons << " Canons.\r\n" << std::endl;
                     if (combatPlayer->get_AI() == nullptr){
-                        playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
+                        playerNbCanons = inputHandler->chooseCanonNb(playerNbCanons);
                     }
                     else {
                         playerNbCanons = combatPlayer->get_AI()->chooseCanonNb(playerNbCanons);
@@ -646,7 +646,7 @@ namespace client {
                         auto boatHolds = combatPlayer->getBoatHolds();
                         // Pick a boat hold
                         if (combatPlayer->get_AI()==nullptr){ //real player
-                            chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                            chosenBoatholdId = inputHandler->selectUserBoatHold(boatHoldCount);
                         }
                         else { // AI input
                             chosenBoatholdId = combatPlayer->get_AI()->selectUserBoatHold(boatHoldCount, "Canon", combatPlayer->getPlayerId(), true);
@@ -694,7 +694,7 @@ namespace client {
                     std::cout << "Defending Player:" << combatPlayer->getName() << " has: " << playerNbCanons << " Canons.\r\n" << std::endl;
                     
                     if (gameInstance->getDefendingPlayer()->get_AI() == nullptr){
-                        playerNbCanons = inputHandler.chooseCanonNb(playerNbCanons);
+                        playerNbCanons = inputHandler->chooseCanonNb(playerNbCanons);
                     }
                     else {
                         playerNbCanons = gameInstance->getDefendingPlayer()->get_AI()->chooseCanonNb(playerNbCanons);
@@ -709,7 +709,7 @@ namespace client {
                         auto boatHolds = combatPlayer->getBoatHolds();
                         // Pick a boat hold
                         if (combatPlayer->get_AI()==nullptr){ //real player
-                            chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                            chosenBoatholdId = inputHandler->selectUserBoatHold(boatHoldCount);
                         }
                         else { // AI input
                             chosenBoatholdId = combatPlayer->get_AI()->selectUserBoatHold(boatHoldCount, "Canon", combatPlayer->getPlayerId(), true);
@@ -769,7 +769,7 @@ namespace client {
                             // Pick a boatHold to Steal
                             // Real player
                             if (winner->get_AI()==nullptr){
-                                chosenBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount, true);
+                                chosenBoatholdId = inputHandler->selectUserBoatHold(boatHoldCount, true);
                             }
                             // AI input
                             else {
@@ -804,7 +804,7 @@ namespace client {
                                 // Pick a boatHold to Store the stolen Resource
                                 // Real player
                                 if (winner->get_AI()==nullptr){
-                                    winnerBoatholdId = inputHandler.selectUserBoatHold(boatHoldCount);
+                                    winnerBoatholdId = inputHandler->selectUserBoatHold(boatHoldCount);
                                 }
                                 // AI input
                                 else { 
@@ -933,7 +933,7 @@ namespace client {
         gameInstance->setTurn(0);
 
         // Sets number of player
-        int playerNumber = inputHandler.getNumberofPlayers();
+        int playerNumber = inputHandler->getNumberofPlayers();
         std::cout <<"Number of players set to: " << std::to_string(playerNumber)<< std::endl;
         nbPlayerChosen=true;
         chooseNbOfPlayers = new engine::ChooseNbOfPlayers(playerNumber);
@@ -949,13 +949,13 @@ namespace client {
 
             // Set the AI
             std::string playerName;
-            levelAI = inputHandler.pickAnAI(playerIndex);
+            levelAI = inputHandler->pickAnAI(playerIndex);
             currentPlayer = gameInstance->getActivePlayer();
             chooseAI = new engine::ChooseAI(levelAI, playerIndex);
             chooseAI->launchCommand(gameInstance);
             // Set the username
             if (currentPlayer->get_AI()==nullptr){ //real player
-                playerName = inputHandler.getPlayerName(playerIndex);
+                playerName = inputHandler->getPlayerName(playerIndex);
             }
             else { // AI input
                 playerName = currentPlayer->get_AI()->getPlayerName(playerIndex);
@@ -966,7 +966,7 @@ namespace client {
         }
         allPlayerSet=true;
         // Sets MapSize
-        int mapSize = inputHandler.getMapSize();
+        int mapSize = inputHandler->getMapSize();
         std::cout <<"MapSize set to: " << std::to_string(mapSize)<< std::endl;
         chooseMapSize = new engine::ChooseMapSize(mapSize);
         chooseMapSize->launchCommand(gameInstance);
