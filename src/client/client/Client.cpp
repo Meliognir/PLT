@@ -81,8 +81,9 @@ namespace client {
     int Client::launch(){
         // Playing Modes
         running=true;
-                
         int playingMode = 1;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
         while(playingMode){
             playingMode = inputHandler->selectGameMode(); //Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)
             modeChosen=true;

@@ -1,4 +1,5 @@
 #include "HUD.h"
+#include "state.h"
 #define WIDTHFAC 1.0
 #define HEIGHTFAC 1.0
 
@@ -214,3 +215,77 @@ void render::HUD::askCanonNb(sf::RenderWindow &window, std::string playerName, i
     window.draw(Text);
 }
 
+void render::HUD::welcomeMessage(sf::RenderWindow &window)
+{
+    sf::Font font;
+    font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    sf::Text Text;
+    Text.setFont(font);    
+    Text.setCharacterSize(windowWidth/20.f);
+    Text.setFillColor(sf::Color::Black);
+    Text.setString("Welcome to Jamaica !"/*, 3 = duel)"*/);  
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
+    highLightText(&window, Text);
+    window.draw(Text);
+}
+
+void render::HUD::displayResults(sf::RenderWindow &window, const std::vector<state::Player *> &players, int mapSize)
+{
+    //quand un joueur atteint la dernière tile chaque joueur fini son tour et on compte alors les points
+    state::Player * winner;
+    int maxScore = -50;
+    int positionEnding;
+    int relativePosition;
+    int playerScore;
+    for(state::Player * playerEnd : players) {
+        positionEnding=playerEnd->getPosition();
+        relativePosition = positionEnding-mapSize;
+        playerScore = 0;
+        for(state::BoatHold *currentBoathold : playerEnd->getBoatHolds()){
+            if (currentBoathold->hasResourceType("Gold")) {
+                playerScore += currentBoathold->getQuantity();
+            }
+        }
+        if (relativePosition <= -15) {
+            playerScore -= 5;
+        }
+        else {
+            if (relativePosition == 0){
+                playerScore += 15;
+            }
+                else{
+                switch (relativePosition) {
+                    case -6:
+                        playerScore += 0;
+                        break;
+                    case -5:
+                        playerScore += 1;
+                        break;
+                    case -4:
+                        playerScore += 3;
+                        break;
+                    case -3:
+                        playerScore += 5;
+                        break;
+                    case -2:
+                        playerScore += 7;
+                        break;
+                    case -1:
+                        playerScore += 10;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        //std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << "."<< std::endl;
+        if(playerScore > maxScore){
+            maxScore = playerScore;
+            winner = playerEnd;
+        }
+    }
+    //std::cout<< "Player : " << winner->getName() << " has won with a score of : " << maxScore << "."<< std::endl;
+}

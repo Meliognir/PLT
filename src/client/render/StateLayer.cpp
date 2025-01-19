@@ -5,6 +5,7 @@
 #include "client/InputHandler.h"
 #include "engine.h"
 #include <iostream>
+#include <thread>
 
 #define GAME_CONFIG_STATE 0
 #define CAPTAIN_DICE_STATE 1
@@ -32,6 +33,11 @@ void render::StateLayer::setCurrentStateID(int StateID){
 void render::StateLayer::runRenderLoop(client::Client* client) {
     userInputListener->userInput = "";
     bool animationWasPlayed = false;
+    renderer->renderBackground(*window);
+    instHUD->welcomeMessage(*window);
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
+
     while (window->isOpen() && client->running) {
         window->clear();
 
@@ -66,10 +72,12 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                     }
                 }
                 else {
-                    instHUD->askMapSize(*window);renderer->renderFinalAnimation(*window);if (!animationWasPlayed){
-                    renderer->renderFinalAnimation(*window);
-                    animationWasPlayed = true;
-                }
+                    instHUD->askMapSize(*window);
+                                if (!animationWasPlayed){
+                                renderer->renderFinalAnimation(*window, game->getPlayerList(), *game->map);
+                                instHUD->displayResults(*window, game->getPlayerList(), game->map->getSize());
+                                animationWasPlayed = true;
+                                }
                 }
                 break;
             }
@@ -194,13 +202,14 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
             case GAME_OVER_STATE:{
+                /*
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
-                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
-                //instHUD->displayResults(*window, *game);
+                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);*/
                 //only show the animation once :
                 if (!animationWasPlayed){
-                    renderer->renderFinalAnimation(*window);
+                    renderer->renderFinalAnimation(*window, game->getPlayerList(), *game->map);
+                    instHUD->displayResults(*window, game->getPlayerList(), game->map->getSize());
                     animationWasPlayed = true;
                 }
                 break;
