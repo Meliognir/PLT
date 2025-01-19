@@ -224,10 +224,10 @@ void render::HUD::welcomeMessage(sf::RenderWindow &window)
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/20.f);
+    Text.setCharacterSize(windowWidth/15.f);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Welcome to Jamaica !"/*, 3 = duel)"*/);  
-    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
+    Text.setString("Welcome to Jamaica !");  
+    Text.setPosition(windowWidth/13.f,windowHeight/2.7f);
     highLightText(&window, Text);
     window.draw(Text);
 }

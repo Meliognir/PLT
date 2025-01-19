@@ -33,9 +33,13 @@ void render::StateLayer::setCurrentStateID(int StateID){
 void render::StateLayer::runRenderLoop(client::Client* client) {
     userInputListener->userInput = "";
     bool animationWasPlayed = false;
-    renderer->renderBackground(*window);
+    while (!window->isOpen());
+    window->clear();
+    renderer->renderCenteredBackground(*window);
+    //renderer->renderBackground(*window);
     instHUD->welcomeMessage(*window);
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    window->display();
+    std::this_thread::sleep_for(std::chrono::milliseconds(2500));
 
 
     while (window->isOpen() && client->running) {
