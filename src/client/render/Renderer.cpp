@@ -518,6 +518,7 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window)
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
 
     // Dimensions of the animation
     const int frameWidth = 400;
@@ -526,7 +527,7 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window)
     const int framesPerRow = 23;
     const float frameDuration = 0.1f;
     const float totalDuration = frameCount*frameDuration;
-    const int startFrame = 19;
+    const int startFrame = 0;
 
     // Load the sprite sheet
     sf::Texture spriteSheet;
@@ -536,15 +537,19 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window)
     }
 
     // Create the sprite
+    sf::IntRect frameRect(startFrame*frameWidth, 0, frameWidth, frameHeight);
     sf::Sprite sprite(spriteSheet);
-    sprite.setPosition(windowWidth/2.f, windowHeight/2.f);
+    sprite.setTextureRect(frameRect);
+    sprite.setPosition(windowWidth/5.f, windowHeight/9.f);
+    sprite.setScale(globalScale/200.f, globalScale/300.f);
 
     sf::Clock clock;       // time for the frames
+    float totalClock = 0;
     int currentFrame = startFrame;
 
-    
-    while (window.isOpen() && clock.getElapsedTime().asSeconds() < totalDuration) {
-        sf::Event event;
+    sf::Event event;
+
+    while (window.isOpen() && totalClock <= totalDuration) {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
@@ -556,15 +561,16 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window)
             currentFrame = startFrame + (currentFrame - startFrame + 1) % (frameCount - startFrame); // go to next frame
 
             int row = currentFrame / framesPerRow; // row of the frame
-            int col = currentFrame % framesPerRow; // Column de la frame
+            int col = currentFrame % framesPerRow; // column of the frame
             sf::IntRect frameRect(col * frameWidth, row * frameHeight, frameWidth, frameHeight);
             sprite.setTextureRect(frameRect);
 
+            totalClock += clock.getElapsedTime().asSeconds();
             clock.restart(); // reset timer
         }
 
         // display it
-        window.clear(sf::Color::White);
+        window.clear(sf::Color::Transparent);
         window.draw(sprite);
         window.display();
     }

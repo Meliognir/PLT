@@ -31,6 +31,7 @@ void render::StateLayer::setCurrentStateID(int StateID){
 
 void render::StateLayer::runRenderLoop(client::Client* client) {
     userInputListener->userInput = "";
+    bool animationWasPlayed = false;
     while (window->isOpen() && client->running) {
         window->clear();
 
@@ -39,6 +40,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
 
         switch(currentStateID){
             case GAME_CONFIG_STATE:{
+                //animationWasPlayed = false;
                 renderer->renderBackground(*window); 
                 if (client::Client::modeChosen && !client::Client::nbPlayerChosen){
                     instHUD->askNumberofPlayers(*window);
@@ -64,7 +66,10 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                     }
                 }
                 else {
-                    instHUD->askMapSize(*window);renderer->renderFinalAnimation(*window);
+                    instHUD->askMapSize(*window);renderer->renderFinalAnimation(*window);if (!animationWasPlayed){
+                    renderer->renderFinalAnimation(*window);
+                    animationWasPlayed = true;
+                }
                 }
                 break;
             }
@@ -191,8 +196,13 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
             case GAME_OVER_STATE:{
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
-                renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                //instHUD->displayResults(*window, *game);
+                //only show the animation once :
+                if (!animationWasPlayed){
+                    renderer->renderFinalAnimation(*window);
+                    animationWasPlayed = true;
+                }
                 break;
             }
             default:{
