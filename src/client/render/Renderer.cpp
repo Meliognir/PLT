@@ -1,10 +1,30 @@
 #include "Renderer.h"
 #include <cmath>
 #include <vector>
+#include <SFML/Graphics.hpp>
+#include <string>
 #include <iostream>
 #define PI 3.14159265358979323846
 #define WIDTHFAC 1.0
 #define HEIGHTFAC 1.0
+
+void render::Renderer::renderCenteredBackground(sf::RenderWindow &window){
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("../src/boardGameData/board.png")) {
+        std::cerr << "Error loading board.png!" << std::endl;
+        return;
+    }
+    sf::Sprite backgroundSprite;
+    backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.setScale(
+        static_cast<float>(windowWidth) / backgroundTexture.getSize().x,
+        static_cast<float>(windowHeight) / backgroundTexture.getSize().y
+    );
+    window.draw(backgroundSprite);
+}
 
 void render::Renderer::renderBackground(sf::RenderWindow &window){
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -508,5 +528,261 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
             quantityText.setPosition(0.7f * windowWidth +(i+0.7f)*(windowWidth/36.f), 0.22f * windowHeight + offset);
             window.draw(quantityText);
         }
+    }
+}
+
+void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std::vector<state::Player *> &players, const state::Map &map)
+{
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    float globalScale = std::min(desktopMode.width, desktopMode.height)/2;
+    sf::Vector2f center(windowWidth/3.1f, windowHeight/2.05f);        // Centre du cercle (positionné à gauche dans la fenêtre)
+    int mapSize = map.getSize();
+    float mapScale = 1/((float)mapSize);
+
+    // Create the background -------------------------------------------------
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("../src/boardGameData/BackgroundJamaicaPLT.png")) {
+        std::cerr << "Error loading BackgroundJamaicaPLT.png!" << std::endl;
+        return;
+    }
+    sf::Sprite backgroundSprite;
+    backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.setScale(
+        static_cast<float>(windowWidth) / backgroundTexture.getSize().x,
+        static_cast<float>(windowHeight) / backgroundTexture.getSize().y
+    );
+
+        std::cout << "fine 0" << std::endl;
+
+
+    // Create the map --------------------------------------------------------
+    
+    // Rayon du cercle
+    float radius = globalScale/1.7f;
+    float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
+
+    sf::Font font;
+    font.loadFromFile("../src/boardGameData/Arial.ttf");   
+
+    sf::Texture beachTileset;
+    if (!beachTileset.loadFromFile("../src/boardGameData/Beach_Tileset.png")) {
+        std::cerr << "Error loading Beach_Tileset.png!" << std::endl;
+        return;
+    }
+
+    sf::Sprite tileSprite;
+    tileSprite.setTexture(beachTileset);
+    int tileWidth = 96;   
+    int tileHeight = 96;  
+        std::cout << "fine 1" << std::endl;
+
+    sf::Texture sunTexture;
+    sf::Texture moonTexture;
+    if (!sunTexture.loadFromFile("../src/boardGameData/Sun.png")) {
+        std::cerr << "Error loading sun texture!" << std::endl;
+        return;
+    }
+    if (!moonTexture.loadFromFile("../src/boardGameData/Moon.png")) {
+        std::cerr << "Error loading moon texture!" << std::endl;
+        return;
+    }
+    sf::Sprite sunSprite;
+    sunSprite.setTexture(sunTexture);
+    sunSprite.setTextureRect(sf::IntRect(0, 0, 400, 400));
+    sunSprite.setPosition(windowWidth/16.0f, windowHeight/14.5f);
+    sunSprite.setScale(sf::Vector2f(globalScale/2100.f, globalScale/2100.f));
+
+    sf::Sprite moonSprite;
+    moonSprite.setTexture(moonTexture);
+    moonSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
+    moonSprite.setPosition(windowWidth/1.9f, windowHeight/12.9f);
+    moonSprite.setScale(sf::Vector2f(globalScale/900, globalScale/900));
+
+
+
+    // Create the players ----------------------------------------------------
+
+    sf::Texture playerTexture;
+    if (!playerTexture.loadFromFile("../src/boardGameData/Boats.png")) {
+        std::cerr << "Error loading player texture!" << std::endl;
+        return;
+    }
+
+    std::vector<sf::Color> playerColors = {
+        sf::Color::Red,
+        sf::Color::Green,
+        sf::Color::Blue,
+        sf::Color::Yellow,
+        sf::Color::Magenta,
+        sf::Color::Cyan
+    };
+
+    // Paramètres pour le sprite
+    int spriteWidth = 32;  // Largeur d'une image 
+    int spriteHeight = 32; // Hauteur d'une image 
+
+    sf::Sprite playerSprite;
+    playerSprite.setTexture(playerTexture);
+    playerSprite.setTextureRect(sf::IntRect(0, 0, spriteWidth, spriteHeight));
+    playerSprite.setOrigin(spriteWidth/2, spriteHeight/2);
+    playerSprite.setScale(sf::Vector2f(1.f, 1.f));
+
+    // Créer et configurer le texte pour le nom du joueur
+    sf::Text playerNameText;
+    playerNameText.setFont(font);
+    playerNameText.setCharacterSize(16);
+    playerNameText.setStyle(sf::Text::Bold);
+        std::cout << "fine 2" << std::endl;
+
+    // Create the animation --------------------------------------------------
+
+    // Dimensions of the animation
+    const int frameWidth = 400;
+    const int frameHeight = 379;
+    const int frameCount = 46;
+    const int framesPerRow = 23;
+    const float frameDuration = 0.1f;
+    const float totalDuration = frameCount*frameDuration;
+    const int startFrame = 0;
+
+    // Load the sprite sheet
+    sf::Texture spriteSheet;
+    if (!spriteSheet.loadFromFile("../src/boardGameData/SpritesJamaicaFireworks.png")) {
+        std::cerr << "Erreur : Impossible de charger la sprite sheet.\n";
+        return;
+    }
+
+    // Create the sprite
+    sf::IntRect frameRect(startFrame*frameWidth, 0, frameWidth, frameHeight);
+    sf::Sprite fireworkSprite(spriteSheet);
+    fireworkSprite.setTextureRect(frameRect);
+    fireworkSprite.setPosition(windowWidth/5.f, windowHeight/9.f);
+    fireworkSprite.setScale(globalScale/200.f, globalScale/300.f);
+
+    sf::Clock clock;       // time for the frames
+    float totalClock = 0;
+    int currentFrame = startFrame;
+
+    sf::Event event;
+
+    while (window.isOpen() && totalClock <= totalDuration) {
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        // Update with the next frame if it is time
+        if (clock.getElapsedTime().asSeconds() >= frameDuration) {
+            currentFrame = (currentFrame + 1) % frameCount; 
+            currentFrame = startFrame + (currentFrame - startFrame + 1) % (frameCount - startFrame); // go to next frame
+
+            int row = currentFrame / framesPerRow; // row of the frame
+            int col = currentFrame % framesPerRow; // column of the frame
+            sf::IntRect frameRect(col * frameWidth, row * frameHeight, frameWidth, frameHeight);
+            fireworkSprite.setTextureRect(frameRect);
+
+            totalClock += clock.getElapsedTime().asSeconds();
+            clock.restart(); // reset timer
+        }
+
+        // display it
+        window.clear(sf::Color::Transparent);
+        window.draw(backgroundSprite);
+        // Parcourir toutes les tuiles de la carte
+        for (int i = 0; i < mapSize; ++i) {
+            const state::Tile* tile = map.listOfTiles[i];
+
+            // Calcul des coordonnées de la tuile sur le cercle
+            float angle = i * angleStep;
+            float x = center.x + (radius *1.2f) * cos(angle);
+            float y = center.y + radius * sin(angle);
+            
+            float separatorX = center.x + radius *(1.2f) * cos(angle+angleStep/2.f);
+            float separatorY = center.y + radius * sin(angle+angleStep/2.f);          
+
+            // Tracer une ligne (rayon) entre le centre et la position de la tuile
+            sf::Vertex line[] = {
+                sf::Vertex(sf::Vector2f(0.5f*(separatorX + center.x), 0.5f*(separatorY + center.y)), sf::Color::Black),
+                sf::Vertex(sf::Vector2f(separatorX, separatorY), sf::Color::Black)
+            };
+            window.draw(line, 2, sf::Lines);
+            tileSprite.setTextureRect(sf::IntRect(32+4*tileWidth, 96, tileWidth, tileHeight)); // Première tuile
+            tileSprite.setOrigin(tileWidth / 2, tileHeight / 2);
+            tileSprite.setPosition(x, y);
+            tileSprite.setScale(sf::Vector2f(globalScale/1800.f, globalScale/1800.f));
+            window.draw(tileSprite);
+        }
+        window.draw(sunSprite);
+        window.draw(moonSprite);
+        for (size_t i = 0; i < players.size(); ++i) {
+            const auto& player = players[i];
+            int playerPosition = player->getPosition();  // Position du joueur (index de la tuile)
+            int mapSize = map.getSize();
+            if (playerPosition < 0){
+                playerPosition = mapSize-1 - (-playerPosition)%mapSize;
+            }
+            else if (playerPosition >= mapSize){
+                playerPosition = playerPosition%mapSize;
+            } 
+            // Vérifier si la position est valide dans la carte
+            if (playerPosition >= 0 && playerPosition < static_cast<int>(map.listOfTiles.size())) {
+                // Calculer la position de la tuile correspondante
+
+                float mapScale = 1/((float)mapSize);
+                
+                // Rayon du cercle
+                float radius = globalScale/1.85f;
+                float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
+
+                float angle = playerPosition * angleStep;
+
+                float x = center.x + radius *(1.15f - 0.11f*i) * cos(angle);
+                float y = center.y + radius * (0.95f - 0.11f*i) * sin(angle);  
+
+                // Créer et configurer le sprite
+                playerSprite.setPosition(x, y);
+                
+                window.draw(playerSprite);
+            }
+        }
+
+        for (size_t i = 0; i < players.size(); ++i) {
+            const auto& player = players[i];
+            int playerPosition = player->getPosition();  // Position du joueur (index de la tuile)
+            int mapSize = map.getSize();
+            if (playerPosition < 0){
+                playerPosition = mapSize-1 - (-playerPosition)%mapSize;
+            }
+            else if (playerPosition >= mapSize){
+                playerPosition = playerPosition%mapSize;
+            } 
+            // Vérifier si la position est valide dans la carte
+            if (playerPosition >= 0 && playerPosition < static_cast<int>(map.listOfTiles.size())) {
+                // Calculer la position de la tuile correspondante
+
+                float mapScale = 1/((float)mapSize);
+                
+                // Rayon du cercle
+                float radius = globalScale/1.9f;
+                float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
+
+                float angle = playerPosition * angleStep;
+
+                float x = center.x + radius *(1.15f - 0.15f*i) * cos(angle);
+                float y = center.y + radius * (0.95f - 0.15f*i) * sin(angle);  
+
+
+                // Configurer le texte pour le nom du joueur
+                playerNameText.setString(player->getName());  
+                playerNameText.setPosition(x - spriteWidth / 2 - 10, y + spriteHeight / 2 - 10);  // Position sous le sprite
+                playerNameText.setFillColor(playerColors[i % playerColors.size()]);  
+
+                window.draw(playerNameText);
+            }
+        }
+        window.draw(fireworkSprite);
+        window.display();
     }
 }
