@@ -554,6 +554,7 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std:
         static_cast<float>(windowHeight) / backgroundTexture.getSize().y
     );
 
+        std::cout << "fine 0" << std::endl;
 
 
     // Create the map --------------------------------------------------------
@@ -575,6 +576,7 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std:
     tileSprite.setTexture(beachTileset);
     int tileWidth = 96;   
     int tileHeight = 96;  
+        std::cout << "fine 1" << std::endl;
 
     sf::Texture sunTexture;
     sf::Texture moonTexture;
@@ -632,6 +634,7 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std:
     playerNameText.setFont(font);
     playerNameText.setCharacterSize(16);
     playerNameText.setStyle(sf::Text::Bold);
+        std::cout << "fine 2" << std::endl;
 
     // Create the animation --------------------------------------------------
 

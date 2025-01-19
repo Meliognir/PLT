@@ -77,11 +77,6 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 }
                 else {
                     instHUD->askMapSize(*window);
-                                if (!animationWasPlayed){
-                                renderer->renderFinalAnimation(*window, game->getPlayerList(), *game->map);
-                                instHUD->displayResults(*window, game->getPlayerList(), game->map->getSize());
-                                animationWasPlayed = true;
-                                }
                 }
                 break;
             }
