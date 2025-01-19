@@ -43,13 +43,12 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
 
 
     while (window->isOpen() && client->running) {
-        window->clear();
-
         // Interpret mouse clics and key inputs to read user input or close the window
         userInputListener->readInput(window, client->inputHandler);
 
         switch(currentStateID){
             case GAME_CONFIG_STATE:{
+                window->clear();
                 //animationWasPlayed = false;
                 renderer->renderBackground(*window); 
                 if (client::Client::modeChosen && !client::Client::nbPlayerChosen){
@@ -81,6 +80,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
             case CAPTAIN_DICE_STATE:{
+                window->clear();
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, client::Client::die1, client::Client::die2);
@@ -95,6 +95,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
             }
             
             case CARD_CHOICE_STATE:{
+                window->clear();
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
@@ -111,6 +112,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
             }
 
             case CARD_ACTION_STATE: {
+                window->clear();
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
@@ -121,6 +123,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 renderer->renderBoatholds(*window, game->getActivePlayer(), 0);
                 break;}
             case RESOURCE_HANDLING_STATE: {
+                window->clear();
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
@@ -140,6 +143,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
             case OPPONENT_CHOICE_STATE:{
+                window->clear();
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
@@ -153,6 +157,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
             case COMBAT_ATTACKING_STATE:{
+                window->clear();
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
@@ -171,6 +176,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
             case COMBAT_DEFENDING_STATE:{
+                window->clear();
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
@@ -189,6 +195,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
             case STEAL_RESOURCE_STATE:{ //TODO : instHUD->affichagedetextecaleavoler et instHUD->affichagedetextecaleadeposer
+                window->clear();
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
@@ -201,11 +208,6 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
             case GAME_OVER_STATE:{
-                /*
-                renderer->renderBackground(*window);
-                renderer->renderMap(*window, *game->map);
-                renderer->renderPlayers(*window, game->getPlayerList(), *game->map);*/
-                //only show the animation once :
                 if (!animationWasPlayed){
                     renderer->renderFinalAnimation(*window, game->getPlayerList(), *game->map);
                     instHUD->displayResults(*window, game->getPlayerList(), game->map->getSize());
@@ -214,10 +216,12 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 break;
             }
             default:{
+                /*
                 renderer->renderBackground(*window);
                 renderer->renderMap(*window, *game->map);
                 renderer->renderDice(*window, state::Game::dayDie, state::Game::nightDie);
                 renderer->renderPlayers(*window, game->getPlayerList(), *game->map);
+                */
                 break;
             }
         }
