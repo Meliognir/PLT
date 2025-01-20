@@ -78,6 +78,12 @@ void render::UserInputListener::readInput(sf::RenderWindow *window, client::Inpu
                     std::cout << "The left button was pressed" << std::endl;
                     std::cout << "Mouse X: " << event.mouseButton.x << std::endl;
                     std::cout << "Mouse Y: " << event.mouseButton.y << std::endl;
+                    
+                    userInput = std::string(1, ' ');
+                    inputHandler->setUserInput(userInput);
+                    inputHandler->setWaitingInput(false);
+                    //safePrint(userInput);
+                    userInput.clear(); // Clear input
                 }
                 break;
 
