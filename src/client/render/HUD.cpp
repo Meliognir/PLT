@@ -300,7 +300,7 @@ void render::HUD::displayResults(sf::RenderWindow &window, const std::vector<sta
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/40.f);
+    Text.setCharacterSize(windowWidth/50.f);
     Text.setFillColor(sf::Color::Black);
     Text.setString(resultsString);
     Text.setPosition(windowWidth/10.f,windowHeight/3.f);
