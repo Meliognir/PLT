@@ -36,24 +36,12 @@ int main(int argc,char* argv[])
     Observable::addObserver(stateLayer);
     // Démarrer le thread pour le client
     std::thread clientThread(clientThreadFunction, client);
-    // Attendre que le client soit prêt
-    bool ready = false;
-    while(!ready){
-        if (client != nullptr){
-            if (client->running){
-                ready = true;
-            }
-        }
-        else {
-            ready = true;
-        }
-    }
 
     if (client!=nullptr) {
-    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-    unsigned int windowWidth = desktopMode.width ; 
-    unsigned int windowHeight = desktopMode.height ;
-    window = new sf::RenderWindow(sf::VideoMode(windowWidth, windowHeight), "Jamaica Boardgame");
+        sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+        unsigned int windowWidth = desktopMode.width ; 
+        unsigned int windowHeight = desktopMode.height ;
+        window = new sf::RenderWindow(sf::VideoMode(windowWidth, windowHeight), "Jamaica Boardgame");
     }
     
     if (window) {

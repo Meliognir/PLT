@@ -33,14 +33,14 @@ void render::StateLayer::setCurrentStateID(int StateID){
 void render::StateLayer::runRenderLoop(client::Client* client) {
     userInputListener->userInput = "";
     bool animationWasPlayed = false;
-    while (!window->isOpen());
     window->clear();
     renderer->renderCenteredBackground(*window);
     //renderer->renderBackground(*window);
     instHUD->welcomeMessage(*window);
     window->display();
-    std::this_thread::sleep_for(std::chrono::milliseconds(2500));
-
+    while (!client->running){
+        userInputListener->readInput(window, client->inputHandler);
+    }
 
     while (window->isOpen() && client->running) {
         // Interpret mouse clics and key inputs to read user input or close the window
@@ -48,8 +48,8 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
 
         switch(currentStateID){
             case GAME_CONFIG_STATE:{
+                animationWasPlayed = false;
                 window->clear();
-                //animationWasPlayed = false;
                 renderer->renderBackground(*window); 
                 if (client::Client::modeChosen && !client::Client::nbPlayerChosen){
                     instHUD->askNumberofPlayers(*window);
@@ -121,7 +121,9 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                     break;
                 }
                 renderer->renderBoatholds(*window, game->getActivePlayer(), 0);
-                break;}
+                break;
+            }
+
             case RESOURCE_HANDLING_STATE: {
                 window->clear();
                 renderer->renderBackground(*window);
@@ -142,6 +144,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 }
                 break;
             }
+            
             case OPPONENT_CHOICE_STATE:{
                 window->clear();
                 renderer->renderBackground(*window);
@@ -205,6 +208,7 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
                 }
                 renderer->renderBoatholds(*window, game->getCombatLoser(), 0);
                 renderer->renderBoatholds(*window, game->getCombatWinner(), 100);
+                animationWasPlayed = false;
                 break;
             }
             case GAME_OVER_STATE:{

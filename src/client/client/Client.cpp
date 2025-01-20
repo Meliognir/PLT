@@ -76,15 +76,26 @@ namespace client {
         gameEngine = engine::GameEngine::getInstance(gameState);
         gameInstance = gameEngine->game;
         inputHandler = new InputHandler();
+        running = false;
     }
 
     int Client::launch(){
+        //std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+        inputHandler->waitConfirm();
+
         // Playing Modes
         running=true;
         int playingMode = 1;
-        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
 
         while(playingMode){
+
+            modeChosen = false;
+            nbPlayerChosen = false;
+            isPlayerTypeChosen = false;
+            isPlayerAI = false;
+            allPlayerSet = false;
+            
             playingMode = inputHandler->selectGameMode(); //Dans quel mode souhaitez-vous jouer ? (0 = exit, 1 = local, 2 = online, 3 = ia)
             modeChosen=true;
             switch (playingMode){                        //quel est le mode 3 ? c'est SINGLE_PLAYER ou IA ?
@@ -107,7 +118,8 @@ namespace client {
             }
             //cliquer aux bons endroits pour choisir le mode de jeu souhaité
             std::cout << "We hope you enjoyed your game !" << std::endl;
-            std::string waitConfirm;
+            //std::string waitingConfirm;
+            //std::cin >> waitingConfirm;
         }
         running = false;
         return 0;
@@ -153,6 +165,8 @@ namespace client {
         state::Player* winner;
         state::Player* loser;
         int winnerBoatholdId;
+        int maxScore;
+        int mapSize;
 
         // Get the mapManager for movement logic
         engine::MapManager* mapManager = new engine::MapManager();
@@ -170,7 +184,7 @@ namespace client {
         // Game loop State behavior
         bool endloop = false;
         int gameDays = 0;
-        //std::string waitConfirm;
+        //std::string waitingConfirm;
         std::cout << "Client now entering the game loop\r\n" << std::endl;
         while (!endloop){
 
@@ -835,7 +849,66 @@ namespace client {
                 case GAME_OVER_STATE:
                     std::cout << "Client now entering GAME_OVER_STATE\r\n" << std::endl;
 
-                    // display results
+                    // calculate the scores when a player has reached the last tile and all the users have played their last turn
+                    state::Player * winner;
+                    maxScore = -50;
+                    mapSize = gameInstance->map->getSize();
+                    int positionEnding;
+                    int relativePosition;
+                    int playerScore;
+                    for(state::Player * playerEnd : gameInstance->getPlayerList()) {
+                        positionEnding=playerEnd->getPosition();
+                        relativePosition = positionEnding-mapSize;
+                        playerScore = 0;
+                        for(state::BoatHold *currentBoathold : playerEnd->getBoatHolds()){
+                            if (currentBoathold->hasResourceType("Gold")) {
+                                playerScore += currentBoathold->getQuantity();
+                            }
+                        }
+                        if (relativePosition <= -15) {
+                            playerScore -= 5;
+                        }
+                        else {
+                            if (relativePosition == 0){
+                                playerScore += 15;
+                            }
+                                else{
+
+                                switch (relativePosition) {
+                                    case -6:
+                                        playerScore += 0;
+                                        break;
+                                    case -5:
+                                        playerScore += 1;
+                                        break;
+                                    case -4:
+                                        playerScore += 3;
+                                        break;
+                                    case -3:
+                                        playerScore += 5;
+                                        break;
+                                    case -2:
+                                        playerScore += 7;
+                                        break;
+                                    case -1:
+                                        playerScore += 10;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                        std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << "."<< std::endl;
+                        if(playerScore > maxScore){
+                            maxScore = playerScore;
+                            winner = playerEnd;
+                        }
+                    }
+                    // show the winner
+                    std::cout<< "Player : " << winner->getName() << " has won with a score of : " << maxScore << "."<< std::endl;
+
+                    inputHandler->waitConfirm();
+
                     gameInstance->request();
                     endloop = true; // exit this game mode
                     break;
@@ -846,8 +919,8 @@ namespace client {
 
 
             //std::cout << "\n\n\nDo you wish to continue the game ? -------------------------------" << std::endl;
-            //std::cin >> waitConfirm;
-            //if (waitConfirm[0] == 'n'){
+            //std::cin >> waitingConfirm;
+            //if (waitingConfirm[0] == 'n'){
             //    endloop = 1;
             //}
 

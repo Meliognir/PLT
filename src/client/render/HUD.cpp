@@ -306,4 +306,12 @@ void render::HUD::displayResults(sf::RenderWindow &window, const std::vector<sta
     Text.setPosition(windowWidth/10.f,windowHeight/3.f);
     highLightText(&window, Text);
     window.draw(Text);
+
+    Text.setFont(font);    
+    Text.setCharacterSize(windowWidth/80.f);
+    Text.setFillColor(sf::Color::Black);
+    Text.setString("Press any key to continue.");
+    Text.setPosition(windowWidth/10.f, 6.7f*windowHeight/8.f);
+    highLightText(&window, Text);
+    window.draw(Text);
 }
