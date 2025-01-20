@@ -326,7 +326,6 @@ Game::~Game(){
     for(Player* player : playerList){
         delete player;
     }
-    playerList.clear();
     for (auto card : collectionOfCards) {
         delete card;
     }
