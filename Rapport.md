@@ -214,7 +214,7 @@ Pour le rendu, on utilise la librairie SFML. On utilise une fenêtre SFML (sf::R
 On utilise nos propres images qu'on associe à des textures SFML (sf::Texture). On peut ensuite crée un ou plusieurs sprites (sf::Sprite) liés à une texture pour ensuite les afficher sur la fenêtre SFML grâce à la fonction draw() de sf::RenderWindow. Il y a aussi la possibilité d'afficher des textes (sf::Text) avec la police désirée (sf::Font).  
 >### 3.2 Conception logiciel**
 >>![Image du render.dia](rapport/images/render1.1.png "Image du render.dia.")
->>StateLayer gère la machine à état, Renderer affiche tous les sprites et HUD affiche le texte pour indiquer les actions aux joueurs. 
+>>StateLayer s'appuie sur la machine à état du jeu pour afficher à chaque instant le rendu correspondant. Renderer est la classe employée par StateLayer pour afficher l'ensemble des sprites et animations. HUD est la classe utilisée pour afficher le texte qui donnent des instruction de jeu aux joueurs. Enfin, UserListener est la classe que l'on utilise pour écouter les entrées claviers du joueurs, ainsi que les clics dans certaines situations, afin de lui permettre d'interagir avec le client. 
 
  ## 4-Règles de changement d'états et moteur de jeu 
 
@@ -264,7 +264,7 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 ## 5-Intelligence Artificiel
 >### 5.1 Stratégie
 >> #### 5.1.1 IA Random
->> L'IA Random renvoie à chaque input une valeur aléatoire qui dépend
+>> L'IA Random renvoie à chaque  une valeur aléatoire qui dépend
 >> de l'action à faire.
 >>>Par exemple : elle renvoie un entier entre 1 et 3 quand il faut choisir une carte 
 >> et un entier entre 1 et 6 quand il faut choisir un boathold.
@@ -292,8 +292,8 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 >> Pour la partie serveur nous n'avons pas vraiment eu le temps de nous pencher dessus. Néanmoins, nous avons réussi a connecter deux
 >> clients au même serveur, de deux ordinateurs différents et afficher la map.
 >> 
->>Le but est que quand le premier joueur décide de faire sa partie en ligne en entrant l'input 2 après la première requête nous lançions le jeu pour chaque client. 
->> Malheureusement quand nous effectuons la commande 2 (runGameOnline) le serveur affiche à l'infini la même ligne qui demande un input sans que nous puissions avoir le temps de lui répondre.
+>>Le but est que quand le premier joueur décide de faire sa partie en ligne en entrant l' 2 après la première requête nous lançions le jeu pour chaque client. 
+>> Malheureusement quand nous effectuons la commande 2 (runGameOnline) le serveur affiche à l'infini la même ligne qui demande un  sans que nous puissions avoir le temps de lui répondre.
 >> 
 >> ## 6.2 Conception logiciel 
 >> Voici donc le dia du server, il est accompagné d'un main et d'un autre clientNetwork qui a la même fonctionnalité que le runGameOnline du client de src. 
@@ -301,6 +301,6 @@ mandes, ce sont d’autres éléments en dehors du moteur de jeu qui fabriqueron
 >> ![Image de server.dia](rapport/images/server1.1.png "Image du server.dia")
 >>
 > 
->> La plupart des fonctions qui servent à modifier le jeu et donc les inputs sont dans le client de src qui est le suivant :
+>> La plupart des fonctions qui servent à modifier le jeu et donc les s sont dans le client de src qui est le suivant :
 >> ![Image du client.dia](rapport/images/client.png "Image du client.dia")
 >> Toutes les commandes sont envoyées depuis le client et appellent donc l'engine pour modifier le state.
