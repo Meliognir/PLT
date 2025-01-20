@@ -56,7 +56,10 @@ int main(int argc,char* argv[])
     // while (!client->closing) {display();}
     clientThread.join();
     delete renderer;
+    std::cout << "render closed" << std::endl;
     delete client;
-    delete game;
+    std::cout << "client closed" << std::endl;
+    //delete game;
+    //std::cout << "game closed" << std::endl;
     return 0;
 }
