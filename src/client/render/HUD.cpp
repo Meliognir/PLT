@@ -234,7 +234,9 @@ void render::HUD::welcomeMessage(sf::RenderWindow &window)
 
 void render::HUD::displayResults(sf::RenderWindow &window, const std::vector<state::Player *> &players, int mapSize)
 {
-    //quand un joueur atteint la dernière tile chaque joueur fini son tour et on compte alors les points
+
+    std::string resultsString = "";
+
     state::Player * winner;
     int maxScore = -50;
     int positionEnding;
@@ -282,10 +284,26 @@ void render::HUD::displayResults(sf::RenderWindow &window, const std::vector<sta
             }
         }
         //std::cout<< "Player : " << playerEnd->getName() << " has a score of : " << playerScore << "."<< std::endl;
+        resultsString += "Player : " + playerEnd->getName() + " has a score of : " + std::to_string(playerScore) + ".\n";
         if(playerScore > maxScore){
             maxScore = playerScore;
             winner = playerEnd;
         }
     }
     //std::cout<< "Player : " << winner->getName() << " has won with a score of : " << maxScore << "."<< std::endl;
+    resultsString += "\nPlayer : " + winner->getName() + " has won with a score of : " + std::to_string(maxScore) + ".";
+
+    sf::Font font;
+    font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
+    unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
+    sf::Text Text;
+    Text.setFont(font);    
+    Text.setCharacterSize(windowWidth/50.f);
+    Text.setFillColor(sf::Color::Black);
+    Text.setString(resultsString);
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
+    highLightText(&window, Text);
+    window.draw(Text);
 }

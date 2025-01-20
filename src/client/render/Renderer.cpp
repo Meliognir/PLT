@@ -220,8 +220,6 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
         std::cerr << "Error loading player texture!" << std::endl;
         return;
     }
-    sf::Font font;
-    font.loadFromFile("../src/boardGameData/Arial.ttf"); 
 
     std::vector<sf::Color> playerColors = {
         sf::Color::Red,
@@ -236,57 +234,21 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
     int spriteWidth = 32;  // Largeur d'une image 
     int spriteHeight = 32; // Hauteur d'une image 
 
+    sf::Sprite playerSprite;
+    playerSprite.setTexture(playerTexture);
+    playerSprite.setTextureRect(sf::IntRect(0, 0, spriteWidth, spriteHeight));
+    playerSprite.setOrigin(spriteWidth/2, spriteHeight/2);
+    playerSprite.setScale(sf::Vector2f(1.f, 1.f));
 
-//old version :
-/*
-    for (size_t i = 0; i < players.size(); ++i) {
-        const auto& player = players[i];
-        int playerPosition = player->getPosition();  // Position du joueur (index de la tuile)
-        int mapSize = map.getSize();
-        if (playerPosition < 0){
-            playerPosition = mapSize-1 - (-playerPosition)%mapSize;
-        }
-        else if (playerPosition >= mapSize){
-            playerPosition = playerPosition%mapSize;
-        } 
-        // Vérifier si la position est valide dans la carte
-        if (playerPosition >= 0 && playerPosition < static_cast<int>(map.listOfTiles.size())) {
-            // Calculer la position de la tuile correspondante
+    // Créer et configurer le texte pour le nom du joueur
+    sf::Font font;
+    font.loadFromFile("../src/boardGameData/Arial.ttf"); 
 
-            float mapScale = 1/((float)mapSize);
-            
-            // Rayon du cercle
-            float radius = globalScale/2;
-            float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
+    sf::Text playerNameText;
+    playerNameText.setFont(font);
+    playerNameText.setCharacterSize(16);
+    playerNameText.setStyle(sf::Text::Bold);
 
-
-            float angle = playerPosition * angleStep;
-            float x = center.x + radius *(1.33f+ 0.05f*i) * cos(angle);
-            float y = center.y + radius * (1.05f+ 0.05f*i) * sin(angle);
-
-            // Créer et configurer le sprite
-            sf::Sprite playerSprite;
-            playerSprite.setTexture(playerTexture);
-            playerSprite.setTextureRect(sf::IntRect(0, 0, spriteWidth, spriteHeight));
-            playerSprite.setOrigin(spriteWidth/2, spriteHeight/2);
-            playerSprite.setScale(sf::Vector2f(1.f, 1.f));
-            playerSprite.setPosition(x, y);
-
-            // Créer et configurer le texte pour le nom du joueur
-            sf::Text playerNameText;
-            playerNameText.setFont(font);
-            playerNameText.setString(player->getName());  
-            playerNameText.setCharacterSize(16);
-            playerNameText.setFillColor(playerColors[i % playerColors.size()]);  
-            playerNameText.setStyle(sf::Text::Bold);
-            playerNameText.setPosition(x - spriteWidth / 2 - 10, y + spriteHeight / 2 - 10);  // Position sous le sprite
-
-            window.draw(playerSprite);
-            window.draw(playerNameText);
-        }
-    }
-    */
-    // In this old version, the code was cleaner, but the usernames were sometimes hidden by the boats
 
     for (size_t i = 0; i < players.size(); ++i) {
         const auto& player = players[i];
@@ -301,34 +263,20 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
         // Vérifier si la position est valide dans la carte
         if (playerPosition >= 0 && playerPosition < static_cast<int>(map.listOfTiles.size())) {
             // Calculer la position de la tuile correspondante
-
             float mapScale = 1/((float)mapSize);
             
             // Rayon du cercle
             float radius = globalScale/1.85f;
             float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
-
             float angle = playerPosition * angleStep;
-            /*
-            float x = center.x + radius *(1.33f+ 0.05f*i) * cos(angle);
-            float y = center.y + radius * (1.05f+ 0.05f*i) * sin(angle);
-            */
-
-            float x = center.x + radius *(1.15f - 0.11f*i) * cos(angle);
+            float x = center.x + radius * (1.15f - 0.11f*i) * cos(angle);
             float y = center.y + radius * (0.95f - 0.11f*i) * sin(angle);  
-
             // Créer et configurer le sprite
-            sf::Sprite playerSprite;
-            playerSprite.setTexture(playerTexture);
-            playerSprite.setTextureRect(sf::IntRect(0, 0, spriteWidth, spriteHeight));
-            playerSprite.setOrigin(spriteWidth/2, spriteHeight/2);
-            playerSprite.setScale(sf::Vector2f(1.f, 1.f));
             playerSprite.setPosition(x, y);
             
             window.draw(playerSprite);
         }
     }
-
     for (size_t i = 0; i < players.size(); ++i) {
         const auto& player = players[i];
         int playerPosition = player->getPosition();  // Position du joueur (index de la tuile)
@@ -342,32 +290,18 @@ void render::Renderer::renderPlayers(sf::RenderWindow &window, const std::vector
         // Vérifier si la position est valide dans la carte
         if (playerPosition >= 0 && playerPosition < static_cast<int>(map.listOfTiles.size())) {
             // Calculer la position de la tuile correspondante
-
             float mapScale = 1/((float)mapSize);
             
             // Rayon du cercle
-            float radius = globalScale/1.9f;
+            float radius = globalScale/1.87f;
             float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
-
             float angle = playerPosition * angleStep;
-            /*
-            float x = center.x + radius *(1.33f+ 0.05f*i) * cos(angle);
-            float y = center.y + radius * (1.05f+ 0.05f*i) * sin(angle);
-            */
-
-            float x = center.x + radius *(1.15f - 0.15f*i) * cos(angle);
-            float y = center.y + radius * (0.95f - 0.15f*i) * sin(angle);  
-
-
-            // Créer et configurer le texte pour le nom du joueur
-            sf::Text playerNameText;
-            playerNameText.setFont(font);
+            float x = center.x + radius * (1.15f - 0.11f*i) * cos(angle);
+            float y = center.y + radius * (0.95f - 0.11f*i) * sin(angle);  
+            // Configurer le texte pour le nom du joueur
             playerNameText.setString(player->getName());  
-            playerNameText.setCharacterSize(16);
-            playerNameText.setFillColor(playerColors[i % playerColors.size()]);  
-            playerNameText.setStyle(sf::Text::Bold);
             playerNameText.setPosition(x - spriteWidth / 2 - 10, y + spriteHeight / 2 - 10);  // Position sous le sprite
-
+            playerNameText.setFillColor(playerColors[i % playerColors.size()]);  
             window.draw(playerNameText);
         }
     }
@@ -533,6 +467,7 @@ void render::Renderer::renderBoatholds(sf::RenderWindow &window, state::Player *
 
 void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std::vector<state::Player *> &players, const state::Map &map)
 {
+    window.clear();
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
@@ -554,9 +489,6 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std:
         static_cast<float>(windowHeight) / backgroundTexture.getSize().y
     );
 
-        std::cout << "fine 0" << std::endl;
-
-
     // Create the map --------------------------------------------------------
     
     // Rayon du cercle
@@ -576,7 +508,6 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std:
     tileSprite.setTexture(beachTileset);
     int tileWidth = 96;   
     int tileHeight = 96;  
-        std::cout << "fine 1" << std::endl;
 
     sf::Texture sunTexture;
     sf::Texture moonTexture;
@@ -634,7 +565,6 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std:
     playerNameText.setFont(font);
     playerNameText.setCharacterSize(16);
     playerNameText.setStyle(sf::Text::Bold);
-        std::cout << "fine 2" << std::endl;
 
     // Create the animation --------------------------------------------------
 
@@ -738,7 +668,7 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std:
 
                 float angle = playerPosition * angleStep;
 
-                float x = center.x + radius *(1.15f - 0.11f*i) * cos(angle);
+                float x = center.x + radius * (1.15f - 0.11f*i) * cos(angle);
                 float y = center.y + radius * (0.95f - 0.11f*i) * sin(angle);  
 
                 // Créer et configurer le sprite
@@ -765,13 +695,13 @@ void render::Renderer::renderFinalAnimation(sf::RenderWindow &window, const std:
                 float mapScale = 1/((float)mapSize);
                 
                 // Rayon du cercle
-                float radius = globalScale/1.9f;
+                float radius = globalScale/1.87f;
                 float angleStep = 2 * PI * mapScale;   // Angle entre chaque tuile
 
                 float angle = playerPosition * angleStep;
 
-                float x = center.x + radius *(1.15f - 0.15f*i) * cos(angle);
-                float y = center.y + radius * (0.95f - 0.15f*i) * sin(angle);  
+                float x = center.x + radius * (1.15f - 0.11f*i) * cos(angle);
+                float y = center.y + radius * (0.95f - 0.11f*i) * sin(angle);  
 
 
                 // Configurer le texte pour le nom du joueur

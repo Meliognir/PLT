@@ -48,7 +48,7 @@
 #define ONLINE_MULTIPLAYER 2
 //#define DUEL_GAME 3
 
-#define WAIT std::this_thread::sleep_for(std::chrono::milliseconds(500))
+#define WAIT std::this_thread::sleep_for(std::chrono::milliseconds(1))
 
 template <typename T, typename... Args>
 std::unique_ptr<T> make_unique(Args&&... args) {
