@@ -294,18 +294,16 @@ void render::HUD::displayResults(sf::RenderWindow &window, const std::vector<sta
     resultsString += "\nPlayer : " + winner->getName() + " has won with a score of : " + std::to_string(maxScore) + ".";
 
     sf::Font font;
-    font.loadFromFile("../src/boardGameData/Blackpearl.ttf"); 
+    font.loadFromFile("../src/boardGameData/Blackpearl-vPxA.ttf"); 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = desktopMode.width * WIDTHFAC; 
     unsigned int windowHeight = desktopMode.height * HEIGHTFAC;
     sf::Text Text;
     Text.setFont(font);    
-    Text.setCharacterSize(windowWidth/30.f);
+    Text.setCharacterSize(windowWidth/40.f);
     Text.setFillColor(sf::Color::Black);
-    Text.setString("Welcome to Jamaica !");  
-    Text.setPosition(windowWidth/13.f,windowHeight/2.7f);
+    Text.setString(resultsString);
+    Text.setPosition(windowWidth/10.f,windowHeight/3.f);
     highLightText(&window, Text);
     window.draw(Text);
-
-
 }

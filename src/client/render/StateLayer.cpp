@@ -210,6 +210,8 @@ void render::StateLayer::runRenderLoop(client::Client* client) {
             case GAME_OVER_STATE:{
                 if (!animationWasPlayed){
                     renderer->renderFinalAnimation(*window, game->getPlayerList(), *game->map);
+                    window->clear();
+                    renderer->renderCenteredBackground(*window);
                     instHUD->displayResults(*window, game->getPlayerList(), game->map->getSize());
                     animationWasPlayed = true;
                 }
